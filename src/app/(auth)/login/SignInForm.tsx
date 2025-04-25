@@ -1,16 +1,14 @@
-"use client"
+"use client";
 import { Input, SubmitButton } from "@/components/ui";
 import { signInValidationSchema, getError } from "@/lib/utils";
 import { useFormik } from "formik";
 import { Link } from "iconsax-react";
 import { SignInOptions, signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
+import { Suspense } from "react";
 
-export const SignInForm = () => {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
+export const SignInForm = ({ callbackUrl = "/" }: { callbackUrl?: string }) => {
   const router = useRouter();
 
   const {

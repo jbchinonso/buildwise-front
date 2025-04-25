@@ -1,7 +1,10 @@
 import React from "react";
-import LoginForm from "./LoginForm";
+import { SignInForm } from "./SignInForm";
 
-const Login = () => {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+const Login = async (props: { searchParams: SearchParams }) => {
+  const searchParams = await props.searchParams;
   return (
     <section className="flex flex-wrap flex-1 w-full h-full gap-4 p-10">
       <div className="h-full bg-white rounded-4xl flex-[50] py-[126px] px-8">
@@ -11,7 +14,7 @@ const Login = () => {
       </div>
 
       <div className="flex-[50] flex items-center px-8">
-        <LoginForm />
+        <SignInForm callbackUrl={searchParams?.callbackUrl as string}/>
       </div>
     </section>
   );
