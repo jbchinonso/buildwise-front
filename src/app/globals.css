@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --scrollbar-foreground: #0237299a;
+  --scrollbar-background: #f6c3a508;
+}
+
+@theme inline {
+  /* colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-grey-50: #e8e9eb;
+  --color-grey-100: #d1d4d7;
+  --color-grey-200: #b9bec2;
+  --color-grey-300: #a2a9ae;
+  --color-grey-400: #7a7f83;
+  --color-grey-500: #515457;
+  --color-grey-600: #292a2c;
+
+  --color-primary-50: #ccdad6;
+  --color-primary-100: #9ab5ad;
+  --color-primary-200: #678f85;
+  --color-primary-300: #356a5c;
+  --color-primary-400: #024533;
+  --color-primary-500: #023729;
+  --color-primary-600: #01271d;
+
+  --color-secondary-50: #dbcccc;
+  --color-secondary-100: #b79999;
+  --color-secondary-200: #926667;
+  --color-secondary-300: #6e3334;
+  --color-secondary-400: #4a0001;
+  --color-secondary-500: #3b0001;
+  --color-secondary-600: #2c0001;
+
+  --color-success-light: #e2fdd2;
+  --color-success: #70f41f;
+  --color-success-dark: #4fab15;
+
+  --color-error-light: #fdcccc;
+  --color-error: #f40000;
+  --color-error-dark: #7a0000;
+
+  /* fonts */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-inter: var(--font-inter);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  /* background: var(--background);
+  color: var(--foreground); */
+  /* font-family: Arial, Helvetica, sans-serif; */
+}
+
+.overflow-scroll::-webkit-scrollbar-thumb {
+  background-color: #f6bba59a;
+}
+
+.overflow-scroll::-webkit-scrollbar,
+.overflow-y-scroll::-webkit-scrollbar,
+.overflow-auto::-webkit-scrollbar,
+.overflow-x-auto::-webkit-scrollbar,
+.overflow-y-auto::-webkit-scrollbar,
+.overflow-x-scroll::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+  border-radius: 8px;
+}
+
+@media screen and (min-width: 960px) {
+  .overflow-scroll::-webkit-scrollbar,
+  .overflow-y-scroll::-webkit-scrollbar,
+  .overflow-auto::-webkit-scrollbar,
+  .overflow-x-auto::-webkit-scrollbar,
+  .overflow-y-auto::-webkit-scrollbar,
+  .overflow-x-scroll::-webkit-scrollbar {
+    width: 0.5em;
+    height: 0.4em;
+    border-radius: 8px;
+  }
+}
+
+.overflow-scroll::-webkit-scrollbar-thumb,
+.overflow-y-scroll::-webkit-scrollbar-thumb,
+.overflow-auto::-webkit-scrollbar-thumb,
+.overflow-x-auto::-webkit-scrollbar-thumb,
+.overflow-y-auto::-webkit-scrollbar-thumb,
+.overflow-x-scroll::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-foreground);
+  border-radius: 8px;
+}
+
+.overflow-scroll::-webkit-scrollbar-track,
+.overflow-y-scroll::-webkit-scrollbar-track,
+.overflow-auto::-webkit-scrollbar-track,
+.overflow-x-auto::-webkit-scrollbar-track,
+.overflow-y-auto::-webkit-scrollbar-track,
+.overflow-x-scroll::-webkit-scrollbar-track {
+  background: var(--scrollbar-background);
+  border-radius: 8px;
+}
