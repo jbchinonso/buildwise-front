@@ -7,6 +7,8 @@
   --scrollbar-background: #f6c3a508;
 }
 
+@custom-variant data-active (&[data-ui~="active"]);
+
 @theme inline {
   /* colors */
   --color-background: var(--background);

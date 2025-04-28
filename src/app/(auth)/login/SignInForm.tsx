@@ -2,11 +2,10 @@
 import { Input, SubmitButton } from "@/components/ui";
 import { signInValidationSchema, getError } from "@/lib/utils";
 import { useFormik } from "formik";
-import { Link } from "iconsax-react";
 import { SignInOptions, signIn } from "next-auth/react";
-import { useRouter } from "next/router";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { Suspense } from "react";
 
 export const SignInForm = ({ callbackUrl = "/" }: { callbackUrl?: string }) => {
   const router = useRouter();
@@ -57,7 +56,7 @@ export const SignInForm = ({ callbackUrl = "/" }: { callbackUrl?: string }) => {
   return (
     <form
       // action={loginAction}
-      className="flex flex-col  w-full max-w-[343px] mx-auto gap-4 mb-10"
+      className="flex flex-col w-full gap-4 justify-start"
     >
       <Input
         type="email"
@@ -83,7 +82,7 @@ export const SignInForm = ({ callbackUrl = "/" }: { callbackUrl?: string }) => {
         error={touched.password && errors.password ? errors.password : ""}
       />
 
-      <Link href="/forgot-password" className="text-sm text-primarycolortadi6">
+      <Link href="/forgot-password" className="text-sm ml-auto">
         Forgot password?
       </Link>
 
