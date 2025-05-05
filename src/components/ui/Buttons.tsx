@@ -17,7 +17,7 @@ export interface IButtonProps
   outline?: boolean;
   asLink?: boolean;
   loading?: boolean;
-  variant?: 'secondary' | 'primary' ;
+  variant?: "secondary" | "primary" | "ghost";
   size?: keyof typeof ButtonSizes;
 }
 
@@ -37,9 +37,10 @@ export function Button({
   variant,
   ...props
 }: IButtonProps) {
-
   const variantStyles: ClassNameValue = (() => {
     switch (variant) {
+      case "ghost":
+        return "bg-transparent text-primary enabled:hover:border-primary";
       case "secondary":
         return "bg-transparent text-primary enabled:hover:border-primary";
       default:

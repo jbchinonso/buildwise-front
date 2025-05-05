@@ -8,7 +8,7 @@ import React from "react";
 export const AdminSidebar = () => {
   const pathname = usePathname();
   return (
-    <div className="flex-[20] w-full max-w-[MIN(100%,260px)] border rounded-2xl bg-white p-4 border-grey-50">
+    <div className="flex-[20] ml-8 w-full max-w-[MIN(100%,260px)] max-h-[calc(100dvh-var(--scroll-padding))] sticky top-0 border rounded-2xl bg-white p-4 border-grey-50">
       <ul className="w-full">
         {[
           {
@@ -22,7 +22,6 @@ export const AdminSidebar = () => {
             icon: <Network color="currentColor" size="16" />,
           },
           {
-            
             title: "Properties",
             path: "/admin/properties",
             icon: <House color="currentColor" size="16" />,
@@ -52,7 +51,7 @@ export const AdminSidebar = () => {
                   ? "active"
                   : undefined
               }
-              className="w-full whitespace-nowrap flex items-center my-1 px-6 gap-2 py-5 rounded-xl text-grey-400 data-active:text-white data-active:bg-primary-400 hover:bg-primary-400/80 hover:text-white transition-all duration-300"
+              className="flex items-center w-full gap-2 px-6 py-5 my-1 transition-all duration-300 whitespace-nowrap rounded-xl text-grey-400 data-active:text-white data-active:bg-primary-400 hover:bg-primary-400/80 hover:text-white"
             >
               {icon} {title}
             </Link>

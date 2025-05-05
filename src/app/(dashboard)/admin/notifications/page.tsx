@@ -1,5 +1,6 @@
 import { customFetch } from "@/lib/utils";
 import React from "react";
+import NotificationListener from "./Notifications";
 
 const Notifications = async () => {
   const data = await customFetch(
@@ -13,16 +14,18 @@ const Notifications = async () => {
     }
   );
 
-  const notifications = data?.data?.result ?? [];
+  const notifications = data?.result ?? [];
 
   return (
     <div>
       <h1>Notification</h1>
       <ol className="">
         {notifications.map((notification: any, index: number) => (
-          <li className="decimal list-decimal list-inside" key={index}>{notification?.title}</li>
+          <li className="list-decimal list-inside decimal" key={index}>{notification?.title}</li>
         ))}
       </ol>
+
+      <NotificationListener/>
     </div>
   );
 };

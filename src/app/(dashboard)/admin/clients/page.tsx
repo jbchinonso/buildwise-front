@@ -1,4 +1,4 @@
-import { DashboardStatsCard } from "@/components/dashboards";
+import { DashboardStatsCard } from "@/components/dashboard";
 import { Button } from "@/components/ui";
 import { ArrowRight, House2 } from "iconsax-react";
 import { Hourglass, KeyRound } from "lucide-react";

@@ -4,15 +4,17 @@ import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  res: NextResponse,
-  route: { params: { tag: string } }
 ) {
-  const params = route;
-  const { searchParams } = new URL(req.url as string);
-  const tags = searchParams.get("old")?.split(",");
-  //   const path = searchParams.get("path");
+  const userAgent = req.headers.get("user-agent");
+  const headers: Record<string, string> = {
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+    Connection: "keep-alive",
+  };
 
-  console.log({ req, searchParams, tags });
+  if (userAgent && userAgent.includes("Mobile")) {
+    headers["X-Is-Mobile"] = "true";
+  }
 
   try {
     const response = await customFetch(
@@ -21,16 +23,20 @@ export async function GET(
 
     const data = response?.data;
 
-    console.log({ data });
-
-    return NextResponse.json({
+    return new NextResponse(JSON.stringify(data), {
       status: HttpStatusCode.Ok,
-      data,
+      headers,
     });
   } catch (error) {
-    return NextResponse.json({
-      status: HttpStatusCode.InternalServerError,
-      error: getError(error) || "failed to fetch data",
-    });
+    return new NextResponse(
+      JSON.stringify({
+        message: getError(error) || "failed to fetch data",
+      }),
+      {
+        headers,
+        status: HttpStatusCode.InternalServerError,
+      }
+    );
   }
 }
+
