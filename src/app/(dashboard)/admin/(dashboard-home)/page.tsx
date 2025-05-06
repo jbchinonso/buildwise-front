@@ -6,6 +6,8 @@ import { ClientOverview } from "./ClientsOverview";
 import { SalesOverview } from "./SalesOverview";
 import { getTransactions } from "@/lib/services";
 import { RecentTransactions } from "./RecentTransactions";
+import { RevenueChart } from "./RevenueChart";
+import { PropertiesSold } from "./PropertiesSold";
 
 const Dashboard = async () => {
   const data = await getTransactions();
@@ -13,7 +15,7 @@ const Dashboard = async () => {
     <>
       {/* Cards */}
       <section className="flex flex-wrap justify-between w-full gap-4 py-2">
-        <RevenueOverview />
+        <RevenueOverview data={data as any} />
         <SalesOverview />
         <TitansOverview />
         <ClientOverview />
@@ -21,8 +23,8 @@ const Dashboard = async () => {
 
       {/* chart */}
       <section className="flex flex-wrap gap-4">
-        <div className="rounded-2xl min-w-[MIN(100%,518px)] bg-white p-4 w-full flex-1 border border-grey-50">
-          <div className="flex items-center justify-between w-full gap-4">
+        <div className="rounded-2xl min-w-[MIN(100%,518px)] bg-white w-full flex-1 border border-grey-50">
+          <div className="flex items-center justify-between p-4  w-full gap-4">
             <div className="flex flex-col">
               <p className="text-sm font-semibold">Revenue</p>
               <span className="text-xs text-grey-400">Total: ₦1,495,00</span>
@@ -32,9 +34,12 @@ const Dashboard = async () => {
               <p className="text-xs">Last 1 year</p>
             </div>
           </div>
+          <div className="flex flex-1 w-full my-4 p-1 overflow-x-auto">
+            <RevenueChart />
+          </div>
         </div>
-        <div className="rounded-2xl min-w-[MIN(100%,518px)] bg-white p-4 w-full flex-1 border border-grey-50">
-          <div className="flex items-center justify-between w-full gap-4">
+        <div className="rounded-2xl min-w-[MIN(100%,518px)] bg-white w-full flex-1 border border-grey-50">
+          <div className="flex items-center justify-between w-full p-4  gap-4">
             <div className="flex flex-col">
               <p className="text-sm font-semibold">Properties sold</p>
               <span className="text-xs text-grey-400">Total: 115</span>
@@ -43,24 +48,15 @@ const Dashboard = async () => {
               <p className="text-xs">Last 1 year</p>
             </div>
           </div>
+
+          <div className="flex flex-1 w-full my-4 p-1 overflow-x-auto">
+            <PropertiesSold />
+          </div>
         </div>
       </section>
 
       {/* recent transactions */}
-      <section className="flex flex-col w-full">
-        <div className="flex items-baseline justify-between w-full gap-4">
-          <h2 className="font-semibold text-grey-600">Recent Transactions</h2>
-
-          <Link
-            href="/"
-            className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
-          >
-            View all <ArrowRight size={14} color="currentColor" />
-          </Link>
-        </div>
-
-        <RecentTransactions data={data as any}/>
-      </section>
+      <RecentTransactions data={data as any} />
     </>
   );
 };

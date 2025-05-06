@@ -4,6 +4,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader, Button } from "@/components/ui";
 import { ChevronRight } from "lucide-react";
+import { ArrowRight } from "iconsax-react";
+import Link from "next/link";
 
 type Transaction = {
   id: string;
@@ -90,6 +92,20 @@ const columns: ColumnDef<Transaction>[] = [
 ];
 
 export const RecentTransactions = ({ data }: { data: Transaction[] }) => {
-  
-  return <DataTable columns={columns} data={data} />;
+  return (
+    <section className="flex flex-col w-full">
+      <div className="flex items-baseline justify-between w-full gap-4">
+        <h2 className="font-semibold text-grey-600">Recent Transactions</h2>
+
+        <Link
+          href="/"
+          className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
+        >
+          View all <ArrowRight size={14} color="currentColor" />
+        </Link>
+      </div>
+
+      <DataTable columns={columns} data={data} />
+    </section>
+  );
 };

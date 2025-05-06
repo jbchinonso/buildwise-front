@@ -159,7 +159,7 @@ function DataTableColumnHeader<TData, TValue>({
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => column.toggleSorting(true)}>
+          <DropdownMenuItem onClick={() => column.clearSorting()}>
             <RefreshCcw className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Reset
           </DropdownMenuItem>
