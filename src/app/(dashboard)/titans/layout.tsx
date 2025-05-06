@@ -1,4 +1,4 @@
-import { Header, Sidebar } from "@/components/dashboards";
+import { Header, Sidebar } from "@/components/dashboard";
 
 export default function TitansLayout({
   children,
