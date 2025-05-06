@@ -3,8 +3,8 @@ import { getServerSession } from "next-auth";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, route: { params: { id: string } }) {
-  const id = route.params.id;
+export async function GET(req: NextRequest) {
+
   const { searchParams } = new URL(req.url);
   const tags = searchParams.get("tags")?.split(",");
   const path = searchParams.get("path");

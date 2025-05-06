@@ -3,7 +3,6 @@ import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  route: { params: { tag: string } }
 ) {
   const { searchParams } = new URL(req.url);
   const tags = searchParams.get("tags")?.split(",");
