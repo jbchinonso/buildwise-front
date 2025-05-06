@@ -2,20 +2,27 @@ import { customFetch } from "@/lib/utils";
 import React from "react";
 import NotificationListener from "./Notifications";
 
-const Notifications = async () => {
-  const data = await customFetch(
-    "http://localhost:3000/api/notifications?old=true",
-    {
-      next: {
-        tags: ["notifications"],
-        revalidate: 6400,
-      },
-        // cache: "no-store", // optional, prevents caching in dev
-    }
-  );
 
-  const notifications = data?.result ?? [];
+type Notification = {
+  title: string;
+  // Add other properties if needed
+};
 
+const Notifications =  () => {
+  // const data = await customFetch(
+  //   "http://localhost:3000/api/notifications?old=true",
+  //   {
+  //     next: {
+  //       tags: ["notifications"],
+  //       revalidate: 6400,
+  //     },
+  //       // cache: "no-store", // optional, prevents caching in dev
+  //   }
+  // );
+
+   const notifications: Notification[] = /*data?.result ??*/ [];
+
+  
   return (
     <div>
       <h1>Notification</h1>
