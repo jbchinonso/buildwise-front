@@ -49,7 +49,7 @@ export const Input = ({
     <div className="flex flex-col">
       <div
         className={twMerge(
-          `w-full flex flex-col gap-2 py-2  overflow-hidden border  bg-white rounded-2xl has-[input:focus-within]:border-grey-600`,
+          `w-full flex flex-col gap-2 py-1  overflow-hidden border  bg-white rounded-2xl has-[input:focus-within]:border-grey-600`,
           error ? "text-error-5 border-red-600/[0.06]" : "border-[#E8E9EB]",
           containerStyle
         )}
