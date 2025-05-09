@@ -1,21 +1,41 @@
 import type { NextConfig } from "next";
-
-// const nextConfig: NextConfig = {
-//   /* config options here */
-// };
-
-// export default nextConfig;
-// next.config.js
-const nextConfig = {
-  webpack(config:NextConfig) {
+const nextConfig: NextConfig = {
+ 
+  webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
-      issuer: /\.[jt]sx?$/,
-      use: ['@svgr/webpack'],
+      use: [
+        {
+          loader: "@svgr/webpack",
+          options: {
+            svgoConfig: {
+              plugins: [
+                {
+                  name: "removeAttrs",
+                  params: { attrs: "(stroke-opacity|stroke)" },
+                },
+                {
+                  name: "addAttributesToSVGElement",
+                  params: {
+                    attributes: [{ stroke: "currentColor" }],
+                  },
+                },
+                {
+                  name: "convertStyleToAttrs",
+                },
+              ],
+            },
+            icon: true,
+            ref: true,
+          },
+        },
+      ],
     });
 
     return config;
   },
+  output: "standalone",
 };
+
 
 module.exports = nextConfig;
