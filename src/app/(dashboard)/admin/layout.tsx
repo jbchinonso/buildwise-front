@@ -11,7 +11,7 @@ export default function TitansLayout({
 
       <div className="w-full gap-6 flex flex-1 mb-8  max-h-[calc(100dvh-var(--scroll-padding))] overflow-hidden">
         <AdminSidebar />
-        <div className="w-full flex flex-col gap-6 flex-[80]  px-8 overflow-auto">
+        <div className="w-full flex flex-col gap-6 flex-[80] py-2 px-8 overflow-auto">
           {children}
         </div>
       </div>

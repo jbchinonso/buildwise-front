@@ -10,15 +10,16 @@ import { RevenueChart } from "./RevenueChart";
 import { PropertiesSold } from "./PropertiesSold";
 
 const Dashboard = async () => {
-  const data = await getTransactions();
+  const { data = [] } = await getTransactions();
+
   return (
     <>
       {/* Cards */}
       <section className="flex flex-wrap justify-between w-full gap-4 py-2">
         <RevenueOverview data={data as any} />
-        <SalesOverview />
-        <TitansOverview />
-        <ClientOverview />
+        <SalesOverview data={data as any} />
+        <TitansOverview data={data as any} />
+        <ClientOverview data={data as any} />
       </section>
 
       {/* chart */}

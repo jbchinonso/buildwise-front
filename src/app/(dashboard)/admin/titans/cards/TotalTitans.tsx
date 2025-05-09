@@ -6,11 +6,11 @@ import {
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
-import { ColumnDef } from "@tanstack/react-table";
-import { ArrowRight } from "iconsax-react";
-import { ChevronRight, Network } from "lucide-react";
+import { ArrowRight, Profile2User } from "iconsax-react";
 import Link from "next/link";
-import React from "react";
+import { ColumnDef } from "@tanstack/react-table";
+import { ChevronRight } from "lucide-react";
+
 
 type Transaction = {
   id: string;
@@ -47,7 +47,6 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
 
- 
   {
     id: "actions",
     cell: ({ row }) => {
@@ -63,14 +62,14 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const TitansOverview = ({ data }: { data: Transaction[] }) => {
+export const TotalTitans = ({ data }: { data: Transaction[] }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
-        title="Total titans"
-        icon={<Network size="24" color="#926667" className="rotate-90" />}
-        data="23.8B"
+        title="Titans"
+        icon={<Profile2User size="24" color="#1FDBF4" />}
+        data="100"
         theme=""
         onClick={toggleModal}
       />
@@ -88,16 +87,12 @@ export const TitansOverview = ({ data }: { data: Transaction[] }) => {
                 <p className="text-grey-600">100</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Active Titan</p>
-                <p className="text-grey-600">208</p>
+                <p className="text-grey-400">Active</p>
+                <p className="text-grey-600">90</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Commissions earned</p>
-                <p className="text-grey-600">₦51,208,009</p>
-              </div>
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Commissions paid-out</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-400">Inactive earned</p>
+                <p className="text-grey-600">10</p>
               </div>
             </div>
 

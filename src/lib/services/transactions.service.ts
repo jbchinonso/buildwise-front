@@ -1,9 +1,17 @@
+import { customFetch, getError } from "../utils";
 
-export const getTransactions = async (): Promise<User[]> => {
-  // const data = await fetch("https://jsonplaceholder.typicode.com/users");
-  const data = await fetch("https://dummyjson.com/c/db22-4fc9-4774-8468");
+export const getTransactions = async (): Promise<{
+  data?: any[];
+  error?: string;
+}> => {
+  try {
+    // const data = await fetch("https://jsonplaceholder.typicode.com/users");
+    const data = await customFetch(
+      "https://dummyjson.com/c/4920-aa7f-4dcf-9c6f"
+    );
 
-  return data.json();
+    return { data };
+  } catch (error) {
+    return { error: getError(error) };
+  }
 };
-
-
