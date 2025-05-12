@@ -3,9 +3,9 @@ import { AxiosError } from "axios";
 
 export const getError = (error: any) => {
   if (typeof error === "string") {
+    console.log("Error is string::: ", error)
     return error;
-  }
-  if (error.isAxiosError) {
+  } else if (error instanceof AxiosError) {
     const axiosError = error as AxiosError;
     if (axiosError.response === undefined) {
       return "Network error. Please check your internet connection and try again.";
@@ -28,8 +28,8 @@ export const getError = (error: any) => {
     } else {
       return "An unexpected error occurred. Please try again later.";
     }
-  } else if (error.message) {
-    return error.message;
+  } else if (error?.message) {
+    return error?.message;
   } else {
     return "An unexpected error occurred. Please try again later.";
   }

@@ -63,7 +63,7 @@ const ResetPasswordForm = () => {
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 
-        <SubmitButton disabled={!newPassword || !confirmPassword} className="min-w-full mt-8 bg-[#020a08]" >
+        <SubmitButton disabled={!newPassword || !confirmPassword} className="min-w-full mt-8 bg-[#024533]" >
           Reset Password
         </SubmitButton>
       </form>

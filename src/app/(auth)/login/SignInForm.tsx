@@ -115,7 +115,7 @@ export const SignInForm = ({ callbackUrl = "/" }: { callbackUrl?: string }) => {
     </form>
     {showRecoverModal && (
         <Modal onClose={() => setShowRecoverModal(false)}  
-        height="h-[340px]">
+        height="h-[340px] w-[400px]">
       
           <RecoverPasswordModal
             email={recoverEmail}

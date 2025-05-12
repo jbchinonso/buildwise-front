@@ -17,14 +17,15 @@ export interface IButtonProps
   outline?: boolean;
   asLink?: boolean;
   loading?: boolean;
-  variant?: 'secondary' | 'primary' ;
+  variant?: "secondary" | "primary" | "ghost";
   size?: keyof typeof ButtonSizes;
 }
 
 const ButtonSizes = {
-  default: "h-9 px-4 py-2",
-  sm: "max-h-8 rounded-md px-3 text-xs py-10",
-  lg: "h-10 rounded-md px-8",
+  default: "px-4 py-2",
+  xs: "px-3 text-xs py-1",
+  sm: "px-3 text-xs py-2",
+  lg: "px-8",
   icon: "size-9 aspect-square h-auto p-0 !sm:p-0",
 };
 
@@ -37,9 +38,10 @@ export function Button({
   variant,
   ...props
 }: IButtonProps) {
-
   const variantStyles: ClassNameValue = (() => {
     switch (variant) {
+      case "ghost":
+        return "bg-transparent text-primary enabled:hover:border-primary";
       case "secondary":
         return "bg-transparent text-primary enabled:hover:border-primary";
       default:
@@ -54,7 +56,7 @@ export function Button({
       className={twMerge(
         `capitalize rounded-4xl whitespace-nowrap flex flex-nowrap items-center place-items-center text-sm md:text-base cursor-pointer relative p-4 md:px-[19px] group disabled:pointer-events-none disabled:opacity-70 min-w-fit`,
         size ? ButtonSizes[size] : "",
-        outline && "text-white bg-transparent",
+        outline && "text-white bg-transparent border",
         variantStyles,
         className
       )}
