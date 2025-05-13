@@ -42,10 +42,10 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export default function EarningsOverview() {
+export default function EarningsSummary() {
   return (
     <ChartContainer config={chartConfig} className="w-full h-[180px]">
-        <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%">
       <LineChart data={chartData}>
         <XAxis dataKey="month" />
         <YAxis tickFormatter={(value) => `₦${(value / 1000).toFixed(0)}k`} />
@@ -54,14 +54,14 @@ export default function EarningsOverview() {
           type="monotone"
           dataKey="sales"
           stroke="var(--color-sales)"
-          strokeWidth={2}
+          strokeWidth={1}
           dot={false}
         />
         <Line
           type="monotone"
           dataKey="titans"
           stroke="var(--color-titans)"
-          strokeWidth={2}
+          strokeWidth={1}
           dot={false}
         />
       </LineChart>

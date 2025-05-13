@@ -5,8 +5,8 @@ import Clients from "./Clients";
 import Earnings from "./Earnings";
 import ReferredAgents from "./ReferredAgents";
 import TotalRevenue from "./TotalRevenue";
-import EarningsOverview from "@/components/titans/EarningOverview";
 import { mockActivities } from "../../../components/data/mockActivities";
+import EarningsSummary from "@/components/titans/EarningsSummary";
 
 const Dashboard = async () => {
   return (
@@ -36,12 +36,14 @@ const Dashboard = async () => {
               {/* Legend (left side) */}
               <div className="flex flex-col text-sm text-black gap-3 min-w-[180px]">
                   <div className="mt-16">
-                <div className="flex items-center gap-2 mt-16">
+                <div className="flex items-center gap-2 ">
                   <div className="w-3 h-3 rounded-full bg-[#1FDBF4]"></div>
+                  <div>
                     <p className="font-medium">Sales Commissions</p>
                     <p className="text-xs text-grey-400">
                       Yearly Total: ₦1,495,000
                     </p>
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
@@ -58,7 +60,7 @@ const Dashboard = async () => {
               {/* Chart (right side) */}
               <div className="flex-1 overflow-hidden h-full">
                 <div className="w-full h-full">
-                  <EarningsOverview />
+                  <EarningsSummary />
                 </div>
               </div>
             </div>

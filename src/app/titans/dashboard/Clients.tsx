@@ -1,12 +1,13 @@
 "use client";
 
 import { PageModal } from "@/components/dashboard";
+import ClientOverview from "@/components/titans/dashboard/ClientOverview";
 import { TitanDashboardStatsCard } from "@/components/titans/TitanDashboardStatsCard";
 import { useModal } from "@/lib/hooks";
 import { House } from "lucide-react";
 
-const Clients = async () =>{
-    const { isModalOpen, toggleModal, closeModal } = useModal();
+const Clients = () => {
+  const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <TitanDashboardStatsCard
@@ -17,12 +18,11 @@ const Clients = async () =>{
         onClick={toggleModal}
       />
       {isModalOpen && (
-              <PageModal
-                handleClose={closeModal}
-                heading="Total Sales Overview"
-              ></PageModal>
-            )}
+        <PageModal handleClose={closeModal} heading="Client Overview">
+          <ClientOverview />
+        </PageModal>
+      )}
     </>
   );
-}
-export default Clients ;
+};
+export default Clients;
