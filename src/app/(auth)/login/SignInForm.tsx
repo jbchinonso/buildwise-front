@@ -4,11 +4,10 @@ import Modal from "@/components/ui/Modal";
 import RecoverPasswordModal from "@/components/ui/RecoverPasswordModal";
 import { signInValidationSchema, getError } from "@/lib/utils";
 import { useFormik } from "formik";
-// import { SignInOptions, signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-// import toast from "react-hot-toast";
+
 
 export const SignInForm = ({ callbackUrl = "/" }: { callbackUrl?: string }) => {
   // const router = useRouter();
@@ -116,7 +115,8 @@ export const SignInForm = ({ callbackUrl = "/" }: { callbackUrl?: string }) => {
     </form>
     {showRecoverModal && (
         <Modal onClose={() => setShowRecoverModal(false)}  
-        height="h-[340px]">
+        height="h-[340px] w-[400px]">
+      
           <RecoverPasswordModal
             email={recoverEmail}
             setEmail={setRecoverEmail}
