@@ -79,6 +79,7 @@ const ResetPasswordForm = () => {
               className="mt-6 px-2 py-3 bg-[#024533] text-white rounded-4xl w-full"
             >
               Proceed to login
+              
             </button>
           </div>
         </Modal>

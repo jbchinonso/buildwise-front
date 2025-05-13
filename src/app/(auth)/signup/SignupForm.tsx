@@ -7,6 +7,8 @@ import { useFormik } from "formik";
 // import { SignInOptions, signIn } from "next-auth/react";
 import Modal from "@/components/ui/Modal";
 import { useState } from "react";
+import { Check } from "lucide-react";
+
 
 const SignupForm = () => {
   const [showModal, setShowModal] = useState(false);
@@ -38,8 +40,8 @@ const SignupForm = () => {
   });
 
   const handleSignupClick = (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent form submission
-    setShowModal(true); // Show the modal
+    e.preventDefault(); 
+    setShowModal(true);
   };
 
   // const loginAction = async () => {
@@ -194,7 +196,11 @@ const SignupForm = () => {
       </form>
 
       {showModal && (
-        <Modal customClassName="w-[440px] h-[364px]">
+        <Modal customClassName="w-[350px] h-[364px] flex flex-col justify-between items-center">
+          <div className="w-14 h-14 bg-green-100 flex flex-col justify-center items-center rounded-full">
+          <Check className="w-8 h-8 text-white bg-[#70F41F] rounded-full p-2 mx-auto" />
+          </div>
+     
         <h2 className="text-xl  mb-2 mt-5">Sign Up Successful</h2>
         <p className="text-gray-600">Use the link example@gmail.com to complete your registration</p>
         <button
@@ -202,6 +208,7 @@ const SignupForm = () => {
           className="mt-6 px-4 py-2 w-full  bg-[#024533] text-white rounded-4xl"
         >
           Done
+         
         </button>
       </Modal>
       

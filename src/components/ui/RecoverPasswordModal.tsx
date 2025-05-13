@@ -1,4 +1,5 @@
 import { Input } from "@/components/ui";
+import { X } from "lucide-react";
 
 
 const RecoverPasswordModal = ({email,setEmail,onCancel,onRecover,}: {
@@ -8,18 +9,21 @@ const RecoverPasswordModal = ({email,setEmail,onCancel,onRecover,}: {
   onRecover: () => void;
 }) => {
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4 px-2">
+    <div className="px-2">
+      <div className="flex items-center justify-between mb-2 ">
         <h2 className="text-lg font-semibold ">Recover Password</h2>
-        <button className="w-5 h-5 text-gray-500 hover:text-black" onClick={onCancel}>
-          x
+        <button className="w-5 h-5 text-black " onClick={onCancel}>
+        <X className="w-5 h-5" />
         </button>
       </div>
-
+      <div className="text-left ">
       <p className="text-sm text-gray-600 mb-4">
         Enter your email to receive a link for resetting your password.
       </p>
-    <div className="px-2 mt-9">
+      </div>
+
+      
+    <div className=" mt-9">
       <Input
         type="email"
         name="recoverEmail"

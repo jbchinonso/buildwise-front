@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import React, { useEffect, useRef } from "react";
 
 export const Header = () => {
@@ -19,7 +20,14 @@ export const Header = () => {
       ref={topHeaderRef}
       className="py-2 px-10 min-h-[80px] flex justify-between items-center"
     >
-      header logo
+      <div className="self-start">
+                 <Image
+                   src="/image/BuildWiseLogo.svg"
+                   alt="Logo"
+                   width={120}
+                   height={40}
+                 />
+               </div>
     </section>
   );
 };
