@@ -60,7 +60,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="">
+    <div className="w-full">
       <Table>
         <TableHeader className="bg-grey-50 rounded-lg mb-2">
           {table.getHeaderGroups().map((headerGroup) => (

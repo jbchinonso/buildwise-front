@@ -1,13 +1,12 @@
 import { customFetch, getError } from "../utils";
 
-export const getTransactions = async (): Promise<{
+export const getTitans = async (): Promise<{
   data?: any[];
   error?: string;
 }> => {
   try {
-    // const data = await fetch("https://jsonplaceholder.typicode.com/users");
     const data = await customFetch(
-      "https://dummyjson.com/c/d971-2806-4333-994c",
+      "https://dummyjson.com/c/ee14-b763-4227-8657",
       {
         next: {
           revalidate: 8400,
