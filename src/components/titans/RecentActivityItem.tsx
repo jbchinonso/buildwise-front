@@ -1,8 +1,9 @@
 
 import React from "react";
-import { Activity } from "../types/activity";
+// import { Activity } from "../types/activity";
 import { ArrowDown, ArrowRight, User } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Activity } from "@/lib/types/global/activity";
 
 interface ActivityItemProps {
   activity: Activity;
@@ -14,7 +15,7 @@ const RecentActivityItem: React.FC<ActivityItemProps> = ({ activity }) => {
       case "payment":
         return (
           <div className="w-8 h-8 rounded-full  flex items-center justify-center">
-            <ArrowDown className="w-4 h-4 text-blue-400" />
+            <ArrowDown className="w-4 h-4 text-green-400" />
           </div>
         );
       case "onboarding":
