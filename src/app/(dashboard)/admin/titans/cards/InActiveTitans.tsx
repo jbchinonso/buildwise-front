@@ -13,14 +13,15 @@ export const InActiveTitans = () => {
         icon={<Ban size="24" color="#7A7F83" className="rotate-90" />}
         data="10"
         theme=""
-        onClick={toggleModal}
+        className="cursor-auto"
+        // onClick={toggleModal}
       />
 
-      {isModalOpen && (
+      {/* {isModalOpen && (
         <PageModal handleClose={closeModal} heading="Revenue Overview">
           <section className="flex flex-col w-full gap-4 "></section>
         </PageModal>
-      )}
+      )} */}
     </>
   );
 };

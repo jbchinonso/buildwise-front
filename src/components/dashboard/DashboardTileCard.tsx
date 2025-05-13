@@ -18,7 +18,7 @@ export const DashboardTileCard = ({
         onClick?.();
       }}
       className={twMerge(
-        `w-full flex overflow-hidden border justify-between items-center bg-white rounded-2xl hover:border-grey-600`,
+        "w-full flex overflow-hidden cursor-pointer border justify-between items-center bg-white rounded-2xl hover:border-grey-600",
         className
       )}
     >
@@ -34,14 +34,14 @@ export const DashboardTileCard = ({
 
         <div
           className={twMerge(
-            "relative rounded text-base flex-1 w-full bg-red-600 justify-start flex items-center",
+            "relative rounded text-base flex-1 w-full justify-start flex items-center",
             dataContainerClassName
           )}
         >
           <p className={twMerge("px-4 text-start", dataClassName)}>{data}</p>
         </div>
       </div>
-      <ChevronRight />
+      <ChevronRight className="mx-2" />
     </button>
   );
 };

@@ -1,6 +1,6 @@
 import { BreadCrumbs, Button, Input, ProfileAvatar } from "@/components/ui";
 import { PayCommissionModal } from "./PayCommissionModal";
-import { PropertiesSold } from "./tiles";
+import { Clients, PropertiesSold, SubTitians } from "./tiles";
 
 type Params = Promise<{ titan: string }>;
 const TitanProfile = async (props: { params: Params }) => {
@@ -140,33 +140,15 @@ const TitanProfile = async (props: { params: Params }) => {
             className="flex-[45%] max-w-[MIN(100%,470px)]"
           />
 
-          <Input
-            label="Properties sold"
-            name="properties_sold"
-            id="properties_sold"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={activities.properties_sold}
+          <Clients
+            data={activities.clients}
+            className="flex-[45%] max-w-[MIN(100%,470px)]"
           />
-          <Input
-            label="Clients"
-            name="clients"
-            id="clients"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={activities.clients}
+          <SubTitians
+            data={activities.sub_titans}
+            className="flex-[45%] max-w-[MIN(100%,470px)]"
           />
-          <Input
-            label="Sub-titans"
-            name="sub_titans"
-            id="sub_titans"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={activities.sub_titans}
-          />
+
           <Input
             label="Total revenue"
             name="total_revenue"
@@ -195,7 +177,7 @@ const TitanProfile = async (props: { params: Params }) => {
             defaultValue={activities.referral_commission}
           />
 
-          <div className="w-full flex">
+          <div className="w-full flex py-2 my-2">
             <Button
               variant="secondary"
               size="sm"
