@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
 import { ColumnDef } from "@tanstack/react-table";
@@ -7,7 +7,6 @@ import Link from "next/link";
 
 export type Transaction = {
   id: string;
-  client: string;
   property: string;
   location: string;
   last_payment: string;
@@ -19,20 +18,42 @@ export type Transaction = {
 
 export const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "client",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Titans" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
-  },
-  {
     accessorKey: "property",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Unpaid commission" />
+      <DataTableColumnHeader column={column} title="Property" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    cell: ({ row }) => (
+      <p className="max-w-[200px] whitespace-normal  ">
+        {row.getValue("property")}
+      </p>
+    ),
+  },
+  {
+    accessorKey: "location",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Location" />
+    ),
+    cell: ({ row }) => (
+      <p className="max-w-[200px] whitespace-normal  ">
+        {row.getValue("location")}
+      </p>
+    ),
   },
 
+  {
+    accessorKey: "revenue",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Revenue" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("revenue")}</div>,
+  },
+  {
+    accessorKey: "unit_sold",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Unit sold" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("unit_sold")}</div>,
+  },
   {
     // id: "actions",
     accessorKey: "id",

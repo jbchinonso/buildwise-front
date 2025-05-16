@@ -1,10 +1,9 @@
 "use client";
 import { DataTable } from "@/components/dashboard";
-import { DataTableColumnHeader } from "@/components/ui";
 import { ColumnDef } from "@tanstack/react-table";
 import React, { PropsWithChildren } from "react";
 
-export type Transaction = {
+type Transaction = {
   id: string;
   property: string;
   commission: string;
@@ -18,7 +17,7 @@ const TableHead: React.FC<PropsWithChildren & {title?: string}> = ({ children, t
   return <div>{children||title}</div>;
 };
 
-export const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "property",
     header: ({ column }) => <TableHead title="Property" />,

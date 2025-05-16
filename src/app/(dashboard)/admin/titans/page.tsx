@@ -1,9 +1,11 @@
 import { getTransactions } from "@/lib/services";
-import { ArrowRight } from "iconsax-react";
-import Link from "next/link";
-import { TotalTitans, ActiveTitans, InActiveTitans } from "./cards/";
-import { TopPerformingAgents } from "./top-performing-agents";
-import CommissionsDue from "./commissions-due";
+import {
+  TotalTitans,
+  ActiveTitans,
+  InActiveTitans,
+  TopPerformingAgents,
+  CommissionsDue,
+} from "./ui";
 
 const Titan = async () => {
   const { data = [] } = await getTransactions();

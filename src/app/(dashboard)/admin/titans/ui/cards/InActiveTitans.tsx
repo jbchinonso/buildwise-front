@@ -1,17 +1,17 @@
 "use client";
-import { DashboardStatsCard, PageModal } from "@/components/dashboard";
-import { useModal } from "@/lib/hooks";
-import { Flash } from "iconsax-react";
+import { DashboardStatsCard, } from "@/components/dashboard";
+// import { useModal } from "@/lib/hooks";
+import { Ban } from "lucide-react";
 import React from "react";
 
-export const ActiveTitans = () => {
-  const { isModalOpen, toggleModal, closeModal } = useModal();
+export const InActiveTitans = () => {
+  // const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
-        title="Active"
-        icon={<Flash size="24" color="#F4BB1F" />}
-        data="90"
+        title="Inactive"
+        icon={<Ban size="24" color="#7A7F83" className="rotate-90" />}
+        data="10"
         theme=""
         className="cursor-auto"
         // onClick={toggleModal}

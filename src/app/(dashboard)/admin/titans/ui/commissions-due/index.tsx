@@ -1,10 +1,9 @@
 import { ArrowRight } from "iconsax-react";
 import Link from "next/link";
-import React from "react";
 import Table from "./Table";
 import { getTransactions } from "@/lib/services";
 
-const CommissionsDue = async () => {
+export const CommissionsDue = async () => {
   const { data = [] } = await getTransactions();
   return (
     <div className="rounded-2xl m.in-w-[MIN(100%,518px)] bg-white p-4 w/-full flex flex-col gap-4 flex-[30%] border border-grey-50">
@@ -25,5 +24,3 @@ const CommissionsDue = async () => {
     </div>
   );
 };
-
-export default CommissionsDue;

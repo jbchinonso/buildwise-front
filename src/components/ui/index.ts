@@ -6,3 +6,7 @@ export * from "./chart";
 export * from "./dropdown-menu";
 export * from "./BreadCrumbs";
 export * from "./ProfileAvatar";
+export * from "./pie-chart";
+export * from "./SearchInput";
+export * from "./Filters";
+export * from "./select";

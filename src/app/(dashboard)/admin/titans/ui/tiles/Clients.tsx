@@ -1,19 +1,74 @@
 "use client";
-import { DashboardTileCard, PageModal } from "@/components/dashboard";
+import {
+  DashboardTileCard,
+  DataTable,
+  PageModal,
+} from "@/components/dashboard";
+import { DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
+import { ColumnDef } from "@tanstack/react-table";
 
-export const SubTitians = ({
+type Client = {
+  id: string;
+  client: string;
+  properties_sold: number;
+  commission: string;
+  joined: string;
+};
+
+const columns: ColumnDef<Client>[] = [
+  {
+    accessorKey: "client",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Client's name" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+  },
+  {
+    accessorKey: "properties",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Properties" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("properties")}</div>,
+  },
+  {
+    accessorKey: "payment",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Payment" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("payment")}</div>,
+  },
+  {
+    accessorKey: "joined",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Joined" />
+    ),
+    cell: ({ row }) => (
+      <div
+        className={`text-center ${
+          row.getValue("payment_status") == "Active" ? "text-[#09A4B9]" : ""
+        }`}
+      >
+        {row.getValue("payment_status")}
+      </div>
+    ),
+  },
+];
+
+export const Clients = ({
   data,
   className,
+  clients = [],
 }: {
   data?: string | number;
   className?: string;
+  clients?: [];
 }) => {
   const { isModalOpen, closeModal, toggleModal } = useModal();
   return (
     <>
       <DashboardTileCard
-        label="Sub-titans"
+        label="Clients"
         data={data}
         className={className}
         onClick={toggleModal}
@@ -54,9 +109,9 @@ export const SubTitians = ({
                </Link>
              </div> */}
 
-            {/* <div className="w-full my-2">
-               <DataTable columns={columns} data={data} />
-             </div> */}
+            <div className="w-full my-2">
+              <DataTable columns={columns} data={clients} />
+            </div>
           </section>
         </PageModal>
       )}

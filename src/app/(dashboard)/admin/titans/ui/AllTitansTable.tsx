@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-export type Transaction = {
+type Transaction = {
   id: string;
   titan: string;
   upline: string;
@@ -16,7 +16,7 @@ export type Transaction = {
   joined: string;
 };
 
-export const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "titan",
     header: ({ column }) => (
@@ -87,9 +87,8 @@ export const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-const AllTitansTable = ({ data = [] }: { data: Transaction[] }) => {
+export const AllTitansTable = ({ data = [] }: { data: Transaction[] }) => {
 
   return <DataTable columns={columns} data={data} />;
 };
 
-export default AllTitansTable;

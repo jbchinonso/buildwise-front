@@ -2,7 +2,7 @@ interface IDashboardStatsCardProps {
   title?: string;
   icon?: React.ReactNode | string;
   theme?: string;
-  data?: string;
+  data?: string|number;
   onClick?: () => void;
 }
 

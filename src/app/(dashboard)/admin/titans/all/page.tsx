@@ -1,6 +1,6 @@
-import { getTitans, getTransactions } from "@/lib/services";
-import AllTitansTable from "./AllTitansTable";
+import { getTitans } from "@/lib/services";
 import { BreadCrumbs } from "@/components/ui";
+import { AllTitansTable } from "../ui";
 
 const AllTitansPage = async () => {
   const { data = [] } = await getTitans();

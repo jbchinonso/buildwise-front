@@ -1,6 +1,10 @@
 import { BreadCrumbs, Button, Input, ProfileAvatar } from "@/components/ui";
-import { PayCommissionModal } from "./PayCommissionModal";
-import { Clients, PropertiesSold, SubTitians } from "./tiles";
+import {
+  Clients,
+  PropertiesSold,
+  SubTitians,
+  PayCommissionModal,
+} from "../../ui";
 
 type Params = Promise<{ titan: string }>;
 const TitanProfile = async (props: { params: Params }) => {

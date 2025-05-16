@@ -1,13 +1,13 @@
-import { ArrowRight } from "iconsax-react";
-import Link from "next/link";
-import { RevenueOverview } from "./RevenueOverview";
-import { TitansOverview } from "./TitansOverview";
-import { ClientOverview } from "./ClientsOverview";
-import { SalesOverview } from "./SalesOverview";
 import { getTransactions } from "@/lib/services";
-import { RecentTransactions } from "./RecentTransactions";
-import { RevenueChart } from "./RevenueChart";
-import { PropertiesSold } from "./PropertiesSold";
+import {
+  ClientOverview,
+  PropertiesSold,
+  RecentTransactions,
+  RevenueChart,
+  RevenueOverview,
+  SalesOverview,
+  TitansOverview,
+} from "./ui";
 
 const Dashboard = async () => {
   const { data = [] } = await getTransactions();

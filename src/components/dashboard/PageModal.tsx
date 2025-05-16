@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { ClassNameValue, twMerge } from "tailwind-merge";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { CloseCircle } from "iconsax-react";
+import { X } from "lucide-react";
 
 interface IModalProps {
   heading?: string | React.ReactNode;
@@ -93,7 +93,7 @@ export const PageModal = ({
                     className="absolute z-10 text-inherit top-4 right-6 place-self-end "
                     onClick={closeModal}
                   >
-                    <CloseCircle color="currentColor" className="text-xl" />
+                    <X color="currentColor" className="text-xl" />
                   </button>
                 )}
               </>
@@ -110,11 +110,7 @@ export const PageModal = ({
                     className="absolute h-24 -translate-y-1/2 cursor-pointer transition-all duration-300 hover:enabled:scale-[1.05] right-4 top-1/2"
                     onClick={closeModal}
                   >
-                    <CloseCircle
-                      size={24}
-                      color="currentColor"
-                      className="text-xl"
-                    />
+                    <X size={24} color="currentColor" className="text-xl" />
                   </button>
                 )}
               </div>

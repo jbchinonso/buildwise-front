@@ -1,7 +1,6 @@
 import { BreadCrumbs } from "@/components/ui";
 import { getCommissions } from "@/lib/services";
-import { CommissionsTable } from "./CommissionsTable";
-
+import { CommissionsTable } from "../../../ui";
 
 type Params = Promise<{ titan: string }>;
 
@@ -16,10 +15,10 @@ const CommissionHistory = async (props: { params: Params }) => {
         paths={[
           { title: "Home", path: "/admin/titans" },
           { title: "All Titans", path: "/admin/titans/all" },
-          { title: "Profile", path: `/admin/titans/${id}` },
+          { title: "Profile", path: `/admin/titans/all/${id}` },
           {
             title: "Commission history",
-            path: `/admin/titans/:profile/Commission history`,
+            path: "",
           },
         ]}
       />

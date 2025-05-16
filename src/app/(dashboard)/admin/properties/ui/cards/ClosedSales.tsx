@@ -1,27 +1,27 @@
 "use client";
 import { DashboardStatsCard, PageModal } from "@/components/dashboard";
 import { useModal } from "@/lib/hooks";
-import { Ban } from "lucide-react";
+import { KeyRound } from "lucide-react";
 import React from "react";
 
-export const InActiveTitans = () => {
+export const ClosedSales = () => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
-        title="Inactive"
-        icon={<Ban size="24" color="#7A7F83" className="rotate-90" />}
-        data="10"
+        title="Closed sales"
+        icon={<KeyRound size="24" color="#9747FF" />}
+        data="90"
         theme=""
-        className="cursor-auto"
-        // onClick={toggleModal}
+        // className="cursor-auto"
+        onClick={toggleModal}
       />
 
-      {/* {isModalOpen && (
-        <PageModal handleClose={closeModal} heading="Revenue Overview">
+      {isModalOpen && (
+        <PageModal handleClose={closeModal} heading="Closed Sales">
           <section className="flex flex-col w-full gap-4 "></section>
         </PageModal>
-      )} */}
+      )}
     </>
   );
 };

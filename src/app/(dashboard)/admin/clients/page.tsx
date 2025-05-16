@@ -1,17 +1,21 @@
 import { DashboardStatsCard } from "@/components/dashboard";
-import { Button } from "@/components/ui";
+import { Button, SearchInput } from "@/components/ui";
 import { ArrowRight, House2 } from "iconsax-react";
-import { Hourglass, KeyRound } from "lucide-react";
+import { Hourglass, KeyRound, Plus, Search } from "lucide-react";
+import { ClientOverview, ClientsTable } from "./ui/";
 import Link from "next/link";
-import React from "react";
 
 const Properties = () => {
   return (
     <>
-      <div className="flex-w-full items-center">
-        <Button>Add new client</Button>
+      <div className="flex w-full justify-end items-center">
+        <Button asLink href="clients/add-client">
+          <Plus color="currentColor" />
+          Add new client
+        </Button>
       </div>
       <section className="w-full justify-between flex flex-wrap gap-4">
+        <ClientOverview data={[]} />
         {[
           {
             title: "Clients",
@@ -37,27 +41,23 @@ const Properties = () => {
       </section>
 
       <section className="flex flex-wrap gap-4 flex-1 max-h-[601px]">
-        <div className="rounded-2xl min-w-[MIN(100%,518px)] bg-white p-4 w-full flex-1 border border-grey-50">
-          <div className="flex w-full items-center justify-between gap-4">
-            <div className="flex flex-col">
-              <p className="text-lg font-semibold">Top selling properties</p>
-            </div>
-          </div>
-        </div>
+        <div className="w-full my-4">
+          <div className="w-full flex items-baseline my-2">
+            <div className="flex items-center gap-4">
+              <p className="font-bold">Clients</p>
 
-        <div className="rounded-2xl min-w-[MIN(100%,518px)] bg-white p-4 w-full flex-1 border border-grey-50">
-          <div className="flex w-full items-center justify-between gap-4">
-            <div className="flex flex-col">
-              <p className="text-lg font-semibold">Recently listed </p>
+              <SearchInput />
             </div>
 
             <Link
-              href="/"
-              className="text-xs text-primary-400 items-center gap-1 font-medium flex flex-nowrap whitespace-nowrap"
+              href="clients/all"
+              className="flex ml-auto items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
             >
               View all <ArrowRight size={14} color="currentColor" />
             </Link>
           </div>
+
+          <ClientsTable data={[]} />
         </div>
       </section>
     </>

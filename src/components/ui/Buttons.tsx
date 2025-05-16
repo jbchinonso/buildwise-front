@@ -44,7 +44,7 @@ export function Button({
       case "ghost":
         return "bg-transparent text-primary enabled:hover:border-primary";
       case "secondary":
-        return "bg-[#E8E9EB] text-primary enabled:hover:border-primary border";
+        return "bg-[#E8E9EB] text-primary hover:border-primary border";
       default:
         return "text-white hover:text-primary-500 text-white border border-primary-500 bg-primary-500 hover:bg-[#ededed]";
     }

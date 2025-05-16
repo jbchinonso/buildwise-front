@@ -7,7 +7,7 @@ import { Link } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
 
 
-export type Transaction = {
+type Transaction = {
   id: string;
   property: string;
   buyer: string;
@@ -18,7 +18,7 @@ export type Transaction = {
   payment_status: string;
 };
 
-export const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "property",
     header: ({ column }) => (

@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-export type Transaction = {
+type Transaction = {
   id: string;
   client: string;
   property: string;
@@ -17,7 +17,7 @@ export type Transaction = {
   payment_status: string;
 };
 
-export const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "client",
     header: ({ column }) => (

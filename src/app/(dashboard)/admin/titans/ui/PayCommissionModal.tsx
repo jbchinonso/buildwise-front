@@ -6,7 +6,7 @@ import { copyTextToClipboard } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { Files } from "lucide-react";
 
-export type ICommission = {
+type ICommission = {
   id: string;
   client: string;
   payment: string;
@@ -15,7 +15,7 @@ export type ICommission = {
   status: string;
 };
 
-export const columns: ColumnDef<ICommission>[] = [
+const columns: ColumnDef<ICommission>[] = [
   {
     accessorKey: "client",
     header: ({ column }) => (
@@ -107,7 +107,12 @@ export const PayCommissionModal = ({ bankAccount = "O70 3456 6543" }) => {
               <DataTable columns={columns} data={[]} />
             </div>
             <div className="flex gap-4 justify-end">
-              <Button variant="secondary" size="sm" className="px-8">
+              <Button
+                onClick={closeModal}
+                variant="secondary"
+                size="sm"
+                className="px-8"
+              >
                 Cancel
               </Button>
               <Button size="sm">Update Payment</Button>

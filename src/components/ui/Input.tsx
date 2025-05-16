@@ -21,7 +21,6 @@ interface IInputProps extends InputProps {
   error?: string;
   touched?: boolean;
   containerStyle?: string;
-  NotTextInputWrapperClassName?: string;
   inputStyle?: string;
   labelStyle?: string;
   children?: React.ReactNode;
@@ -48,7 +47,7 @@ export const Input = ({
   return (
     <div
       className={twMerge(
-        `w-full flex flex-col gap-2 py-1  overflow-hidden border  bg-white rounded-2xl has-[input:focus-within]:border-grey-600`,
+        `w-full flex flex-col min-h-[64px] gap-2 py-1  overflow-hidden border  bg-white rounded-2xl has-[input:focus-within]:border-grey-600`,
         error ? "text-error-5 border-red-600/[0.06]" : "border-[#E8E9EB]",
         containerStyle
       )}
@@ -57,7 +56,7 @@ export const Input = ({
         <label
           htmlFor={props.name}
           className={twMerge(
-            `flex capitalize px-4 leading-[100%] items-center text-xs font-medium text-grey-500 labelStyle`,
+            `flex capitalize px-4 leading-[100%] items-center text-xs font-medium text-grey-500`,
             labelStyle
           )}
         >
