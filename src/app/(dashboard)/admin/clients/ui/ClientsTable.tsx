@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-export type Client = {
+type Client = {
   id: string;
   client: string;
   location: string;
@@ -15,7 +15,7 @@ export type Client = {
   joined: string;
 };
 
-export const columns: ColumnDef<Client>[] = [
+const columns: ColumnDef<Client>[] = [
   {
     accessorKey: "client",
     header: ({ column }) => (

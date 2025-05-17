@@ -61,7 +61,7 @@ export const DashboardModal = ({
   return (
     <section
       ref={modalRef}
-      className="fixed top-0 translate-x-0 translate-y-0 left-0 z-[999] flex flex-col items-center justify-center w-screen min-h-dvh"
+      className="fixed top-0 translate-x-0 translate-y-0 left-0 z-[999] flex flex-col items-center justify-center w-screen min-h-dvh overflow-y-auto"
     >
       <button
         type="button"
@@ -78,7 +78,7 @@ export const DashboardModal = ({
           transition={{ duration: 0.3 }}
           key={"modal-div"}
           className={twMerge(
-            "w-full max-w-[95%] sm:max-w-[MIN(90%,600px)] h-full min-h-[300px] pb-2 overflow-hidden m-auto bg-white flex flex-col relative rounded-4xl border z-[999] ma.x-h-[50dvh] max-h-[calc(100dvh-var(--scroll-padding)-var(--bottom-tab)-16px)]",
+            "w-full max-w-[95%] sm:max-w-[MIN(90%,600px)] h-full min-h-[300px] pb-2 overflow-hidden m-auto bg-white flex flex-col relative rounded-4xl border overflow-y-auto z-[999] ma.x-h-[50dvh] max-h-[calc(100dvh-var(--scroll-padding)-var(--bottom-tab)-16px)]",
             className
           )}
         >
@@ -91,7 +91,7 @@ export const DashboardModal = ({
                 {canClose && (
                   <button
                     type="button"
-                    className="absolute cursor-pointer z-10 text-inherit top-4 right-6 place-self-end "
+                    className="absolute z-10 cursor-pointer text-inherit top-4 right-6 place-self-end "
                     onClick={closeModal}
                   >
                     <X color="currentColor" className="text-xl" />
@@ -108,7 +108,7 @@ export const DashboardModal = ({
                 {canClose && (
                   <button
                     type="button"
-                    className="absolute cursor-pointer h-24 -translate-y-1/2 right-6 top-1/2"
+                    className="absolute h-24 -translate-y-1/2 cursor-pointer right-6 top-1/2"
                     onClick={closeModal}
                   >
                     <X color="currentColor" className="text-xl" />
@@ -127,7 +127,7 @@ export const DashboardModal = ({
             ) : (
               subheading
             ))}
-          <div className="relative flex flex-col flex-1 px-6 sm:px-7 pb-4 my-2 w-full max-h-full overflow-y-auto border-t border-white/[0.06] bg-inherit mx-auto ">
+          <div className="relative flex flex-col flex-1 px-6 sm:px-7 pb-4 my-2 w-full max-h-[90dvh] overflow-y-auto border-t border-white/[0.06] bg-inherit mx-auto ">
             {children}
           </div>
         </motion.div>

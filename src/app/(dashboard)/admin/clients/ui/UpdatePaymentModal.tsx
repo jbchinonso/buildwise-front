@@ -60,19 +60,19 @@ export const UpdatePaymentModal = () => {
           handleClose={closeModal}
           className="sm:max-w-[MIN(90%,520px)]"
         >
-          <div className="flex flex-col mt-auto flex-1 gap-4 w-full">
+          <div className="flex flex-col flex-1 w-full gap-4 mt-auto">
             {step ? (
-              <div className="flex flex-col mt-auto flex-1 gap-4 w-full">
+              <div className="flex flex-col flex-1 w-full gap-4 mt-auto">
                 {data.map((data, index) => {
                   return (
                     <div
                       key={`${data?.item}-${index}`}
-                      className="flex items-center border-b w-full justify-between"
+                      className="flex items-center justify-between w-full border-b"
                     >
-                      <p className="text-sm capitalize text-grey-400">
+                      <p className="text-xs capitalize text-grey-400">
                         {data?.label || data?.item}
                       </p>
-                      <p className="font-bold text-grey-600">{data?.data}</p>
+                      <p className="text-sm font-bold text-grey-600">{data?.data}</p>
                     </div>
                   );
                 })}
