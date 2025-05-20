@@ -78,7 +78,7 @@ export const DashboardModal = ({
           transition={{ duration: 0.3 }}
           key={"modal-div"}
           className={twMerge(
-            "w-full max-w-[95%] sm:max-w-[MIN(90%,600px)] h-full min-h-[300px] pb-2 overflow-hidden m-auto bg-white flex flex-col relative rounded-4xl border overflow-y-auto z-[999] ma.x-h-[50dvh] max-h-[calc(100dvh-var(--scroll-padding)-var(--bottom-tab)-16px)]",
+            "w-full max-w-[95%] sm:max-w-[MIN(90%,600px)] h-full min-h-[300px] pb-2 overflow-hidden m-auto bg-white flex flex-col relative rounded-4xl border overflow-y-auto z-[999] max-h-[95dvh]",
             className
           )}
         >
