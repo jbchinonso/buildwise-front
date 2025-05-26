@@ -1,24 +1,25 @@
-import { ArrowRight } from "iconsax-react";
-import Link from "next/link";
-import { RevenueOverview } from "./RevenueOverview";
-import { TitansOverview } from "./TitansOverview";
-import { ClientOverview } from "./ClientsOverview";
-import { SalesOverview } from "./SalesOverview";
 import { getTransactions } from "@/lib/services";
-import { RecentTransactions } from "./RecentTransactions";
-import { RevenueChart } from "./RevenueChart";
-import { PropertiesSold } from "./PropertiesSold";
+import {
+  ClientOverview,
+  PropertiesSold,
+  RecentTransactions,
+  RevenueChart,
+  RevenueOverview,
+  SalesOverview,
+  TitansOverview,
+} from "./ui";
 
 const Dashboard = async () => {
-  const data = await getTransactions();
+  const { data = [] } = await getTransactions();
+
   return (
     <>
       {/* Cards */}
       <section className="flex flex-wrap justify-between w-full gap-4 py-2">
         <RevenueOverview data={data as any} />
-        <SalesOverview />
-        <TitansOverview />
-        <ClientOverview />
+        <SalesOverview data={data as any} />
+        <TitansOverview data={data as any} />
+        <ClientOverview data={data as any} />
       </section>
 
       {/* chart */}
