@@ -12,11 +12,11 @@ type Transaction = {
   client: string;
   property: string;
   location: string;
-  "last payment": string;
+  last_payment: string;
   totalPaid: string;
   outstanding: string;
   instalment: string;
-  "payment status": string;
+  payment_status: string;
 };
 
 const columns: ColumnDef<Transaction>[] = [
@@ -42,18 +42,18 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
   {
-    accessorKey: "last payment",
+    accessorKey: "last_payment",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Last payment" />
     ),
-    cell: ({ row }) => <div>{row.getValue("last payment")}</div>,
+    cell: ({ row }) => <div>{row.getValue("last_payment")}</div>,
   },
   {
-    accessorKey: "total paid",
+    accessorKey: "total_paid",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Total Paid" />
     ),
-    cell: ({ row }) => <div>{row.getValue("total paid")}</div>,
+    cell: ({ row }) => <div>{row.getValue("total_paid")}</div>,
   },
   {
     accessorKey: "outstanding",
@@ -70,11 +70,11 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("instalment")}</div>,
   },
   {
-    accessorKey: "payment status",
+    accessorKey: "payment_status",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Payment status" />
     ),
-    cell: ({ row }) => <div>{row.getValue("payment status")}</div>,
+    cell: ({ row }) => <div>{row.getValue("payment_status")}</div>,
   },
   {
     id: "actions",

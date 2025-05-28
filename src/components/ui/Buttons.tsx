@@ -3,13 +3,14 @@ import Link from "next/link";
 import { useFormStatus } from "react-dom";
 import { LoaderIcon } from "react-hot-toast";
 import { ClassNameValue, twMerge } from "tailwind-merge";
+import { Url } from "url";
 
 export interface IButtonProps
   extends React.DetailedHTMLProps<
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
-  href?: string;
+  href?: Partial<Url>|string;
   small?: boolean;
   large?: boolean;
   replace?: boolean;
@@ -43,7 +44,7 @@ export function Button({
       case "ghost":
         return "bg-transparent text-primary enabled:hover:border-primary";
       case "secondary":
-        return "bg-transparent text-primary enabled:hover:border-primary";
+        return "bg-[#E8E9EB] text-primary hover:border-primary border";
       default:
         return "text-white hover:text-primary-500 text-white border border-primary-500 bg-primary-500 hover:bg-[#ededed]";
     }
@@ -81,14 +82,14 @@ const ButtonWrapper = ({
   asLink,
   ...props
 }: {
-  href?: string;
+  href?: Partial<Url> | string;
   scroll?: boolean;
   replace?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onClick?: any;
   children: React.ReactNode;
 } & IButtonProps) => {
-  return href && !asLink ? (
+  return href && asLink ? (
     <Link
       onClick={onClick}
       replace={replace}

@@ -21,7 +21,6 @@ interface IInputProps extends InputProps {
   error?: string;
   touched?: boolean;
   containerStyle?: string;
-  NotTextInputWrapperClassName?: string;
   inputStyle?: string;
   labelStyle?: string;
   children?: React.ReactNode;
@@ -46,96 +45,94 @@ export const Input = ({
   const isPasswordInput =
     /password/gi.test(`${props.name}`) || /password/gi.test(`${props.type}`);
   return (
-    <div className="flex flex-col">
-      <div
-        className={twMerge(
-          `w-full flex flex-col gap-2 py-1  overflow-hidden border  bg-white rounded-2xl has-[input:focus-within]:border-grey-600`,
-          error ? "text-error-5 border-red-600/[0.06]" : "border-[#E8E9EB]",
-          containerStyle
-        )}
-      >
-        {label && (
-          <label
-            htmlFor={props.name}
+    <div
+      className={twMerge(
+        `w-full flex flex-col min-h-[64px] gap-1 py-1  overflow-hidden border  bg-white rounded-2xl has-[input:focus-within]:border-grey-600`,
+        error ? "text-error-5 border-red-600/[0.06]" : "border-[#E8E9EB]",
+        containerStyle
+      )}
+    >
+      {label && (
+        <label
+          htmlFor={props.name}
+          className={twMerge(
+            `flex capitalize px-4 leading-[100%] items-center text-xs font-medium text-grey-500`,
+            labelStyle
+          )}
+        >
+          {label}
+          {props.required && <>*</>}
+        </label>
+      )}
+      {isTextArea ? (
+        <textarea
+          {...props}
+          className={twMerge(
+            `border focus:ring-1 r.ing-offset-1 focus:outline-none  border-[#D1D1D1] p-3 text-brand-black-100 px-4 rounded flex-1 w-full  placeholder:font-body ${
+              touched && error
+                ? "text-error-1 border-error-1"
+                : "border-[#CCC] text-[#020202]"
+            }`,
+            className
+          )}
+        />
+      ) : props.type === "checkbox" ? (
+        <CheckboxInput {...props} />
+      ) : props.type === "radio" ? (
+        <RadioInput {...props} />
+      ) : (
+        <>
+          <div
             className={twMerge(
-              `flex capitalize px-4 leading-[100%] items-center text-xs font-medium text-grey-500 labelStyle`,
-              labelStyle
-            )}
-          >
-            {label}
-            {props.required && <>*</>}
-          </label>
-        )}
-        {isTextArea ? (
-          <textarea
-            {...props}
-            className={twMerge(
-              `border focus:ring-1 r.ing-offset-1 focus:outline-none  border-[#D1D1D1] p-3 text-brand-black-100 px-4 rounded flex-1 w-full  placeholder:font-body ${
-                touched && error
-                  ? "text-error-1 border-error-1"
-                  : "border-[#CCC] text-[#020202]"
-              }`,
+              "relative rounded text-base flex-1 w-full justify-start flex items-center",
               className
             )}
-          />
-        ) : props.type === "checkbox" ? (
-          <CheckboxInput {...props} />
-        ) : props.type === "radio" ? (
-          <RadioInput {...props} />
-        ) : (
-          <>
-            <div
+          >
+            <>{children}</>
+            <input
+              {...props}
+              type={`${
+                isPasswordInput && isPasswordVisible ? "text" : props.type
+              }`}
               className={twMerge(
-                "relative rounded text-base flex-1 w-full justify-start flex items-center",
-                className
+                "border-none px-4 autofill:bg-white ring-0 outline-none rounded w-full placeholder:font-body bg-inherit",
+                isPasswordInput && "pr-12",
+                inputStyle
               )}
-            >
-              <>{children}</>
-              <input
-                {...props}
-                type={`${
-                  isPasswordInput && isPasswordVisible ? "text" : props.type
-                }`}
-                className={twMerge(
-                  "border-none px-4 autofill:bg-white ring-0 outline-none rounded w-full placeholder:font-body bg-inherit",
-                  isPasswordInput && "pr-12",
-                  inputStyle
+            />
+            {isPasswordInput && props.value && (
+              <button
+                type="button"
+                className={`text-black z-10 absolute text-sm right-3 top-[50%] -translate-y-[50%] px-2`}
+                onClick={togglePassword}
+              >
+                {isPasswordVisible ? (
+                  <Eye
+                    size={16}
+                    color="currentColor"
+                    className="text-current"
+                  />
+                ) : (
+                  <EyeSlash
+                    size={16}
+                    color="currentColor"
+                    className="text-current"
+                  />
                 )}
-              />
-              {isPasswordInput && props.value && (
-                <button
-                  type="button"
-                  className={`text-black z-10 absolute text-sm right-3 top-[50%] -translate-y-[50%] px-2`}
-                  onClick={togglePassword}
-                >
-                  {isPasswordVisible ? (
-                    <Eye
-                      size={16}
-                      color="currentColor"
-                      className="text-current"
-                    />
-                  ) : (
-                    <EyeSlash
-                      size={16}
-                      color="currentColor"
-                      className="text-current"
-                    />
-                  )}
-                </button>
-              )}
-              {rightIcon && (
-                <span
-                  className={`absolute text-sm right-3 top-[50%] -translate-y-[50%] px-2`}
-                >
-                  {" "}
-                  {rightIcon}{" "}
-                </span>
-              )}
-            </div>
-          </>
-        )}
-        {/* </div> */}
-      </div>
+              </button>
+            )}
+            {rightIcon && (
+              <span
+                className={`absolute text-sm right-3 top-[50%] -translate-y-[50%] px-2`}
+              >
+                {" "}
+                {rightIcon}{" "}
+              </span>
+            )}
+          </div>
+        </>
+      )}
+      {/* </div> */}
       {error && (
         <span className="my-1 text-xs text-red-700 break-words max-w-fit">
           {error}

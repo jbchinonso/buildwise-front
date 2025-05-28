@@ -78,7 +78,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        "text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px] text-sm",
         className
       )}
       {...props}
@@ -129,7 +129,7 @@ function DataTableColumnHeader<TData, TValue>({
   }
 
   return (
-    <div className={cn("flex items-center space-x-2", className)}>
+    <div className={cn("flex items-center space-x-2 text-sm", className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
@@ -137,13 +137,13 @@ function DataTableColumnHeader<TData, TValue>({
             // size="sm"
             className="flex items-center p-1 rounded outline-none border-none data-[state=open]:bg-accent"
           >
-            <span>{title}</span>
+            <span className="text-start max-w-fit">{title}</span>
             {column.getIsSorted() === "desc" ? (
-              <ArrowDown className="ml-2 size-4" />
+              <ArrowDown className="ml-1 size-4" />
             ) : column.getIsSorted() === "asc" ? (
-              <ArrowUp className="ml-2 size-4" />
+              <ArrowUp className="ml-1 size-4" />
             ) : (
-              <ChevronsUpDown className="ml-2 size-4" />
+              <ChevronsUpDown className="ml-1 size-4" />
             )}
           </button>
         </DropdownMenuTrigger>
