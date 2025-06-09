@@ -1,6 +1,6 @@
-import { AdminSidebar, Header, Sidebar } from "@/components/dashboard";
+import { AdminSidebar, Header } from "@/components/dashboard";
 
-export default function TitansLayout({
+export default function AdminLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
