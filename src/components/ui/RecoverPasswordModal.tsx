@@ -1,56 +1,62 @@
-import { Input } from "@/components/ui";
+"use client";
+import { useCallback, useState } from "react";
+import { Button, Input, Modal, SubmitButton } from "@/components/ui";
 import { X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
+export const RecoverPasswordModal = () => {
+  const [email, setEmail] = useState("");
 
-const RecoverPasswordModal = ({email,setEmail,onCancel,onRecover,}: {
-  email: string;
-  setEmail: (v: string) => void;
-  onCancel: () => void;
-  onRecover: () => void;
-}) => {
+  const router = useRouter();
+  const closeModal = useCallback(() => router.replace("?"), []);
+
+  const handleRecover = () => {
+    if (!email) return; // leaving it for now to validate later
+    router.replace("/reset-password");
+    closeModal();
+  };
+
   return (
-    <div className="px-2">
-      <div className="flex items-center justify-between mb-2 ">
-        <h2 className="text-lg font-semibold ">Recover Password</h2>
-        <button className="w-5 h-5 text-black " onClick={onCancel}>
-        <X className="w-5 h-5" />
-        </button>
-      </div>
-      <div className="text-left ">
-      <p className="text-sm text-gray-600 mb-4">
-        Enter your email to receive a link for resetting your password.
-      </p>
-      </div>
+    <Modal
+      heading="Recover Password"
+      handleClose={closeModal}
+      className=" w-[400px]"
+    >
+      <form onSubmit={handleRecover} className="w-full flex flex-col gap-4">
+        <div className="text-left ">
+          <p className="text-sm text-gray-600 mb-4">
+            Enter your email to receive a link for resetting your password.
+          </p>
+        </div>
 
-      
-    <div className=" mt-9">
-      <Input
-        type="email"
-        name="recoverEmail"
-        placeholder="Enter your email"
-        label="Email address"
-        value={email}
-        required    
-        onChange={(e) => setEmail(e.target.value)}
-        className="rounded-xs"
-      />
-     </div> 
+        <div className="">
+          <Input
+            type="email"
+            name="recoverEmail"
+            placeholder="Enter your email"
+            label="Email address"
+            value={email}
+            required
+            onChange={(e) => setEmail(e.target.value)}
+            className="rounded-xs"
+          />
+        </div>
 
-      <div className="flex justify-between gap-2 mt-11">
-        <button
-          onClick={onCancel}
-          className="w-72 px-2 py-4 rounded-4xl text-sm bg-[#E8E9EB]"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={onRecover}
-          className="w-72 px-2 py-4 bg-[#024533] text-white rounded-4xl text-sm"
-        >
-          Recover Password
-        </button>
-      </div>
-    </div>
+        <div className="flex justify-between gap-2 mt-11">
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={closeModal}
+            className="w-full"
+          >
+            Cancel
+          </Button>
+          <SubmitButton id="submit-recovery" type="submit" size="sm" className="flex-1">
+            Recover Password
+          </SubmitButton>
+        </div>
+      </form>
+    </Modal>
   );
 };
-export default RecoverPasswordModal;

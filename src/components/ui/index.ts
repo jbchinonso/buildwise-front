@@ -10,3 +10,5 @@ export * from "./pie-chart";
 export * from "./SearchInput";
 export * from "./Filters";
 export * from "./select";
+export * from "./RecoverPasswordModal";
+export * from "./Modal";

@@ -1,25 +1,20 @@
 import React from "react";
-import { SignInForm } from "./SignInForm";
 import Image from "next/image";
-import Link from "next/link";
+import ResetPasswordForm from "./ResetPasswordForm";
 import { Logo } from "@/components/ui";
 
-type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
-
-const Login = async (props: { searchParams: SearchParams }) => {
-  const searchParams = await props.searchParams;
+const ResetPassword = () => {
   return (
-    <section className="flex flex-col flex-wrap flex-1 w-full h-full px-10 ove.rflow-y-auto gap-x-10 lg:flex-row md:max-h-dvh">
+    <section className="flex flex-col flex-wrap flex-1 w-full h-full px-10 overflow-y-auto gap-x-10 lg:flex-row md:max-h-dvh">
       <div className="w-full flex-[50] py-6 max-h-[MIN(976px,99dvh)] hidden lg:flex md:sticky top-0">
         <div className="bg-white h-full rounded-4xl py-2 px-8 flex flex-col gap-8">
-          <div className="self-start py-4">
-            <Logo />
-          </div>
+          <Logo />
 
           <h1 className="sm:text-xl md:text-2xl lg:text-[56px] leading-[120%] font-bold max-w-[598px]">
             Start your real estate business with Buildwise.
           </h1>
 
+          {/* Avatar */}
           <div className="flex relative max-w-[MIN(80%,510px)] m-auto flex-col items-center flex-1">
             <Image
               src="/image/AuthImage.svg"
@@ -37,12 +32,10 @@ const Login = async (props: { searchParams: SearchParams }) => {
         <div className="self-start py-4 lg:hidden">
           <Logo />
         </div>
-        <SignInForm callbackUrl={searchParams?.callbackUrl as string} />
-
-        
+        <ResetPasswordForm />
       </div>
     </section>
   );
 };
 
-export default Login;
+export default ResetPassword;

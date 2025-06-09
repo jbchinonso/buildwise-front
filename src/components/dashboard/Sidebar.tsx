@@ -7,7 +7,7 @@ import React from "react";
 export const Sidebar = () => {
   const pathname = usePathname();
   return (
-    <div className="flex-[20] w-full max-w-[MIN(100%,260px)] border rounded-2xl bg-white p-4 border-grey-50">
+    <div className="flex-[20] ml-8 w-full max-w-[MIN(100%,260px)] max-h-[calc(100dvh-var(--scroll-padding))] sticky top-0 border rounded-2xl bg-white p-4 border-grey-50">
       <ul className="w-full">
         {[
           {
@@ -16,8 +16,8 @@ export const Sidebar = () => {
             icon: <Element3 color="currentColor" size="14" />,
           },
           {
-            title: "Client",
-            path: "/titans/client",
+            title: "Clients",
+            path: "/titans/clients",
             icon: <Profile2User color="currentColor" size="14" />,
           },
           {

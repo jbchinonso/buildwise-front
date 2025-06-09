@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { Input, SubmitButton } from "@/components/ui";
-import Modal from "@/components/ui/Modal";
+import { Input, SubmitButton, Modal, Button } from "@/components/ui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Check } from "lucide-react";
+import Link from "next/link";
 
 const ResetPasswordForm = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -14,7 +15,7 @@ const ResetPasswordForm = () => {
 
   const handleResetPassword = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("clicked")
+    console.log("clicked");
     if (!newPassword || !confirmPassword) {
       setError("Please fill in all fields.");
       return;
@@ -27,12 +28,10 @@ const ResetPasswordForm = () => {
     setShowSuccessModal(true);
   };
 
-
-  const handleProceedToLogin= () => {
+  const handleProceedToLogin = () => {
     // leaving it for now to validate later
     router.push("/login");
     setShowSuccessModal(false);
-    
   };
 
   return (
@@ -63,24 +62,35 @@ const ResetPasswordForm = () => {
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 
-        <SubmitButton disabled={!newPassword || !confirmPassword} className="min-w-full mt-8 bg-[#024533]" >
+        <SubmitButton
+          disabled={!newPassword || !confirmPassword}
+          className="min-w-full mt-8 bg-[#024533]"
+        >
           Reset Password
         </SubmitButton>
       </form>
 
       {showSuccessModal && (
-        <Modal onClose={() => setShowSuccessModal(false)} height="h-[280px]">
-          <div className="flex flex-col items-center justify-center">
-            <h2 className="text-2xl font-semibold mb-2 mt-8">Successful</h2>
-            <p className="text-gray-700 text-xs">Your password has been successfully reset.</p>
-            <p className="text-gray-700 text-xs mb-4">Login to continue</p>
-            <button
-              onClick={handleProceedToLogin}
+        <Modal
+          className="md:max-w-[440px] max-w-[440px]"
+          handleClose={() => setShowSuccessModal(false)}
+        >
+          <div className="flex flex-col items-center gap-4 justify-center">
+            <div className="w-14 h-14 bg-green-100 flex flex-col justify-center items-center rounded-full">
+              <Check className="w-8 h-8 text-white bg-[#70F41F] rounded-full p-2 mx-auto" />
+            </div>
+            <h2 className="text-2xl font-semibold">Successful</h2>
+            <p className="text-gray-700 text-sm">
+              Your password has been successfully reset.
+            </p>
+            <p className="text-gray-700 text-sm">Login to continue</p>
+            <Button
+              asLink
+              href="/login"
               className="mt-6 px-2 py-3 bg-[#024533] text-white rounded-4xl w-full"
             >
               Proceed to login
-              
-            </button>
+            </Button>
           </div>
         </Modal>
       )}
