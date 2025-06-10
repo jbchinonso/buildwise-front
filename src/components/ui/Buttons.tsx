@@ -55,7 +55,7 @@ export function Button({
       asLink={asLink}
       {...props}
       className={twMerge(
-        `capitalize rounded-4xl whitespace-nowrap flex flex-nowrap items-center place-items-center text-sm md:text-base cursor-pointer relative p-4 md:px-[19px] group disabled:pointer-events-none disabled:opacity-70 min-w-fit`,
+        `capitalize rounded-4xl  whitespace-nowrap flex flex-nowrap items-center place-items-center text-sm md:text-base cursor-pointer relative p-4 px-14 group disabled:pointer-events-none disabled:opacity-70 min-w-fit`,
         size ? ButtonSizes[size] : "",
         outline && "text-white bg-transparent border",
         variantStyles,
