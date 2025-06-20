@@ -253,6 +253,7 @@ body {
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  
   }
   body {
     @apply bg-background text-foreground;
@@ -261,4 +262,11 @@ body {
 
 button {
   cursor: pointer;
+}
+
+
+.custom-width{
+  width: 100%;
+  max-width: MIN(100%,1232px);
+  margin: 0 auto;
 }

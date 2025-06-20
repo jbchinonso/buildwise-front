@@ -6,10 +6,12 @@ import Link from "next/link";
 import { Hamburger } from "./Hamburger";
 import { Button, Logo } from "../ui";
 import { NavData } from "@/lib/data";
+import { useSession } from "next-auth/react";
 
 export const Navbar = () => {
   const pathname = usePathname();
   const navbarContainer = useRef<HTMLElement | null>(null);
+  const { data: session } = useSession();
 
   useEffect(() => {
     if (navbarContainer.current) {
@@ -38,9 +40,11 @@ export const Navbar = () => {
   return (
     <nav
       ref={navbarContainer}
-      className={`flex-col bg-white/20 -mb-[calc(var(--navbar-scroll-padding)-16px)] backdrop-blur-sm left-0 mx-auto m/d:max-h-[108px] z-[100] w-full sticky top-0 flex place-items-center`}
+      className={
+        "flex-col -mb-[calc(var(--navbar-scroll-padding)-16px)] backdrop-blur-sm left-0 m/d:max-h-[108px] z-[100] w-full sticky top-0 flex place-items-center "
+      }
     >
-      <div className="w-full flex-1 gap-4 md:gap-2 shop-width pt-6 pb-4 md:py-6 px-2 py-4 sm:px-[MIN(100px,10%)] flex justify-between items-center">
+      <div className="w-full flex-1 gap-4 max-w-[1232px] mx-auto md:gap-2 shop-width pt-6 pb-4 md:py-6 px-2 py-4 sm:px-[MIN(100px,10%)] flex justify-between items-center">
         <div className="border bg-[#024533] shadow-navbar flex items-center justify-between flex-1 w-full gap-4 px-2 p-4 m-auto rounded-sm md:gap-2">
           <div className="flex items-center gap-4">
             <Hamburger />
@@ -48,7 +52,7 @@ export const Navbar = () => {
           </div>
           <ul
             className={twMerge(
-              `transition-all mx-auto font-body px-2 md:px-4 duration-500 max-w-full gap-3 sm:gap-x-2 md:bg-transparent  md: justify-center items-center z-0 hidden w-full sm:flex`
+              `transition-all mx-auto font-body px-2 md:px-4 duration-500 max-w-full gap-3 sm:gap-x-2 md:bg-transparent  md: justify-center items-center z-0 hi.dden w-full sm:flex`
             )}
           >
             {NavData.map(({ path, name }, index) => {
@@ -72,8 +76,12 @@ export const Navbar = () => {
               );
             })}
           </ul>
-          <Button asLink href={"/login"} className="bg-[#4A0001] rounded">
-            Login{" "}
+          <Button
+            asLink
+            href={session ? "/titans" : "/login"}
+            className="bg-[#4A0001] rounded"
+          >
+            {session ? "Dashboard" : "Login"}
           </Button>
           {/* <SearchBar /> */}
         </div>

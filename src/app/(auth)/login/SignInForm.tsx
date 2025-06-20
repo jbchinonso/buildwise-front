@@ -1,64 +1,68 @@
 "use client";
 import { Input, RecoverPasswordModal, SubmitButton } from "@/components/ui";
-import { signInValidationSchema } from "@/lib/utils";
+import { getError, signInValidationSchema } from "@/lib/utils";
 import { useFormik } from "formik";
+import { signIn, SignInOptions } from "next-auth/react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
-export const SignInForm = ({ callbackUrl = "/" }: { callbackUrl?: string }) => {
+export const SignInForm = () => {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const router = useRouter();
   const isModalOpen = searchParams.get("forgot-password");
 
-  const router = useRouter();
+  const { touched, errors, handleBlur, handleChange, values, isValid } =
+    useFormik({
+      initialValues: {
+        email: "",
+        password: "",
+      },
+      validationSchema: signInValidationSchema,
+      onSubmit: async () => {},
+    });
 
-  const {
-    handleSubmit,
-    touched,
-    errors,
-    handleBlur,
-    handleChange,
-    values,
-    isValid,
-  } = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema: signInValidationSchema,
-    onSubmit: async () => {},
-  });
+  const loginAction = async (formData: FormData) => {
+    // event.preventDefault(); // Prevent the default form submission
+    toast.dismiss();
+    try {
+      // const formData = new FormData(event.currentTarget);
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
 
-  // const loginAction = async () => {
-  //   toast.dismiss();
-  //   try {
-  //     if (!isValid) {
-  //       handleSubmit();
-  //       throw new Error("Fill all required fields!");
-  //     }
-  //     const credentials: SignInOptions = {
-  //       ...values,
-  //       callbackUrl,
-  //       redirect: false,
-  //     };
+      const credentials: SignInOptions = {
+        email,
+        password,
+        callbackUrl,
+        redirect: false,
+      };
 
-  //     const res = await signIn("credentials", credentials);
+      const res = await signIn("credentials", credentials);
 
-  //     if (res?.error) {
-  //       throw new Error(res.error);
-  //     }
+      console.log({res})
 
-  //     toast.success("Login successful, Redirecting...");
-  //     return res?.url && router.replace(res.url);
-  //   } catch (error: any) {
-  //     toast.error(getError(error) || "Login failed! Please try again.");
-  //   }
-  // };
+      if (res?.error) {
+        throw new Error(res?.error);
+      }
+
+      toast.success("Login successful, Redirecting...");
+
+      return pathname.startsWith("/login")
+        ? router.refresh()
+        : router.replace(res?.url || "/titans");
+    } catch (error: any) {
+      const err = getError(error);
+      toast.error(getError(error));
+    }
+  };
 
   return (
     <>
       <form
-        // action={loginAction}
-        className="flex flex-col my-auto w-full gap-4 justify-start"
+        action={loginAction}
+        className="flex flex-col my-auto w-full gap-4 justify-start "
       >
         <Input
           type="email"
