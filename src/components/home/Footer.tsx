@@ -31,9 +31,9 @@ const Links = [
 export const Footer = () => {
   return (
     <footer className="z-0 w-full py-10 mt-auto bg-gradient-to-b from-[rgba(3,68,50,1)] to-[rgba(74,0,1,1)]">
-      <div className="relative shop-width flex py-10 sm:py-6 flex-col  items-start bottom-0 left-0 w-full  text-white px-6 sm:px-[MIN(100px,10%)] gap-8">
+      <div className="relative max-w-[1232px] mx-auto flex py-10 sm:py-6 flex-col  items-start bottom-0 left-0 w-full  text-white px-6 gap-8">
         <div className="relative rounded-3xl min-h-[352px] m-auto flex py-10  flex-col  items-start bottom-0 left-0 w-full bg-[rgba(5,67,49,1)] border border-[rgba(119,230,203,1)]  text-white px-6 sm:px-[MIN(100px,10%)] gap-8">
-          <div className="flex flex-wrap items-start justify-between flex-1 w-full gap-4">
+          <div className="flex  flex-wrap items-start justify-between flex-1 w-full gap-10">
             <div className="flex gap-6 flex-col items-start max-w-[MIN(90%,467px)]">
               <Logo />
 
@@ -45,7 +45,7 @@ export const Footer = () => {
               </p>
             </div>
 
-            <div className="ml-auto flex-1 px-4 sm:px-10 justify-evenly items-start flex gap-10">
+            <div className="ml-auto flex-1 flex-wrap md:flex-nowrap  justify-between items-start flex gap-10">
               <div className="flex justify-between min-w-[MIN(100%,309px)] items-start gap-4  gap-x-10 flex-col sm:max-w-[50%]">
                 <p className="font-bold">Get In touch</p>
 

@@ -1,11 +1,13 @@
 "use client";
-import { Element3, Global, Profile2User, User } from "iconsax-react";
+import { Element3, Global, Logout, Profile2User, User } from "iconsax-react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
 export const Sidebar = () => {
   const pathname = usePathname();
+
   return (
     <div className="flex-[20] ml-8 w-full max-w-[MIN(100%,260px)] max-h-[calc(100dvh-var(--scroll-padding))] sticky top-0 border rounded-2xl bg-white p-4 border-grey-50">
       <ul className="w-full">
@@ -47,6 +49,15 @@ export const Sidebar = () => {
           </li>
         ))}
       </ul>
+
+      <button
+        type="button"
+        onClick={() => signOut()}
+        className="w-full flex items-center gap-4 text-red-500"
+      >
+        <Logout size={24} />
+        <p>Logout</p>
+      </button>
     </div>
   );
 };

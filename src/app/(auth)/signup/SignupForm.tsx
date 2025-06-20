@@ -1,11 +1,14 @@
 "use client";
 import Link from "next/link";
 import { Input, SubmitButton, Modal } from "@/components/ui";
-import { getError, signInValidationSchema } from "@/lib/utils";
+import { getError, signIn, signInValidationSchema } from "@/lib/utils";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { Check } from "lucide-react";
 import { useModal } from "@/lib/hooks";
+import toast from "react-hot-toast";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { SignInOptions } from "next-auth/react";
 // import toast from "react-hot-toast";
 // import { SignInOptions, signIn } from "next-auth/react";
 
@@ -13,6 +16,7 @@ const SignupForm = () => {
   const { isModalOpen, toggleModal } = useModal();
   const [modalMessage, setModalMessage] = useState("");
   const [modalType, setModalType] = useState<"success" | "error">("success");
+
 
   const {
     handleSubmit,

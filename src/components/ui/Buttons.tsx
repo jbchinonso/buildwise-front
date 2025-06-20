@@ -10,7 +10,7 @@ export interface IButtonProps
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
-  href?: Partial<Url>|string;
+  href?: Partial<Url> | string;
   small?: boolean;
   large?: boolean;
   replace?: boolean;
@@ -122,9 +122,7 @@ export function SubmitButton({ children, loading, ...props }: IButtonProps) {
       )}
     >
       {(pending || loading) && <LoaderIcon />}
-      <span className={`w-full flex mx-auto justify-center items-center`}>
-        {children}
-      </span>
+      {children}
     </Button>
   );
 }
