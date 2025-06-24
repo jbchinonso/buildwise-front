@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Input, SubmitButton, Modal } from "@/components/ui";
-import { getError, signIn, signInValidationSchema } from "@/lib/utils";
+import { getError, signInValidationSchema } from "@/lib/utils";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { Check } from "lucide-react";
