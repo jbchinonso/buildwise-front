@@ -1,5 +1,7 @@
 "use client";
 
+import { IDashboardStatsCardProps } from "@/lib/type";
+
 export const TitanDashboardStatsCard = ({
   title,
   icon,
