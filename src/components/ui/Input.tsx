@@ -125,8 +125,7 @@ export const Input = ({
               <span
                 className={`absolute text-sm right-3 top-[50%] -translate-y-[50%] px-2`}
               >
-                {" "}
-                {rightIcon}{" "}
+                {rightIcon}
               </span>
             )}
           </div>
@@ -134,7 +133,7 @@ export const Input = ({
       )}
       {/* </div> */}
       {error && (
-        <span className="my-1 text-xs text-red-700 break-words max-w-fit">
+        <span className="my-1 px-4 text-xs text-red-700 break-words max-w-fit">
           {error}
         </span>
       )}

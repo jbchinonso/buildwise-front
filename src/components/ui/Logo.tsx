@@ -13,21 +13,19 @@ export const Logo = ({
   return (
     <Link
       href="/"
-      onClick={() => (onClick ? onClick() : null)}
+      onClick={() => onClick?.()}
       className={twMerge(
-        `-in.dent-[9999px] text-primary relative flex items-center justify-center z-50`,
+        `-indent-[9999px] text-primary relative flex items-center justify-center z-50`,
         className
       )}
     >
-      Bimi
-      {/* <Image
-        priority
-        width={185}
-        height={34}
-        className="object-contain w-full max-w-[128px] sm:max-w-[185px] h-full"
-        src={"/images/Bimi.svg"}
-        alt="Bimi logo"
-      /> */}
+      Buildwise
+      <Image
+        src="/logo.svg"
+        alt="Logo"
+        width={110}
+        height={64}
+      />
     </Link>
   );
 };

@@ -1,19 +1,22 @@
 "use client";
 import Link from "next/link";
-import { Input, SubmitButton } from "@/components/ui";
+import { Input, SubmitButton, Modal } from "@/components/ui";
 import { getError, signInValidationSchema } from "@/lib/utils";
 import { useFormik } from "formik";
-// import toast from "react-hot-toast";
-// import { SignInOptions, signIn } from "next-auth/react";
-import Modal from "@/components/ui/Modal";
 import { useState } from "react";
 import { Check } from "lucide-react";
-
+import { useModal } from "@/lib/hooks";
+import toast from "react-hot-toast";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { SignInOptions } from "next-auth/react";
+// import toast from "react-hot-toast";
+// import { SignInOptions, signIn } from "next-auth/react";
 
 const SignupForm = () => {
-  const [showModal, setShowModal] = useState(false);
+  const { isModalOpen, toggleModal } = useModal();
   const [modalMessage, setModalMessage] = useState("");
   const [modalType, setModalType] = useState<"success" | "error">("success");
+
 
   const {
     handleSubmit,
@@ -40,35 +43,35 @@ const SignupForm = () => {
   });
 
   const handleSignupClick = (e: React.FormEvent) => {
-    e.preventDefault(); 
-    setShowModal(true);
+    e.preventDefault();
+    toggleModal();
   };
 
   // const loginAction = async () => {
   //   toast.dismiss();
-  
+
   //   const errors = await validateForm();
   //   if (Object.keys(errors).length > 0) {
   //     toast.error("Fill all required fields!");
   //     return;
   //   }
-  
+
   //   try {
   //     const credentials: SignInOptions = {
   //       ...values,
   //       redirect: false,
   //     };
-  
+
   //     const res = await signIn("credentials", credentials);
-  
+
   //     if (res?.error) {
   //       throw new Error(res.error);
   //     }
-  
+
   //     setModalType("success");
   //     setModalMessage("Your account has been created successfully.");
   //     setShowModal(true);
-  
+
   //     toast.success("Login successful, Redirecting...");
   //     // router.replace(res.url); // Optional
   //   } catch (error: any) {
@@ -79,13 +82,10 @@ const SignupForm = () => {
   //     toast.error(errMsg);
   //   }
   // };
-  
+
   return (
     <>
-      <form className="flex flex-col w-full gap-4"  onSubmit={(e) => {
-    e.preventDefault();
-  
-  }}>
+      <form className="flex flex-col w-full gap-4" onSubmit={handleSubmit}>
         <Input
           type="text"
           name="firstName"
@@ -183,35 +183,46 @@ const SignupForm = () => {
         <SubmitButton
           disabled={!isValid}
           className="min-w-full my-2"
-          onClick={handleSignupClick }
+          onClick={handleSignupClick}
         >
           Signup
         </SubmitButton>
+        <p className="mx-auto">
+          Already have an account?
+          <Link
+            className="text-primary font-bold hover:underline"
+            href="/login"
+          >
+            {" "}
+            Login{" "}
+          </Link>
+        </p>
 
-        <div className="mt-3 ml-auto">
-          <p className="px-2 text-sm text-center">
-            You are Invited by Damilola Nkechi
-          </p>
-        </div>
+        <p className="mt-3 ml-auto px-2 text-sm text-center">
+          You are invited by Damilola Nkechi
+        </p>
       </form>
 
-      {showModal && (
-        <Modal customClassName="w-[350px] h-[364px] flex flex-col justify-between items-center">
-          <div className="w-14 h-14 bg-green-100 flex flex-col justify-center items-center rounded-full">
-          <Check className="w-8 h-8 text-white bg-[#70F41F] rounded-full p-2 mx-auto" />
+      {isModalOpen && (
+        <Modal handleClose={toggleModal} className="w-[350px]">
+          <div className="flex flex-col w-full gap-4 flex-1 justify-between items-center">
+            <div className="w-14 h-14 bg-green-100 flex flex-col justify-center items-center rounded-full">
+              <Check className="w-8 h-8 text-white bg-[#70F41F] rounded-full p-2 mx-auto" />
+            </div>
+
+            <h2 className="text-xl font-bold ">Sign Up Successful</h2>
+            <p className="text-gray-600 text-center">
+              Use the link sent to {values?.email || "your email"} to complete
+              your registration
+            </p>
+            <button
+              onClick={toggleModal}
+              className="mt-6 px-4 py-2 w-full  bg-[#024533] text-white rounded-4xl"
+            >
+              Done
+            </button>
           </div>
-     
-        <h2 className="text-xl  mb-2 mt-5">Sign Up Successful</h2>
-        <p className="text-gray-600">Use the link example@gmail.com to complete your registration</p>
-        <button
-          onClick={() => setShowModal(false)}
-          className="mt-6 px-4 py-2 w-full  bg-[#024533] text-white rounded-4xl"
-        >
-          Done
-         
-        </button>
-      </Modal>
-      
+        </Modal>
       )}
     </>
   );

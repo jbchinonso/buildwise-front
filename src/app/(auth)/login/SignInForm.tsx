@@ -1,130 +1,115 @@
 "use client";
-import { Input, SubmitButton } from "@/components/ui";
-import Modal from "@/components/ui/Modal";
-import RecoverPasswordModal from "@/components/ui/RecoverPasswordModal";
-import { signInValidationSchema, getError } from "@/lib/utils";
+import { Input, RecoverPasswordModal, SubmitButton } from "@/components/ui";
+import { getError, signInValidationSchema } from "@/lib/utils";
 import { useFormik } from "formik";
+import { signIn, SignInOptions } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
-
-export const SignInForm = ({ callbackUrl = "/" }: { callbackUrl?: string }) => {
-  // const router = useRouter();
-  const [showRecoverModal, setShowRecoverModal] = useState(false);
-  const [recoverEmail, setRecoverEmail] = useState("");
-
+export const SignInForm = () => {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
   const router = useRouter();
+  const isModalOpen = searchParams.get("forgot-password");
 
-  const handleRecover = () => {
-    // if (!email) return; // leaving it for now to validate later
-    router.push("/resetPassword");
-    setShowRecoverModal(false);
-    
+  const { touched, errors, handleBlur, handleChange, values, isValid } =
+    useFormik({
+      initialValues: {
+        email: "",
+        password: "",
+      },
+      validationSchema: signInValidationSchema,
+      onSubmit: async () => {},
+    });
+
+  const loginAction = async (formData: FormData) => {
+    // event.preventDefault(); // Prevent the default form submission
+    toast.dismiss();
+    try {
+      // const formData = new FormData(event.currentTarget);
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
+
+      const credentials: SignInOptions = {
+        email,
+        password,
+        callbackUrl,
+        redirect: false,
+      };
+
+      const res = await signIn("credentials", credentials);
+
+      console.log({res})
+
+      if (res?.error) {
+        throw new Error(res?.error);
+      }
+
+      toast.success("Login successful, Redirecting...");
+
+      return pathname.startsWith("/login")
+        ? router.refresh()
+        : router.replace(res?.url || "/titans");
+    } catch (error: any) {
+      const err = getError(error);
+      toast.error(getError(error));
+    }
   };
-
-
-  const {
-    handleSubmit,
-    touched,
-    errors,
-    handleBlur,
-    handleChange,
-    values,
-    isValid,
-  } = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema: signInValidationSchema,
-    onSubmit: async () => {},
-  });
-
-  // const loginAction = async () => {
-  //   toast.dismiss();
-  //   try {
-  //     if (!isValid) {
-  //       handleSubmit();
-  //       throw new Error("Fill all required fields!");
-  //     }
-  //     const credentials: SignInOptions = {
-  //       ...values,
-  //       callbackUrl,
-  //       redirect: false,
-  //     };
-
-  //     const res = await signIn("credentials", credentials);
-
-  //     if (res?.error) {
-  //       throw new Error(res.error);
-  //     }
-
-  //     toast.success("Login successful, Redirecting...");
-  //     return res?.url && router.replace(res.url);
-  //   } catch (error: any) {
-  //     toast.error(getError(error) || "Login failed! Please try again.");
-  //   }
-  // };
 
   return (
     <>
-   
-    <form
-      // action={loginAction}
-      className="flex flex-col w-full gap-4 justify-start"
-    >
-      <Input
-        type="email"
-        name="email"
-        id="email"
-        label="email"
-        placeholder="Enter Email"
-        value={values.email}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={touched.email && errors.email ? errors.email : ""}
-      />
+      <form
+        action={loginAction}
+        className="flex flex-col my-auto w-full gap-4 justify-start "
+      >
+        <Input
+          type="email"
+          name="email"
+          id="email"
+          label="email"
+          placeholder="Enter Email"
+          value={values.email}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={touched.email && errors.email ? errors.email : ""}
+        />
 
-      <Input
-        type="password"
-        name="password"
-        id="password"
-        label="Password"
-        placeholder="Enter Password"
-        value={values.password}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={touched.password && errors.password ? errors.password : ""}
-      />
+        <Input
+          type="password"
+          name="password"
+          id="password"
+          label="Password"
+          placeholder="Enter Password"
+          value={values.password}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={touched.password && errors.password ? errors.password : ""}
+        />
 
-<Link
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            setShowRecoverModal(true);
-          }}
+        <Link
+          href="?forgot-password=true&search=yes"
           className="text-sm ml-auto"
         >
           Forgot password?
         </Link>
 
-      <SubmitButton disabled={!isValid} className="min-w-full mt-8">
-        Login
-      </SubmitButton>
-    </form>
-    {showRecoverModal && (
-        <Modal onClose={() => setShowRecoverModal(false)}  
-        height="h-[340px] w-[400px]">
-      
-          <RecoverPasswordModal
-            email={recoverEmail}
-            setEmail={setRecoverEmail}
-            onCancel={() => setShowRecoverModal(false)}
-            onRecover={handleRecover}
-          />
-        </Modal>
-      )}
+        <SubmitButton disabled={!isValid} className="min-w-full mt-8">
+          Login
+        </SubmitButton>
+        <p className="mx-auto">
+          Don't have an account?
+          <Link
+            className="text-primary font-bold hover:underline"
+            href="/signup"
+          >
+            {" "}
+            Sign up{" "}
+          </Link>
+        </p>
+      </form>
+      {isModalOpen && <RecoverPasswordModal />}
     </>
   );
 };

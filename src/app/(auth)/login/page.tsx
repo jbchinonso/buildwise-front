@@ -1,49 +1,39 @@
 import React from "react";
 import { SignInForm } from "./SignInForm";
 import Image from "next/image";
+import { Logo } from "@/components/ui";
 
-type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
-
-const Login = async (props: { searchParams: SearchParams }) => {
-  const searchParams = await props.searchParams;
+const Login = async () => {
   return (
-    <section className="flex flex-col flex-wrap flex-1 w-full h-full px-10 overflow-y-auto gap-x-10 lg:flex-row md:max-h-dvh">
-  
-      <div className="w-full flex-[50] py-6 h-auto md:sticky top-0">
-              <div className="bg-white h-full rounded-4xl py-2 px-8 flex flex-col gap-8">
-                {/* Logo */}
-                <div className="self-start">
-                  <Image
-                    src="/image/BuildWiseLogo.svg"
-                    alt="Logo"
-                    width={120}
-                    height={40}
-                  />
-                </div>
-      
-                <h1 className="sm:text-xl md:text-2xl lg:text-[56px] leading-[120%] font-bold max-w-[598px]">
-                  Start your real estate business with Buildwise.
-                </h1>
-      
-                {/* Avatar */}
-                <div>
-                  <div className="flex flex-col items-center">
-                    <Image
-                      src="/image/AuthImage.svg"
-                      alt="An avatar"
-                      width={510}
-                      height={486}
-                      className="w-full h-auto object-contain max-w-[510px]"
-                      priority
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-      
+    <section className="flex flex-col flex-wrap sm:py-[MIN(50px,5%)] !max-h-[1080px] custom-width flex-1 w-full gap-x-10 lg:flex-row  m-auto">
+      <div className="w-full flex-[45%]  max-h-[MIN(976px,90dvh)] hidden lg:flex sticky top-0">
+        <div className="bg-white min-h-full rounded-4xl py-2 px-8 flex flex-col gap-8">
+          <div className="self-start py-4">
+            <Logo />
+          </div>
 
-      <div className="flex-[50] flex items-center px-8">
-        <SignInForm callbackUrl={searchParams?.callbackUrl as string}/>
+          <h1 className="sm:text-xl md:text-3xl lg:text-4xl 2xl:text-[56px] leading-[120%] font-bold max-w-[598px]">
+            Start your real estate business with Buildwise.
+          </h1>
+
+          <div className="flex relative max-w-[MIN(80%,510px)] w-full h-auto aspect-[510/486] justify-center m-auto flex-col items-center flex-1">
+            <Image
+              src="/image/auth_image.webp"
+              alt=""
+              width={510}
+              height={486}
+              className="w-full"
+              priority
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="flex-[50] flex-col gap-8 flex lg:justify-center overflow-y-auto items-center px-8 w-full max-w-[MIN(100%,568px)] self-center">
+        <div className="self-start py-4 lg:hidden">
+          <Logo />
+        </div>
+        <SignInForm />
       </div>
     </section>
   );

@@ -10,7 +10,7 @@ export interface IButtonProps
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
-  href?: Partial<Url>|string;
+  href?: Partial<Url> | string;
   small?: boolean;
   large?: boolean;
   replace?: boolean;
@@ -55,7 +55,7 @@ export function Button({
       asLink={asLink}
       {...props}
       className={twMerge(
-        `capitalize rounded-4xl whitespace-nowrap flex flex-nowrap items-center place-items-center text-sm md:text-base cursor-pointer relative p-4 md:px-[19px] group disabled:pointer-events-none disabled:opacity-70 min-w-fit`,
+        `capitalize rounded-4xl  whitespace-nowrap flex flex-nowrap items-center place-items-center text-sm md:text-base cursor-pointer relative p-4 px-14 group disabled:pointer-events-none disabled:opacity-70 min-w-fit`,
         size ? ButtonSizes[size] : "",
         outline && "text-white bg-transparent border",
         variantStyles,
@@ -122,9 +122,7 @@ export function SubmitButton({ children, loading, ...props }: IButtonProps) {
       )}
     >
       {(pending || loading) && <LoaderIcon />}
-      <span className={`w-full flex mx-auto justify-center items-center`}>
-        {children}
-      </span>
+      {children}
     </Button>
   );
 }

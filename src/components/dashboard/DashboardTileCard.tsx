@@ -1,3 +1,4 @@
+import { IDashboardTileCardProps } from "@/lib/type";
 import { ChevronRight } from "lucide-react";
 import React from "react";
 import { twMerge } from "tailwind-merge";

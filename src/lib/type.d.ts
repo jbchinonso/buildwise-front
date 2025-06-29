@@ -1,3 +1,7 @@
+import NextAuth from "next-auth/next";
+import { DefaultUser, DefaultSession } from "next-auth";
+import { JWT, DefaultJWT } from "next-auth/jwt";
+
 interface IDashboardStatsCardProps {
   title?: string;
   icon?: React.ReactNode | string;
@@ -43,4 +47,68 @@ interface Company {
   name: string;
   catchPhrase: string;
   bs: string;
+}
+
+
+export interface IUser {
+  id: number | string;
+  created_at: string;
+  updated_at: string;
+  firstName?: string;
+  lastName?: string;
+  full_name?: string;
+  email: string;
+ 
+  is_verified: boolean;
+  is_deleted: boolean;
+  profile_image: string | null;
+  profile_image_cloudinary_id: string | null;
+
+  isAdmin: boolean;
+  vendor?:any
+}
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    token: string;
+    user: IUser;
+  }
+
+  interface User extends DefaultUser {
+    user: IUser;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT extends DefaultJWT {
+    user: User;
+    token: string;
+  }
+}
+
+export interface ISignUpData {
+  full_name: string;
+  email: string;
+  phone_number: string;
+  password: string;
+}
+export interface INewPassword {
+  old_password: string;
+  new_password: string;
+  confirm_password: string;
+}
+
+export interface IVendorSignUpData {
+  business_name: string;
+  business_category: string;
+  has_cac: boolean;
+  account_number: string;
+  account_name: string;
+  bank_name: string;
+  bank_code: string;
+}
+export interface ICompleteProfileData {
+  full_name: string;
+  phone_number: string;
+  // account_number: string;
+  // bank_name: string;
 }
