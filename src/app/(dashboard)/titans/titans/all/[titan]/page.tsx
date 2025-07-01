@@ -1,4 +1,4 @@
-import { BreadCrumbs, Button, Input, ProfileAvatar } from "@/components/ui";
+import { Avatar, BreadCrumbs, Button, Input } from "@/components/ui";
 import {
   Clients,
   PropertiesSold,
@@ -42,11 +42,7 @@ const TitanProfile = async (props: { params: Params }) => {
 
       <div className="flex flex-col gap-8 flex-1 w-full gap max-w-[MIN(100%,1052px)]">
         <div className="flex w-full justify-between gap-4 flex-wrap items-center">
-          <ProfileAvatar
-            image="/image/avatar.png"
-            name="Annette Black"
-            id="0939393"
-          />
+          <Avatar image="/image/avatar.png" name="Annette Black" id="0939393" />
 
           <div className="flex gap-4 items-center">
             <PayCommissionModal />

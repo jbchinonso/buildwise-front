@@ -1,52 +1,75 @@
 "use client";
 
 import { Input, SubmitButton, Modal, Button } from "@/components/ui";
-import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import { Check } from "lucide-react";
+import { useFormik } from "formik";
+import { getError, resetPasswordSchema } from "@/lib/utils";
+import toast from "react-hot-toast";
+import { resetPassword } from "@/lib/services";
 
 const ResetPasswordForm = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const params = useParams();
   const [error, setError] = useState("");
-  const router = useRouter();
 
-  const handleResetPassword = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("clicked");
-    if (!newPassword || !confirmPassword) {
-      setError("Please fill in all fields.");
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-    setError("");
-    setShowSuccessModal(true);
-  };
+  const {
+    values,
+    handleChange,
+    handleReset,
+    handleBlur,
+    errors,
+    isValid,
+    dirty,
+    touched,
+    resetForm,
+  } = useFormik({
+    initialValues: {
+      token: params?.token || "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+    onSubmit: () => {},
+    validationSchema: resetPasswordSchema,
+  });
 
-  const handleProceedToLogin = () => {
-    // leaving it for now to validate later
-    router.push("/login");
-    setShowSuccessModal(false);
+  const handleResetPassword = async () => {
+    try {
+      await resetPassword({
+        newPassword: values.newPassword,
+        token: values.token as string,
+      });
+      resetForm();
+      setShowSuccessModal(true);
+    } catch (error) {
+      setError(getError(error));
+      toast.error(getError(error));
+    }
   };
 
   return (
     <>
       <form
         className="flex flex-col w-full gap-4 justify-start"
-        onSubmit={handleResetPassword}
+        action={handleResetPassword}
+        onReset={handleReset}
       >
+        <p className="font-bold mx-auto my-4">Enter your new password</p>
         <Input
           type="password"
           name="newPassword"
           id="newPassword"
           label="New Password"
           placeholder="Enter new password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
+          value={values.newPassword}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={
+            touched?.newPassword && errors?.newPassword
+              ? errors.newPassword
+              : ""
+          }
         />
 
         <Input
@@ -55,14 +78,20 @@ const ResetPasswordForm = () => {
           id="confirmPassword"
           label="Confirm Password"
           placeholder="Confirm your password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          value={values.confirmPassword}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={
+            touched?.confirmPassword && errors?.confirmPassword
+              ? errors.confirmPassword
+              : ""
+          }
         />
 
         {error && <p className="text-sm text-red-600">{error}</p>}
 
         <SubmitButton
-          disabled={!newPassword || !confirmPassword}
+          disabled={!isValid || !dirty}
           className="min-w-full mt-8 bg-[#024533]"
         >
           Reset Password

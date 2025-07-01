@@ -65,7 +65,7 @@ export const login = async (payload: { email: string; password: string }) => {
 // Forgot password
 export const forgotPassword = async (data: {
   email: string;
-  baseUrl: string;
+  baseUrl?: string;
 }) => {
   try {
     const response = await baseUrl.post("/auth/forgot-password", data);
@@ -76,25 +76,15 @@ export const forgotPassword = async (data: {
 };
 
 // Reset password
-export const resetPassword = async ({
-  confirm_password,
-  new_password,
-  token,
-}: {
-  confirm_password: string;
-  new_password: string;
+export const resetPassword = async (data: {
+  newPassword: string;
   token: string | null;
 }) => {
-  // const form = formDataToObject(formData);
   try {
-    const res = await baseUrl.post(`/auth/reset-password/${token}`, {
-      new_password,
-      confirm_password,
-    });
-    const data = res?.data?.data;
-    return { data };
+    const response = await baseUrl.post("/auth/reset-password", data);
+    return response?.data;
   } catch (error) {
-    return { error: getError(error) };
+    throw getError(error);
   }
 };
 
@@ -165,5 +155,14 @@ export const resendVerification = async (form: any) => {
   } catch (error) {
     console.log({ error });
     return { error: getError(error) };
+  }
+};
+
+export const editTitanProfile = async (form: any) => {
+  try {
+    const response = await baseUrl.patch("/auth/profile", form);
+    return response?.data;
+  } catch (error) {
+    throw getError(error);
   }
 };

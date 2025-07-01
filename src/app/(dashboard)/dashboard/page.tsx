@@ -4,16 +4,18 @@ import { redirect } from "next/navigation";
 
 const Dashboard = async () => {
   const session = await getServerSession(authOptions);
+  console.log({ session });
 
-  if (session?.user) {
-    if (session?.user?.role == "admin") {
-      return redirect("/admin");
-    }
-    if (session?.user?.role == "titan") {
-      return redirect("/titans");
-    }
+  switch (session?.user?.role) {
+    case "admin":
+      redirect("/admin");
+      break;
+    case "titan":
+      redirect("/titans");
+      break;
+    default:
+      redirect("/login");
   }
-  return redirect("/login");
 };
 
 export default Dashboard;
