@@ -41,15 +41,13 @@ const SignupForm = () => {
     onSubmit: async () => {},
   });
 
-  console.log({baseUrl})
+  console.log({ baseUrl });
 
   const onSignup = async () => {
     toast.dismiss();
     try {
-      const { error } = await signUp(values);
-      if (error) {
-        throw error;
-      }
+      await signUp(values);
+
       toggleModal();
       setEmail(values.email);
       resetForm();

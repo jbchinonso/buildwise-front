@@ -91,11 +91,9 @@ export const resetPassword = async (data: {
 export const signUp = async (values: ISignUpData) => {
   try {
     const response = await baseUrl.post("/user/signup", values);
-    const data = response?.data;
-    console.log({ data, response });
-    return { data };
+    return response?.data;
   } catch (error) {
-    return { error: getError(error) };
+    throw getError(error) 
   }
 };
 
@@ -107,9 +105,9 @@ export const verifyEmail = async (verificationToken: string) => {
       `/users/verify-email/${verificationToken}`
     );
     revalidateTag("profile");
-    return response?.data?.data;
+    return response?.data;
   } catch (error: any) {
-    throw new Error(getError(error));
+    throw getError(error);
   }
 };
 
