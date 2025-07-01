@@ -9,7 +9,11 @@ export const signInValidationSchema = Yup.object().shape({
 });
 
 export const signUpValidationSchema = Yup.object().shape({
-  username: Yup.string().required("*Username is required!"),
+  firstName: Yup.string().required("*First name is required!"),
+  lastName: Yup.string().required("*Last name is required!"),
+  address: Yup.string().required("*Address is required!"),
+  state: Yup.string().required("*State is required!"),
+  lga: Yup.string().required("*LGA is required!"),
   email: Yup.string()
     .email("*Enter a valid email address")
     .required("*Email is required"),
@@ -24,7 +28,7 @@ export const signUpValidationSchema = Yup.object().shape({
     .min(6, "*Password must be at least 6 characters")
     .max(120, "*Password is too long!")
     .required("*Enter password"),
-  terms: Yup.bool().required("*You have to accept terms before signup!"),
+  // terms: Yup.bool().required("*You have to accept terms before signup!"),
 });
 
 import { object, string } from "zod";

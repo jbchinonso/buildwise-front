@@ -78,7 +78,7 @@ export const Navbar = () => {
           </ul>
           <Button
             asLink
-            href={session ? "/titans" : "/login"}
+            href={session ? "/dashboard" : "/login"}
             className="bg-[#4A0001] rounded"
           >
             {session ? "Dashboard" : "Login"}

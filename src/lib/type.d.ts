@@ -6,17 +6,17 @@ interface IDashboardStatsCardProps {
   title?: string;
   icon?: React.ReactNode | string;
   theme?: string;
-  data?: string|number;
+  data?: string | number;
   onClick?: () => void;
 }
 
 interface IDashboardTileCardProps {
-  className?: string,
-  data?: any,
-  dataClassName?: string,
-  dataContainerClassName?: string,
-  labelClassName?: string,
-  label?: string,
+  className?: string;
+  data?: any;
+  dataClassName?: string;
+  dataContainerClassName?: string;
+  labelClassName?: string;
+  label?: string;
 }
 
 interface User {
@@ -49,7 +49,6 @@ interface Company {
   bs: string;
 }
 
-
 export interface IUser {
   id: number | string;
   created_at: string;
@@ -58,14 +57,16 @@ export interface IUser {
   lastName?: string;
   full_name?: string;
   email: string;
- 
+  role: "titan" | "admin";
+
+  isEmailVerified: boolean;
   is_verified: boolean;
   is_deleted: boolean;
   profile_image: string | null;
   profile_image_cloudinary_id: string | null;
 
   isAdmin: boolean;
-  vendor?:any
+  vendor?: any;
 }
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -86,10 +87,15 @@ declare module "next-auth/jwt" {
 }
 
 export interface ISignUpData {
-  full_name: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
   email: string;
-  phone_number: string;
+  address: string;
+  state: string;
+  lga: string;
   password: string;
+  referralCode?: string;
 }
 export interface INewPassword {
   old_password: string;

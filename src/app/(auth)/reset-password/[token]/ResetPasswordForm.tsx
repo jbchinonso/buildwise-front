@@ -4,7 +4,6 @@ import { Input, SubmitButton, Modal, Button } from "@/components/ui";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Check } from "lucide-react";
-import Link from "next/link";
 
 const ResetPasswordForm = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);

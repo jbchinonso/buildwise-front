@@ -11,7 +11,6 @@ import { authOptions } from "@/lib/utils";
 
 const Hero = async () => {
   const session = await getServerSession(authOptions);
-  console.log({session})
   return (
     <section className="w-full relative flex-1 min-h-full bg-[#F8F8F8] py-[calc(var(--navbar-scroll-padding))] px-2 sm:px-[MIN(100px,10%)]">
       <div className="w-full relative py-10 flex-1 z-[1] flex flex-col gap-10 justify-center items-center">
@@ -29,7 +28,7 @@ const Hero = async () => {
           <Button
             className="rounded-sm bg-[rgba(74,0,1,1)] max-w-[151px]"
             asLink
-            href={session ? "/titans" : "/login"}
+            href={session ? "/dashboard" : "/login"}
           >
             {session ? "Dashboard" : "Login"}
           </Button>

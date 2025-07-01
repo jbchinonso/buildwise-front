@@ -3,6 +3,9 @@ import { useCallback, useState } from "react";
 import { Button, Input, Modal, SubmitButton } from "@/components/ui";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { forgotPassword } from "@/lib/services";
+import toast from "react-hot-toast";
+import { getError } from "@/lib/utils";
 
 export const RecoverPasswordModal = () => {
   const [email, setEmail] = useState("");
@@ -10,10 +13,23 @@ export const RecoverPasswordModal = () => {
   const router = useRouter();
   const closeModal = useCallback(() => router.replace("?"), []);
 
-  const handleRecover = () => {
+  const handleRecover = async () => {
     if (!email) return; // leaving it for now to validate later
-    router.replace("/reset-password");
-    closeModal();
+    try {
+      const response = await forgotPassword({
+        email,
+        baseUrl: window.location.origin,
+      });
+      toast.success(
+        response?.message ||
+          "If an account exists, you will receive a reset email"
+      );
+      setEmail("");
+      router.replace("/reset-password");
+      closeModal();
+    } catch (error) {
+      toast.error(getError(error));
+    }
   };
 
   return (
@@ -22,7 +38,7 @@ export const RecoverPasswordModal = () => {
       handleClose={closeModal}
       className=" w-[400px]"
     >
-      <form onSubmit={handleRecover} className="w-full flex flex-col gap-4">
+      <form action={handleRecover} className="w-full flex flex-col gap-4">
         <div className="text-left ">
           <p className="text-sm text-gray-600 mb-4">
             Enter your email to receive a link for resetting your password.
@@ -52,7 +68,12 @@ export const RecoverPasswordModal = () => {
           >
             Cancel
           </Button>
-          <SubmitButton id="submit-recovery" type="submit" size="sm" className="flex-1">
+          <SubmitButton
+            id="submit-recovery"
+            type="submit"
+            size="sm"
+            className="flex-1"
+          >
             Recover Password
           </SubmitButton>
         </div>
