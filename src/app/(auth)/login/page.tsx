@@ -24,6 +24,7 @@ const Login = async () => {
               height={486}
               className="w-full"
               priority
+              unoptimized
             />
           </div>
         </div>

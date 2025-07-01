@@ -40,20 +40,20 @@ const Hero = async () => {
         <div className="flex flex-wrap gap-4 backdrop-blur-[12px] px-4 lg:px-[50px] py-8 bg-[rgba(255,255,255,0.2)] w-full p-4 rounded-xl border max-w-[MIN(816px,99%)]">
           <div className="flex items-baseline gap-4 justify-evenly w-full">
             <div className="rounded-xl flex-[25%] w-full max-w-[170px] bg-[rgba(53,53,53,0.5)]">
-              <Image src={Landing} alt="Revenue" />
+              <Image src={Landing} alt="Revenue" unoptimized />
             </div>
             <div className="rounded-xl flex-[25%] w-full max-w-[170px] bg-[rgba(53,53,53,0.5)]">
-              <Image src={Landing2} alt="Revenue" />
+              <Image src={Landing2} alt="Revenue" unoptimized />
             </div>
             <div className="rounded-xl flex-[25%] w-full max-w-[170px] bg-[rgba(53,53,53,0.5)]">
-              <Image src={Landing3} alt="Revenue" />
+              <Image src={Landing3} alt="Revenue" unoptimized />
             </div>
             <div className="rounded-xl flex-[25%] w-full max-w-[170px] bg-[rgba(53,53,53,0.5)]">
-              <Image src={Landing4} alt="Revenue" />
+              <Image src={Landing4} alt="Revenue" unoptimized />
             </div>
           </div>
           <div className="flex rounded-xl items-baseline gap-4 justify-evenly w-full bg-[rgba(53,53,53,0.5)]">
-            <Image src={Landing5} alt="Revenue" />
+            <Image src={Landing5} alt="Revenue" unoptimized />
           </div>
         </div>
       </div>
