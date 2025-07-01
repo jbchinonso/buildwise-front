@@ -1,6 +1,7 @@
 import { ClassArray } from "clsx";
 import { cn, createAvatarUrl } from "@/lib/utils";
 import Image from "next/image";
+import { ClassNameValue } from "tailwind-merge";
 
 interface AvatarProps {
   name: string;
@@ -63,6 +64,26 @@ export const ProfileAvatar = (props: AvatarProps) => {
           className={cnFn("bg-cover  rounded-full bg-center")}
         />
       )}
+    </div>
+  );
+};
+
+interface IProfileAvatar {
+  className?: ClassNameValue;
+  image?: string;
+  name?: string;
+  id?: string;
+}
+
+export const Avatar = ({ className, image, name, id }: IProfileAvatar) => {
+  return (
+    <div className={cn("flex gap-4 items-center", className)}>
+      <ProfileAvatar img={image} name={name || "User"} />
+
+      <div className="flex flex-col">
+        {name && <p className="font-semibold text-[#292A2C] text-xl">{name}</p>}
+        {id && <span className="text-xs text-grey-400">User Id: {id}</span>}
+      </div>
     </div>
   );
 };
