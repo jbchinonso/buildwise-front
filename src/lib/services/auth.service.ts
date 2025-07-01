@@ -8,6 +8,7 @@ import {
 import baseUrl from "../utils/baseUrl.utils";
 import { ISignUpData, IUser } from "../type";
 import { getServerSession } from "next-auth";
+import { revalidateTag } from "next/cache";
 
 export const authFetch = async (url: string, options?: any) => {
   const session = await getServerSession(authOptions);
@@ -62,16 +63,15 @@ export const login = async (payload: { email: string; password: string }) => {
 };
 
 // Forgot password
-export const forgotPassword = async (formData: FormData) => {
-  const form = formDataToObject(formData);
+export const forgotPassword = async (data: {
+  email: string;
+  baseUrl: string;
+}) => {
   try {
-    const { data } = await baseUrl.post("/auth/forgot-password", form);
-    return {
-      data,
-    };
+    const response = await baseUrl.post("/auth/forgot-password", data);
+    return response?.data;
   } catch (error: any) {
-    console.log({ error });
-    return { error: getError(error) };
+    throw getError(error);
   }
 };
 
@@ -100,12 +100,39 @@ export const resetPassword = async ({
 
 export const signUp = async (values: ISignUpData) => {
   try {
-    const response = await baseUrl.post("/auth/sign-up", values);
+    const response = await baseUrl.post("/user/signup", values);
     const data = response?.data;
+    console.log({ data, response });
     return { data };
   } catch (error) {
-    // console.log({ error });
     return { error: getError(error) };
+  }
+};
+
+// verify email
+export const verifyEmail = async (verificationToken: string) => {
+  // Your database call logic here
+  try {
+    const response = await baseUrl.get(
+      `/users/verify-email/${verificationToken}`
+    );
+    revalidateTag("profile");
+    return response?.data?.data;
+  } catch (error: any) {
+    throw new Error(getError(error));
+  }
+};
+
+// get verification email
+export const resendVerificationEmail = async (email: string) => {
+  try {
+    const response = await baseUrl.post(`/users/get-verification-mail`, {
+      email,
+    });
+    const data = response?.data?.data;
+    return data;
+  } catch (error: any) {
+    throw new Error(getError(error));
   }
 };
 

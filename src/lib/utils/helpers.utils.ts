@@ -133,3 +133,44 @@ export function formDataToObject(formData: FormData) {
   });
   return object;
 }
+
+
+/**
+ * Description placeholder
+ *
+ * @interface CreateAvatarUrlArgs
+ * @typedef {CreateAvatarUrlArgs}
+ */
+interface CreateAvatarUrlArgs {
+  /** Can be the user's name or the imgSrc. */
+  avatarUrl: string;
+  /** @see https://ui-avatars.com/ for additional properties. */
+  additionalParams?: Record<string, string | number>;
+}
+
+/**
+ * The `createAvatarUrl` function generates a URL for an avatar image with specified parameters.
+ * @param {CreateAvatarUrlArgs} args - The `args` parameter in the `createAvatarUrl` function is an
+ * object with the following structure:
+ * @returns The function `createAvatarUrl` returns a URL string that includes the base URL
+ * `https://ui-avatars.com/api.jpg` with query parameters appended based on the input arguments. If the
+ * `avatarUrl` provided in the arguments already includes "http", it returns the `avatarUrl` as is.
+ * Otherwise, it appends query parameters "name" with the `avatarUrl`, "size"
+ */
+export const createAvatarUrl = (args: CreateAvatarUrlArgs) => {
+  const { avatarUrl: url, additionalParams } = args;
+
+  if (url.includes("http")) return url;
+
+  const params = new URLSearchParams();
+  params.append("name", url);
+  params.append("size", "256");
+
+  if (additionalParams) {
+    Object.entries(additionalParams).forEach(([key, value]) => {
+      params.append(key, String(value));
+    });
+  }
+
+  return `https://ui-avatars.com/api.jpg?${params.toString()}`;
+};

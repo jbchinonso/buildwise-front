@@ -2,9 +2,10 @@
 import { Input, RecoverPasswordModal, SubmitButton } from "@/components/ui";
 import { getError, signInValidationSchema } from "@/lib/utils";
 import { useFormik } from "formik";
-import { signIn, SignInOptions } from "next-auth/react";
+import { signIn, SignInOptions, signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 export const SignInForm = () => {
@@ -41,7 +42,7 @@ export const SignInForm = () => {
 
       const res = await signIn("credentials", credentials);
 
-      console.log({res})
+      console.log({ res });
 
       if (res?.error) {
         throw new Error(res?.error);
@@ -51,18 +52,22 @@ export const SignInForm = () => {
 
       return pathname.startsWith("/login")
         ? router.refresh()
-        : router.replace(res?.url || "/titans");
+        : router.replace(res?.url || "/dashboard");
     } catch (error: any) {
       const err = getError(error);
       toast.error(getError(error));
     }
   };
 
+  useEffect(() => {
+    signOut();
+  }, []);
+
   return (
     <>
       <form
         action={loginAction}
-        className="flex flex-col my-auto w-full gap-4 justify-start "
+        className="flex flex-col justify-start w-full gap-4 my-auto "
       >
         <Input
           type="email"
@@ -90,7 +95,7 @@ export const SignInForm = () => {
 
         <Link
           href="?forgot-password=true&search=yes"
-          className="text-sm ml-auto"
+          className="ml-auto text-sm"
         >
           Forgot password?
         </Link>
@@ -101,7 +106,7 @@ export const SignInForm = () => {
         <p className="mx-auto">
           Don't have an account?
           <Link
-            className="text-primary font-bold hover:underline"
+            className="font-bold text-primary hover:underline"
             href="/signup"
           >
             {" "}
