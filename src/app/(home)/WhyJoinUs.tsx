@@ -19,6 +19,7 @@ const WhyJoinUs = () => {
               placeholder="blur"
               src={ExpandNetwork}
               className="rounded-b-[24px] w-full "
+              unoptimized
             />
           </span>
 
@@ -48,6 +49,7 @@ const WhyJoinUs = () => {
               placeholder="blur"
               src={ManageClients}
               className="rounded-t-[24px] w-full"
+              unoptimized
             />
           </span>
         </div>
@@ -67,6 +69,7 @@ const WhyJoinUs = () => {
                 placeholder="blur"
                 src={EarnCommissions}
                 className="rounded-[24px] w-full  mt-auto"
+                unoptimized
               />
             </span>
           </div>

@@ -1,17 +1,17 @@
-import { clsx, type ClassValue } from "clsx"
+import { clsx, type ClassValue } from "clsx";
 import { User } from "next-auth";
 import toast from "react-hot-toast";
-import { twMerge } from "tailwind-merge"
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 /**
  * Description placeholder
  *
- * @param {string} textToCopy 
- * @param {string} [name="Text"] 
+ * @param {string} textToCopy
+ * @param {string} [name="Text"]
  */
 export const copyTextToClipboard = (textToCopy: string, name = "Text") => {
   if (navigator.clipboard) {
@@ -73,7 +73,6 @@ export const maskEmail = (email: string) => {
   return maskedEmail;
 };
 
-
 type OutputType = "formData" | "object";
 
 export const stripFormData = (
@@ -134,7 +133,6 @@ export function formDataToObject(formData: FormData) {
   return object;
 }
 
-
 /**
  * Description placeholder
  *
@@ -174,3 +172,15 @@ export const createAvatarUrl = (args: CreateAvatarUrlArgs) => {
 
   return `https://ui-avatars.com/api.jpg?${params.toString()}`;
 };
+
+export function myImageLoader({src="", width="100", quality=75}: {
+  src?: string;
+  width?: string | number;
+  quality?: string | number;
+}) {
+  // Example: Using a hypothetical external image optimization service
+  // Replace with your actual image optimization service URL logic
+  return `https://example.com/api/image?url=${encodeURIComponent(
+    src
+  )}&w=${width}&q=${quality || 75}`;
+}

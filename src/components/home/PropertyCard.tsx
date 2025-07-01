@@ -58,6 +58,7 @@ export const PropertyCard = ({
               height={323}
               placeholder="blur"
               className="w-full h-full"
+              unoptimized
             />
           )}
         </div>

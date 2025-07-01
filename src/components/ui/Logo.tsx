@@ -26,6 +26,7 @@ export const Logo = ({
         width={110}
         height={64}
         priority
+        unoptimized
       />
     </Link>
   );
