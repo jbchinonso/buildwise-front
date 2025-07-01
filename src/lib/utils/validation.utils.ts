@@ -31,44 +31,32 @@ export const signUpValidationSchema = Yup.object().shape({
   // terms: Yup.bool().required("*You have to accept terms before signup!"),
 });
 
-import { object, string } from "zod";
-
-export const signInSchema = object({
-  email: string({ required_error: "Email is required" })
+export const signInSchema = Yup.object().shape({
+  email: Yup.string()
+    .required("Email is required")
     .min(1, "Email is required")
     .email("Invalid email"),
-  password: string({ required_error: "Password is required" })
+  password: Yup.string()
+    .required("Password is required")
     .min(1, "Password is required")
     .min(8, "Password must be more than 8 characters")
     .max(32, "Password must be less than 32 characters"),
 });
 
-
-export const newsletterSubscribeSchema = object({
-  email: string({ required_error: "Email is required" })
-    .min(1, "Email is required")
-    .email("Invalid email"),
-});
-
-export const resetPasswordSchema = object({
-  token: string({ required_error: "Reset password token is required" })
-    .min(1, "Reset password token is required"),
-  password: string({ required_error: "Password is required" })
+export const resetPasswordSchema = Yup.object().shape({
+  token: Yup.string().required("Token is required").min(1, "Token is required"),
+  password: Yup.string()
+    .required("Password is required")
     .min(1, "Password is required")
     .min(8, "Password must be more than 8 characters")
     .max(32, "Password must be less than 32 characters"),
 });
 
-
-export const verifySchema = object({
-  email: string({ required_error: "Email is required" })
+export const verifySchema = Yup.object().shape({
+  email: Yup.string()
+    .required("Email is required")
     .min(1, "Email is required")
     .email("Invalid email"),
-  otp: string({ required_error: "OTP is required" })
-    .min(1, "OTP is required")
-    .max(32, "OTP must be less than 32 characters"),
-});
-
-export const browserSchema = object({
-  address: string().url().min(1, "address is required"),
+  token: Yup.string()
+    .required("Token is required")
 });
