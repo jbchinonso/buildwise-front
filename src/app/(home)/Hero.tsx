@@ -28,9 +28,9 @@ const Hero = async () => {
           <Button
             className="rounded-sm bg-[rgba(74,0,1,1)] max-w-[151px]"
             asLink
-            href={session ? "/dashboard" : "/login"}
+            href={session?.user ? "/dashboard" : "/login"}
           >
-            {session ? "Dashboard" : "Login"}
+            {session?.user ? "Dashboard" : "Login"}
           </Button>
           <Button className="rounded-sm" variant="secondary">
             Learn More

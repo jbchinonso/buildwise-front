@@ -1,7 +1,8 @@
 "use client";
 import { Button, Input, SubmitButton } from "@/components/ui";
 import { editTitanProfile } from "@/lib/services";
-import { getError, profileValidationSchema } from "@/lib/utils";
+import { IUser } from "@/lib/type";
+import { getError, profileValidationSchema, stripFormData } from "@/lib/utils";
 import { useFormik } from "formik";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
@@ -26,7 +27,15 @@ const ProfileForm = () => {
 
   const onEdit = async () => {
     try {
-      const response = await editTitanProfile({});
+      const unchangedValues: string[] = [];
+      Object.entries(values).forEach(([key, value]) => {
+        if (value != session?.user?.[key as keyof IUser] && key != "email") {
+          unchangedValues.push(value);
+        }
+      });
+      const response = await editTitanProfile(
+        stripFormData(values, unchangedValues)
+      );
       update(response);
       setIsEditing(false);
       toast.success("Profile information updated successfully");
