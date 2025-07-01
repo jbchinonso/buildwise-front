@@ -9,9 +9,9 @@ export default async function TitansLayout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession(authOptions);
-  // if (!session || session?.user?.role !== "user") {
-  //   return redirect("/login");
-  // }
+  if (!session || session?.user?.role !== "titan") {
+    return redirect("/login");
+  }
   return (
     <section className="flex flex-col flex-1 w-full min-h-full bg-[#F8F8F8] ">
       <Header />
