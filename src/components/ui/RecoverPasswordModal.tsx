@@ -1,7 +1,6 @@
 "use client";
 import { useCallback, useState } from "react";
 import { Button, Input, Modal, SubmitButton } from "@/components/ui";
-import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { forgotPassword } from "@/lib/services";
 import toast from "react-hot-toast";
@@ -18,15 +17,13 @@ export const RecoverPasswordModal = () => {
     try {
       const response = await forgotPassword({
         email,
-        baseUrl: window.location.origin,
       });
       toast.success(
         response?.message ||
           "If an account exists, you will receive a reset email"
       );
       setEmail("");
-      router.replace("/reset-password");
-      closeModal();
+      return router.refresh();
     } catch (error) {
       toast.error(getError(error));
     }

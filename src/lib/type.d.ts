@@ -57,7 +57,11 @@ export interface IUser {
   lastName?: string;
   full_name?: string;
   email: string;
+  phone: string;
   role: "titan" | "admin";
+  state: string;
+  lga: string;
+  address: string;
 
   isEmailVerified: boolean;
   is_verified: boolean;

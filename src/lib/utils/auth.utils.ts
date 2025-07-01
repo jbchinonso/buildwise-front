@@ -70,8 +70,12 @@ export const authOptions: AuthOptions = {
       if (account) {
         token.access_token = account.access_token;
       }
+      if ((user as any)?.access_token) {
+        token.access_token = (user as any).access_token;
+      }
 
       if (trigger === "update" && session) {
+        console.log({session})
         token.user = { ...session };
       }
 
@@ -99,6 +103,7 @@ export const authOptions: AuthOptions = {
         "" + " " + session.user?.lastName ||
         ""
       ).trim();
+    
       return session;
     },
   },

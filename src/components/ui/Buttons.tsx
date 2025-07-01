@@ -25,7 +25,7 @@ export interface IButtonProps
 const ButtonSizes = {
   default: "px-4 py-2",
   xs: "px-3 text-xs py-1",
-  sm: "px-3 text-xs py-2",
+  sm: "px-3 text-[10px] py-2",
   lg: "px-8",
   icon: "size-9 aspect-square h-auto p-0 !sm:p-0",
 };
@@ -63,9 +63,7 @@ export function Button({
       )}
     >
       <span
-        className={`relative w-full min-w-fit h-full text-center justify-center items-center gap-1 flex mx-auto text-inherit transition-all duration-300 ease-out ${
-          small ? "text-xs" : ""
-        }`}
+        className={"relative w-full min-w-fit h-full text-center justify-center items-center gap-1 flex mx-auto text-inherit transition-all duration-300 ease-out px-4"}
       >
         {props.children}
       </span>

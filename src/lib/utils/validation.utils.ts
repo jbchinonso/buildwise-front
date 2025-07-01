@@ -31,6 +31,15 @@ export const signUpValidationSchema = Yup.object().shape({
   // terms: Yup.bool().required("*You have to accept terms before signup!"),
 });
 
+export const profileValidationSchema = Yup.object().shape({
+  firstName: Yup.string().optional(),
+  lastName: Yup.string().optional(),
+  phone: Yup.string().required("Phone is required"),
+  address: Yup.string().required("*Address is required!"),
+  state: Yup.string().required("*State is required!"),
+  lga: Yup.string().required("*LGA is required!"),
+});
+
 export const signInSchema = Yup.object().shape({
   email: Yup.string()
     .required("Email is required")
@@ -45,11 +54,15 @@ export const signInSchema = Yup.object().shape({
 
 export const resetPasswordSchema = Yup.object().shape({
   token: Yup.string().required("Token is required").min(1, "Token is required"),
-  password: Yup.string()
-    .required("Password is required")
-    .min(1, "Password is required")
-    .min(8, "Password must be more than 8 characters")
-    .max(32, "Password must be less than 32 characters"),
+  newPassword: Yup.string()
+    .required("New Password is required")
+    .min(8, "New Password must be more than 8 characters")
+    .max(32, "New Password must be less than 32 characters"),
+  confirmPassword: Yup.string()
+    .required("Confirm Password is required")
+    .oneOf([Yup.ref('newPassword')], "Passwords must match")
+    .min(8, "Confirm Password must be more than 8 characters")
+    .max(32, "Confirm Password must be less than 32 characters"),
 });
 
 export const verifySchema = Yup.object().shape({
