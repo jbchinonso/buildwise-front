@@ -2,10 +2,8 @@ import { ArrowRight } from "iconsax-react";
 import Link from "next/link";
 import React from "react";
 import Table from "./Table";
-import { getTransactions } from "@/lib/services";
 
-export const RecentlyListed = async () => {
-  const { data = [] } = await getTransactions();
+export const RecentlyListed = ({ data }: { data: any[] }) => {
   return (
     <div className="rounded-2xl max.-w-[MIN(100%,435px)] bg-white p-4 flex flex-col gap-4 flex-[30%] border border-grey-50">
       <div className="flex w-full items-center justify-between gap-4">

@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 
 const Dashboard = async () => {
   const session = await getServerSession(authOptions);
-  console.log({ session });
 
   switch (session?.user?.role) {
     case "admin":

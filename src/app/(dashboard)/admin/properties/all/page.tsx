@@ -1,24 +1,24 @@
 import React from "react";
-import { ClientsTable } from "../ui";
+import { PropertyTable } from "../ui";
 import { BreadCrumbs, Filters, SearchInput } from "@/components/ui";
-import { getAllClients } from "@/lib/services/client.service";
-import { clientTableDTO } from "@/lib/dtos";
+import { getAllProperties } from "@/lib/services";
+import { propertyTableDTO } from "@/lib/dtos/property.dto";
 
-const AllClients = async () => {
-  const { data = [], pagination = {} } = await getAllClients({});
+const AllProperties = async () => {
+  const { data = [], pagination = {} } = await getAllProperties({});
 
   return (
     <section className="flex flex-1 flex-col gap-4">
       <BreadCrumbs
         paths={[
-          { title: "Home", path: "/admin/clients" },
-          { title: "All Clients", path: "/admin/clients/all" },
+          { title: "Home", path: "/admin/properties" },
+          { title: "All Properties", path: "/admin/properties/all" },
         ]}
       />
 
       <div className="w-full my-2 flex items-baseline justify-between">
         <p className="font-bold flex gap-2">
-          All Clients
+          All Properties
           <span className="text-grey-400">{pagination?.total ?? 0}</span>
         </p>
 
@@ -27,9 +27,9 @@ const AllClients = async () => {
           <SearchInput />
         </div>
       </div>
-      <ClientsTable data={clientTableDTO(data)} />
+      <PropertyTable data={propertyTableDTO(data)} />
     </section>
   );
 };
 
-export default AllClients;
+export default AllProperties;

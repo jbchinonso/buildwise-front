@@ -7,8 +7,21 @@ import {
   RecentlyListed,
   TopSellingProperties,
 } from "./ui";
+import {
+  getTopSellingProperties,
+  getRecentlyListedProperties,
+} from "@/lib/services/";
+import {
+  recentlyListedPropertiesDTO,
+  topSellingPropertiesDTO,
+} from "@/lib/dtos/property.dto";
 
-const Properties = () => {
+const Properties = async () => {
+  const [topSelling, recentlyListed] = await Promise.all([
+    getTopSellingProperties({}),
+    getRecentlyListedProperties({}),
+  ]);
+
   return (
     <>
       <section className="w-full justify-between flex flex-wrap gap-4">
@@ -19,8 +32,12 @@ const Properties = () => {
       </section>
 
       <section className="flex flex-wrap gap-4 flex-1 max-h-[601px]">
-        <TopSellingProperties />
-        <RecentlyListed />
+        <TopSellingProperties
+          data={topSellingPropertiesDTO(topSelling) ?? []}
+        />
+        <RecentlyListed
+          data={recentlyListedPropertiesDTO(recentlyListed) ?? []}
+        />
       </section>
     </>
   );

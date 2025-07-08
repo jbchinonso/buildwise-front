@@ -1,11 +1,15 @@
 import { DashboardStatsCard } from "@/components/dashboard";
 import { Button, SearchInput } from "@/components/ui";
 import { ArrowRight, House2 } from "iconsax-react";
-import { Hourglass, KeyRound, Plus, Search } from "lucide-react";
+import { Hourglass, KeyRound, Plus } from "lucide-react";
 import { ClientOverview, ClientsTable } from "./ui/";
 import Link from "next/link";
+import { getAllClients } from "@/lib/services/client.service";
+import { clientTableDTO } from "@/lib/dtos/client.dto";
 
-const Properties = () => {
+const Clients = async () => {
+  const { data } = await getAllClients({});
+
   return (
     <>
       <div className="flex w-full justify-end items-center">
@@ -57,11 +61,11 @@ const Properties = () => {
             </Link>
           </div>
 
-          <ClientsTable data={[]} />
+          <ClientsTable data={clientTableDTO(data)} />
         </div>
       </section>
     </>
   );
 };
 
-export default Properties;
+export default Clients;

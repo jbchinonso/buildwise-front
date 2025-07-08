@@ -1,16 +1,11 @@
 "use client";
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
+import { IRecentlyListedDTO } from "@/lib/dtos/property.dto";
 import { ColumnDef } from "@tanstack/react-table";
 
-export type Transaction = {
-  id: string;
-  property: string;
-  location: string;
-  date_listed: string;
-};
 
-export const columns: ColumnDef<Transaction>[] = [
+export const columns: ColumnDef<IRecentlyListedDTO>[] = [
   {
     accessorKey: "property",
     header: ({ column }) => (
@@ -42,7 +37,7 @@ export const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-const Table = ({ data = [] }: { data: Transaction[] }) => {
+const Table = ({ data = [] }: { data: IRecentlyListedDTO[] }) => {
   return <DataTable columns={columns} data={data} />;
 };
 
