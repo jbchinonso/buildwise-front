@@ -1,5 +1,5 @@
 import { BreadCrumbs, Button, Input, ProfileAvatar } from "@/components/ui";
-import { UpdatePaymentModal, AddPropertyModal } from "../../ui";
+// import { UpdatePaymentModal, AddPropertyModal } from "../../ui";
 import { getClient } from "@/lib/services";
 import { clientProfileDTO } from "@/lib/dtos";
 // import { Clients, PropertiesSold, SubTitians } from "./tiles";
@@ -30,7 +30,7 @@ const ClientProfile = async (props: { params: Params }) => {
           <ProfileAvatar name="Annette Black" />
 
           <div className="flex gap-4 items-center">
-            <UpdatePaymentModal />
+            {/* <UpdatePaymentModal /> */}
 
             <Button
               asLink
@@ -150,7 +150,7 @@ const ClientProfile = async (props: { params: Params }) => {
           /> */}
 
           <div className="w-full flex py-2 my-2 mt-auto">
-            <AddPropertyModal />
+            {/* <AddPropertyModal /> */}
           </div>
         </div>
       </div>
