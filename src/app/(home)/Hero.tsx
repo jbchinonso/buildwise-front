@@ -11,7 +11,6 @@ import { authOptions } from "@/lib/utils";
 
 const Hero = async () => {
   const session = await getServerSession(authOptions);
-  console.log({session})
   return (
     <section className="w-full relative flex-1 min-h-full bg-[#F8F8F8] py-[calc(var(--navbar-scroll-padding))] px-2 sm:px-[MIN(100px,10%)]">
       <div className="w-full relative py-10 flex-1 z-[1] flex flex-col gap-10 justify-center items-center">
@@ -29,9 +28,9 @@ const Hero = async () => {
           <Button
             className="rounded-sm bg-[rgba(74,0,1,1)] max-w-[151px]"
             asLink
-            href={session ? "/titans" : "/login"}
+            href={session?.user ? "/dashboard" : "/login"}
           >
-            {session ? "Dashboard" : "Login"}
+            {session?.user ? "Dashboard" : "Login"}
           </Button>
           <Button className="rounded-sm" variant="secondary">
             Learn More
@@ -41,20 +40,20 @@ const Hero = async () => {
         <div className="flex flex-wrap gap-4 backdrop-blur-[12px] px-4 lg:px-[50px] py-8 bg-[rgba(255,255,255,0.2)] w-full p-4 rounded-xl border max-w-[MIN(816px,99%)]">
           <div className="flex items-baseline gap-4 justify-evenly w-full">
             <div className="rounded-xl flex-[25%] w-full max-w-[170px] bg-[rgba(53,53,53,0.5)]">
-              <Image src={Landing} alt="Revenue" />
+              <Image src={Landing} alt="Revenue" unoptimized />
             </div>
             <div className="rounded-xl flex-[25%] w-full max-w-[170px] bg-[rgba(53,53,53,0.5)]">
-              <Image src={Landing2} alt="Revenue" />
+              <Image src={Landing2} alt="Revenue" unoptimized />
             </div>
             <div className="rounded-xl flex-[25%] w-full max-w-[170px] bg-[rgba(53,53,53,0.5)]">
-              <Image src={Landing3} alt="Revenue" />
+              <Image src={Landing3} alt="Revenue" unoptimized />
             </div>
             <div className="rounded-xl flex-[25%] w-full max-w-[170px] bg-[rgba(53,53,53,0.5)]">
-              <Image src={Landing4} alt="Revenue" />
+              <Image src={Landing4} alt="Revenue" unoptimized />
             </div>
           </div>
           <div className="flex rounded-xl items-baseline gap-4 justify-evenly w-full bg-[rgba(53,53,53,0.5)]">
-            <Image src={Landing5} alt="Revenue" />
+            <Image src={Landing5} alt="Revenue" unoptimized />
           </div>
         </div>
       </div>

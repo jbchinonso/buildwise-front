@@ -1,17 +1,17 @@
-import { clsx, type ClassValue } from "clsx"
+import { clsx, type ClassValue } from "clsx";
 import { User } from "next-auth";
 import toast from "react-hot-toast";
-import { twMerge } from "tailwind-merge"
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 /**
  * Description placeholder
  *
- * @param {string} textToCopy 
- * @param {string} [name="Text"] 
+ * @param {string} textToCopy
+ * @param {string} [name="Text"]
  */
 export const copyTextToClipboard = (textToCopy: string, name = "Text") => {
   if (navigator.clipboard) {
@@ -73,7 +73,6 @@ export const maskEmail = (email: string) => {
   return maskedEmail;
 };
 
-
 type OutputType = "formData" | "object";
 
 export const stripFormData = (
@@ -132,4 +131,56 @@ export function formDataToObject(formData: FormData) {
     object[key] = value;
   });
   return object;
+}
+
+/**
+ * Description placeholder
+ *
+ * @interface CreateAvatarUrlArgs
+ * @typedef {CreateAvatarUrlArgs}
+ */
+interface CreateAvatarUrlArgs {
+  /** Can be the user's name or the imgSrc. */
+  avatarUrl: string;
+  /** @see https://ui-avatars.com/ for additional properties. */
+  additionalParams?: Record<string, string | number>;
+}
+
+/**
+ * The `createAvatarUrl` function generates a URL for an avatar image with specified parameters.
+ * @param {CreateAvatarUrlArgs} args - The `args` parameter in the `createAvatarUrl` function is an
+ * object with the following structure:
+ * @returns The function `createAvatarUrl` returns a URL string that includes the base URL
+ * `https://ui-avatars.com/api.jpg` with query parameters appended based on the input arguments. If the
+ * `avatarUrl` provided in the arguments already includes "http", it returns the `avatarUrl` as is.
+ * Otherwise, it appends query parameters "name" with the `avatarUrl`, "size"
+ */
+export const createAvatarUrl = (args: CreateAvatarUrlArgs) => {
+  const { avatarUrl: url, additionalParams } = args;
+
+  if (url.includes("http")) return url;
+
+  const params = new URLSearchParams();
+  params.append("name", url);
+  params.append("size", "256");
+
+  if (additionalParams) {
+    Object.entries(additionalParams).forEach(([key, value]) => {
+      params.append(key, String(value));
+    });
+  }
+
+  return `https://ui-avatars.com/api.jpg?${params.toString()}`;
+};
+
+export function myImageLoader({src="", width="100", quality=75}: {
+  src?: string;
+  width?: string | number;
+  quality?: string | number;
+}) {
+  // Example: Using a hypothetical external image optimization service
+  // Replace with your actual image optimization service URL logic
+  return `https://example.com/api/image?url=${encodeURIComponent(
+    src
+  )}&w=${width}&q=${quality || 75}`;
 }

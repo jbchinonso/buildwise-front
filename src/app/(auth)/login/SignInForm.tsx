@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 export const SignInForm = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
+  const callbackUrl = "/dashboard";
   const router = useRouter();
   const isModalOpen = searchParams.get("forgot-password");
 
@@ -41,19 +41,16 @@ export const SignInForm = () => {
 
       const res = await signIn("credentials", credentials);
 
-      console.log({res})
-
       if (res?.error) {
         throw new Error(res?.error);
       }
 
       toast.success("Login successful, Redirecting...");
 
-      return pathname.startsWith("/login")
-        ? router.refresh()
-        : router.replace(res?.url || "/titans");
+      return router.replace(res?.url || "/dashboard");
     } catch (error: any) {
       const err = getError(error);
+      console.error(err);
       toast.error(getError(error));
     }
   };
@@ -62,7 +59,7 @@ export const SignInForm = () => {
     <>
       <form
         action={loginAction}
-        className="flex flex-col my-auto w-full gap-4 justify-start "
+        className="flex flex-col justify-start w-full gap-4 my-auto "
       >
         <Input
           type="email"
@@ -90,7 +87,7 @@ export const SignInForm = () => {
 
         <Link
           href="?forgot-password=true&search=yes"
-          className="text-sm ml-auto"
+          className="ml-auto text-sm"
         >
           Forgot password?
         </Link>
@@ -101,7 +98,7 @@ export const SignInForm = () => {
         <p className="mx-auto">
           Don't have an account?
           <Link
-            className="text-primary font-bold hover:underline"
+            className="font-bold text-primary hover:underline"
             href="/signup"
           >
             {" "}

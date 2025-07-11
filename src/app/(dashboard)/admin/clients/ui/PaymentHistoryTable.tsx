@@ -169,7 +169,13 @@ export const PaymentHistoryTable = ({
             })}
           </div>
           <div className="relative flex w-full my-4">
-            <Image src="/image/sign.png" alt="" width={100} height={100} />
+            <Image
+              src="/image/sign.png"
+              alt=""
+              width={100}
+              height={100}
+              unoptimized
+            />
           </div>
           <div className="flex mt-auto py-4 gap-4 justify-stretch w-full  *:w-full">
             <Button

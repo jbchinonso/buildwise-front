@@ -1,6 +1,6 @@
 "use client";
 import { DashboardModal, DataTable } from "@/components/dashboard";
-import { Button, DataTableColumnHeader, ProfileAvatar } from "@/components/ui";
+import { Avatar, Button, DataTableColumnHeader, ProfileAvatar } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
 import { copyTextToClipboard } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
@@ -77,7 +77,7 @@ export const PayCommissionModal = ({ bankAccount = "O70 3456 6543" }) => {
         >
           <div className="flex flex-col gap-4 w-full">
             <div className="flex items-baseline justify-between">
-              <ProfileAvatar
+              <Avatar
                 image="/image/avatar.png"
                 name="Annette Black"
                 id="0939393"

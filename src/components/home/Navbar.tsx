@@ -47,7 +47,6 @@ export const Navbar = () => {
       <div className="w-full flex-1 gap-4 max-w-[1232px] mx-auto md:gap-2 shop-width pt-6 pb-4 md:py-6 px-2 py-4 sm:px-[MIN(100px,10%)] flex justify-between items-center">
         <div className="border bg-[#024533] shadow-navbar flex items-center justify-between flex-1 w-full gap-4 px-2 p-4 m-auto rounded-sm md:gap-2">
           <div className="flex items-center gap-4">
-            <Hamburger />
             <Logo />
           </div>
           <ul
@@ -78,12 +77,13 @@ export const Navbar = () => {
           </ul>
           <Button
             asLink
-            href={session ? "/titans" : "/login"}
+            href={session?.user ? "/dashboard" : "/login"}
             className="bg-[#4A0001] rounded"
           >
-            {session ? "Dashboard" : "Login"}
+            {session?.user ? "Dashboard" : "Login"}
           </Button>
-          {/* <SearchBar /> */}
+
+          <Hamburger />
         </div>
       </div>
     </nav>

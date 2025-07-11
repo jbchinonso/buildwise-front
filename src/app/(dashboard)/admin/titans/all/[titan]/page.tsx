@@ -7,14 +7,15 @@ import {
 } from "../../ui";
 
 type Params = Promise<{ titan: string }>;
+
 const TitanProfile = async (props: { params: Params }) => {
   const params = await props.params;
   const id = params.titan;
 
   const personalInformation = {
-    phone_number: "070 3456 6543",
-    email_address: "AnnetteBlack@gmail.com",
-    residential_address: "2464 Royal Ln. Mesa, New Jersey 45463",
+    phone: "070 3456 6543",
+    email: "AnnetteBlack@gmail.com",
+    address: "2464 Royal Ln. Mesa, New Jersey 45463",
     bank_account: "First bank- 0838 3838 38",
     upline: "Ibrahim Sanogo",
     joined: "1 year 5 months ago",
@@ -42,11 +43,7 @@ const TitanProfile = async (props: { params: Params }) => {
 
       <div className="flex flex-col gap-8 flex-1 w-full gap max-w-[MIN(100%,1052px)]">
         <div className="flex w-full justify-between gap-4 flex-wrap items-center">
-          <ProfileAvatar
-            image="/image/avatar.png"
-            name="Annette Black"
-            id="0939393"
-          />
+          <ProfileAvatar img="/image/avatar.png" name="Annette Black" />
 
           <div className="flex gap-4 items-center">
             <PayCommissionModal />
@@ -71,12 +68,12 @@ const TitanProfile = async (props: { params: Params }) => {
 
           <Input
             label="Phone number"
-            name="phone_number"
-            id="phone_number"
+            name="phone"
+            id="phone"
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.phone_number}
+            defaultValue={personalInformation.phone}
           />
           <Input
             label="Email address"
@@ -85,16 +82,16 @@ const TitanProfile = async (props: { params: Params }) => {
             type="email"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.email_address}
+            defaultValue={personalInformation.email}
           />
           <Input
             label="Residential address"
-            name="residential_address"
-            id="residential_address"
+            name="address"
+            id="address"
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.residential_address}
+            defaultValue={personalInformation.address}
           />
           <Input
             label="Bank account"

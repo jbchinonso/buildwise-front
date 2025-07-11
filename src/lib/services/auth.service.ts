@@ -8,6 +8,7 @@ import {
 import baseUrl from "../utils/baseUrl.utils";
 import { ISignUpData, IUser } from "../type";
 import { getServerSession } from "next-auth";
+import { revalidateTag } from "next/cache";
 
 export const authFetch = async (url: string, options?: any) => {
   const session = await getServerSession(authOptions);
@@ -62,50 +63,64 @@ export const login = async (payload: { email: string; password: string }) => {
 };
 
 // Forgot password
-export const forgotPassword = async (formData: FormData) => {
-  const form = formDataToObject(formData);
+export const forgotPassword = async (data: {
+  email: string;
+  baseUrl?: string;
+}) => {
   try {
-    const { data } = await baseUrl.post("/auth/forgot-password", form);
-    return {
-      data,
-    };
+    const response = await baseUrl.post("/auth/forgot-password", data);
+    return response?.data;
   } catch (error: any) {
-    console.log({ error });
-    return { error: getError(error) };
+    throw getError(error);
   }
 };
 
 // Reset password
-export const resetPassword = async ({
-  confirm_password,
-  new_password,
-  token,
-}: {
-  confirm_password: string;
-  new_password: string;
+export const resetPassword = async (data: {
+  newPassword: string;
   token: string | null;
 }) => {
-  // const form = formDataToObject(formData);
   try {
-    const res = await baseUrl.post(`/auth/reset-password/${token}`, {
-      new_password,
-      confirm_password,
-    });
-    const data = res?.data?.data;
-    return { data };
+    const response = await baseUrl.post("/auth/reset-password", data);
+    return response?.data;
   } catch (error) {
-    return { error: getError(error) };
+    throw getError(error);
   }
 };
 
 export const signUp = async (values: ISignUpData) => {
   try {
-    const response = await baseUrl.post("/auth/sign-up", values);
-    const data = response?.data;
-    return { data };
+    const response = await baseUrl.post("/user/signup", values);
+    return response?.data;
   } catch (error) {
-    // console.log({ error });
-    return { error: getError(error) };
+    throw getError(error) 
+  }
+};
+
+// verify email
+export const verifyEmail = async (verificationToken: string) => {
+  // Your database call logic here
+  try {
+    const response = await baseUrl.get(
+      `/users/verify-email/${verificationToken}`
+    );
+    revalidateTag("profile");
+    return response?.data;
+  } catch (error: any) {
+    throw getError(error);
+  }
+};
+
+// get verification email
+export const resendVerificationEmail = async (email: string) => {
+  try {
+    const response = await baseUrl.post(`/users/get-verification-mail`, {
+      email,
+    });
+    const data = response?.data?.data;
+    return data;
+  } catch (error: any) {
+    throw new Error(getError(error));
   }
 };
 
@@ -138,5 +153,14 @@ export const resendVerification = async (form: any) => {
   } catch (error) {
     console.log({ error });
     return { error: getError(error) };
+  }
+};
+
+export const editTitanProfile = async (form: any) => {
+  try {
+    const response = await baseUrl.patch("/auth/profile", form);
+    return response?.data;
+  } catch (error) {
+    throw getError(error);
   }
 };
