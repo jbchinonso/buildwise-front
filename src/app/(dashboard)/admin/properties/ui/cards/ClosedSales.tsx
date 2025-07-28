@@ -4,14 +4,14 @@ import { useModal } from "@/lib/hooks";
 import { KeyRound } from "lucide-react";
 import React from "react";
 
-export const ClosedSales = () => {
+export const ClosedSales = ({ data = 0 }: { data?: number }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
         title="Closed sales"
         icon={<KeyRound size="24" color="#9747FF" />}
-        data="90"
+        data={data}
         theme=""
         // className="cursor-auto"
         onClick={toggleModal}

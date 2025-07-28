@@ -1,91 +1,57 @@
 import { BreadCrumbs, Button, Input, ProfileAvatar } from "@/components/ui";
-// import { UpdatePaymentModal, AddPropertyModal } from "../../ui";
-import { getClient } from "@/lib/services";
+import { getProperty } from "@/lib/services";
 import { clientProfileDTO } from "@/lib/dtos";
-// import { Clients, PropertiesSold, SubTitians } from "./tiles";
+import { PropertyMenu } from "./ui";
 
-type Params = Promise<{ client: string }>;
+type Params = Promise<{ property: string }>;
 
-const ClientProfile = async (props: { params: Params }) => {
+const Property = async (props: { params: Params }) => {
   const params = await props.params;
-  const id = params.client;
+  const id = params.property;
 
-  
-  const data = await getClient(id);
-  
-  const personalInformation = clientProfileDTO(data)
+  const property = await getProperty(id);
 
   return (
     <section className="flex flex-1 flex-col gap-4">
       <BreadCrumbs
         paths={[
-          { title: "Home", path: "/admin/clients" },
-          { title: "All Clients", path: "/admin/clients/all" },
-          { title: "Profile", path: "/admin/clients/:profile" },
+          { title: "Home", path: "/admin/properties" },
+          { title: "All Properties", path: "/admin/properties/all" },
+          {
+            title: property?.name || "Property",
+            path: "/admin/properties/:property",
+          },
         ]}
       />
 
       <div className="flex p-2 flex-col gap-8 flex-1 w-full gap max-w-[MIN(100%,1052px)]">
         <div className="flex w-full justify-between gap-4 flex-wrap items-center">
-          <ProfileAvatar name="Annette Black" />
+          <p className="font-bold text-xl">{property?.name || "Property"}</p>
 
           <div className="flex gap-4 items-center">
             {/* <UpdatePaymentModal /> */}
 
+            <Button asLink href={`${id}/new-sale`} size="sm">
+              Make Sales
+            </Button>
             <Button
               asLink
               href={`${id}/payment-history`}
               size="sm"
               variant="secondary"
             >
-              Payment History
+              Update Payment
             </Button>
+            <PropertyMenu />
           </div>
         </div>
 
         {/* Profile info */}
         <div className="flex flex-wrap justify-between gap-4 gap-x-20 w-full">
           <header className="w-full text-grey-400 font-bold">
-            <p>Personal Information</p>
+            <p>Property information</p>
           </header>
 
-          <Input
-            label="First name"
-            name="firstName"
-            id="firstName"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.firstName}
-          />
-          <Input
-            label="Last name"
-            name="lastName"
-            id="lastName"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.lastName}
-          />
-
-          <Input
-            label="Phone number"
-            name="phone_number"
-            id="phone_number"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.phone_number}
-          />
-          <Input
-            label="Email Address"
-            name="email"
-            id="email"
-            type="email"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.email}
-          />
           <Input
             label="State"
             name="state"
@@ -93,7 +59,7 @@ const ClientProfile = async (props: { params: Params }) => {
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.state}
+            defaultValue={property?.state || "N/A"}
           />
           <Input
             label="LGA"
@@ -102,17 +68,117 @@ const ClientProfile = async (props: { params: Params }) => {
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.lga}
+            defaultValue={property?.lga || "N/A"}
           />
 
           <Input
-            label="Residential address"
+            label="Address"
+            name="address"
+            id="address"
+            type="text"
+            readOnly
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            defaultValue={property?.address}
+          />
+          <Input
+            label="Price"
+            name="price"
+            id="price"
+            type="text"
+            readOnly
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            defaultValue={property?.price || "N/A"}
+          />
+          <Input
+            label="Payment options"
+            name="priceOptions"
+            id="priceOptions"
+            type="text"
+            readOnly
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            defaultValue={property?.priceOptions as string}
+          />
+          <Input
+            label="Documents"
+            name="documents"
+            id="documents"
+            type="text"
+            readOnly
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            defaultValue={property?.documents}
+          />
+
+          <Input
+            label="Units available"
             name="residential_address"
             id="residential_address"
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.residential_address}
+            defaultValue={property?.availableUnits}
+          />
+          <Input
+            label="Units Sold/Reserved"
+            name="soldUnits"
+            id="soldUnits"
+            type="text"
+            readOnly
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            defaultValue={property?.soldUnits}
+          />
+          <Input
+            label="Revenue generated"
+            name="revenue"
+            id="revenue"
+            type="text"
+            readOnly
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            defaultValue={property?.revenue}
+          />
+          <Input
+            label="Outstanding payments"
+            name="revenue"
+            id="revenue"
+            type="text"
+            readOnly
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            defaultValue={property?.outstandingPayments}
+          />
+          <Input
+            label="Date listed"
+            name="createdAt"
+            id="createdAt"
+            type="text"
+            readOnly
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            defaultValue={property?.createdAt}
+          />
+          <Input
+            label="Clients/Ownerships"
+            name="owners"
+            id="owners"
+            type="text"
+            readOnly
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            defaultValue={property?.owners}
+          />
+          <Input
+            label="Active agents"
+            name="agents"
+            id="agents"
+            type="text"
+            readOnly
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            defaultValue={property?.agents}
+          />
+          <Input
+            label="Commission rate"
+            name="saleCommissionRate"
+            id="saleCommissionRate"
+            type="text"
+            readOnly
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            defaultValue={property?.saleCommissionRate}
           />
         </div>
         {/* Activities info */}
@@ -158,4 +224,4 @@ const ClientProfile = async (props: { params: Params }) => {
   );
 };
 
-export default ClientProfile;
+export default Property;

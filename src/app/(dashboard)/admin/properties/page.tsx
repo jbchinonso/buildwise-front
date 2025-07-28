@@ -10,24 +10,34 @@ import {
 import {
   getTopSellingProperties,
   getRecentlyListedProperties,
+  getPropertiesSummary,
 } from "@/lib/services/";
 import {
   recentlyListedPropertiesDTO,
   topSellingPropertiesDTO,
 } from "@/lib/dtos/property.dto";
+import { Plus } from "lucide-react";
+import { Button } from "@/components/ui";
 
 const Properties = async () => {
-  const [topSelling, recentlyListed] = await Promise.all([
+  const [topSelling, recentlyListed, summary] = await Promise.all([
     getTopSellingProperties({}),
     getRecentlyListedProperties({}),
+    getPropertiesSummary(),
   ]);
 
   return (
     <>
+      <div className="flex w-full justify-end items-center">
+        <Button asLink href="properties/add-property">
+          <Plus color="currentColor" />
+          Add new property
+        </Button>
+      </div>
       <section className="w-full justify-between flex flex-wrap gap-4">
-        <TotalListing totalListing={90} />
-        <AvailableUnits />
-        <ReservedUnits />
+        <TotalListing totalListing={summary?.totalProperties || 0} />
+        <AvailableUnits availableUnits={summary?.totalAvailableUnits || 0} />
+        <ReservedUnits reservedUnits={summary?.totalReservedUnits || 0} />
         <ClosedSales />
       </section>
 

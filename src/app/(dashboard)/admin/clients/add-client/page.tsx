@@ -1,7 +1,10 @@
 import { BreadCrumbs, Input } from "@/components/ui";
 import { AddClientForm } from "./AddClientForm";
+import { getTitans } from "@/lib/services";
 
-const AddClient = () => {
+const AddClient = async() => {
+  const titans = await getTitans()
+  console.log({titans})
   return (
     <section className="flex flex-1 flex-col gap-4">
       <BreadCrumbs
@@ -15,7 +18,8 @@ const AddClient = () => {
           <p>Enter your client information</p>
         </header>
 
-        <AddClientForm />
+        <AddClientForm 
+         />
       </div>
     </section>
   );

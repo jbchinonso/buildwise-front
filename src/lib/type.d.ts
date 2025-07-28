@@ -49,6 +49,11 @@ interface Company {
   bs: string;
 }
 
+interface IPagination {
+  page?: number;
+  limit?: number;
+}
+
 export interface IUser {
   id: number | string;
   created_at: string;

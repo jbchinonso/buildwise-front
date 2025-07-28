@@ -94,7 +94,7 @@ const columns: ColumnDef<Transaction>[] = [
 
 export const TotalListing = ({
   data = [],
-  totalListing = 90,
+  totalListing = 0,
 }: {
   data?: any[];
   totalListing?: number | string;

@@ -1,21 +1,20 @@
-import { customFetch, getError } from "../utils";
+import { getError } from "../utils";
+import { authFetch } from "./auth.service";
 
-export const getTitans = async (): Promise<{
-  data?: any[];
-  error?: string;
-}> => {
+export const getTitans = async () => {
   try {
-    const data = await customFetch(
-      "https://dummyjson.com/c/ee14-b763-4227-8657",
-      {
-        next: {
-          revalidate: 8400,
-        },
-      }
-    );
+    const response= await authFetch("/titans/all", {
+      next: {
+        revalidate: 8400,
+        tags: ["titans"],
+      },
+    });
 
-    return { data };
+    console.log({ response });
+
+    return response //{ data, ...pagination };
   } catch (error) {
-    return { error: getError(error) };
+    console.error("Error fetching titans:", getError(error));
+    throw new Error(getError(error));
   }
 };
