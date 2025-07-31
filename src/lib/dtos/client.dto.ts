@@ -21,6 +21,7 @@ export const clientTableDTO = (data: IClientsData[]): Client[] =>
 interface IClientProfile {
   phone_number: string;
   firstName: string;
+  fullname?: string;
   lastName: string;
   email: string;
   state: string;
@@ -33,6 +34,7 @@ export const clientProfileDTO = (client: IClientsData): IClientProfile => ({
   id: client?._id,
   firstName: client?.firstName ?? "N/A",
   lastName: client?.lastName ?? "N/A",
+  fullname: `${client?.firstName || ""} ${client?.lastName || ""}`.trim(),
   email: client?.email ?? "N/A",
   state: client?.state,
   lga: client?.lga,

@@ -68,3 +68,22 @@ export const addClient = async (client: ICreateClientPayload) => {
     throw getError(error);
   }
 };
+
+export const getClientSummary = async () => {
+  try {
+    const response = await authFetch(`/sales/client-stat-summary`, {
+      next: {
+        tags: ["client"],
+        revalidate: 8400,
+      },
+    });
+
+    return response as {
+      totalClients: number;
+      totalReservedProperties: number;
+      totalCompletedSales: number;
+    };
+  } catch (error) {
+    throw getError(error);
+  }
+};

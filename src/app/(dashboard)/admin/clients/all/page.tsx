@@ -5,7 +5,7 @@ import { getAllClients } from "@/lib/services/client.service";
 import { clientTableDTO } from "@/lib/dtos";
 
 const AllClients = async () => {
-  const { data = [], pagination = {} } = await getAllClients({});
+  const { data = [], pagination = {} } = await getAllClients();
 
   return (
     <section className="flex flex-1 flex-col gap-4">

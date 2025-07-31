@@ -140,7 +140,7 @@ export const ClosedSales = ({
           heading="Closed Sales"
           className="max-w-[MIN(100%,600px)]"
         >
-          <section className="flex flex-col w-full gap-4">
+          <section className="flex flex-1 flex-col w-full gap-4">
             <div className="w-full flex flex-col">
               <PieChart chartConfig={chartConfig} chartData={chartData} />
               <div className="flex w-full rounded-xl text-sm py-[10px] flex-wrap gap-2 text-white">
@@ -186,7 +186,7 @@ export const ClosedSales = ({
               <DataTable columns={columns} data={data} />
             </div>
 
-            <div className="flex justify-end gap-4 items-center">
+            <div className="flex mt-auto justify-end gap-4 items-center">
               <Button size="xs" outline variant="secondary">
                 Close
               </Button>

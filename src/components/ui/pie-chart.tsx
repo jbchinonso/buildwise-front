@@ -46,11 +46,11 @@ const renderCustomizedLabel = ({
 
 export function PieChart({ chartConfig, chartData }: PieChartProps) {
   return (
-    <div className="w-full">
+    <div className="w-full ">
       <ChartContainer
         config={chartConfig}
         // className="mx-auto aspect-square max-h-[250px] [&_.recharts-text]:fill-background"
-        className="mx-auto text-black aspect-square max-h-[250px] [&_.recharts-text]:fill-black [&_.recharts-pie-label-text]:fill-black [&_.recharts-pie-label-line]:fill-black"
+        className="mx-auto border p-4 bg-zinc-100 rounded-full text-black aspect-square max-h-[250px] [&_.recharts-text]:fill-black [&_.recharts-pie-label-text]:fill-black [&_.recharts-pie-label-line]:fill-black"
       >
         <PieChartComponent>
           <ChartTooltip

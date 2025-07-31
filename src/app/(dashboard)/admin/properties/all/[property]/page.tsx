@@ -1,7 +1,7 @@
 import { BreadCrumbs, Button, Input } from "@/components/ui";
 import { getAllClients, getProperty } from "@/lib/services";
 import { ActiveAgents, PropertyMenu, UnitsSold } from "../../ui";
-import { UpdatePaymentModal } from "../../../clients/ui";
+import { UpdatePropertyPaymentModal } from "../../../clients/ui";
 import { clientSelectDTO } from "@/lib/dtos";
 import { ClientsOwnersModal } from "../../ui/ClientsOwnersModal";
 
@@ -45,7 +45,7 @@ const Property = async (props: {
             <Button asLink href={`${id}/new-sale`} size="sm">
               Make Sales
             </Button>
-            <UpdatePaymentModal clients={clientOptions} />
+            <UpdatePropertyPaymentModal clients={clientOptions} />
             <PropertyMenu property={property} />
           </div>
         </div>

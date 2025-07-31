@@ -55,14 +55,20 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const ClientOverview = ({ data }: { data: Transaction[] }) => {
+export const ClientOverview = ({
+  data,
+  clients = 0,
+}: {
+  data: Transaction[];
+  clients?: string | number;
+}) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
-        title="Total Clients"
-        icon={<Profile2User size="24" color="#9747FF" />}
-        data="23.8B"
+        title="Clients"
+        icon={<Profile2User size="24" color="rgba(112,244,31,1)" />}
+        data={clients}
         theme=""
         onClick={toggleModal}
       />
@@ -73,7 +79,7 @@ export const ClientOverview = ({ data }: { data: Transaction[] }) => {
           heading="Clients Overview"
           className="max-w-[MIN(95%,600px)]"
         >
-          <section className="flex flex-col w-full gap-4 ">
+          <section className="flex  flex-1 flex-col w-full gap-4 ">
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">All Clients</p>
@@ -84,9 +90,7 @@ export const ClientOverview = ({ data }: { data: Transaction[] }) => {
                 <p className="text-grey-600">208</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">
-                  Properties bought/reserved
-                </p>
+                <p className="text-grey-400">Properties bought/reserved</p>
                 <p className="text-grey-600">₦51,208,009</p>
               </div>
             </div>
@@ -106,7 +110,7 @@ export const ClientOverview = ({ data }: { data: Transaction[] }) => {
               <DataTable columns={columns} data={data} />
             </div>
 
-            <div className="flex justify-end gap-4 items-center">
+            <div className="flex mt-auto justify-end gap-4 items-center">
               <Button size="xs" outline variant="secondary">
                 Close
               </Button>
