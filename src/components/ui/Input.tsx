@@ -47,7 +47,7 @@ export const Input = ({
   return (
     <div
       className={twMerge(
-        `w-full flex flex-col min-h-[64px] gap-1 py-1  overflow-hidden border  bg-white rounded-2xl has-[input:focus-within]:border-grey-600`,
+        `w-full flex flex-col min-h-[64px] gap-1 py-1  overflow-hidden border bg-white rounded-2xl has-[input:focus-within]:border-grey-600`,
         error ? "text-error-5 border-red-600/[0.06]" : "border-[#E8E9EB]",
         containerStyle
       )}
@@ -90,6 +90,7 @@ export const Input = ({
           >
             <>{children}</>
             <input
+              autoComplete="off"
               {...props}
               type={`${
                 isPasswordInput && isPasswordVisible ? "text" : props.type

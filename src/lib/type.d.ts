@@ -49,6 +49,11 @@ interface Company {
   bs: string;
 }
 
+interface IPagination {
+  page?: number;
+  limit?: number;
+}
+
 export interface IUser {
   id: number | string;
   created_at: string;
@@ -121,4 +126,47 @@ export interface ICompleteProfileData {
   phone_number: string;
   // account_number: string;
   // bank_name: string;
+}
+
+interface IState {
+  name: string;
+  lgas: string[];
+}
+
+interface IPaymentOptions {
+  instantPrice: string | number;
+  plans?: {
+    duration: string;
+    price: string;
+  }[];
+}
+
+interface ICreatePropertyPayload {
+  name: string;
+  state: string;
+  lga: string;
+  address: string;
+  totalUnits: number | string;
+  availableUnits: number | string;
+  saleCommissionRate: number | string;
+  documents: string;
+  priceOptions?: IPaymentOptions | any;
+}
+
+interface IProperty extends ICreatePropertyPayload {
+  _id: string;
+  price: string;
+  sales: [];
+  soldUnits?: string;
+  createdAt?: string;
+  revenue?: string;
+  outstandingPayments?: string;
+  owners?: string;
+  agents?: string;
+}
+
+
+interface IOption {
+  value?: string;
+  label?: React.ReactNode | string;
 }

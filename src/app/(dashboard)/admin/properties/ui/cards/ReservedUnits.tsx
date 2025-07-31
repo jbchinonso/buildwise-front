@@ -99,18 +99,40 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
+interface ISummary {
+  totalProperties: number;
+  totalAvailableUnits: number;
+  totalReservedUnits: number;
+  closedSales: number;
+}
+
 export const ReservedUnits = ({
   data = [],
-  reservedUnits = 90,
+  reservedUnits = 0,
+  summary,
 }: {
   data?: any[];
+  summary?: ISummary;
   reservedUnits?: number | string;
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+  const chartData = [
+    {
+      label: "available",
+      data: summary?.totalAvailableUnits ?? 0,
+      fill: "#9747FF",
+    },
+    {
+      label: "reserved",
+      data: summary?.totalReservedUnits ?? 0,
+      fill: "#926667",
+    },
+    { label: "closed", data: summary?.closedSales ?? 0, fill: "#1FDBF4" },
+  ];
   return (
     <>
       <DashboardStatsCard
-        title="Reserved Units"
+        title="Reserved units"
         icon={<Hourglass size="24" color="#926667" />}
         data={reservedUnits}
         theme=""
@@ -121,10 +143,10 @@ export const ReservedUnits = ({
       {isModalOpen && (
         <PageModal
           handleClose={closeModal}
-          heading="Reserved Units"
+          heading="Reserved units"
           className="max-w-[MIN(100%,600px)]"
         >
-          <section className="flex flex-col w-full gap-4">
+          <section className="flex flex-1 flex-col w-full gap-4">
             <div className="w-full flex flex-col">
               <PieChart chartConfig={chartConfig} chartData={chartData} />
               <div className="flex w-full rounded-xl text-sm py-[10px] flex-wrap gap-2 text-white">
@@ -132,7 +154,9 @@ export const ReservedUnits = ({
                   <span className="size-3 rounded-full bg-[#7A7F83]" />
                   <div className="flex flex-col">
                     <p className="text-grey-400">Total Listing</p>
-                    <p className="text-grey-600">100</p>
+                    <p className="text-grey-600">
+                      {summary?.totalAvailableUnits ?? 0}
+                    </p>
                   </div>
                 </div>
                 {chartData.map(({ label, data, fill }) => {
@@ -170,7 +194,7 @@ export const ReservedUnits = ({
               <DataTable columns={columns} data={data} />
             </div>
 
-            <div className="flex justify-end gap-4 items-center">
+            <div className="flex mt-auto justify-end gap-4 items-center">
               <Button size="xs" outline variant="secondary">
                 Close
               </Button>

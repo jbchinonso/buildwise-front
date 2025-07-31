@@ -1,22 +1,13 @@
 "use client"
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
+import { ITopSellingDTO } from "@/lib/dtos/property.dto";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-export type Transaction = {
-  id: string;
-  property: string;
-  location: string;
-  last_payment: string;
-  totalPaid: string;
-  outstanding: string;
-  instalment: string;
-  payment_status: string;
-};
 
-export const columns: ColumnDef<Transaction>[] = [
+export const columns: ColumnDef<ITopSellingDTO>[] = [
   {
     accessorKey: "property",
     header: ({ column }) => (
@@ -63,7 +54,7 @@ export const columns: ColumnDef<Transaction>[] = [
 
       return (
         <div className="flex justify-center px-4">
-          <Link href={`/admin/titans/all/${id}`} id="button">
+          <Link href={`/admin/properties/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
           </Link>
@@ -73,7 +64,7 @@ export const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-const Table = ({ data = [] }: { data: Transaction[] }) => {
+const Table = ({ data = [] }: { data: ITopSellingDTO[] }) => {
   return <DataTable columns={columns} data={data} />;
 };
 

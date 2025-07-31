@@ -1,11 +1,17 @@
 import { DashboardStatsCard } from "@/components/dashboard";
 import { Button, SearchInput } from "@/components/ui";
 import { ArrowRight, House2 } from "iconsax-react";
-import { Hourglass, KeyRound, Plus, Search } from "lucide-react";
+import { Hourglass, KeyRound, Plus } from "lucide-react";
 import { ClientOverview, ClientsTable } from "./ui/";
 import Link from "next/link";
+import { getAllClients, getClientSummary } from "@/lib/services/client.service";
+import { clientTableDTO } from "@/lib/dtos/client.dto";
+import { ClosedSales, ReservedUnits } from "../properties/ui";
 
-const Properties = () => {
+const Clients = async () => {
+  const { data } = await getAllClients({});
+  const [summary] = await Promise.all([getClientSummary()]);
+
   return (
     <>
       <div className="flex w-full justify-end items-center">
@@ -15,29 +21,9 @@ const Properties = () => {
         </Button>
       </div>
       <section className="w-full justify-between flex flex-wrap gap-4">
-        <ClientOverview data={[]} />
-        {[
-          {
-            title: "Clients",
-            icon: <House2 size="24" color="#70F41F" />,
-            data: "86",
-            theme: "",
-          },
-          {
-            title: "Reserved properties",
-            icon: <Hourglass size="24" color="#926667" />,
-            data: "2",
-            theme: "",
-          },
-          {
-            title: "Closed sales",
-            icon: <KeyRound size="24" color="#9747FF" />,
-            data: "2",
-            theme: "",
-          },
-        ].map((props, index) => (
-          <DashboardStatsCard key={`${index}-${props?.title}`} {...props} />
-        ))}
+        <ClientOverview data={[]} clients={summary?.totalClients || 0} />
+        <ReservedUnits reservedUnits={summary?.totalReservedProperties || 0} />
+        <ClosedSales closedSales={summary?.totalCompletedSales || 0} />
       </section>
 
       <section className="flex flex-wrap gap-4 flex-1 max-h-[601px]">
@@ -57,11 +43,11 @@ const Properties = () => {
             </Link>
           </div>
 
-          <ClientsTable data={[]} />
+          <ClientsTable data={clientTableDTO(data)} />
         </div>
       </section>
     </>
   );
 };
 
-export default Properties;
+export default Clients;

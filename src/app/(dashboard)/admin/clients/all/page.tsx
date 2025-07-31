@@ -1,8 +1,12 @@
 import React from "react";
 import { ClientsTable } from "../ui";
 import { BreadCrumbs, Filters, SearchInput } from "@/components/ui";
+import { getAllClients } from "@/lib/services/client.service";
+import { clientTableDTO } from "@/lib/dtos";
 
-const AllClients = () => {
+const AllClients = async () => {
+  const { data = [], pagination = {} } = await getAllClients();
+
   return (
     <section className="flex flex-1 flex-col gap-4">
       <BreadCrumbs
@@ -15,16 +19,15 @@ const AllClients = () => {
       <div className="w-full my-2 flex items-baseline justify-between">
         <p className="font-bold flex gap-2">
           All Clients
-          <span className="text-grey-400">400</span>
+          <span className="text-grey-400">{pagination?.total ?? 0}</span>
         </p>
 
         <div className="flex gap-2 items-center">
-
           <Filters />
           <SearchInput />
         </div>
       </div>
-      <ClientsTable data={[]} />
+      <ClientsTable data={clientTableDTO(data)} />
     </section>
   );
 };

@@ -1,0 +1,119 @@
+"use client";
+import { DashboardModal } from "@/components/dashboard";
+import { Button, Input, SelectScrollable } from "@/components/ui";
+import { useModal } from "@/lib/hooks";
+import { IOption } from "@/lib/type";
+import { useState } from "react";
+
+export const UpdatePropertyPaymentModal = ({ clients=[] }: { clients?: IOption[]}) => {
+  const { isModalOpen, toggleModal, closeModal } = useModal();
+  const [step, setStep] = useState(0);
+
+  const data = [
+    {
+      item: "client",
+      label: "Client  name",
+      data: "Courtney Henry",
+    },
+    {
+      item: "agent",
+      data: "Sodik Nwachukwu",
+    },
+    {
+      item: "property",
+      data: "Silvercrest vill",
+    },
+    {
+      item: "units",
+      data: "1 Plot",
+    },
+    {
+      item: "installment_period",
+      label: "Instalment period",
+      data: "18 May 2025 - 18 Nov 2026",
+    },
+    {
+      item: "total_amount",
+      label: "Total amount",
+      data: "₦3,500,000",
+    },
+    {
+      item: "amount_due",
+      label: "Amount due",
+      data: "₦1,500,000",
+    },
+    {
+      item: "amount_paid",
+      label: "Amount paid",
+      data: "₦500,500",
+    },
+  ];
+
+  return (
+    <>
+      <Button size="sm" variant="secondary" onClick={toggleModal}>
+        Update Payment
+      </Button>
+
+      {isModalOpen && (
+        <DashboardModal
+          heading={"Update Client's Payment"}
+          handleClose={closeModal}
+          className="sm:max-w-[MIN(90%,520px)]"
+        >
+          <div className="flex flex-col flex-1 w-full gap-4 mt-auto">
+            {step ? (
+              <div className="flex flex-col flex-1 w-full gap-4 mt-auto">
+                {data.map((data, index) => {
+                  return (
+                    <div
+                      key={`${data?.item}-${index}`}
+                      className="flex items-center justify-between w-full border-b"
+                    >
+                      <p className="text-xs capitalize text-grey-400">
+                        {data?.label || data?.item}
+                      </p>
+                      <p className="text-sm font-bold text-grey-600">
+                        {data?.data}
+                      </p>
+                    </div>
+                  );
+                })}
+
+                <Input
+                  placeholder="₦ Enter amount"
+                  containerStyle="mt-4 mb-10"
+                  type="tel"
+                />
+              </div>
+            ) : (
+              <SelectScrollable
+                placeholder="Select Client"
+                label="Client's name"
+                options={clients}
+              />
+            )}
+
+            <div className="flex mt-auto gap-4 justify-stretch w-full  *:w-full">
+              <Button
+                onClick={closeModal}
+                variant="secondary"
+                size="sm"
+                className="px-8"
+              >
+                Cancel
+              </Button>
+              {step ? (
+                <Button size="sm">Confirm Payment</Button>
+              ) : (
+                <Button onClick={() => setStep(1)} size="sm">
+                  Next
+                </Button>
+              )}
+            </div>
+          </div>
+        </DashboardModal>
+      )}
+    </>
+  );
+};

@@ -55,18 +55,18 @@ export function Button({
       asLink={asLink}
       {...props}
       className={twMerge(
-        `capitalize rounded-4xl  whitespace-nowrap flex flex-nowrap items-center place-items-center text-sm md:text-base cursor-pointer relative p-4 px-14 group disabled:pointer-events-none disabled:opacity-70 min-w-fit`,
+        `capitalize rounded-4xl  whitespace-nowrap flex flex-nowrap items-center place-items-center text-sm md:text-base cursor-pointer relative p-4 px-16 group disabled:pointer-events-none disabled:opacity-70 min-w-fit gap-1 transition-all duration-300 ease-out justify-center`,
         size ? ButtonSizes[size] : "",
         outline && "text-white bg-transparent border",
         variantStyles,
         className
       )}
     >
-      <span
+      {/* <span
         className={"relative w-full min-w-fit h-full text-center justify-center items-center gap-1 flex mx-auto text-inherit transition-all duration-300 ease-out px-4"}
-      >
-        {props.children}
-      </span>
+      > */}
+      {props.children}
+      {/* </span> */}
     </ButtonWrapper>
   );
 }

@@ -17,7 +17,7 @@ import {
   FaYoutube,
 } from "react-icons/fa6";
 import { Logo } from "../ui";
-import { NavData } from "@/lib/data";
+import { NavData } from "@/lib/data/data";
 import { LocateIcon } from "lucide-react";
 import { FaEnvelope } from "react-icons/fa";
 
