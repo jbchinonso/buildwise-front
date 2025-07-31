@@ -80,7 +80,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody className="bg-white rounded-lg my-2 p-4 p-4">
+        <TableBody className="bg-white rounded-lg my-2 p-4">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow

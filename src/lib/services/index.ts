@@ -5,3 +5,4 @@ export * from "./commissions.service";
 export * from "./client.service";
 export * from "./properties.service";
 export * from "./sales.service";
+export * from "./data.service";

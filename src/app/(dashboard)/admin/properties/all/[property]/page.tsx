@@ -1,15 +1,28 @@
-import { BreadCrumbs, Button, Input, ProfileAvatar } from "@/components/ui";
-import { getProperty } from "@/lib/services";
-import { clientProfileDTO } from "@/lib/dtos";
-import { PropertyMenu } from "./ui";
+import { BreadCrumbs, Button, Input } from "@/components/ui";
+import { getAllClients, getProperty } from "@/lib/services";
+import { ActiveAgents, PropertyMenu, UnitsSold } from "../../ui";
+import { UpdatePaymentModal } from "../../../clients/ui";
+import { clientSelectDTO } from "@/lib/dtos";
+import { ClientsOwnersModal } from "../../ui/ClientsOwnersModal";
 
 type Params = Promise<{ property: string }>;
+type SearchParams = Promise<{ page?: string; limit?: string; search?: string }>;
 
-const Property = async (props: { params: Params }) => {
+const Property = async (props: {
+  params: Params;
+  searchParams: SearchParams;
+}) => {
   const params = await props.params;
+  const searchParams = await props.searchParams;
   const id = params.property;
+  const page = searchParams.page || 1;
+  const limit = searchParams.page || 10;
+  const search = searchParams.search || "";
 
   const property = await getProperty(id);
+
+  const [clients] = await Promise.all([getAllClients({ page, limit, search })]);
+  const clientOptions = clientSelectDTO(clients?.data);
 
   return (
     <section className="flex flex-1 flex-col gap-4">
@@ -19,7 +32,7 @@ const Property = async (props: { params: Params }) => {
           { title: "All Properties", path: "/admin/properties/all" },
           {
             title: property?.name || "Property",
-            path: "/admin/properties/:property",
+            path: "/admin/properties/all/:property",
           },
         ]}
       />
@@ -29,20 +42,11 @@ const Property = async (props: { params: Params }) => {
           <p className="font-bold text-xl">{property?.name || "Property"}</p>
 
           <div className="flex gap-4 items-center">
-            {/* <UpdatePaymentModal /> */}
-
             <Button asLink href={`${id}/new-sale`} size="sm">
               Make Sales
             </Button>
-            <Button
-              asLink
-              href={`${id}/payment-history`}
-              size="sm"
-              variant="secondary"
-            >
-              Update Payment
-            </Button>
-            <PropertyMenu />
+            <UpdatePaymentModal clients={clientOptions} />
+            <PropertyMenu property={property} />
           </div>
         </div>
 
@@ -87,7 +91,7 @@ const Property = async (props: { params: Params }) => {
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={property?.price || "N/A"}
+            defaultValue={property?.priceOptions?.instantPrice || "N/A"}
           />
           <Input
             label="Payment options"
@@ -96,7 +100,7 @@ const Property = async (props: { params: Params }) => {
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={property?.priceOptions as string}
+            // defaultValue={property?.priceOptions as string}
           />
           <Input
             label="Documents"
@@ -117,15 +121,9 @@ const Property = async (props: { params: Params }) => {
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
             defaultValue={property?.availableUnits}
           />
-          <Input
-            label="Units Sold/Reserved"
-            name="soldUnits"
-            id="soldUnits"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={property?.soldUnits}
-          />
+
+          <UnitsSold id={property?._id} unitsSold={property?.soldUnits} />
+
           <Input
             label="Revenue generated"
             name="revenue"
@@ -151,26 +149,16 @@ const Property = async (props: { params: Params }) => {
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={property?.createdAt}
+            defaultValue={
+              property?.createdAt
+                ? new Date(property.createdAt).toLocaleString()
+                : ""
+            }
           />
-          <Input
-            label="Clients/Ownerships"
-            name="owners"
-            id="owners"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={property?.owners}
-          />
-          <Input
-            label="Active agents"
-            name="agents"
-            id="agents"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={property?.agents}
-          />
+
+          <ClientsOwnersModal owners={property?.owners || 0} />
+          <ActiveAgents agents={property?.agents || 0} />
+
           <Input
             label="Commission rate"
             name="saleCommissionRate"

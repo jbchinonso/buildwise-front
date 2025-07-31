@@ -3,7 +3,7 @@
 import { revalidateTag } from "next/cache";
 import { baseUrl, getError } from "../utils";
 import { authFetch } from "./auth.service";
-import { IPagination } from "../type";
+import { ICreatePropertyPayload, IPagination, IProperty } from "../type";
 
 export const getAllProperties = async ({
   page = 1,
@@ -85,25 +85,49 @@ export const getRecentlyListedProperties = async ({
   }
 };
 
-interface ICreatePropertyPayload {
-  name: string;
-  state: string;
-  lga: string;
-  address: string;
-  totalUnits: number | string;
-  availableUnits: number | string;
-  saleCommissionRate: number | string;
-  documents: string;
-  priceOptions?:
-    | {
-        instantPrice: number | string;
-        plans: {
-          duration: string;
-          price: number | string;
-        }[];
+export const getAvailableProperties = async ({
+  page = 1,
+  limit = 10,
+}: IPagination = {}) => {
+  try {
+    const response = await authFetch(
+      `/properties/most-available-units?page=${page}&limit=${limit}`,
+      {
+        next: {
+          tags: ["properties"],
+          revalidate: 8400,
+        },
       }
-    | any;
-}
+    );
+    return response;
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getReservedProperties = async ({
+  page = 1,
+  limit = 10,
+}: IPagination = {}) => {
+  try {
+    const response = await authFetch(
+      `/properties/recently-reserved?page=${page}&limit=${limit}`,
+      {
+        next: {
+          tags: ["properties"],
+          revalidate: 8400,
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+
+    return []
+    throw getError(error);
+  }
+};
+
+
 
 export const addProperty = async (property: ICreatePropertyPayload) => {
   try {
@@ -115,17 +139,7 @@ export const addProperty = async (property: ICreatePropertyPayload) => {
   }
 };
 
-interface IProperty extends ICreatePropertyPayload {
-  _id: string;
-  price: string;
-  sales: [];
-  soldUnits?: string;
-  createdAt?: string;
-  revenue?: string;
-  outstandingPayments?: string;
-  owners?: string;
-  agents?: string;
-}
+
 
 export const getProperty = async (id: string) => {
   try {

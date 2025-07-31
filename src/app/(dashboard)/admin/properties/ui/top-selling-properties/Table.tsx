@@ -54,7 +54,7 @@ export const columns: ColumnDef<ITopSellingDTO>[] = [
 
       return (
         <div className="flex justify-center px-4">
-          <Link href={`/admin/titans/all/${id}`} id="button">
+          <Link href={`/admin/properties/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
           </Link>

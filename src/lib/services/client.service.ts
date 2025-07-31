@@ -3,17 +3,24 @@
 import { revalidateTag } from "next/cache";
 import { baseUrl, getError } from "../utils";
 import { authFetch } from "./auth.service";
+import { URLSearchParams } from "url";
 
-export const getAllClients = async ({
-  page = 1,
-  limit = 5,
-}: {
-  page?: number;
-  limit?: number;
-}) => {
+export const getAllClients = async (
+  params: {
+    page?: number | string;
+    limit?: number | string;
+    search?: string;
+  } = { page: 1, limit: 5, search: "" }
+) => {
   try {
+    const query = new URLSearchParams();
+
+    Object.entries(params).forEach(([key, value]) => {
+      query.set(key, String(value));
+    });
+
     const { data, ...pagination } = await authFetch(
-      `/client?page=${page}&limit=${limit}`,
+      `/client?${query.toString()}`,
       {
         next: {
           tags: ["clients"],

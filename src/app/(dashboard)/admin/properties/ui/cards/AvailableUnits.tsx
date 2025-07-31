@@ -47,21 +47,23 @@ type Transaction = {
 
 const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "property",
+    accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Property" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "location",
+    accessorKey: "address",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Location" />
     ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("address")}</div>
+    ),
   },
   {
-    accessorKey: "available_plots",
+    accessorKey: "availableUnits",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -69,19 +71,19 @@ const columns: ColumnDef<Transaction>[] = [
         className="whitespace-normal text-start"
       />
     ),
-    cell: ({ row }) => <div>{row.getValue("available_plots")}</div>,
+    cell: ({ row }) => <div>{row.getValue("availableUnits")}</div>,
   },
-  {
-    accessorKey: "reserved_plots",
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title="Reserved/sold plots"
-        className="whitespace-normal text-left"
-      />
-    ),
-    cell: ({ row }) => <div>{row.getValue("reserved_plots")}</div>,
-  },
+  // {
+  //   accessorKey: "reserved_plots",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title="Reserved/sold plots"
+  //       className="whitespace-normal text-left"
+  //     />
+  //   ),
+  //   cell: ({ row }) => <div>{row.getValue("reserved_plots")}</div>,
+  // },
 
   {
     id: "actions",
@@ -98,18 +100,40 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
+interface ISummary {
+  totalProperties: number;
+  totalAvailableUnits: number;
+  totalReservedUnits: number;
+  closedSales: number;
+}
+
 export const AvailableUnits = ({
   data = [],
   availableUnits = 0,
+  summary,
 }: {
   data?: any[];
+  summary?: ISummary;
   availableUnits?: number | string;
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+  const chartData = [
+    {
+      label: "available",
+      data: summary?.totalAvailableUnits ?? 0,
+      fill: "#9747FF",
+    },
+    {
+      label: "reserved",
+      data: summary?.totalReservedUnits ?? 0,
+      fill: "#926667",
+    },
+    { label: "closed", data: summary?.closedSales ?? 0, fill: "#1FDBF4" },
+  ];
   return (
     <>
       <DashboardStatsCard
-        title="Available Properties"
+        title="Available units"
         icon={<House size="24" color="#1FDBF4" />}
         data={availableUnits}
         theme=""
@@ -131,7 +155,9 @@ export const AvailableUnits = ({
                   <span className="size-3 rounded-full bg-[#7A7F83]" />
                   <div className="flex flex-col">
                     <p className="text-grey-400">Total Listing</p>
-                    <p className="text-grey-600">100</p>
+                    <p className="text-grey-600">
+                      {summary?.totalAvailableUnits ?? 0}
+                    </p>
                   </div>
                 </div>
                 {chartData.map(({ label, data, fill }) => {

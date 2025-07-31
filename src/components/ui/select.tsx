@@ -171,15 +171,17 @@ function SelectScrollDownButton({
 }
 
 interface IOption {
-  value: string;
-  label: React.ReactNode;
+  value?: string;
+  label?: React.ReactNode | string;
 }
+
 interface IGroupOption {
   group_label: string;
   options: IOption[];
 }
 
-interface IScrollSelectProps {
+interface IScrollSelectProps
+  extends React.ComponentProps<typeof SelectPrimitive.Root> {
   isTextArea?: boolean;
   className?: string;
   placeholder?: string;
@@ -192,9 +194,12 @@ interface IScrollSelectProps {
   labelStyle?: string;
   children?: React.ReactNode;
   rightIcon?: React.ReactNode;
-  required?: boolean;
+  // required?: boolean;
+  // disabled?: boolean;
   options?: IOption[];
   group_options?: IGroupOption[];
+  value?: string; // Or the type of your select item values
+  onChange?: (value: string) => void; // Or the type of your select item values
 }
 
 function SelectScrollable({
@@ -204,28 +209,30 @@ function SelectScrollable({
   labelStyle,
   required,
   options = [],
-  name,
+  onChange,
+  name, 
+  ...props
 }: IScrollSelectProps & {
   options: IOption[];
 }) {
   return (
-    <Select>
+    <Select onValueChange={onChange} name={name} {...props}>
       <SelectTrigger
         style={{
           background: "white",
-          minHeight: "fit-content",
+          minHeight: "64px",
         }}
         className={cn(
-          "w-full flex gap-2 py-1 overflow-hidden border  bg-red-600 rounded-2xl has-[input:focus-within]:border-grey-600",
+          "w-full  overflow-hidden border  rounded-2xl has-[input:focus-within]:border-grey-600",
           className
         )}
       >
-        <div className="w-full min-h-[64px] items-start justify-start flex-col flex bg-white">
+        <div className="w-full flex gap-2 py-1 px-1  items-start justify-start flex-col">
           {label && (
             <label
               htmlFor={name}
               className={cn(
-                "flex capitalize py-1 leading-[100%] items-center text-xs font-medium text-grey-500",
+                "flex capitalize mb-auto leading-[100%] items-center text-xs font-medium text-grey-500",
                 labelStyle
               )}
             >
@@ -233,12 +240,20 @@ function SelectScrollable({
               {required && <>*</>}
             </label>
           )}
-          <SelectValue className="text-base" placeholder={placeholder} />
+          <SelectValue
+            style={{ minHeight: "64px", background: "crimson" }}
+            className="text-base px-4 placeholder:px-10"
+            placeholder={placeholder}
+          />
         </div>
       </SelectTrigger>
       <SelectContent id="name" className="z-[9999]">
         {options.map(({ label = "", value = "" }, index) => (
-          <SelectItem key={`${name}-${index}-${label}-${value}`} value={value}>
+          <SelectItem
+            id={value}
+            key={`${name}-${index}-${label}-${value}`}
+            value={value}
+          >
             {label}
           </SelectItem>
         ))}

@@ -23,20 +23,18 @@ export const topSellingPropertiesDTO = (
     location: property?.propertyDetails?.address ?? "N/A",
     revenue: property?.totalRevenue,
     unit_sold: property?.propertyDetails?.soldUnits,
-    id: "",
+    id: property?.propertyId ?? "",
   }));
 };
 
 export type IRecentlyListedPropertiesData = IPropertyData;
 
-
 export interface IRecentlyListedDTO {
-    property: string;
-    location: string;
-    date_listed: string;
-    id: string;
-  }
-  
+  property: string;
+  location: string;
+  date_listed: string;
+  id: string;
+}
 
 export const recentlyListedPropertiesDTO = (
   data: IRecentlyListedPropertiesData[] = []
@@ -120,6 +118,28 @@ export const propertyTableDTO = (
     closed: property?.soldUnits,
     total_revenue: 0,
     outstanding: 0,
-    listed: property?.createdAt ? formatDistanceToNow(property?.createdAt) + "ago" : "N/A",
+    listed: property?.createdAt
+      ? formatDistanceToNow(property?.createdAt) + "ago"
+      : "N/A",
+  }));
+};
+
+export type IPropertyTransactionDTO = {
+  id: string;
+  date: string;
+  amountPaid: string;
+  client: string;
+  plotNo: number | string;
+};
+
+export const propertyTransactionTableDTO = (
+  data: IPropertyData[] = []
+): IPropertyTransactionDTO[] => {
+  return data?.map((property) => ({
+    id: property?._id,
+    date: property?.name ?? "N/A",
+    amountPaid: property?.address ?? "N/A",
+    client: property?.name ?? "N/A",
+    plotNo: property?.availableUnits,
   }));
 };

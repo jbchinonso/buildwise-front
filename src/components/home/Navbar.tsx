@@ -5,7 +5,7 @@ import { twMerge } from "tailwind-merge";
 import Link from "next/link";
 import { Hamburger } from "./Hamburger";
 import { Button, Logo } from "../ui";
-import { NavData } from "@/lib/data";
+import { NavData } from "@/lib/data/data";
 import { useSession } from "next-auth/react";
 
 export const Navbar = () => {

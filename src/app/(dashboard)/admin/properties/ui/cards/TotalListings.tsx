@@ -18,12 +18,6 @@ import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-const chartData = [
-  { label: "available", data: 10, fill: "#9747FF" },
-  { label: "reserved", data: 200, fill: "#926667" },
-  { label: "closed", data: 300, fill: "#1FDBF4" },
-];
-
 const chartConfig = {
   available: {
     label: "Available",
@@ -92,18 +86,41 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
+interface ISummary {
+  totalProperties: number;
+  totalAvailableUnits: number;
+  totalReservedUnits: number;
+  closedSales: number;
+}
+
 export const TotalListing = ({
   data = [],
   totalListing = 0,
+  summary,
 }: {
   data?: any[];
   totalListing?: number | string;
+  summary?: ISummary;
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+  const chartData = [
+    {
+      label: "available",
+      data: summary?.totalAvailableUnits ?? 0,
+      fill: "#9747FF",
+    },
+    {
+      label: "reserved",
+      data: summary?.totalReservedUnits ?? 0,
+      fill: "#926667",
+    },
+    { label: "closed", data: summary?.closedSales ?? 0, fill: "#1FDBF4" },
+  ];
+
   return (
     <>
       <DashboardStatsCard
-        title="Total Listing"
+        title="Properties listed"
         icon={<House2 size="24" color="#70F41F" />}
         data={totalListing}
         theme=""
@@ -114,7 +131,7 @@ export const TotalListing = ({
       {isModalOpen && (
         <PageModal
           handleClose={closeModal}
-          heading="Total Listing"
+          heading="Properties listed"
           className="max-w-[MIN(100%,600px)]"
         >
           <section className="flex flex-col w-full gap-4">
@@ -125,7 +142,9 @@ export const TotalListing = ({
                   <span className="size-3 rounded-full bg-[#7A7F83]" />
                   <div className="flex flex-col">
                     <p className="text-grey-400">Total Listing</p>
-                    <p className="text-grey-600">100</p>
+                    <p className="text-grey-600">
+                      {summary?.totalAvailableUnits ?? 0}
+                    </p>
                   </div>
                 </div>
                 {chartData.map(({ label, data, fill }) => {

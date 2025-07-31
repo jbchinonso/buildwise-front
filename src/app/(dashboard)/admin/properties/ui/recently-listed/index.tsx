@@ -12,7 +12,7 @@ export const RecentlyListed = ({ data }: { data: any[] }) => {
         </div>
 
         <Link
-          href="/admin/titans/all"
+          href="/admin/properties/all"
           className="text-xs text-primary-400 items-center gap-1 font-medium flex flex-nowrap whitespace-nowrap"
         >
           View all <ArrowRight size={14} color="currentColor" />

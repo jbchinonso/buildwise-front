@@ -2,10 +2,11 @@
 
 import { Button } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
+import { IProperty } from "@/lib/type";
 import { More } from "iconsax-react";
 import { useRef } from "react";
 
-export const PropertyMenu = () => {
+export const PropertyMenu = ({ property }: { property: IProperty }) => {
   const targetRef = useRef<HTMLButtonElement | null>(null);
   const { isModalOpen, toggleModal, closeModal } = useModal();
 
@@ -34,9 +35,9 @@ export const PropertyMenu = () => {
             <Button
               size="xs"
               asLink
-              href="history"
+              href={`${property?._id}/transaction-history`}
               variant="ghost"
-              className="text-start justify-start !py-3 !text-xs rounded-none hover:bg-primary-400 hover:text-white"
+              className="text-start justify-start !py-3 !text-xs rounded rounded-b-none hover:bg-primary-400 hover:text-white"
             >
               View Transaction History
             </Button>
@@ -45,7 +46,7 @@ export const PropertyMenu = () => {
               asLink
               variant="ghost"
               href="history"
-              className="text-start justify-start !py-3 !text-xs rounded-none hover:bg-primary-300 hover:text-white"
+              className="text-start justify-start !py-3 !text-xs rounded rounded-b-none hover:bg-primary-300 hover:text-white"
             >
               Update property details
             </Button>
@@ -54,7 +55,7 @@ export const PropertyMenu = () => {
               asLink
               variant="ghost"
               href="history"
-              className="text-start justify-start !py-3 !text-xs rounded-none hover:bg-primary-300 hover:text-white"
+              className="text-start justify-start !py-3 !text-xs rounded rounded-b-none hover:bg-primary-300 hover:text-white"
             >
               Change availability status
             </Button>
@@ -63,7 +64,7 @@ export const PropertyMenu = () => {
               asLink
               variant="ghost"
               href="history"
-              className="text-start justify-start !py-3 !text-xs rounded-none hover:bg-primary-300 hover:text-white"
+              className="text-start justify-start !py-3 !text-xs rounded rounded-b-none hover:bg-primary-300 hover:text-white"
             >
               Upload new property document
             </Button>
@@ -72,7 +73,7 @@ export const PropertyMenu = () => {
               asLink
               variant="ghost"
               href="history"
-              className="text-start text-red-600 justify-start !py-3 !text-xs rounded-none hover:bg-primary-300 hover:text-white"
+              className="text-start text-red-600 justify-start !py-3 !text-xs rounded rounded-b-none hover:bg-primary-300 hover:text-white"
             >
               Unlist property
             </Button>

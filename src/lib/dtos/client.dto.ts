@@ -1,3 +1,4 @@
+import { IOption } from "../type";
 import { Client, IClientsData } from "../types/client";
 import { formatDistanceToNow } from "date-fns";
 
@@ -30,11 +31,17 @@ interface IClientProfile {
 
 export const clientProfileDTO = (client: IClientsData): IClientProfile => ({
   id: client?._id,
-  firstName: client?.firstName ?? 'N/A',
-  lastName: client?.lastName ?? 'N/A',
-  email: client?.email ?? 'N/A',
+  firstName: client?.firstName ?? "N/A",
+  lastName: client?.lastName ?? "N/A",
+  email: client?.email ?? "N/A",
   state: client?.state,
   lga: client?.lga,
   residential_address: client?.residentialAddress,
-  phone_number: client?.phoneNumber
+  phone_number: client?.phoneNumber,
 });
+
+export const clientSelectDTO = (data: IClientsData[]): IOption[] =>
+  data?.map((client) => ({
+    value: client?._id,
+    label: `${client?.firstName || ""} ${client?.lastName || ""}`.trim(),
+  }));

@@ -15,7 +15,7 @@ export const Logo = ({
       href="/"
       onClick={() => onClick?.()}
       className={twMerge(
-        `-indent-[9999px] mix-blend-darken text-primary relative flex items-center justify-center z-50`,
+        `-indent-[9999px] text-primary relative flex items-center justify-center z-50`,
         className
       )}
     >

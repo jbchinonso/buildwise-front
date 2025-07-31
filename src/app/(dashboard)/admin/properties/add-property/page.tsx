@@ -1,10 +1,12 @@
 import { BreadCrumbs } from "@/components/ui";
 import { AddPropertyForm } from "./AddPropertyForm";
-import { getTitans } from "@/lib/services";
+import { getStates, getTitans } from "@/lib/services";
 
 const AddProperty = async () => {
   // const titans = await getTitans();
   // console.log({ titans });
+  const states = await getStates();
+
   return (
     <section className="flex flex-1 flex-col gap-4">
       <BreadCrumbs
@@ -18,7 +20,7 @@ const AddProperty = async () => {
           <p>Add New Property</p>
         </header>
 
-        <AddPropertyForm />
+        <AddPropertyForm states={states} />
       </div>
     </section>
   );

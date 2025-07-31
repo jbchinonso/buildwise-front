@@ -1,12 +1,16 @@
 "use client";
-import { Input, SubmitButton } from "@/components/ui";
-import { addClient, addProperty } from "@/lib/services";
-import { getError } from "@/lib/utils";
-import { useFormik } from "formik";
-import { redirect } from "next/navigation";
 import toast from "react-hot-toast";
+import { redirect } from "next/navigation";
+import { useMemo } from "react";
+import { useFormik } from "formik";
+import { Input, SelectScrollable, SubmitButton } from "@/components/ui";
+import { useModal } from "@/lib/hooks";
+import { addProperty } from "@/lib/services";
+import { IState } from "@/lib/type";
+import { getError } from "@/lib/utils";
+import { PaymentOptionsModal } from "../ui";
 
-export const AddPropertyForm = () => {
+export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
   const {
     handleBlur,
     handleChange,
@@ -15,13 +19,17 @@ export const AddPropertyForm = () => {
     dirty,
     resetForm,
     handleReset,
+    setFieldValue,
   } = useFormik({
     initialValues: {
       name: "",
       state: "",
       lga: "",
       address: "",
-      priceOptions: "",
+      priceOptions: {
+        instantPrice: "",
+        plans: [],
+      },
       documents: "",
       totalUnits: "",
       availableUnits: "",
@@ -31,15 +39,32 @@ export const AddPropertyForm = () => {
     onSubmit: async () => {},
   });
 
+  const handleSelect = (name: string, value: any) => {
+    setFieldValue(name, value);
+  };
 
+  const {
+    openModal: openPaymentOptions,
+    closeModal: closePaymentOptions,
+    isModalOpen: isPaymentOptionsModalOpen,
+  } = useModal();
 
+  const lgas = useMemo(() => {
+    const selectedState = states.find((state) => state.name === values.state);
+
+    return (
+      selectedState?.lgas.map((lga) => ({
+        label: lga,
+        value: lga,
+      })) ?? []
+    );
+  }, [values.state]);
   const submitForm = async () => {
     try {
       const result = await addProperty(values);
-      console.log({ result });
-      toast.success("Property added successfully");
+      toast.success("New property successfully added");
       resetForm();
-      redirect(`/properties/all/${result?._id}`)
+      redirect(`/properties/all/${result?._id}`);
     } catch (error) {
       toast.error(getError(error));
     }
@@ -49,7 +74,7 @@ export const AddPropertyForm = () => {
     <form
       action={submitForm}
       onReset={handleReset}
-      className="w-full flex flex-wrap justify-between gap-4 gap-x-20"
+      className="w-full flex flex-wrap supports-[grid]:grid sm:grid-cols-2 justify-between gap-4 gap-x-20"
     >
       <Input
         label="Property name"
@@ -63,30 +88,31 @@ export const AddPropertyForm = () => {
         labelStyle="text-[#292A2C]"
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
-      <Input
+
+      <SelectScrollable
         label="State"
         name="state"
-        id="state"
+        // id="state"
         placeholder="Select state"
-        type="text"
         value={values.state}
-        onChange={handleChange}
-        onBlur={handleBlur}
+        onChange={(value) => handleSelect("state", value)}
+        options={states.map((state) => ({
+          label: state.name,
+          value: state.name,
+        }))}
         labelStyle="text-[#292A2C]"
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+        className="flex-[45%] max-w-[MIN(100%,470px)]"
       />
-
-      <Input
+      <SelectScrollable
         label="LGA"
         name="lga"
-        id="lga"
-        type="text"
-        placeholder="Select local government"
+        options={lgas}
         value={values.lga}
-        onChange={handleChange}
-        onBlur={handleBlur}
+        onChange={(value) => handleSelect("lga", value)}
+        disabled={!values.state}
+        placeholder="Select local government"
         labelStyle="text-[#292A2C]"
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+        className="flex-[45%] max-w-[MIN(100%,470px)]"
       />
       <Input
         label="Address"
@@ -100,18 +126,30 @@ export const AddPropertyForm = () => {
         labelStyle="text-[#292A2C]"
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
-      <Input
-        label="Price/Payment options"
-        name="priceOptions"
-        id="priceOptions"
-        placeholder="Select payment options"
-        type="text"
-        value={values.priceOptions}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        labelStyle="text-[#292A2C]"
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-      />
+      <div>
+        <Input
+          label="Price/Payment options"
+          name="priceOptions"
+          id="priceOptions"
+          placeholder="Select payment options"
+          type="text"
+          autoComplete="off"
+          value={values.priceOptions?.instantPrice + " " + ""}
+          onClick={openPaymentOptions}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          labelStyle="text-[#292A2C]"
+          containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+        />
+
+        {isPaymentOptionsModalOpen && (
+          <PaymentOptionsModal
+            onClose={closePaymentOptions}
+            options={values.priceOptions}
+            onSelect={(value) => setFieldValue("priceOptions", value)}
+          />
+        )}
+      </div>
       <Input
         label="Documents"
         name="documents"
@@ -124,7 +162,6 @@ export const AddPropertyForm = () => {
         labelStyle="text-[#292A2C]"
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
-
       <Input
         label="Total Units"
         name="totalUnits"
@@ -162,9 +199,9 @@ export const AddPropertyForm = () => {
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
 
-      <div className="w-full flex">
+      <div className="w-full flex col-span-2">
         <SubmitButton disabled={!dirty || !isValid} size="sm" className="my-4">
-          Save Client
+          Save Property
         </SubmitButton>
       </div>
     </form>

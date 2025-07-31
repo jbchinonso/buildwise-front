@@ -27,7 +27,7 @@ export const Header = () => {
       className="py-2 px-10 min-h-[80px] flex justify-between items-center"
     >
       <div className="self-start">
-        <Logo />
+        <Logo className="mix-blend-darken"/>
       </div>
 
       <div className="flex items-center gap-2 md:ml-auto md:flex-row-reverse">
