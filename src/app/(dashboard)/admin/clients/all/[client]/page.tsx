@@ -1,23 +1,20 @@
-import { BreadCrumbs, Button, Input, ProfileAvatar } from "@/components/ui";
+import { Avatar, BreadCrumbs, Button, Input, ProfileAvatar } from "@/components/ui";
 import { UpdatePaymentModal, AddPropertyModal } from "../../ui";
-// import { Clients, PropertiesSold, SubTitians } from "./tiles";
-
+import { getClient } from "@/lib/services";
+import { clientProfileDTO } from "@/lib/dtos";
 type Params = Promise<{ client: string }>;
 
 const ClientProfile = async (props: { params: Params }) => {
   const params = await props.params;
   const id = params.client;
 
-  const personalInformation = {
-    phone_number: "070 3456 6543",
-    firstName: "Courtney",
-    lastName: "Henry",
-    email: "AnnetteBlack@gmail.com",
-    state: "Lagos",
-    lga: "Ikeja",
-    residential_address: "2464 Royal Ln. Mesa, New Jersey 45463",
-  };
-
+  
+  
+  const data = await getClient(id);
+  
+  const personalInformation = clientProfileDTO(data)
+  
+  console.log({data, personalInformation})
   return (
     <section className="flex flex-1 flex-col gap-4">
       <BreadCrumbs
@@ -30,7 +27,7 @@ const ClientProfile = async (props: { params: Params }) => {
 
       <div className="flex p-2 flex-col gap-8 flex-1 w-full gap max-w-[MIN(100%,1052px)]">
         <div className="flex w-full justify-between gap-4 flex-wrap items-center">
-          <ProfileAvatar name="Annette Black" />
+          <Avatar name={personalInformation?.fullname} />
 
           <div className="flex gap-4 items-center">
             <UpdatePaymentModal />

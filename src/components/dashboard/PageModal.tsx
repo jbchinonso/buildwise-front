@@ -100,7 +100,7 @@ export const PageModal = ({
             ) : (
               <div
                 className={
-                  "flex p-4 px-6 w-full font-medium justify-between relative items-center"
+                  "flex p-4 px-6 w-full font-bold justify-between relative items-center"
                 }
               >
                 {heading}
@@ -126,7 +126,7 @@ export const PageModal = ({
             ) : (
               subheading
             ))}
-          <div className="relative flex flex-col flex-1 p-4 px-6 pb-4 my-2 w-full max-h-full overflow-y-auto border-t border-white/[0.06] bg-inherit mx-auto ">
+          <div className="relative flex flex-col flex-1 p-4 px-6 pb-4 mb-2 w-full max-h-full overflow-y-auto border-t border-white/[0.06] bg-inherit mx-auto ">
             {children}
           </div>
         </motion.div>
