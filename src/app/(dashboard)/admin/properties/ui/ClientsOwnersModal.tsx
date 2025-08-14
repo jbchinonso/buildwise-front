@@ -1,55 +1,54 @@
 "use client";
 import { DataTable, PageModal } from "@/components/dashboard";
 import { DataTableColumnHeader, Input } from "@/components/ui";
+import { IPropertyClientOwnershipTable } from "@/lib/dtos/property.dto";
 import { useModal } from "@/lib/hooks";
+import { toCurrency } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-type Owner = {
-  id: string;
-  client: string;
-  titan: string;
-  units: string;
-  amountPaid: string;
-  outtandin: string;
-};
-
-const columns: ColumnDef<Owner>[] = [
+const columns: ColumnDef<IPropertyClientOwnershipTable>[] = [
   {
     accessorKey: "client",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client Name" />
     ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("client")}</div>
+    ),
   },
   {
-    accessorKey: "titan",
+    accessorKey: "agent",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Titan" />
     ),
-    cell: ({ row }) => <div>{row.getValue("titan")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("agent")}</div>
+    ),
   },
   {
-    accessorKey: "units",
+    accessorKey: "unit",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Units" />
     ),
-    cell: ({ row }) => <div>{row.getValue("units")}</div>,
+    cell: ({ row }) => <div>{row.getValue("unit")}</div>,
   },
   {
-    accessorKey: "amountPaid",
+    accessorKey: "paid",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Paid" />
     ),
-    cell: ({ row }) => <div>{row.getValue("amountPaid")}</div>,
+    cell: ({ row }) => <div>{toCurrency(row.getValue("paid") ?? 0)}</div>,
   },
   {
     accessorKey: "outstanding",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Outstanding" />
     ),
-    cell: ({ row }) => <div>{row.getValue("outstanding")}</div>,
+    cell: ({ row }) => (
+      <div>{toCurrency(row.getValue("outstanding") ?? 0)}</div>
+    ),
   },
   {
     id: "actions",
@@ -69,9 +68,10 @@ const columns: ColumnDef<Owner>[] = [
 interface IProps {
   id?: string;
   owners?: string | number;
+  clientOwners?: IPropertyClientOwnershipTable[];
 }
 
-export const ClientsOwnersModal = ({ id, owners }: IProps) => {
+export const ClientsOwnersModal = ({ id, owners, clientOwners }: IProps) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const router = useRouter();
   return (
@@ -94,7 +94,7 @@ export const ClientsOwnersModal = ({ id, owners }: IProps) => {
           <p className="mb-4">{owners}</p>
           <section className="flex flex-col w-full gap-4">
             <div className="w-full my-1 flex-1">
-              <DataTable columns={columns} data={[]} />
+              <DataTable columns={columns} data={clientOwners ?? []} />
             </div>
           </section>
         </PageModal>

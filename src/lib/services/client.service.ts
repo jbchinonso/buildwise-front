@@ -30,6 +30,8 @@ export const getAllClients = async (
     );
     return { data, pagination };
   } catch (error) {
+    return {error}
+    // 
     throw getError(error);
   }
 };

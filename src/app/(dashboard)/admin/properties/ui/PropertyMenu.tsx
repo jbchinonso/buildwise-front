@@ -45,7 +45,7 @@ export const PropertyMenu = ({ property }: { property: IProperty }) => {
               size="xs"
               asLink
               variant="ghost"
-              href="history"
+              // href="history"
               className="text-start justify-start !py-3 !text-xs rounded rounded-b-none hover:bg-primary-300 hover:text-white"
             >
               Update property details

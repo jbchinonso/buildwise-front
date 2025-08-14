@@ -184,3 +184,51 @@ export function myImageLoader({src="", width="100", quality=75}: {
     src
   )}&w=${width}&q=${quality || 75}`;
 }
+
+
+/**
+ * Converts a string or number to a currency string
+ *
+ * @param {(string | number)} value
+ * @returns {(string | number)}
+ */
+export const toCurrency = (value: string | number, isNaira = true) => {
+  if (isNaN(Number(value))) {
+    return value
+  }
+  const formatter = new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 0,
+  })
+  if (isNaira) {
+    return '₦ ' + formatter.format(Number(value))
+  }
+  return formatter.format(Number(value))
+}
+
+
+
+/**
+ * Generates a single address string from provided LGA, state, and country.
+ * Only includes parts that are provided (truthy values).
+ *
+ * @param lga - The Local Government Area.
+ * @param state - The State.
+ * @param country - The Country.
+ * @returns A formatted address string, or an empty string if no parts are provided.
+ */
+
+export function formatAddress(lga?: string, state?: string, country?: string): string {
+  const addressParts: string[] = [];
+
+  if (lga) {
+    addressParts.push(lga);
+  }
+  if (state) {
+    addressParts.push(state);
+  }
+  if (country) {
+    addressParts.push(country);
+  }
+
+  return addressParts.join(', ');
+}

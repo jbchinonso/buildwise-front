@@ -1,17 +1,25 @@
 import { format, formatDistanceToNow } from "date-fns";
+import {
+  IPropertyClientOwnership,
+  IRecentlyReservedPropertyData,
+} from "../type";
+import { formatAddress, toCurrency } from "../utils";
 
 export interface ITopSellingData {
   totalSales: number;
   totalRevenue: number;
-  propertyDetails: IPropertyData;
+  name: string;
   propertyId: string;
+  lga: string;
+  state: string;
+  unitSold: string | number;
 }
 
 export interface ITopSellingDTO {
-  property: string;
+  name: string;
   location: string;
-  revenue: number;
-  unit_sold: number;
+  revenue: number | string;
+  unitSold: number | string;
   id: string;
 }
 
@@ -19,10 +27,10 @@ export const topSellingPropertiesDTO = (
   data: ITopSellingData[] = []
 ): ITopSellingDTO[] => {
   return data?.map((property) => ({
-    property: property?.propertyDetails?.name ?? "N/A",
-    location: property?.propertyDetails?.address ?? "N/A",
-    revenue: property?.totalRevenue,
-    unit_sold: property?.propertyDetails?.soldUnits,
+    name: property?.name ?? "N/A",
+    location: formatAddress(property?.lga, property?.state) ?? "N/A",
+    revenue: toCurrency(property?.totalRevenue || 0),
+    unitSold: toCurrency(property?.unitSold || 0, false),
     id: property?.propertyId ?? "",
   }));
 };
@@ -32,22 +40,11 @@ export type IRecentlyListedPropertiesData = IPropertyData;
 export interface IRecentlyListedDTO {
   property: string;
   location: string;
+  lga?: string;
+  state?: string;
   date_listed: string;
   id: string;
 }
-
-export const recentlyListedPropertiesDTO = (
-  data: IRecentlyListedPropertiesData[] = []
-): IRecentlyListedDTO[] => {
-  return data?.map((property) => ({
-    date_listed: property?.createdAt
-      ? format(property?.createdAt, "dd MMM, yyyy")
-      : "N/A",
-    id: property?._id,
-    location: property?.address ?? "N/A",
-    property: property?.name ?? "N/A",
-  }));
-};
 
 export interface IPropertySale {
   _id: string;
@@ -118,9 +115,7 @@ export const propertyTableDTO = (
     closed: property?.soldUnits,
     total_revenue: 0,
     outstanding: 0,
-    listed: property?.createdAt
-      ? formatDistanceToNow(property?.createdAt) + "ago"
-      : "N/A",
+    listed: property?.createdAt,
   }));
 };
 
@@ -141,5 +136,68 @@ export const propertyTransactionTableDTO = (
     amountPaid: property?.address ?? "N/A",
     client: property?.name ?? "N/A",
     plotNo: property?.availableUnits,
+  }));
+};
+
+export interface ISoldUnitsDTO {
+  id: string;
+  client: string;
+  unit: string;
+  price: string | number;
+  paid: string | number;
+  outstanding: string | number;
+  status: string;
+}
+
+export const soldUnitsDTO = (data: IPropertyClientOwnership[]) =>
+  data?.map((item) => ({
+    id: item?.saleId,
+    client: item?.client?.name,
+    unit: item?.unitDetails?.unitNumber,
+    price: item?.paymentInfo?.totalPrice,
+    paid: item?.paymentInfo?.amountPaid,
+    outstanding: item?.paymentInfo?.outstandingBalance,
+    status: item?.paymentInfo?.saleStatus,
+  }));
+
+export interface IPropertyClientOwnershipTable {
+  id: string;
+  client: string;
+  agent: string;
+  unit: string;
+  paid: string | number;
+  outstanding: string | number;
+  status: string;
+}
+
+export const propertyClientOwnershipDTO = (
+  data: IPropertyClientOwnership[]
+): IPropertyClientOwnershipTable[] =>
+  data?.map((item) => ({
+    id: item?.saleId,
+    client: item?.client?.name,
+    agent: item?.agent?.name,
+    unit: item?.unitDetails?.unitNumber,
+    paid: item?.paymentInfo?.amountPaid,
+    outstanding: item?.paymentInfo?.outstandingBalance,
+    status: item?.paymentInfo?.saleStatus,
+  }));
+
+export interface IReservedUnitDTO {
+  name: string;
+  location: string;
+  plots: number | string;
+  id: string;
+}
+
+export const recentlyReservedPropertiesDTO = (
+  data: IRecentlyReservedPropertyData[] = []
+): IReservedUnitDTO[] => {
+  return data?.map((sale) => ({
+    name: sale?.propertyDetails?.name ?? "N/A",
+    location: sale?.propertyDetails?.address ?? "N/A",
+    plots: sale?.unitNumber, //toCurrency(property?.unitSold || 0, false),
+    id: sale?._id ?? "",
+    date: sale?.createdAt || "",
   }));
 };

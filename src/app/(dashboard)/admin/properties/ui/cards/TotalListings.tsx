@@ -11,6 +11,7 @@ import {
   PieChart,
 } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
+import { IPropertySummary } from "@/lib/type";
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight, House2 } from "iconsax-react";
@@ -86,13 +87,6 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-interface ISummary {
-  totalProperties: number;
-  totalAvailableUnits: number;
-  totalReservedUnits: number;
-  closedSales: number;
-}
-
 export const TotalListing = ({
   data = [],
   totalListing = 0,
@@ -100,7 +94,7 @@ export const TotalListing = ({
 }: {
   data?: any[];
   totalListing?: number | string;
-  summary?: ISummary;
+  summary?: IPropertySummary;
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const chartData = [

@@ -73,3 +73,49 @@ export const verifySchema = Yup.object().shape({
   token: Yup.string()
     .required("Token is required")
 });
+
+export const paymentOptionsSchema = Yup.object().shape({
+  instantPrice: Yup.mixed()
+    .test(
+      'is-number-or-string',
+      'Instant price must be a number or a string',
+      (value) => typeof value === 'number' || typeof value === 'string'
+    )
+    .required('Instant price is required'),
+  plans: Yup.array().optional().of(
+    Yup.object().shape({
+      duration: Yup.string().required('Duration is required'),
+      price: Yup.string().required('Price is required'),
+    })
+  ),
+});
+
+export const createPropertyPayloadSchema = Yup.object().shape({
+  name: Yup.string().required('Name is required'),
+  state: Yup.string().required('State is required'),
+  lga: Yup.string().required('LGA is required'),
+  address: Yup.string().required('Address is required'),
+  totalUnits: Yup.mixed()
+    .test(
+      'is-number-or-string',
+      'Total units must be a number or a string',
+      (value) => typeof value === 'number' || typeof value === 'string'
+    )
+    .required('Total units is required'),
+  availableUnits: Yup.mixed()
+    .test(
+      'is-number-or-string',
+      'Available units must be a number or a string',
+      (value) => typeof value === 'number' || typeof value === 'string'
+    )
+    .required('Available units is required'),
+  saleCommissionRate: Yup.mixed()
+    .test(
+      'is-number-or-string',
+      'Sale commission rate must be a number or a string',
+      (value) => typeof value === 'number' || typeof value === 'string'
+    )
+    .required('Sale commission rate is required'),
+  documents: Yup.string(),
+  priceOptions: paymentOptionsSchema,
+});

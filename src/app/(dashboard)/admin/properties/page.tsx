@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import {
   AvailableUnits,
   ReservedUnits,
@@ -11,26 +11,26 @@ import {
   getTopSellingProperties,
   getRecentlyListedProperties,
   getPropertiesSummary,
-  getAvailableProperties,
   getReservedProperties,
+  getMostAvaliableUnits,
 } from "@/lib/services/";
-import {
-  recentlyListedPropertiesDTO,
-  topSellingPropertiesDTO,
-} from "@/lib/dtos/property.dto";
+import { recentlyReservedPropertiesDTO, topSellingPropertiesDTO } from "@/lib/dtos/property.dto";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui";
+import { toCurrency } from "@/lib/utils";
+// import { AvaliableUnitsData } from "./ui/cards/AvaliableUnits.server";
 
 const Properties = async () => {
-  const [topSelling, recentlyListed, summary, available, reserved] =
+  const [topSelling, recentlyListed, summary, reserved] =
     await Promise.all([
-      getTopSellingProperties({}),
-      getRecentlyListedProperties({}),
+      getTopSellingProperties(),
+      getRecentlyListedProperties(),
       getPropertiesSummary(),
-      getAvailableProperties(),
       getReservedProperties(),
     ]);
 
+
+  const availableUnits = getMostAvaliableUnits();
 
   return (
     <>
@@ -42,21 +42,26 @@ const Properties = async () => {
       </div>
       <section className="w-full justify-between flex flex-wrap gap-4">
         <TotalListing
-          totalListing={summary?.totalProperties || 0}
+          totalListing={toCurrency(summary?.totalUnits || 0, false)}
           summary={summary}
         />
-        <AvailableUnits
-          availableUnits={summary?.totalAvailableUnits || 0}
-          data={available ?? []}
-          summary={summary}
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <AvailableUnits
+            availableUnits={toCurrency(
+              summary?.totalAvailableUnits || 0,
+              false
+            )}
+            data={availableUnits}
+            summary={summary}
+          />
+        </Suspense>
         <ReservedUnits
-          reservedUnits={summary?.totalReservedUnits || 0}
-          data={reserved ?? []}
+          reservedUnits={toCurrency(summary?.totalReservedUnits || 0, false)}
+          data={recentlyReservedPropertiesDTO(reserved) ?? []}
           summary={summary}
         />
         <ClosedSales
-          closedSales={summary?.closedSales || 0}
+          closedSales={toCurrency(summary?.closedSales || 0, false)}
           data={[]}
           summary={summary}
         />
@@ -66,9 +71,7 @@ const Properties = async () => {
         <TopSellingProperties
           data={topSellingPropertiesDTO(topSelling) ?? []}
         />
-        <RecentlyListed
-          data={recentlyListedPropertiesDTO(recentlyListed) ?? []}
-        />
+        <RecentlyListed data={recentlyListed ?? []} />
       </section>
     </>
   );

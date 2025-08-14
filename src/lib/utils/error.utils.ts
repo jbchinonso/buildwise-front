@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 
 export const getError = (error: any) => {
   if (typeof error === "string") {
-    console.log("Error is string::: ", error)
+    console.log("Error is string::: ", error);
     return error;
   } else if (error instanceof AxiosError) {
     const axiosError = error as AxiosError;
@@ -35,3 +35,6 @@ export const getError = (error: any) => {
   }
 };
 
+export const getFormikError = (touched?: any, error?: string) => {
+  return Boolean(touched) && error ? error : "";
+};

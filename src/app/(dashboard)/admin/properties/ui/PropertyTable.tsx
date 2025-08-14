@@ -3,6 +3,7 @@ import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
 import { IPropertyTableDTO } from "@/lib/dtos/property.dto";
 import { ColumnDef } from "@tanstack/react-table";
+import { formatDistanceToNow } from "date-fns";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -63,7 +64,7 @@ const columns: ColumnDef<IPropertyTableDTO>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Listed" />
     ),
-    cell: ({ row }) => <div>{row.getValue("listed")}</div>,
+    cell: ({ row }) => <div> {row.original?.listed ? formatDistanceToNow(row.original?.listed) + " ago" : "" }</div>
   },
 
   {

@@ -149,7 +149,7 @@ interface ICreatePropertyPayload {
   totalUnits: number | string;
   availableUnits: number | string;
   saleCommissionRate: number | string;
-  documents: string;
+  documents: string | string[];
   priceOptions?: IPaymentOptions | any;
 }
 
@@ -165,8 +165,69 @@ interface IProperty extends ICreatePropertyPayload {
   agents?: string;
 }
 
-
 interface IOption {
   value?: string;
   label?: React.ReactNode | string;
+}
+
+interface IPropertyClientOwnership {
+  agent: {
+    name: string;
+    email: string;
+  };
+  client: {
+    name: string;
+    email: string;
+  };
+  saleId: string;
+  unitDetails: {
+    plotNumber: string | number;
+    unitNumber: string;
+  };
+  paymentInfo: {
+    amountPaid: string | number;
+    totalPrice: string | number;
+    outstandingBalance: string | number;
+    paymentPlan: string;
+    lastPaymentDate: string;
+    saleStatus: string;
+  };
+}
+
+interface IPropertySummary {
+  totalUnits: number;
+  totalAvailableUnits: number;
+  totalReservedUnits: number;
+  totalSoldUnits: number;
+  closedSales: number;
+}
+
+interface IMostAvailableUnits {
+  name: string;
+  location: string;
+  availablePlots: string | number;
+  soldPlots: string | number;
+  totalReservedAndSold: string | number;
+}
+interface IRecentlyReservedPropertyData {
+  _id: string;
+  plotNumber: string | number;
+  unitNumber: string;
+  amountPaid: string | number;
+  price: string | number;
+  paymentPlan: string;
+  createdAt: string;
+  propertyDetails: {
+    _id: string;
+    name: string;
+    address: string;
+  };
+  clientDetails: {
+    _id: string;
+    email: string;
+  };
+  agentDetails: {
+    _id: string;
+    email: string;
+  };
 }

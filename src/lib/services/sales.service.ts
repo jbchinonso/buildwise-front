@@ -26,3 +26,20 @@ export const createSale = async (sale: ISalePayload) => {
     throw getError(error);
   }
 };
+
+
+export const getActiveAgents = async () => {
+  try {
+    const response= await authFetch("/sales/active-agent", {
+      next: {
+        revalidate: 8400,
+        tags: ["agents"],
+      },
+    });
+
+    return response //{ data, ...pagination };
+  } catch (error) {
+    console.error("Error fetching agents:", getError(error));
+    throw new Error(getError(error));
+  }
+};

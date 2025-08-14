@@ -1,4 +1,4 @@
-import { IOption } from "../type";
+import { IOption, IPropertyClientOwnership } from "../type";
 import { Client, IClientsData } from "../types/client";
 import { formatDistanceToNow } from "date-fns";
 
@@ -47,3 +47,4 @@ export const clientSelectDTO = (data: IClientsData[]): IOption[] =>
     value: client?._id,
     label: `${client?.firstName || ""} ${client?.lastName || ""}`.trim(),
   }));
+

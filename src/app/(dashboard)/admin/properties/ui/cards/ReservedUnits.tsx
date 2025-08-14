@@ -10,9 +10,12 @@ import {
   DataTableColumnHeader,
   PieChart,
 } from "@/components/ui";
+import { IReservedUnitDTO } from "@/lib/dtos/property.dto";
 import { useModal } from "@/lib/hooks";
+import { IPropertySummary } from "@/lib/type";
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
 import { ArrowRight } from "iconsax-react";
 import { ChevronRight, Hourglass } from "lucide-react";
 import Link from "next/link";
@@ -38,21 +41,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-type Transaction = {
-  id: string;
-  property: string;
-  location: string;
-  plots: string;
-  date_reserved: string;
-};
-
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<IReservedUnitDTO>[] = [
   {
-    accessorKey: "property",
+    accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Property" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
   {
     accessorKey: "location",
@@ -62,7 +57,7 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
   {
-    accessorKey: "reserved_plots",
+    accessorKey: "plots",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -70,10 +65,10 @@ const columns: ColumnDef<Transaction>[] = [
         className="whitespace-normal text-start"
       />
     ),
-    cell: ({ row }) => <div>{row.getValue("reserved_plots")}</div>,
+    cell: ({ row }) => <div>{row.getValue("plots")}</div>,
   },
   {
-    accessorKey: "date_reserved",
+    accessorKey: "date",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -81,7 +76,9 @@ const columns: ColumnDef<Transaction>[] = [
         className="whitespace-normal text-left"
       />
     ),
-    cell: ({ row }) => <div>{row.getValue("date_reserved")}</div>,
+    cell: ({ row }) => (
+      <div>{format(row.getValue("date") || "", "dd/MM/yyyy, HH:MMa")}</div>
+    ),
   },
 
   {
@@ -99,20 +96,13 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-interface ISummary {
-  totalProperties: number;
-  totalAvailableUnits: number;
-  totalReservedUnits: number;
-  closedSales: number;
-}
-
 export const ReservedUnits = ({
   data = [],
   reservedUnits = 0,
   summary,
 }: {
   data?: any[];
-  summary?: ISummary;
+  summary?: IPropertySummary;
   reservedUnits?: number | string;
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
@@ -166,7 +156,10 @@ export const ReservedUnits = ({
                       key={label}
                       className="flex flex-[20%] gap-2 items-center"
                     >
-                      <span className={cn("size-3 rounded-full", bg)} />
+                      <span
+                        style={{ background: fill }}
+                        className={cn("size-3 rounded-full", bg)}
+                      />
                       <div className="flex flex-col">
                         <p className="text-grey-400 capitalize">{label}</p>
                         <p className="text-grey-600">{data}</p>

@@ -1,9 +1,16 @@
 import { BreadCrumbs, Button, Input } from "@/components/ui";
-import { getAllClients, getProperty } from "@/lib/services";
+import {
+  getActiveAgents,
+  getAllClients,
+  getClientAndOwnership,
+  getProperty,
+} from "@/lib/services";
 import { ActiveAgents, PropertyMenu, UnitsSold } from "../../ui";
 import { UpdatePropertyPaymentModal } from "../../../clients/ui";
 import { clientSelectDTO } from "@/lib/dtos";
 import { ClientsOwnersModal } from "../../ui/ClientsOwnersModal";
+import { propertyClientOwnershipDTO } from "@/lib/dtos/property.dto";
+import { toCurrency } from "@/lib/utils";
 
 type Params = Promise<{ property: string }>;
 type SearchParams = Promise<{ page?: string; limit?: string; search?: string }>;
@@ -21,8 +28,14 @@ const Property = async (props: {
 
   const property = await getProperty(id);
 
-  const [clients] = await Promise.all([getAllClients({ page, limit, search })]);
+  const [clients, clientOwner, activeAgents] = await Promise.all([
+    getAllClients({ page, limit, search }),
+    getClientAndOwnership({ id }),
+    getActiveAgents(),
+  ]);
+
   const clientOptions = clientSelectDTO(clients?.data);
+  const clientOwnerData = propertyClientOwnershipDTO(clientOwner);
 
   return (
     <section className="flex flex-1 flex-col gap-4">
@@ -62,7 +75,8 @@ const Property = async (props: {
             id="state"
             type="text"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)] capitalize"
+            inputStyle="capitalize"
             defaultValue={property?.state || "N/A"}
           />
           <Input
@@ -71,7 +85,8 @@ const Property = async (props: {
             id="lga"
             type="text"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            inputStyle="capitalize"
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)] capitalize"
             defaultValue={property?.lga || "N/A"}
           />
 
@@ -81,7 +96,8 @@ const Property = async (props: {
             id="address"
             type="text"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            inputStyle="capitalize"
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)] capitalize"
             defaultValue={property?.address}
           />
           <Input
@@ -91,7 +107,7 @@ const Property = async (props: {
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={property?.priceOptions?.instantPrice || "N/A"}
+            defaultValue={toCurrency(property?.priceOptions?.instantPrice || 0)}
           />
           <Input
             label="Payment options"
@@ -100,8 +116,13 @@ const Property = async (props: {
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            // defaultValue={property?.priceOptions as string}
+            defaultValue={
+              property?.priceOptions?.plans?.length
+                ? "Outright, Installment"
+                : property?.priceOptions ?? ""
+            }
           />
+
           <Input
             label="Documents"
             name="documents"
@@ -124,6 +145,7 @@ const Property = async (props: {
 
           <UnitsSold id={property?._id} unitsSold={property?.soldUnits} />
 
+          {/* NOTE ?? will I get revenue generated separately */}
           <Input
             label="Revenue generated"
             name="revenue"
@@ -133,6 +155,8 @@ const Property = async (props: {
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
             defaultValue={property?.revenue}
           />
+
+          {/* NOTE If outstanding payment is an array how do I display outstanding payments */}
           <Input
             label="Outstanding payments"
             name="revenue"
@@ -156,8 +180,11 @@ const Property = async (props: {
             }
           />
 
-          <ClientsOwnersModal owners={property?.owners || 0} />
-          <ActiveAgents agents={property?.agents || 0} />
+          <ClientsOwnersModal
+            owners={property?.owners || 0}
+            clientOwners={clientOwnerData}
+          />
+          <ActiveAgents total={activeAgents?.length} agents={activeAgents} />
 
           <Input
             label="Commission rate"
@@ -166,7 +193,9 @@ const Property = async (props: {
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={property?.saleCommissionRate}
+            defaultValue={
+              (property?.saleCommissionRate ?? 0) + "% of property value"
+            }
           />
         </div>
         {/* Activities info */}

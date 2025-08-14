@@ -1,6 +1,7 @@
 "use client";
 import { DataTable, PageModal } from "@/components/dashboard";
 import { Button, DataTableColumnHeader, Input } from "@/components/ui";
+import { ISoldUnitsDTO } from "@/lib/dtos/property.dto";
 import { useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight } from "iconsax-react";
@@ -11,6 +12,7 @@ import { useRouter } from "next/navigation";
 interface IProps {
   id?: string;
   unitsSold?: string;
+  sales?: ISoldUnitsDTO[];
 }
 
 type Transaction = {
