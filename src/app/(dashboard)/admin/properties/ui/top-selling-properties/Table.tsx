@@ -2,7 +2,7 @@
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
 import { ITopSellingDTO } from "@/lib/dtos/property.dto";
-import { toCurrency } from "@/lib/utils";
+import { toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -36,14 +36,14 @@ export const columns: ColumnDef<ITopSellingDTO>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Revenue" />
     ),
-    cell: ({ row }) => <div>{toCurrency(row.getValue("revenue")||0)}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("revenue")||0)}</div>,
   },
   {
     accessorKey: "unitSold",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Unit sold" />
     ),
-    cell: ({ row }) => <div>{toCurrency(row.getValue("unitSold") || 0)}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("unitSold") || 0)}</div>,
   },
   {
     // id: "actions",

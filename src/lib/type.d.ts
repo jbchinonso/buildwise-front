@@ -50,8 +50,15 @@ interface Company {
 }
 
 interface IPagination {
-  page?: number;
-  limit?: number;
+  page?: number | string;
+  limit?: number | string;
+}
+
+interface IPaginationResponse extends IPagination {
+  total?: number;
+  totalPages?: number;
+  hasNextPage?: boolean;
+  hasPreviousPage?: boolean;
 }
 
 export interface IUser {
@@ -230,4 +237,43 @@ interface IRecentlyReservedPropertyData {
     _id: string;
     email: string;
   };
+}
+
+interface IClientOverviewRecentCLients {
+  name: string;
+  agentName: string;
+  location: string;
+  joinedDate: string;
+}
+
+interface IClientOverview {
+  totalClients: number;
+  activeBuyersCount: number;
+  totalPropertiesBoughtOrReserved: number;
+  recentClients: IClientOverviewRecentCLients[];
+}
+
+interface IClientRecentlyReserved {
+  _id: string;
+  client: { name: string };
+  plotNumber: number;
+  unitNumber: string;
+  propertyName: string;
+  location: { state: string; lga: string };
+  dateReserved: string;
+}
+
+interface IClientPaymentData {
+  clientName: string;
+  units: string;
+  amountPaid: number;
+  installmentPeriod: {
+    start: string;
+    end: string;
+    duration: string;
+  };
+  paymentPlan: string;
+  amountDue: string | number;
+  totalAmount: string | number;
+  saleId: string;
 }

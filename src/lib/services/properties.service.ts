@@ -7,6 +7,7 @@ import {
   ICreatePropertyPayload,
   IMostAvailableUnits,
   IPagination,
+  IPaginationResponse,
   IProperty,
   IPropertyClientOwnership,
   IPropertySummary,
@@ -170,7 +171,6 @@ export const getClientAndOwnership = async (
       }
     });
 
-    // NOTE??  this endpoint is not paginated, but the UI is
     const response = await authFetch(
       `/properties/${params.id}/clients-ownership?${query.toString()}`,
       {
@@ -181,9 +181,10 @@ export const getClientAndOwnership = async (
       }
     );
 
-    const { data, ...pagination } = response;
-
-    return response as IPropertyClientOwnership[];
+    return response as {
+      data: IPropertyClientOwnership[];
+      pagination: IPaginationResponse;
+    };
   } catch (error) {
     throw getError(error);
   }

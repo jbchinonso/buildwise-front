@@ -12,8 +12,8 @@ import {
 } from "@/components/ui";
 import { IReservedUnitDTO } from "@/lib/dtos/property.dto";
 import { useModal } from "@/lib/hooks";
-import { IPropertySummary } from "@/lib/type";
-import { cn } from "@/lib/utils";
+import { IClientRecentlyReserved, IPropertySummary } from "@/lib/type";
+import { cn, formatAddress } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ArrowRight } from "iconsax-react";
@@ -41,23 +41,30 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const columns: ColumnDef<IReservedUnitDTO>[] = [
+const columns: ColumnDef<IClientRecentlyReserved>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "propertyName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Property" />
     ),
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    cell: ({ row }) => <div>{row.getValue("propertyName")}</div>,
   },
   {
     accessorKey: "location",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Location" />
     ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">
+        {formatAddress(
+          row.original?.location?.lga || "",
+          row?.original?.location?.lga || ""
+        )}
+      </div>
+    ),
   },
   {
-    accessorKey: "plots",
+    accessorKey: "plotNumber",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -65,10 +72,10 @@ const columns: ColumnDef<IReservedUnitDTO>[] = [
         className="whitespace-normal text-start"
       />
     ),
-    cell: ({ row }) => <div>{row.getValue("plots")}</div>,
+    cell: ({ row }) => <div>{row.getValue("plotNumber")}</div>,
   },
   {
-    accessorKey: "date",
+    accessorKey: "dateReserved",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -77,7 +84,9 @@ const columns: ColumnDef<IReservedUnitDTO>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div>{format(row.getValue("date") || "", "dd/MM/yyyy, HH:MMa")}</div>
+      <div>
+        {format(row.getValue("dateReserved") || "", "dd/MM/yyyy, HH:MMa")}
+      </div>
     ),
   },
 
@@ -101,7 +110,7 @@ export const ReservedUnits = ({
   reservedUnits = 0,
   summary,
 }: {
-  data?: any[];
+  data?: IClientRecentlyReserved[];
   summary?: IPropertySummary;
   reservedUnits?: number | string;
 }) => {
@@ -133,7 +142,7 @@ export const ReservedUnits = ({
       {isModalOpen && (
         <PageModal
           handleClose={closeModal}
-          heading="Reserved units"
+          heading="Reserved properties"
           className="max-w-[MIN(100%,600px)]"
         >
           <section className="flex flex-1 flex-col w-full gap-4">
@@ -171,9 +180,7 @@ export const ReservedUnits = ({
             </div>
 
             <div className="flex items-baseline justify-between w-full gap-4 my-1">
-              <h2 className="font-semibold text-grey-600">
-                Most units available
-              </h2>
+              <h2 className="font-semibold text-grey-600">Recently reserved</h2>
 
               <Link
                 href="/"

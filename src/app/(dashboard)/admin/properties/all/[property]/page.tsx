@@ -10,7 +10,7 @@ import { UpdatePropertyPaymentModal } from "../../../clients/ui";
 import { clientSelectDTO } from "@/lib/dtos";
 import { ClientsOwnersModal } from "../../ui/ClientsOwnersModal";
 import { propertyClientOwnershipDTO } from "@/lib/dtos/property.dto";
-import { toCurrency } from "@/lib/utils";
+import { toAmount } from "@/lib/utils";
 
 type Params = Promise<{ property: string }>;
 type SearchParams = Promise<{ page?: string; limit?: string; search?: string }>;
@@ -35,7 +35,8 @@ const Property = async (props: {
   ]);
 
   const clientOptions = clientSelectDTO(clients?.data);
-  const clientOwnerData = propertyClientOwnershipDTO(clientOwner);
+  const clientOwnerData = propertyClientOwnershipDTO(clientOwner?.data);
+
 
   return (
     <section className="flex flex-1 flex-col gap-4">
@@ -107,7 +108,7 @@ const Property = async (props: {
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={toCurrency(property?.priceOptions?.instantPrice || 0)}
+            defaultValue={toAmount(property?.priceOptions?.instantPrice || 0)}
           />
           <Input
             label="Payment options"

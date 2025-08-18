@@ -1,16 +1,28 @@
-import { DashboardStatsCard } from "@/components/dashboard";
 import { Button, SearchInput } from "@/components/ui";
-import { ArrowRight, House2 } from "iconsax-react";
-import { Hourglass, KeyRound, Plus } from "lucide-react";
+import { ArrowRight } from "iconsax-react";
+import { Plus } from "lucide-react";
 import { ClientOverview, ClientsTable } from "./ui/";
 import Link from "next/link";
-import { getAllClients, getClientSummary } from "@/lib/services/client.service";
+import {
+  getAllClients,
+  getClientOverview,
+  getClientRecentlyReserved,
+  getClientStats,
+} from "@/lib/services";
 import { clientTableDTO } from "@/lib/dtos/client.dto";
 import { ClosedSales, ReservedUnits } from "../properties/ui";
 
-const Clients = async () => {
-  const { data } = await getAllClients({});
-  const [summary] = await Promise.all([getClientSummary()]);
+type SearchParams = Promise<{ page?: string; limit?: string; search?: string }>;
+
+const Clients = async (props: { searchParams: SearchParams }) => {
+  const searchParams = await props.searchParams;
+
+  const [clients, stats, overview, recentlyReserved] = await Promise.all([
+    getAllClients(searchParams),
+    getClientStats(),
+    getClientOverview(),
+    getClientRecentlyReserved(),
+  ]);
 
   return (
     <>
@@ -21,9 +33,12 @@ const Clients = async () => {
         </Button>
       </div>
       <section className="w-full justify-between flex flex-wrap gap-4">
-        <ClientOverview data={[]} clients={summary?.totalClients || 0} />
-        <ReservedUnits reservedUnits={summary?.totalReservedProperties || 0} />
-        <ClosedSales closedSales={summary?.totalCompletedSales || 0} />
+        <ClientOverview data={overview} clients={stats?.totalClients || 0} />
+        <ReservedUnits
+          data={recentlyReserved ?? []}
+          reservedUnits={stats?.totalReserved || 0}
+        />
+        <ClosedSales closedSales={stats?.totalClosed || 0} />
       </section>
 
       <section className="flex flex-wrap gap-4 flex-1 max-h-[601px]">
@@ -43,7 +58,7 @@ const Clients = async () => {
             </Link>
           </div>
 
-          <ClientsTable data={clientTableDTO(data)} />
+          <ClientsTable data={clientTableDTO(clients?.data)} />
         </div>
       </section>
     </>

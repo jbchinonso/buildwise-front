@@ -2,8 +2,9 @@ import { format, formatDistanceToNow } from "date-fns";
 import {
   IPropertyClientOwnership,
   IRecentlyReservedPropertyData,
+  IUser,
 } from "../type";
-import { formatAddress, toCurrency } from "../utils";
+import { formatAddress, toAmount } from "../utils";
 
 export interface ITopSellingData {
   totalSales: number;
@@ -29,8 +30,8 @@ export const topSellingPropertiesDTO = (
   return data?.map((property) => ({
     name: property?.name ?? "N/A",
     location: formatAddress(property?.lga, property?.state) ?? "N/A",
-    revenue: toCurrency(property?.totalRevenue || 0),
-    unitSold: toCurrency(property?.unitSold || 0, false),
+    revenue: toAmount(property?.totalRevenue || 0),
+    unitSold: toAmount(property?.unitSold || 0, false),
     id: property?.propertyId ?? "",
   }));
 };
@@ -67,6 +68,8 @@ export interface IPropertySale {
   createdAt: string;
   updatedAt: string;
   lastPaymentDate: string;
+  clientDetails: IUser;
+  agentDetails: IUser;
 }
 
 export interface IPropertyData {
@@ -122,20 +125,23 @@ export const propertyTableDTO = (
 export type IPropertyTransactionDTO = {
   id: string;
   date: string;
-  amountPaid: string;
+  amountPaid: string | number;
   client: string;
   plotNo: number | string;
 };
 
 export const propertyTransactionTableDTO = (
-  data: IPropertyData[] = []
+  data: IPropertySale[] = []
 ): IPropertyTransactionDTO[] => {
   return data?.map((property) => ({
     id: property?._id,
-    date: property?.name ?? "N/A",
-    amountPaid: property?.address ?? "N/A",
-    client: property?.name ?? "N/A",
-    plotNo: property?.availableUnits,
+    date: property?.createdAt ?? "N/A",
+    amountPaid: property?.amountPaid ?? "N/A",
+    client:
+      property?.client || property?.clientDetails
+        ? `${property?.clientDetails?.lastName} ${property?.clientDetails?.firstName}`
+        : "N/A",
+    plotNo: property?.plotNumber,
   }));
 };
 
@@ -171,9 +177,9 @@ export interface IPropertyClientOwnershipTable {
 }
 
 export const propertyClientOwnershipDTO = (
-  data: IPropertyClientOwnership[]
+  data: IPropertyClientOwnership[] = []
 ): IPropertyClientOwnershipTable[] =>
-  data?.map((item) => ({
+  (data || [])?.map((item) => ({
     id: item?.saleId,
     client: item?.client?.name,
     agent: item?.agent?.name,
@@ -196,7 +202,7 @@ export const recentlyReservedPropertiesDTO = (
   return data?.map((sale) => ({
     name: sale?.propertyDetails?.name ?? "N/A",
     location: sale?.propertyDetails?.address ?? "N/A",
-    plots: sale?.unitNumber, //toCurrency(property?.unitSold || 0, false),
+    plots: sale?.unitNumber, //toAmount(property?.unitSold || 0, false),
     id: sale?._id ?? "",
     date: sale?.createdAt || "",
   }));

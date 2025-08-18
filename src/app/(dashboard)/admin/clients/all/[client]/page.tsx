@@ -1,4 +1,10 @@
-import { Avatar, BreadCrumbs, Button, Input, ProfileAvatar } from "@/components/ui";
+import {
+  Avatar,
+  BreadCrumbs,
+  Button,
+  Input,
+  ProfileAvatar,
+} from "@/components/ui";
 import { UpdatePaymentModal, AddPropertyModal } from "../../ui";
 import { getClient } from "@/lib/services";
 import { clientProfileDTO } from "@/lib/dtos";
@@ -8,13 +14,10 @@ const ClientProfile = async (props: { params: Params }) => {
   const params = await props.params;
   const id = params.client;
 
-  
-  
   const data = await getClient(id);
-  
-  const personalInformation = clientProfileDTO(data)
-  
-  console.log({data, personalInformation})
+
+  const personalInformation = clientProfileDTO(data);
+
   return (
     <section className="flex flex-1 flex-col gap-4">
       <BreadCrumbs
@@ -117,38 +120,6 @@ const ClientProfile = async (props: { params: Params }) => {
         </div>
         {/* Activities info */}
         <div className="flex flex-1 flex-wrap justify-between gap-4 gap-x-20 w-full">
-          {/* <header className="w-full text-grey-400 font-bold">
-            <p>Activities</p>
-          </header>
-
-          <Input
-            label="Total revenue"
-            name="total_revenue"
-            id="total_revenue"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={activities.total_revenue}
-          />
-          <Input
-            label="Sales commission"
-            name="sales_commission"
-            id="sales_commission"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={activities.sales_commission}
-          />
-          <Input
-            label="Referral commission"
-            name="referral_commission"
-            id="referral_commission"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={activities.referral_commission}
-          /> */}
-
           <div className="w-full flex py-2 my-2 mt-auto">
             <AddPropertyModal />
           </div>

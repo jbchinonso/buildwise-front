@@ -2,22 +2,14 @@
 import { DashboardModal, DataTable } from "@/components/dashboard";
 import { Button, DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
+import { IClientPaymentData } from "@/lib/type";
 import { ColumnDef } from "@tanstack/react-table";
-import { Check, TickCircle } from "iconsax-react";
+import { TickCircle } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+// import Link from "next/link";
 
-type PaymentHistory = {
-  id: string;
-  date: string;
-  amount: string;
-  property: number;
-  plot_no: string;
-  status: string;
-};
-
-const columns: (toggleModal: () => void) => ColumnDef<PaymentHistory>[] = (
+const columns: (toggleModal: () => void) => ColumnDef<IClientPaymentData>[] = (
   toggleModal: () => void
 ) => [
   {
@@ -28,11 +20,11 @@ const columns: (toggleModal: () => void) => ColumnDef<PaymentHistory>[] = (
     cell: ({ row }) => <div>{row.getValue("date")}</div>,
   },
   {
-    accessorKey: "amount",
+    accessorKey: "amountPaid",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Amount" />
     ),
-    cell: ({ row }) => <div>{row.getValue("amount")}</div>,
+    cell: ({ row }) => <div>{row.getValue("amountPaid")}</div>,
   },
   {
     accessorKey: "property",
@@ -90,7 +82,7 @@ const columns: (toggleModal: () => void) => ColumnDef<PaymentHistory>[] = (
 export const PaymentHistoryTable = ({
   data = [],
 }: {
-  data: PaymentHistory[];
+  data: IClientPaymentData[];
 }) => {
   const { isModalOpen, closeModal, toggleModal } = useModal();
 

@@ -17,7 +17,7 @@ import {
 import { recentlyReservedPropertiesDTO, topSellingPropertiesDTO } from "@/lib/dtos/property.dto";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui";
-import { toCurrency } from "@/lib/utils";
+import { toAmount } from "@/lib/utils";
 // import { AvaliableUnitsData } from "./ui/cards/AvaliableUnits.server";
 
 const Properties = async () => {
@@ -42,12 +42,12 @@ const Properties = async () => {
       </div>
       <section className="w-full justify-between flex flex-wrap gap-4">
         <TotalListing
-          totalListing={toCurrency(summary?.totalUnits || 0, false)}
+          totalListing={toAmount(summary?.totalUnits || 0, false)}
           summary={summary}
         />
         <Suspense fallback={<div>Loading...</div>}>
           <AvailableUnits
-            availableUnits={toCurrency(
+            availableUnits={toAmount(
               summary?.totalAvailableUnits || 0,
               false
             )}
@@ -56,12 +56,12 @@ const Properties = async () => {
           />
         </Suspense>
         <ReservedUnits
-          reservedUnits={toCurrency(summary?.totalReservedUnits || 0, false)}
+          reservedUnits={toAmount(summary?.totalReservedUnits || 0, false)}
           data={recentlyReservedPropertiesDTO(reserved) ?? []}
           summary={summary}
         />
         <ClosedSales
-          closedSales={toCurrency(summary?.closedSales || 0, false)}
+          closedSales={toAmount(summary?.closedSales || 0, false)}
           data={[]}
           summary={summary}
         />

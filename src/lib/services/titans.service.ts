@@ -10,8 +10,6 @@ export const getTitans = async () => {
       },
     });
 
-    console.log({ response });
-
     return response //{ data, ...pagination };
   } catch (error) {
     console.error("Error fetching titans:", getError(error));

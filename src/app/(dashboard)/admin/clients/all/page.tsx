@@ -4,8 +4,13 @@ import { BreadCrumbs, Filters, SearchInput } from "@/components/ui";
 import { getAllClients } from "@/lib/services/client.service";
 import { clientTableDTO } from "@/lib/dtos";
 
-const AllClients = async () => {
-  const { data = [], pagination = {} } = await getAllClients();
+type SearchParams = Promise<{ page?: string; limit?: string; search?: string }>;
+
+
+const AllClients = async (props: { searchParams: SearchParams }) => {
+  const searchParams = await props.searchParams;
+
+  const { data = [], pagination = {} } = await getAllClients(searchParams);
 
   return (
     <section className="flex flex-1 flex-col gap-4">

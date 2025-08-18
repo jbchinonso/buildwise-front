@@ -3,7 +3,7 @@ import { DataTable, PageModal } from "@/components/dashboard";
 import { DataTableColumnHeader, Input } from "@/components/ui";
 import { IPropertyClientOwnershipTable } from "@/lib/dtos/property.dto";
 import { useModal } from "@/lib/hooks";
-import { toCurrency } from "@/lib/utils";
+import { toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -39,7 +39,7 @@ const columns: ColumnDef<IPropertyClientOwnershipTable>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Paid" />
     ),
-    cell: ({ row }) => <div>{toCurrency(row.getValue("paid") ?? 0)}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("paid") ?? 0)}</div>,
   },
   {
     accessorKey: "outstanding",
@@ -47,7 +47,7 @@ const columns: ColumnDef<IPropertyClientOwnershipTable>[] = [
       <DataTableColumnHeader column={column} title="Outstanding" />
     ),
     cell: ({ row }) => (
-      <div>{toCurrency(row.getValue("outstanding") ?? 0)}</div>
+      <div>{toAmount(row.getValue("outstanding") ?? 0)}</div>
     ),
   },
   {

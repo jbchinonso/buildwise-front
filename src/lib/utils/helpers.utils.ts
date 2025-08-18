@@ -192,14 +192,14 @@ export function myImageLoader({src="", width="100", quality=75}: {
  * @param {(string | number)} value
  * @returns {(string | number)}
  */
-export const toCurrency = (value: string | number, isNaira = true) => {
+export const toAmount = (value: string | number, isCurrency = true) => {
   if (isNaN(Number(value))) {
     return value
   }
   const formatter = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 0,
   })
-  if (isNaira) {
+  if (isCurrency) {
     return '₦ ' + formatter.format(Number(value))
   }
   return formatter.format(Number(value))
