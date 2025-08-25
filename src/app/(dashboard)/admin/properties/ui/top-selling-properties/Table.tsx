@@ -1,21 +1,21 @@
-"use client"
+"use client";
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
 import { ITopSellingDTO } from "@/lib/dtos/property.dto";
+import { toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-
 export const columns: ColumnDef<ITopSellingDTO>[] = [
   {
-    accessorKey: "property",
+    accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Property" />
     ),
     cell: ({ row }) => (
       <p className="max-w-[200px] whitespace-normal  ">
-        {row.getValue("property")}
+        {row.getValue("name")}
       </p>
     ),
   },
@@ -25,7 +25,7 @@ export const columns: ColumnDef<ITopSellingDTO>[] = [
       <DataTableColumnHeader column={column} title="Location" />
     ),
     cell: ({ row }) => (
-      <p className="max-w-[200px] whitespace-normal  ">
+      <p className="max-w-[200px] capitalize whitespace-normal">
         {row.getValue("location")}
       </p>
     ),
@@ -36,14 +36,14 @@ export const columns: ColumnDef<ITopSellingDTO>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Revenue" />
     ),
-    cell: ({ row }) => <div>{row.getValue("revenue")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("revenue")||0)}</div>,
   },
   {
-    accessorKey: "unit_sold",
+    accessorKey: "unitSold",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Unit sold" />
     ),
-    cell: ({ row }) => <div>{row.getValue("unit_sold")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("unitSold") || 0)}</div>,
   },
   {
     // id: "actions",

@@ -1,4 +1,5 @@
 Property
 - When creating a property; ['state', 'LGA'] is required but on get property it is not being returned for the UI
 - How do I get ['price', 'revenue generated', 'outstanding payments', 'clients ownership', 'active agents']?
-- 
+
+

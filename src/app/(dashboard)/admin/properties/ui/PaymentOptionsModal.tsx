@@ -1,8 +1,10 @@
 "use client";
 import { Button, Input, Modal, SelectScrollable } from "@/components/ui";
 import { IPaymentOptions } from "@/lib/type";
+import { getError, paymentOptionsSchema } from "@/lib/utils";
 import { PlusIcon } from "lucide-react";
 import React, { useEffect, useMemo, useState } from "react";
+import toast from "react-hot-toast";
 
 interface IProps {
   onClose: () => void;
@@ -32,15 +34,24 @@ export const PaymentOptionsModal = ({
     plans: null,
   });
 
-  const handleSave = () => {
-    if (!paymentPrice?.instantPrice) {
-      return;
+  const handleSave = async () => {
+    try {
+      if (!paymentPrice?.instantPrice) {
+        return;
+      }
+      const result = {
+        ...paymentPrice,
+        plans: Object.values(paymentPrice?.plans ?? {}),
+      };
+      
+       await paymentOptionsSchema.validate(result, { abortEarly: false });
+
+      onSelect?.({ ...result });
+
+      onClose();
+    } catch (error) {
+      toast.error(getError(error));
     }
-    onSelect?.({
-      ...paymentPrice,
-      plans: Object.values(paymentPrice?.plans ?? {}),
-    });
-    onClose();
   };
 
   const canAddNewOption = useMemo(() => {
@@ -55,6 +66,20 @@ export const PaymentOptionsModal = ({
     }
 
     return true;
+  }, [paymentPrice]);
+
+  const canSaveOption = useMemo(() => {
+    if (paymentPrice?.instantPrice) {
+      return paymentPrice?.plans
+        ? Object.values(paymentPrice.plans).every(
+            (plan) => plan?.duration && plan?.price
+          )
+        : true;
+    }
+
+    return false;
+
+    //NOTE ?? How do I properly display this on the input?
   }, [paymentPrice]);
 
   const handleAddPaymentOption = () => {
@@ -102,7 +127,11 @@ export const PaymentOptionsModal = ({
   }, []);
 
   return (
-    <Modal handleClose={onClose} heading={heading}>
+    <Modal
+      handleClose={onClose}
+      heading={heading}
+      className="max-w-[MIN(531px,100%)] md:max-w-[MIN(531px,100%)]"
+    >
       <div className="flex flex-col w-full gap-4 px-6">
         <Input
           id="paymentPrice"
@@ -165,15 +194,23 @@ export const PaymentOptionsModal = ({
         </button>
 
         <div className="flex w-full gap-4 items-center justify-center">
-          <Button onClick={onClose} type="button" variant="secondary">
+          <Button
+            onClick={onClose}
+            type="button"
+            variant="secondary"
+            size="sm"
+            className="w-full"
+          >
             Cancel
           </Button>
           <Button
             onClick={handleSave}
-            disabled={!paymentPrice?.instantPrice}
+            disabled={!canSaveOption}
             type="button"
+            size="sm"
+            className="w-full"
           >
-            Save
+            Save Price
           </Button>
         </div>
       </div>

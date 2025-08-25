@@ -19,8 +19,6 @@ export async function GET(
       revalidatePath(path);
     }
 
-    console.log({tags, path})
-
     return NextResponse.json({
       status: 200,
       revalidated: true,

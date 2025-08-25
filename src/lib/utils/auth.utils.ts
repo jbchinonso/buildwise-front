@@ -75,7 +75,6 @@ export const authOptions: AuthOptions = {
       }
 
       if (trigger === "update" && session) {
-        console.log({session})
         token.user = { ...session };
       }
 

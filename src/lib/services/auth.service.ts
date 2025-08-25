@@ -21,7 +21,8 @@ export const authFetch = async (url: string, options?: any) => {
   });
 
   if (!res?.ok) {
-    throw new Error("Failed to fetch data!");
+    const response = await res.json()
+    throw new Error(response?.message || "Failed to fetch data!");
   }
 
   return res.json();

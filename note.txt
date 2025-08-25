@@ -1,0 +1,18 @@
+Tested endpoints
+- Create properties
+- get one property
+- clients/ownership
+- get property summary
+- top selling property
+- recently listed properties
+
+---- CLIENTS -----
+- get all clients 
+- 
+- clients overview
+- clients stats
+- recently reserved
+
+
+#Failed endpoints
+- Fetch sales receipt

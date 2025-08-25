@@ -1,10 +1,11 @@
 import { BreadCrumbs, Input } from "@/components/ui";
 import { AddClientForm } from "./AddClientForm";
-import { getTitans } from "@/lib/services";
+import { getStates, getTitans } from "@/lib/services";
 
-const AddClient = async() => {
-  const titans = await getTitans()
-  console.log({titans})
+const AddClient = async () => {
+  const [agents, states] = await Promise.all([getTitans(), getStates()]);
+
+
   return (
     <section className="flex flex-1 flex-col gap-4">
       <BreadCrumbs
@@ -18,8 +19,13 @@ const AddClient = async() => {
           <p>Enter your client information</p>
         </header>
 
-        <AddClientForm 
-         />
+        <AddClientForm
+          agents={agents?.map((v: any) => ({
+            label: v?.fullname,
+            value: v?._id,
+          }))}
+          states={states}
+        />
       </div>
     </section>
   );

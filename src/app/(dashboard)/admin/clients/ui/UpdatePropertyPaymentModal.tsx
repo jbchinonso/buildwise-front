@@ -1,70 +1,125 @@
 "use client";
 import { DashboardModal } from "@/components/dashboard";
-import { Button, Input, SelectScrollable } from "@/components/ui";
-import { useModal } from "@/lib/hooks";
+import { Button, Input, SelectScrollable, SubmitButton } from "@/components/ui";
+import { getClientPaymentData } from "@/lib/services";
 import { IOption } from "@/lib/type";
+import { formatDate, getError, toAmount } from "@/lib/utils";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
-export const UpdatePropertyPaymentModal = ({ clients=[] }: { clients?: IOption[]}) => {
-  const { isModalOpen, toggleModal, closeModal } = useModal();
-  const [step, setStep] = useState(0);
+export const UpdatePropertyPaymentModal = ({
+  clients = [],
+}: {
+  clients?: IOption[];
+}) => {
+  const searchparams = useSearchParams();
+  const [clientId, setClientId] = useState("");
+  const [step, setStep] = useState<0 | 1>(0);
+  const [paymentData, setPaymentData] = useState<any[]>([]);
+  const router = useRouter();
+  const isUpdating = searchparams.get("update-payment");
 
-  const data = [
-    {
-      item: "client",
-      label: "Client  name",
-      data: "Courtney Henry",
-    },
-    {
-      item: "agent",
-      data: "Sodik Nwachukwu",
-    },
-    {
-      item: "property",
-      data: "Silvercrest vill",
-    },
-    {
-      item: "units",
-      data: "1 Plot",
-    },
-    {
-      item: "installment_period",
-      label: "Instalment period",
-      data: "18 May 2025 - 18 Nov 2026",
-    },
-    {
-      item: "total_amount",
-      label: "Total amount",
-      data: "₦3,500,000",
-    },
-    {
-      item: "amount_due",
-      label: "Amount due",
-      data: "₦1,500,000",
-    },
-    {
-      item: "amount_paid",
-      label: "Amount paid",
-      data: "₦500,500",
-    },
-  ];
+  const onSubmit = async () => {
+    try {
+      switch (step) {
+        case 0:
+          if (!clientId) {
+            throw new Error("Select client");
+          }
+          // const queryParams = new URLSearchParams(searchparams);
+          const response = await getClientPaymentData({ clientId });
+          const data = response
+            ? [
+                {
+                  item: "client",
+                  label: "Client  name",
+                  data: response?.clientName || "N/A",
+                },
+                {
+                  item: "agent",
+                  data: response?.agent || "N/A",
+                },
+                {
+                  item: "property",
+                  data: response?.propertyName || "N/A",
+                },
+                {
+                  item: "units",
+                  data: response?.units || "N/A",
+                },
+                {
+                  item: "installment_period",
+                  label: "Instalment period",
+                  data:
+                    (response?.installmentPeriod?.start &&
+                      response?.installmentPeriod?.end &&
+                      `${formatDate(
+                        response?.installmentPeriod?.start,
+                        "dd MM, yyyy"
+                      )} - ${formatDate(
+                        response?.installmentPeriod?.end,
+                        "dd MM, yyyy"
+                      )}`) ||
+                    "N/A",
+                },
+                {
+                  item: "total_amount",
+                  label: "Total amount",
+                  data: toAmount(response?.totalAmount, true),
+                },
+                {
+                  item: "amount_due",
+                  label: "Amount due",
+                  data: toAmount(response?.amountDue, true),
+                },
+                {
+                  item: "amount_paid",
+                  label: "Amount paid",
+                  data: toAmount(response?.amountPaid, true),
+                },
+              ]
+            : [];
+
+          setPaymentData(data);
+          console.log({ data });
+          // queryParams.set("clientId", "");
+          // router.replace(`?${queryParams?.toString()}`);
+          break;
+        case 1:
+          break;
+        default:
+          break;
+      }
+    } catch (error) {
+      toast.error(getError(error));
+    }
+  };
 
   return (
     <>
-      <Button size="sm" variant="secondary" onClick={toggleModal}>
+      <Button
+        asLink
+        size="sm"
+        variant="secondary"
+        onClick={() => router.replace("?update-payment=true")}
+      >
         Update Payment
       </Button>
 
-      {isModalOpen && (
+      {isUpdating && (
         <DashboardModal
           heading={"Update Client's Payment"}
-          handleClose={closeModal}
+          backHref="?"
           className="sm:max-w-[MIN(90%,520px)]"
         >
-          <div className="flex flex-col flex-1 w-full gap-4 mt-auto">
+          <form
+            action={onSubmit}
+            className="flex flex-col flex-1 w-full gap-4 mt-auto"
+          >
             {step ? (
               <div className="flex flex-col flex-1 w-full gap-4 mt-auto">
-                {data.map((data, index) => {
+                {paymentData?.map((data, index) => {
                   return (
                     <div
                       key={`${data?.item}-${index}`}
@@ -91,27 +146,25 @@ export const UpdatePropertyPaymentModal = ({ clients=[] }: { clients?: IOption[]
                 placeholder="Select Client"
                 label="Client's name"
                 options={clients}
+                onChange={(value) => setClientId(value)}
               />
             )}
 
             <div className="flex mt-auto gap-4 justify-stretch w-full  *:w-full">
               <Button
-                onClick={closeModal}
+                onClick={() => router.replace("?")}
                 variant="secondary"
-                size="sm"
+                size="xs"
+                type="button"
                 className="px-8"
               >
                 Cancel
               </Button>
-              {step ? (
-                <Button size="sm">Confirm Payment</Button>
-              ) : (
-                <Button onClick={() => setStep(1)} size="sm">
-                  Next
-                </Button>
-              )}
+              <SubmitButton size="xs">
+                {step ? "Confirm Payment" : "Next"}
+              </SubmitButton>
             </div>
-          </div>
+          </form>
         </DashboardModal>
       )}
     </>

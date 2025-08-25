@@ -78,7 +78,7 @@ export const Modal = ({
           transition={{ duration: 0.3 }}
           key={"modal-div"}
           className={twMerge(
-            "w-full max-w-[95%] sm:max-w-[MIN(90%,600px)] h-full min-h-[300px] pb-2 overflow-hidden m-auto bg-white flex flex-col relative rounded-4xl border overflow-y-auto z-[999] gap-10 max-h-[95dvh]",
+            "w-full max-w-[95%] sm:max-w-[MIN(90%,600px)] h-full min-h-[300px] pb-2 overflow-hidden m-auto bg-white flex flex-col relative rounded-4xl border overflow-y-auto z-[999] gap-6 max-h-[95dvh]",
             className
           )}
         >
@@ -127,7 +127,7 @@ export const Modal = ({
             ) : (
               subheading
             ))}
-          <div className="relative flex flex-col flex-1 px-6 sm:px-7 pb-4 my-2 w-full max-h-[90dvh] overflow-y-auto border-t border-white/[0.06] bg-inherit mx-auto ">
+          <div className="relative flex flex-col flex-1 px-6 sm:px-7 pb-4 my-2 w-full max-h-[90dvh] overflow-y-auto border-t border-white/[0.06] bg-inherit mx-auto">
             {children}
           </div>
         </motion.div>

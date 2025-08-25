@@ -1,5 +1,7 @@
 export interface IClientsData {
   _id: string;
+  clientId?: string;
+  clientName?: string;
   firstName: string;
   lastName: string;
   state: string;

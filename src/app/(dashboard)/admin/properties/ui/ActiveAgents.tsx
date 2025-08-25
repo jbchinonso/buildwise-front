@@ -4,10 +4,12 @@ import { DataTableColumnHeader, Input } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 type Titan = {
   id: string;
+  agentId: string;
   titan: string;
   clients: string;
   units: string;
@@ -15,11 +17,11 @@ type Titan = {
 
 const columns: ColumnDef<Titan>[] = [
   {
-    accessorKey: "titan",
+    accessorKey: "titanName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Titan" />
     ),
-    cell: ({ row }) => <div>{row.getValue("titan")}</div>,
+    cell: ({ row }) => <div className="capitalize">{row.getValue("titanName")}</div>,
   },
   {
     accessorKey: "clients",
@@ -40,10 +42,10 @@ const columns: ColumnDef<Titan>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex justify-end">
-          <button id="button">
+          <Link href={`/admin/titans/all/${row?.original?.agentId}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
@@ -52,10 +54,11 @@ const columns: ColumnDef<Titan>[] = [
 
 interface IProps {
   id?: string;
-  agents?: string | number;
+  total?: string | number;
+  agents?:any[];
 }
 
-export const ActiveAgents = ({ id, agents }: IProps) => {
+export const ActiveAgents = ({ id, agents=[], total=0 }: IProps) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const router = useRouter();
   return (
@@ -66,7 +69,7 @@ export const ActiveAgents = ({ id, agents }: IProps) => {
         readOnly
         onClick={toggleModal}
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)] cursor-pointer"
-        defaultValue={agents}
+        defaultValue={total}
         rightIcon={<ChevronRight className="size-4" color="currentColor" />}
       />
 
@@ -76,10 +79,10 @@ export const ActiveAgents = ({ id, agents }: IProps) => {
           heading="Active agents"
           className="max-w-[MIN(100%,535px)]"
         >
-          <p className="mb-4">{agents}</p>
+          <p className="mb-4">{total}</p>
           <section className="flex flex-col w-full gap-4">
             <div className="w-full my-1 flex-1">
-              <DataTable columns={columns} data={[]} />
+              <DataTable columns={columns} data={agents} />
             </div>
           </section>
         </PageModal>

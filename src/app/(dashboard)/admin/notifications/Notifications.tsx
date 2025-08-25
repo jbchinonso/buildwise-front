@@ -16,8 +16,6 @@ async function fetchNotifications() {
 
   const notifications = data?.result ?? [];
 
-  console.log({ notifications });
-
   return notifications;
 }
 

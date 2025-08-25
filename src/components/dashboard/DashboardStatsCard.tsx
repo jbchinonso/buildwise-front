@@ -22,7 +22,7 @@ export const DashboardStatsCard = ({
         type="button"
         onClick={onClick}
         className={cn(
-          "bg-white cursor-pointer hover:scale-[1.01] duration-300 transition-all hover:bg-green-50/50 hover:border-primary-500 hover:shadow-sm border-[0.5px] border-grey-50 p-4 flex flex-col flex-[25] max-h-[136px] h-full rounded-2xl",
+          "bg-white cursor-pointer hover:scale-[1.01] duration-300 transition-all hover:bg-green-50/50 hover:border-primary-500 hover:shadow-sm border-[0.5px] border-grey-50 p-4 flex flex-col flex-[25] max-h-[136px] max-w-[MIN(251px,100%)] h-full rounded-2xl",
           className
         )}
       >
