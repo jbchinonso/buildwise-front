@@ -95,14 +95,12 @@ export const AvailableUnits = ({
   summary,
   children,
 }: {
-  data: Promise<IMostAvailableUnits[]>;
+  data: IMostAvailableUnits[];
   summary?: IPropertySummary;
   availableUnits?: number | string;
   children?: React.ReactNode;
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
-
-  const tableData = use(data);
 
   const chartData = [
     {
@@ -125,7 +123,7 @@ export const AvailableUnits = ({
         icon={<House size="24" color="#1FDBF4" />}
         data={availableUnits}
         theme=""
-        // className="cursor-auto"
+        className="cursor-auto"
         onClick={toggleModal}
       />
 
@@ -143,9 +141,7 @@ export const AvailableUnits = ({
                   <span className="size-3 rounded-full bg-[#7A7F83]" />
                   <div className="flex flex-col">
                     <p className="text-grey-400">Total Listing</p>
-                    <p className="text-grey-600">
-                      {summary?.totalAvailableUnits ?? 0}
-                    </p>
+                    <p className="text-grey-600">{summary?.totalUnits ?? 0}</p>
                   </div>
                 </div>
                 {chartData.map(({ label, data, fill: background }) => {
@@ -175,7 +171,7 @@ export const AvailableUnits = ({
               </h2>
 
               <Link
-                href="/"
+                href="properties/all?sortBy=availableUnits"
                 className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
               >
                 View all <ArrowRight size={14} color="currentColor" />
@@ -183,7 +179,7 @@ export const AvailableUnits = ({
             </div>
 
             <div className="w-full my-1">
-              <DataTable columns={columns} data={[tableData] as any[]} />
+              <DataTable columns={columns} data={data} />
             </div>
 
             <div className="flex mt-auto justify-end gap-4 items-center">

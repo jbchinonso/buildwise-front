@@ -6,6 +6,7 @@ import { useModal } from "@/lib/hooks";
 import { toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const columns: ColumnDef<IPropertyClientOwnershipTable>[] = [
@@ -55,10 +56,10 @@ const columns: ColumnDef<IPropertyClientOwnershipTable>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex justify-end">
-          <button id="button">
+          <Link href={`${row?.original?.id||""}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },

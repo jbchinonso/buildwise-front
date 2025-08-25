@@ -276,4 +276,6 @@ interface IClientPaymentData {
   amountDue: string | number;
   totalAmount: string | number;
   saleId: string;
+  propertyName: string;
+  agent: string;
 }

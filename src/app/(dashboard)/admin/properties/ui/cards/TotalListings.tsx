@@ -10,10 +10,12 @@ import {
   DataTableColumnHeader,
   PieChart,
 } from "@/components/ui";
+import { IRecentlyListedDTO } from "@/lib/dtos/property.dto";
 import { useModal } from "@/lib/hooks";
 import { IPropertySummary } from "@/lib/type";
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
 import { ArrowRight, House2 } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -34,56 +36,41 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-type Transaction = {
-  id: string;
-  property: string;
-  location: string;
-  plots: string;
-  date_listed: string;
-};
 
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<IRecentlyListedDTO>[] = [
   {
-    accessorKey: "property",
+    accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Property" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    cell: ({ row }) => (
+      <div className="max-w-[100px] whitespace-pre-wrap break-words">
+        {row.getValue("name")}
+      </div>
+    ),
   },
   {
-    accessorKey: "location",
+    // accessorKey: "lga",
+    id: "location", // Use a unique ID for the column
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Location" />
     ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
-  },
-  {
-    accessorKey: "plots",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Plots" />
+    cell: ({ row }) => (
+      <p className="max-w-[100px] whitespace-pre-wrap break-words capitalize">
+        {`${row.original?.lga}, ${row.original?.state}`}
+      </p>
     ),
-    cell: ({ row }) => <div>{row.getValue("plots")}</div>,
   },
   {
-    accessorKey: "date_listed",
+    accessorKey: "dateListed",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date listed" />
     ),
-    cell: ({ row }) => <div>{row.getValue("date_listed")}</div>,
-  },
-
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      return (
-        <div className="flex justify-end">
-          <button id="button">
-            <ChevronRight className="size-4" />
-            <span className="sr-only">View details</span>
-          </button>
-        </div>
-      );
-    },
+    cell: ({ row }) => (
+      <div>
+        {format(row.getValue("dateListed") || "", "dd/MM/yyyy, HH:MMa")}
+      </div>
+    ),
   },
 ];
 
@@ -137,7 +124,7 @@ export const TotalListing = ({
                   <div className="flex flex-col">
                     <p className="text-grey-400">Total Listing</p>
                     <p className="text-grey-600">
-                      {summary?.totalAvailableUnits ?? 0}
+                      {summary?.totalUnits ?? 0}
                     </p>
                   </div>
                 </div>

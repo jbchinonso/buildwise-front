@@ -41,8 +41,6 @@ const SignupForm = () => {
     onSubmit: async () => {},
   });
 
-  console.log({ baseUrl });
-
   const onSignup = async () => {
     toast.dismiss();
     try {

@@ -10,7 +10,6 @@ import {
   DataTableColumnHeader,
   PieChart,
 } from "@/components/ui";
-import { IReservedUnitDTO } from "@/lib/dtos/property.dto";
 import { useModal } from "@/lib/hooks";
 import { IClientRecentlyReserved, IPropertySummary } from "@/lib/type";
 import { cn, formatAddress } from "@/lib/utils";
@@ -19,12 +18,6 @@ import { format } from "date-fns";
 import { ArrowRight } from "iconsax-react";
 import { ChevronRight, Hourglass } from "lucide-react";
 import Link from "next/link";
-
-const chartData = [
-  { label: "available", data: 10, fill: "#9747FF" },
-  { label: "reserved", data: 200, fill: "#926667" },
-  { label: "closed", data: 300, fill: "#1FDBF4" },
-];
 
 const chartConfig = {
   available: {

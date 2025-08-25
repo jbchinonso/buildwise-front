@@ -49,7 +49,6 @@ export const Unverified = () => {
   }, [countdown]);
 
   if (session?.user.isEmailVerified) {
-    // console.log({session})
     return <VerificationSuccessful />;
   }
 

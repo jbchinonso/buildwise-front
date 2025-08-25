@@ -248,7 +248,7 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
         id="saleCommissionRate"
         required
         error={getFormikError(touched?.saleCommissionRate, errors?.saleCommissionRate)}
-        placeholder="Enter sales commission reate"
+        placeholder="Enter sales commission rate"
         value={values.saleCommissionRate}
         onChange={handleChange}
         onBlur={handleBlur}

@@ -5,6 +5,7 @@ import { getStates, getTitans } from "@/lib/services";
 const AddClient = async () => {
   const [agents, states] = await Promise.all([getTitans(), getStates()]);
 
+
   return (
     <section className="flex flex-1 flex-col gap-4">
       <BreadCrumbs

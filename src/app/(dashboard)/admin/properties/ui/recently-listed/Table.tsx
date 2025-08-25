@@ -5,7 +5,7 @@ import { IRecentlyListedDTO } from "@/lib/dtos/property.dto";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
-export const columns: ColumnDef<IRecentlyListedDTO>[] = [
+const columns: ColumnDef<IRecentlyListedDTO>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => (

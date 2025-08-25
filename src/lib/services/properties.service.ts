@@ -82,6 +82,7 @@ export const getRecentlyListedProperties = async ({
         },
       }
     );
+    // NOTE id is not returned here
 
     return response;
   } catch (error) {

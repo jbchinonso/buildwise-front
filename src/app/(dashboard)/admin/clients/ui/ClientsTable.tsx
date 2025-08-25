@@ -1,62 +1,66 @@
 "use client";
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
+import { formatAddress, toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 type Client = {
-  id: string;
-  client: string;
+  clientId: string;
+  clientName: string;
   location: string;
-  properties: number;
-  last_payment: string;
-  payment_status: string;
-  joined: string;
+  lga: string;
+  propertiesCount: string | number;
+  lastPayment: string | number;
+  paymentStatus: number;
+  outstanding: number;
+  joinedDate: string;
 };
 
 const columns: ColumnDef<Client>[] = [
   {
-    accessorKey: "client",
+    accessorKey: "clientName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    cell: ({ row }) => <div>{row.getValue("clientName")}</div>,
   },
   {
     accessorKey: "location",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Location" />
     ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
+    cell: ({ row }) => (
+      <div>{formatAddress(row.original?.location, row.original?.lga)}</div>
+    ),
   },
   {
-    accessorKey: "properties",
+    accessorKey: "propertiesCount",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Properties" />
     ),
-    cell: ({ row }) => <div>{row.getValue("properties")}</div>,
+    cell: ({ row }) => <div>{row.getValue("propertiesCount")}</div>,
   },
 
   {
-    accessorKey: "last_payment",
+    accessorKey: "lastPayment",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Last payment" />
     ),
-    cell: ({ row }) => <div>{row.getValue("last_payment")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("lastPayment")||0, true)}</div>,
   },
   {
-    accessorKey: "payment_status",
+    accessorKey: "paymentStatus",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Payment Status" />
     ),
     cell: ({ row }) => (
       <div
-        className={`text-center ${
-          row.getValue("payment_status") == "Active" ? "text-[#09A4B9]" : ""
-        }`}
+        className="text-center"
       >
-        {row.getValue("payment_status")}
+        {Number(row.getValue("paymentStatus") || 0).toFixed(2) + "% completed"}
       </div>
     ),
   },
@@ -65,22 +69,28 @@ const columns: ColumnDef<Client>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Outstanding" />
     ),
-    cell: ({ row }) => <div>{row.getValue("outstanding")}</div>,
+    cell: ({ row }) => (
+      <div>{toAmount(row.getValue("outstanding") || 0, true)}</div>
+    ),
   },
   {
-    accessorKey: "joined",
+    accessorKey: "joinedDate",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Joined" />
     ),
-    cell: ({ row }) => <div>{row.getValue("joined")}</div>,
+    cell: ({ row }) => (
+      <div>
+        {format(row.getValue("joinedDate") || "", "dd/MM/yyyy, HH:MMa")}
+      </div>
+    ),
   },
 
   {
     // id: "actions",
-    accessorKey: "id",
+    accessorKey: "clientId",
     header: () => null,
     cell: ({ row }) => {
-      const id = String(row.getValue("id")) || String(row?.id);
+      const id = String(row.getValue("clientId")) || String(row?.id);
 
       return (
         <div className="flex justify-center px-4">

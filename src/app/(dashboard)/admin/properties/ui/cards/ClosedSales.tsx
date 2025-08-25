@@ -19,11 +19,6 @@ import { ChevronRight, KeyRound } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-const chartData = [
-  { label: "available", data: 10, fill: "#9747FF" },
-  { label: "reserved", data: 200, fill: "#926667" },
-  { label: "closed", data: 300, fill: "#1FDBF4" },
-];
 
 const chartConfig = {
   available: {
@@ -50,11 +45,11 @@ type Transaction = {
 
 const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "property",
+    accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Property" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
   {
     accessorKey: "location",
@@ -64,18 +59,18 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
   {
-    accessorKey: "plots",
+    accessorKey: "soldUnits",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Plots" />
+      <DataTableColumnHeader column={column} title="Units bought" />
     ),
-    cell: ({ row }) => <div>{row.getValue("plots")}</div>,
+    cell: ({ row }) => <div>{row.getValue("soldUnits")}</div>,
   },
   {
-    accessorKey: "date_listed",
+    accessorKey: "createdAt",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date listed" />
+      <DataTableColumnHeader column={column} title="Date closed" />
     ),
-    cell: ({ row }) => <div>{row.getValue("date_listed")}</div>,
+    cell: ({ row }) => <div>{row.getValue("createdAt")}</div>,
   },
 
   {
@@ -125,7 +120,6 @@ export const ClosedSales = ({
         icon={<KeyRound size="24" color="#9747FF" />}
         data={closedSales}
         theme=""
-        // className="cursor-auto"
         onClick={toggleModal}
       />
 
@@ -143,9 +137,7 @@ export const ClosedSales = ({
                   <span className="size-3 rounded-full bg-[#7A7F83]" />
                   <div className="flex flex-col">
                     <p className="text-grey-400">Total Listing</p>
-                    <p className="text-grey-600">
-                      {summary?.totalAvailableUnits ?? 0}
-                    </p>
+                    <p className="text-grey-600">{summary?.totalUnits ?? 0}</p>
                   </div>
                 </div>
                 {chartData.map(({ label, data, fill }) => {
@@ -167,10 +159,10 @@ export const ClosedSales = ({
             </div>
 
             <div className="flex items-baseline justify-between w-full gap-4 my-1">
-              <h2 className="font-semibold text-grey-600">Recent listing</h2>
+              <h2 className="font-semibold text-grey-600">Recently closed</h2>
 
               <Link
-                href="/"
+                href="properties/all?sortBy=closed"
                 className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
               >
                 View all <ArrowRight size={14} color="currentColor" />

@@ -174,6 +174,7 @@ export interface IPropertyClientOwnershipTable {
   paid: string | number;
   outstanding: string | number;
   status: string;
+  saleId?: string;
 }
 
 export const propertyClientOwnershipDTO = (
@@ -187,6 +188,7 @@ export const propertyClientOwnershipDTO = (
     paid: item?.paymentInfo?.amountPaid,
     outstanding: item?.paymentInfo?.outstandingBalance,
     status: item?.paymentInfo?.saleStatus,
+    saleId: item?.saleId,
   }));
 
 export interface IReservedUnitDTO {

@@ -17,7 +17,7 @@ export const SearchInput = ({
 
   const onSubmit = () => {
     if (search) {
-      const params = new URLSearchParams();
+      const params = new URLSearchParams(searchParams);
       params.set("search", encodeURIComponent(search));
       router.replace(`?${params.toString()}`);
     }
@@ -31,11 +31,11 @@ export const SearchInput = ({
 
   useEffect(() => {
     if (!search) {
-      const params = new URLSearchParams();
+      const params = new URLSearchParams(searchParams);
       params.delete("search");
       router.replace(`?${params.toString()}`);
     }
-  }, [search]);
+  }, [search, searchParams]);
 
   return (
     <form action={onSubmit} className="flex relative rounded-2xl">

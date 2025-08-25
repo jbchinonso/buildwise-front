@@ -91,9 +91,17 @@ export const getReceiptData = async ({ salesId }: { salesId: string }) => {
   }
 };
 
-export const getClientPaymentData = async ({ clientId }: { clientId: string }) => {
+export const getClientPaymentData = async ({
+  clientId,
+}: {
+  clientId: string;
+}) => {
   try {
+    if (!clientId?.trim()) return;
+
     const url = `/sales/clients/${clientId}/payments/`;
+
+    console.log({url})
 
     const response = await authFetch(url, {
       next: {
@@ -102,10 +110,48 @@ export const getClientPaymentData = async ({ clientId }: { clientId: string }) =
       },
     });
 
-    return response as IClientPaymentData[]; 
-    // NOTE: I am getting the data but it doesnt match the UI
+    return response as IClientPaymentData;
+
+    // NOTE: I am getting the data but it doesnt match the UI, no property name, id, agent name, id
   } catch (error) {
     console.error("Error fetching client payments:", getError(error));
     throw new Error(getError(error));
+  }
+};
+
+export const getPropertyUnitsSoldOrReserved = async ({
+  params = {
+    page: 1,
+    limit: 5,
+    search: "",
+    sortBy: "plotNumber",
+    sortOrder: "asc",
+  },
+}: {
+  params: {
+    page?: number | string;
+    limit?: number | string;
+    search?: string;
+    sortBy?: string;
+    sortOrder?: string;
+  };
+}) => {
+  try {
+    const query = new URLSearchParams();
+
+    Object.entries(params).forEach(([key, value]) => {
+      query.set(key, String(value));
+    });
+
+    const url = `/sales/units-sold-reserved/?${query.toString()}`;
+    const { data, ...pagination } = await authFetch(url, {
+      next: {
+        tags: ["sales"],
+        revalidate: 8400,
+      },
+    });
+    return { data, pagination };
+  } catch (error) {
+    throw getError(error);
   }
 };

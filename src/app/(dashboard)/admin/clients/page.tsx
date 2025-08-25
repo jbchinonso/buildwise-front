@@ -9,7 +9,6 @@ import {
   getClientRecentlyReserved,
   getClientStats,
 } from "@/lib/services";
-import { clientTableDTO } from "@/lib/dtos/client.dto";
 import { ClosedSales, ReservedUnits } from "../properties/ui";
 
 type SearchParams = Promise<{ page?: string; limit?: string; search?: string }>;
@@ -27,12 +26,12 @@ const Clients = async (props: { searchParams: SearchParams }) => {
   return (
     <>
       <div className="flex w-full justify-end items-center">
-        <Button asLink href="clients/add-client">
-          <Plus color="currentColor" />
+        <Button asLink href="clients/add-client" size="xs">
+          <Plus color="currentColor"  size={20}/>
           Add new client
         </Button>
       </div>
-      <section className="w-full justify-between flex flex-wrap gap-4">
+      <section className="w-full justify-start flex flex-wrap gap-4">
         <ClientOverview data={overview} clients={stats?.totalClients || 0} />
         <ReservedUnits
           data={recentlyReserved ?? []}
@@ -58,7 +57,7 @@ const Clients = async (props: { searchParams: SearchParams }) => {
             </Link>
           </div>
 
-          <ClientsTable data={clientTableDTO(clients?.data)} />
+          <ClientsTable data={clients?.data || []} />
         </div>
       </section>
     </>

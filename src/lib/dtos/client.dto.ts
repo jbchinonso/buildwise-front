@@ -44,7 +44,8 @@ export const clientProfileDTO = (client: IClientsData): IClientProfile => ({
 
 export const clientSelectDTO = (data: IClientsData[]): IOption[] =>
   data?.map((client) => ({
-    value: client?._id,
-    label: `${client?.firstName || ""} ${client?.lastName || ""}`.trim(),
+    value: client?.clientId || client?._id,
+    label: client?.clientName || `${client?.firstName || ""} ${client?.lastName || ""}`.trim(),
   }));
+
 

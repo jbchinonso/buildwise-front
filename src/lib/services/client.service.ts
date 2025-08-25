@@ -20,7 +20,7 @@ export const getAllClients = async (
       query.set(key, String(value));
     });
 
-    const url = `/clients?${query.toString()}`;
+    const url = `/clients/get-details/?${query.toString()}`;
 
 
     const { data, ...pagination } = await authFetch(

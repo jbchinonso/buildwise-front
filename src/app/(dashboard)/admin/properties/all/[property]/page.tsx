@@ -7,13 +7,16 @@ import {
 } from "@/lib/services";
 import { ActiveAgents, PropertyMenu, UnitsSold } from "../../ui";
 import { UpdatePropertyPaymentModal } from "../../../clients/ui";
-import { clientSelectDTO } from "@/lib/dtos";
 import { ClientsOwnersModal } from "../../ui/ClientsOwnersModal";
 import { propertyClientOwnershipDTO } from "@/lib/dtos/property.dto";
 import { toAmount } from "@/lib/utils";
 
 type Params = Promise<{ property: string }>;
-type SearchParams = Promise<{ page?: string; limit?: string; search?: string }>;
+type SearchParams = Promise<{
+  page?: string;
+  limit?: string;
+  search?: string;
+}>;
 
 const Property = async (props: {
   params: Params;
@@ -34,9 +37,11 @@ const Property = async (props: {
     getActiveAgents(),
   ]);
 
-  const clientOptions = clientSelectDTO(clients?.data);
   const clientOwnerData = propertyClientOwnershipDTO(clientOwner?.data);
-
+  const clientOwnerOptions = clientOwnerData?.map((client) => ({
+    value: client?.id,
+    label: client?.client,
+  }));
 
   return (
     <section className="flex flex-1 flex-col gap-4">
@@ -59,7 +64,9 @@ const Property = async (props: {
             <Button asLink href={`${id}/new-sale`} size="sm">
               Make Sales
             </Button>
-            <UpdatePropertyPaymentModal clients={clientOptions} />
+            <UpdatePropertyPaymentModal
+              clients={clientOwnerOptions}
+            />
             <PropertyMenu property={property} />
           </div>
         </div>
@@ -182,7 +189,7 @@ const Property = async (props: {
           />
 
           <ClientsOwnersModal
-            owners={property?.owners || 0}
+            owners={clientOwner?.pagination?.total || 0}
             clientOwners={clientOwnerData}
           />
           <ActiveAgents total={activeAgents?.length} agents={activeAgents} />

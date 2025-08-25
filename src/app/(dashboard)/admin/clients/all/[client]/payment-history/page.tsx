@@ -12,7 +12,7 @@ const PaymentHistoryPage = async (props: { params: Params }) => {
 
   const personalInformation = clientProfileDTO(data);
 
-  const paymentData = await getClientPaymentData({ clientId });
+  // const paymentData = await getClientPaymentData({ clientId });
 
   return (
     <section className="flex flex-col flex-1 gap-4">
