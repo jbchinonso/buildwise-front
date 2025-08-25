@@ -1,8 +1,10 @@
-import React from 'react'
+import { CommissionsForm } from './CommissionsForm'
 
 const CommissionAndPayment = () => {
   return (
-    <div>CommissionAndPayment</div>
+    <div>
+      <CommissionsForm />
+    </div>
   )
 }
 
