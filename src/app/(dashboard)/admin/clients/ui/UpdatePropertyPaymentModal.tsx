@@ -155,6 +155,7 @@ export const UpdatePropertyPaymentModal = ({
                 onClick={() => router.replace("?")}
                 variant="secondary"
                 size="xs"
+                type="button"
                 className="px-8"
               >
                 Cancel

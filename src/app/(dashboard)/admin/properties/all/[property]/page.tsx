@@ -64,9 +64,7 @@ const Property = async (props: {
             <Button asLink href={`${id}/new-sale`} size="sm">
               Make Sales
             </Button>
-            <UpdatePropertyPaymentModal
-              clients={clientOwnerOptions}
-            />
+            <UpdatePropertyPaymentModal clients={clientOwnerOptions} />
             <PropertyMenu property={property} />
           </div>
         </div>

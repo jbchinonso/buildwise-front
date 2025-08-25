@@ -1,12 +1,10 @@
 "use client";
 import { DataTable, PageModal } from "@/components/dashboard";
-import { Button, DataTableColumnHeader, Input } from "@/components/ui";
+import {  DataTableColumnHeader, Input } from "@/components/ui";
 import { ISoldUnitsDTO } from "@/lib/dtos/property.dto";
 import { useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowRight } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface IProps {

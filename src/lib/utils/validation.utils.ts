@@ -65,6 +65,20 @@ export const resetPasswordSchema = Yup.object().shape({
     .max(32, "Confirm Password must be less than 32 characters"),
 });
 
+export const changePasswordSchema = Yup.object().shape({
+  currentPassword: Yup.string()
+    .required("Current Password is required"),
+  newPassword: Yup.string()
+    .required("New Password is required")
+    .min(8, "New Password must be more than 8 characters")
+    .max(32, "New Password must be less than 32 characters"),
+  confirmPassword: Yup.string()
+    .required("Confirm Password is required")
+    .oneOf([Yup.ref('newPassword')], "Passwords must match")
+    .min(8, "Confirm Password must be more than 8 characters")
+    .max(32, "Confirm Password must be less than 32 characters"),
+});
+
 export const verifySchema = Yup.object().shape({
   email: Yup.string()
     .required("Email is required")
