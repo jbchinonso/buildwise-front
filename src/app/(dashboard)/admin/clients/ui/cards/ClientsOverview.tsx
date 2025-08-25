@@ -6,25 +6,20 @@ import {
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
+import { IClientOverview, IClientOverviewRecentCLients } from "@/lib/type";
+import { toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight, Profile2User } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-type Transaction = {
-  id: string;
-  client: string;
-  location: string;
-  agent: string;
-};
-
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<IClientOverviewRecentCLients>[] = [
   {
-    accessorKey: "client",
+    accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
   {
     accessorKey: "location",
@@ -34,11 +29,11 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
   {
-    accessorKey: "agent",
+    accessorKey: "agentName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Agent" />
     ),
-    cell: ({ row }) => <div>{row.getValue("agent")}</div>,
+    cell: ({ row }) => <div>{row.getValue("agentName")}</div>,
   },
   {
     id: "actions",
@@ -59,7 +54,7 @@ export const ClientOverview = ({
   data,
   clients = 0,
 }: {
-  data: Transaction[];
+  data: IClientOverview;
   clients?: string | number;
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
@@ -83,15 +78,21 @@ export const ClientOverview = ({
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">All Clients</p>
-                <p className="text-grey-600">100</p>
+                <p className="text-grey-600">
+                  {toAmount(data?.totalClients || 0, false)}
+                </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Active Buyers</p>
-                <p className="text-grey-600">208</p>
+                <p className="text-grey-600">
+                  {toAmount(data?.activeBuyersCount || 0, false)}
+                </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Properties bought/reserved</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-600">
+                  {toAmount(data?.totalPropertiesBoughtOrReserved || 0)}
+                </p>
               </div>
             </div>
 
@@ -99,7 +100,7 @@ export const ClientOverview = ({
               <h2 className="font-semibold text-grey-600">Recently added</h2>
 
               <Link
-                href="/"
+                href="/admin/clients/all"
                 className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
               >
                 View all <ArrowRight size={14} color="currentColor" />
@@ -107,7 +108,7 @@ export const ClientOverview = ({
             </div>
 
             <div className="w-full my-2">
-              <DataTable columns={columns} data={data} />
+              <DataTable columns={columns} data={data?.recentClients || []} />
             </div>
 
             <div className="flex mt-auto justify-end gap-4 items-center">

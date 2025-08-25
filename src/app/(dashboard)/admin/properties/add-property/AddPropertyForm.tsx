@@ -1,16 +1,30 @@
 "use client";
 import toast from "react-hot-toast";
-import { redirect } from "next/navigation";
 import { useMemo } from "react";
 import { useFormik } from "formik";
 import { Input, SelectScrollable, SubmitButton } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
 import { addProperty } from "@/lib/services";
 import { IState } from "@/lib/type";
-import { getError } from "@/lib/utils";
+import {
+  createPropertyPayloadSchema,
+  getError,
+  getFormikError,
+} from "@/lib/utils";
 import { PaymentOptionsModal } from "../ui";
+import { ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+ // NOTE ?? should commission rate be typed in?
+const comissionOptions = [
+  { label: "5% of property value", value: "5" },
+  { label: "10% of property value", value: "10" },
+  { label: "15% of property value", value: "15" },
+  { label: "20% of property value", value: "20" },
+];
 
 export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
+  const router = useRouter();
   const {
     handleBlur,
     handleChange,
@@ -20,6 +34,9 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
     resetForm,
     handleReset,
     setFieldValue,
+    setFieldTouched,
+    errors,
+    touched,
   } = useFormik({
     initialValues: {
       name: "",
@@ -35,12 +52,13 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
       availableUnits: "",
       saleCommissionRate: "",
     },
-    // validationSchema: signInValidationSchema,
+    validationSchema: createPropertyPayloadSchema,
     onSubmit: async () => {},
   });
 
   const handleSelect = (name: string, value: any) => {
     setFieldValue(name, value);
+    setFieldTouched(name);
   };
 
   const {
@@ -59,12 +77,30 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
       })) ?? []
     );
   }, [values.state]);
+
+  const price = useMemo(() => {
+    const prices = `${values.priceOptions?.instantPrice}`;
+
+    return (
+      values.priceOptions?.instantPrice && JSON.stringify(values.priceOptions)
+    );
+    return prices;
+  }, [values.priceOptions]);
+
   const submitForm = async () => {
     try {
-      const result = await addProperty(values);
+      await createPropertyPayloadSchema.validate(values, { abortEarly: false });
+      const result = await addProperty({
+        ...values,
+        // NOTE ?? are we getting an endpoint to fetch document types to select from cc Felix
+        documents: [values.documents],
+      });
       toast.success("New property successfully added");
       resetForm();
-      redirect(`/properties/all/${result?._id}`);
+
+      // NOTE?? should this redirect to the property?
+
+      router.replace(`/admin/properties/all/${result?._id}`);
     } catch (error) {
       toast.error(getError(error));
     }
@@ -85,6 +121,7 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
         value={values.name}
         onChange={handleChange}
         onBlur={handleBlur}
+        error={getFormikError(touched?.name, errors?.name)}
         labelStyle="text-[#292A2C]"
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
@@ -102,6 +139,7 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
         }))}
         labelStyle="text-[#292A2C]"
         className="flex-[45%] max-w-[MIN(100%,470px)]"
+        error={getFormikError(touched?.state, errors?.state)}
       />
       <SelectScrollable
         label="LGA"
@@ -112,6 +150,7 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
         disabled={!values.state}
         placeholder="Select local government"
         labelStyle="text-[#292A2C]"
+        error={getFormikError(touched?.lga, errors?.lga)}
         className="flex-[45%] max-w-[MIN(100%,470px)]"
       />
       <Input
@@ -120,6 +159,7 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
         id="address"
         type="text"
         placeholder="Enter property address"
+        error={getFormikError(touched?.address, errors?.address)}
         value={values.address}
         onChange={handleChange}
         onBlur={handleBlur}
@@ -134,19 +174,30 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
           placeholder="Select payment options"
           type="text"
           autoComplete="off"
-          value={values.priceOptions?.instantPrice + " " + ""}
-          onClick={openPaymentOptions}
+          error={getFormikError(
+            touched?.state,
+            errors?.priceOptions?.instantPrice ||
+              errors?.priceOptions?.plans?.[0]
+          )}
+          value={price}
+          onClick={() => {
+            openPaymentOptions();
+            setFieldTouched("priceOptions");
+          }}
           onChange={handleChange}
           onBlur={handleBlur}
           labelStyle="text-[#292A2C]"
           containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+          rightIcon={<ChevronRight size={20} className="text-zinc-400" />}
         />
 
         {isPaymentOptionsModalOpen && (
           <PaymentOptionsModal
             onClose={closePaymentOptions}
             options={values.priceOptions}
-            onSelect={(value) => setFieldValue("priceOptions", value)}
+            onSelect={(value) => {
+              handleSelect("priceOptions", value);
+            }}
           />
         )}
       </div>
@@ -159,6 +210,7 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
         value={values.documents}
         onChange={handleChange}
         onBlur={handleBlur}
+        error={getFormikError(touched?.documents, errors?.documents)}
         labelStyle="text-[#292A2C]"
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
@@ -169,8 +221,10 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
         type="text"
         placeholder="Enter number of plots available"
         value={values.totalUnits}
+        error={getFormikError(touched?.totalUnits, errors?.totalUnits)}
         onChange={handleChange}
         onBlur={handleBlur}
+        required
         labelStyle="text-[#292A2C]"
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
@@ -179,7 +233,9 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
         name="availableUnits"
         id="availableUnits"
         type="text"
-        placeholder="Enter number of plots available"
+        required
+        error={getFormikError(touched?.availableUnits, errors?.availableUnits)}
+        placeholder="Enter number of units available"
         value={values.availableUnits}
         onChange={handleChange}
         onBlur={handleBlur}
@@ -190,14 +246,18 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
         label="Sales commission rate"
         name="saleCommissionRate"
         id="saleCommissionRate"
-        type="text"
-        placeholder="10% of property value"
+        required
+        error={getFormikError(touched?.saleCommissionRate, errors?.saleCommissionRate)}
+        placeholder="Enter sales commission rate"
         value={values.saleCommissionRate}
         onChange={handleChange}
         onBlur={handleBlur}
+        type="tel"
+        pattern="(\d+|\d+.\d+)"
         labelStyle="text-[#292A2C]"
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
+      
 
       <div className="w-full flex col-span-2">
         <SubmitButton disabled={!dirty || !isValid} size="sm" className="my-4">

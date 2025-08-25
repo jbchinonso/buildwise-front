@@ -65,6 +65,20 @@ export const resetPasswordSchema = Yup.object().shape({
     .max(32, "Confirm Password must be less than 32 characters"),
 });
 
+export const changePasswordSchema = Yup.object().shape({
+  currentPassword: Yup.string()
+    .required("Current Password is required"),
+  newPassword: Yup.string()
+    .required("New Password is required")
+    .min(8, "New Password must be more than 8 characters")
+    .max(32, "New Password must be less than 32 characters"),
+  confirmPassword: Yup.string()
+    .required("Confirm Password is required")
+    .oneOf([Yup.ref('newPassword')], "Passwords must match")
+    .min(8, "Confirm Password must be more than 8 characters")
+    .max(32, "Confirm Password must be less than 32 characters"),
+});
+
 export const verifySchema = Yup.object().shape({
   email: Yup.string()
     .required("Email is required")
@@ -72,4 +86,50 @@ export const verifySchema = Yup.object().shape({
     .email("Invalid email"),
   token: Yup.string()
     .required("Token is required")
+});
+
+export const paymentOptionsSchema = Yup.object().shape({
+  instantPrice: Yup.mixed()
+    .test(
+      'is-number-or-string',
+      'Instant price must be a number or a string',
+      (value) => typeof value === 'number' || typeof value === 'string'
+    )
+    .required('Instant price is required'),
+  plans: Yup.array().optional().of(
+    Yup.object().shape({
+      duration: Yup.string().required('Duration is required'),
+      price: Yup.string().required('Price is required'),
+    })
+  ),
+});
+
+export const createPropertyPayloadSchema = Yup.object().shape({
+  name: Yup.string().required('Name is required'),
+  state: Yup.string().required('State is required'),
+  lga: Yup.string().required('LGA is required'),
+  address: Yup.string().required('Address is required'),
+  totalUnits: Yup.mixed()
+    .test(
+      'is-number-or-string',
+      'Total units must be a number or a string',
+      (value) => typeof value === 'number' || typeof value === 'string'
+    )
+    .required('Total units is required'),
+  availableUnits: Yup.mixed()
+    .test(
+      'is-number-or-string',
+      'Available units must be a number or a string',
+      (value) => typeof value === 'number' || typeof value === 'string'
+    )
+    .required('Available units is required'),
+  saleCommissionRate: Yup.mixed()
+    .test(
+      'is-number-or-string',
+      'Sale commission rate must be a number or a string',
+      (value) => typeof value === 'number' || typeof value === 'string'
+    )
+    .required('Sale commission rate is required'),
+  documents: Yup.string(),
+  priceOptions: paymentOptionsSchema,
 });

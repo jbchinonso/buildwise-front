@@ -3,37 +3,42 @@ import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
 import { IRecentlyListedDTO } from "@/lib/dtos/property.dto";
 import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
 
-
-export const columns: ColumnDef<IRecentlyListedDTO>[] = [
+const columns: ColumnDef<IRecentlyListedDTO>[] = [
   {
-    accessorKey: "property",
+    accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Property" />
     ),
     cell: ({ row }) => (
-      <div className="max-w-[100px] whitespace-pre-wrap break-all">
-        {row.getValue("property")}
+      <div className="max-w-[100px] whitespace-pre-wrap break-words">
+        {row.getValue("name")}
       </div>
     ),
   },
   {
-    accessorKey: "location",
+    // accessorKey: "lga",
+    id: "location", // Use a unique ID for the column
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Location" />
     ),
     cell: ({ row }) => (
-      <p className="max-w-[100px] whitespace-pre-wrap break-words">
-        {row.getValue("location")}
+      <p className="max-w-[100px] whitespace-pre-wrap break-words capitalize">
+        {`${row.original?.lga}, ${row.original?.state}`}
       </p>
     ),
   },
   {
-    accessorKey: "date_listed",
+    accessorKey: "dateListed",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date listed" />
     ),
-    cell: ({ row }) => <div>{row.getValue("date_listed")}</div>,
+    cell: ({ row }) => (
+      <div>
+        {format(row.getValue("dateListed") || "", "dd/MM/yyyy, HH:MMa")}
+      </div>
+    ),
   },
 ];
 

@@ -12,3 +12,4 @@ export * from "./Filters";
 export * from "./select";
 export * from "./RecoverPasswordModal";
 export * from "./Modal";
+export * from "./CardError";

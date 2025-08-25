@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
+import { format } from "date-fns";
 import { User } from "next-auth";
 import toast from "react-hot-toast";
 import { twMerge } from "tailwind-merge";
@@ -173,7 +174,11 @@ export const createAvatarUrl = (args: CreateAvatarUrlArgs) => {
   return `https://ui-avatars.com/api.jpg?${params.toString()}`;
 };
 
-export function myImageLoader({src="", width="100", quality=75}: {
+export function myImageLoader({
+  src = "",
+  width = "100",
+  quality = 75,
+}: {
   src?: string;
   width?: string | number;
   quality?: string | number;
@@ -184,3 +189,66 @@ export function myImageLoader({src="", width="100", quality=75}: {
     src
   )}&w=${width}&q=${quality || 75}`;
 }
+
+/**
+ * Converts a string or number to a currency string
+ *
+ * @param {(string | number)} value
+ * @returns {(string | number)}
+ */
+export const toAmount = (value: string | number, isCurrency = true) => {
+  if (isNaN(Number(value))) {
+    return value;
+  }
+  const formatter = new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 0,
+  });
+  if (isCurrency) {
+    return "₦ " + formatter.format(Number(value));
+  }
+  return formatter.format(Number(value));
+};
+
+/**
+ * Generates a single address string from provided LGA, state, and country.
+ * Only includes parts that are provided (truthy values).
+ *
+ * @param lga - The Local Government Area.
+ * @param state - The State.
+ * @param country - The Country.
+ * @returns A formatted address string, or an empty string if no parts are provided.
+ */
+
+export function formatAddress(
+  lga?: string,
+  state?: string,
+  country?: string
+): string {
+  const addressParts: string[] = [];
+
+  if (lga) {
+    addressParts.push(lga);
+  }
+  if (state) {
+    addressParts.push(state);
+  }
+  if (country) {
+    addressParts.push(country);
+  }
+
+  return addressParts.join(", ");
+}
+
+export const formatDate = (
+  date: string | null | undefined,
+  formatString: string
+) => {
+  try {
+    if (!date) {
+      throw new Error();
+    }
+    return format(date, formatString);
+  } catch {
+    return "N/A";
+  }
+};

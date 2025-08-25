@@ -1,11 +1,19 @@
 "use client";
-import { Input, SubmitButton } from "@/components/ui";
+import { Input, SelectScrollable, SubmitButton } from "@/components/ui";
 import { addClient } from "@/lib/services";
-import { getError } from "@/lib/utils";
+import { IOption, IState } from "@/lib/type";
+import { getError, getFormikError } from "@/lib/utils";
 import { useFormik } from "formik";
+import { useMemo } from "react";
 import toast from "react-hot-toast";
 
-export const AddClientForm = () => {
+export const AddClientForm = ({
+  agents = [],
+  states = [],
+}: {
+  states: IState[];
+  agents: IOption[];
+}) => {
   const {
     handleSubmit,
     touched,
@@ -17,6 +25,7 @@ export const AddClientForm = () => {
     dirty,
     resetForm,
     handleReset,
+    setFieldValue,
   } = useFormik({
     initialValues: {
       firstName: "",
@@ -26,18 +35,32 @@ export const AddClientForm = () => {
       state: "",
       lga: "",
       residentialAddress: "",
-      agentId: "68206f473512a94aa6ca0fab",
+      agentId: '',
     },
     // validationSchema: signInValidationSchema,
     onSubmit: async () => {},
   });
 
+  const lgas = useMemo(() => {
+    const selectedState = states.find((state) => state.name === values.state);
+
+    return (
+      selectedState?.lgas.map((lga) => ({
+        label: lga,
+        value: lga,
+      })) ?? []
+    );
+  }, [values.state]);
+
+  const handleSelect = (name: string, value: any) => {
+    setFieldValue(name, value);
+  };
+
   const submitForm = async () => {
     try {
-      const result = await addClient(values);
-      console.log({result})
+      await addClient(values);
       toast.success("Client added successfully");
-      resetForm()
+      resetForm();
     } catch (error) {
       toast.error(getError(error));
     }
@@ -98,54 +121,59 @@ export const AddClientForm = () => {
         labelStyle="text-[#292A2C]"
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
-      <Input
+      <SelectScrollable
         label="State"
         name="state"
-        id="state"
+        // id="state"
         placeholder="Select state"
-        type="text"
         value={values.state}
-        onChange={handleChange}
-        onBlur={handleBlur}
+        onChange={(value) => handleSelect("state", value)}
+        options={states.map((state) => ({
+          label: state.name,
+          value: state.name,
+        }))}
         labelStyle="text-[#292A2C]"
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+        className="flex-[45%] max-w-[MIN(100%,470px)]"
+        error={getFormikError(touched?.state, errors?.state)}
       />
-      <Input
+      <SelectScrollable
         label="LGA"
         name="lga"
-        id="lga"
-        placeholder="Select Local Government Area"
-        type="text"
+        options={lgas}
         value={values.lga}
-        onChange={handleChange}
-        onBlur={handleBlur}
+        onChange={(value) => handleSelect("lga", value)}
+        disabled={!values.state}
+        placeholder="Select local government"
         labelStyle="text-[#292A2C]"
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+        error={getFormikError(touched?.lga, errors?.lga)}
+        className="flex-[45%] max-w-[MIN(100%,470px)]"
       />
-
       <Input
         label="Residential Address"
         name="residentialAddress"
         id="residentialAddress"
         type="text"
-        placeholder="Enter client residential address"
+        placeholder="Enter property address"
+        error={getFormikError(
+          touched?.residentialAddress,
+          errors?.residentialAddress
+        )}
         value={values.residentialAddress}
         onChange={handleChange}
         onBlur={handleBlur}
         labelStyle="text-[#292A2C]"
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
-      <Input
+
+      <SelectScrollable
         label="Agent"
         name="agentId"
-        id="agentId"
-        type="text"
-        placeholder="Enter agent name"
-        labelStyle="text-[#292A2C]"
+        placeholder="Select agent"
         value={values.agentId}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+        onChange={(v) => handleSelect("agentId", v)}
+        options={agents ?? []}
+        labelStyle="text-[#292A2C]"
+        className="flex-[45%] max-w-[MIN(100%,470px)]"
       />
 
       <SubmitButton disabled={!dirty || !isValid} size="sm" className="my-4">

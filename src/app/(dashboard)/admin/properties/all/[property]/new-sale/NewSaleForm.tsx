@@ -60,7 +60,6 @@ export const NewSaleForm = ({
   const submitForm = async () => {
     try {
       const result = await createSale(values);
-      console.log({ result });
       toast.success("Sale recorded successfully");
       resetForm();
       redirect(`/properties/all/${property}`);

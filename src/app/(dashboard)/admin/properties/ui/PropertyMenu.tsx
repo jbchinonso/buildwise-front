@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui";
+import { ConfirmActionModal } from "@/components/ui/ConfirmationModal";
 import { useModal } from "@/lib/hooks";
 import { IProperty } from "@/lib/type";
 import { More } from "iconsax-react";
@@ -9,6 +10,11 @@ import { useRef } from "react";
 export const PropertyMenu = ({ property }: { property: IProperty }) => {
   const targetRef = useRef<HTMLButtonElement | null>(null);
   const { isModalOpen, toggleModal, closeModal } = useModal();
+  const {
+    isModalOpen: isDelistModalOpen,
+    toggleModal: toggleDelistModal,
+    closeModal: closeDelistModal,
+  } = useModal();
 
   return (
     <div className="w-full relative h-full">
@@ -45,38 +51,38 @@ export const PropertyMenu = ({ property }: { property: IProperty }) => {
               size="xs"
               asLink
               variant="ghost"
-              href="history"
+              // href="history"
               className="text-start justify-start !py-3 !text-xs rounded rounded-b-none hover:bg-primary-300 hover:text-white"
             >
               Update property details
             </Button>
-            <Button
-              size="xs"
-              asLink
-              variant="ghost"
-              href="history"
-              className="text-start justify-start !py-3 !text-xs rounded rounded-b-none hover:bg-primary-300 hover:text-white"
-            >
-              Change availability status
-            </Button>
-            <Button
-              size="xs"
-              asLink
-              variant="ghost"
-              href="history"
-              className="text-start justify-start !py-3 !text-xs rounded rounded-b-none hover:bg-primary-300 hover:text-white"
-            >
-              Upload new property document
-            </Button>
-            <Button
-              size="xs"
-              asLink
-              variant="ghost"
-              href="history"
-              className="text-start text-red-600 justify-start !py-3 !text-xs rounded rounded-b-none hover:bg-primary-300 hover:text-white"
-            >
-              Unlist property
-            </Button>
+            <>
+              <Button
+                size="xs"
+                asLink
+                variant="ghost"
+                onClick={toggleDelistModal}
+                className="text-start text-red-600 justify-start !py-3 !text-xs rounded rounded-b-none hover:bg-primary-300 hover:text-white"
+              >
+                Delist property
+              </Button>
+
+              {isDelistModalOpen && (
+                <ConfirmActionModal
+                  action={async () => {}}
+                  onClose={closeDelistModal}
+                  title="Delist  property"
+                >
+                  <p>Are you sure you want to unlist this property?</p>
+                  <p>
+                    Property is no longer going to be available for sales.
+                  </p>
+                  <p>
+                    You will still be able to access property information.
+                  </p>
+                </ConfirmActionModal>
+              )}
+            </>
           </div>
         </>
       )}

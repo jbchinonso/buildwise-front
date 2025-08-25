@@ -11,16 +11,13 @@ import {
   PieChart,
 } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
+import { getMostAvaliableUnits } from "@/lib/services";
+import { IMostAvailableUnits, IPropertySummary } from "@/lib/type";
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight, ChevronRight, House } from "lucide-react";
 import Link from "next/link";
-
-const chartData = [
-  { label: "available", data: 10, fill: "#9747FF" },
-  { label: "reserved", data: 200, fill: "#926667" },
-  { label: "closed", data: 300, fill: "#1FDBF4" },
-];
+import { use } from "react";
 
 const chartConfig = {
   available: {
@@ -37,15 +34,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-type Transaction = {
-  id: string;
-  property: string;
-  location: string;
-  plots: string;
-  date_listed: string;
-};
-
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<IMostAvailableUnits>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => (
@@ -54,16 +43,16 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "address",
+    accessorKey: "location",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Location" />
     ),
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("address")}</div>
+      <div className="capitalize">{row.getValue("location")}</div>
     ),
   },
   {
-    accessorKey: "availableUnits",
+    accessorKey: "availablePlots",
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -71,7 +60,7 @@ const columns: ColumnDef<Transaction>[] = [
         className="whitespace-normal text-start"
       />
     ),
-    cell: ({ row }) => <div>{row.getValue("availableUnits")}</div>,
+    cell: ({ row }) => <div>{row.getValue("availablePlots")}</div>,
   },
   // {
   //   accessorKey: "reserved_plots",
@@ -85,38 +74,34 @@ const columns: ColumnDef<Transaction>[] = [
   //   cell: ({ row }) => <div>{row.getValue("reserved_plots")}</div>,
   // },
 
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      return (
-        <div className="flex justify-end">
-          <button id="button">
-            <ChevronRight className="size-4" />
-            <span className="sr-only">View details</span>
-          </button>
-        </div>
-      );
-    },
-  },
+  // {
+  //   id: "actions",
+  //   cell: ({ row }) => {
+  //     return (
+  //       <div className="flex justify-end">
+  //         <button id="button">
+  //           <ChevronRight className="size-4" />
+  //           <span className="sr-only">View details</span>
+  //         </button>
+  //       </div>
+  //     );
+  //   },
+  // },
 ];
 
-interface ISummary {
-  totalProperties: number;
-  totalAvailableUnits: number;
-  totalReservedUnits: number;
-  closedSales: number;
-}
-
 export const AvailableUnits = ({
-  data = [],
+  data,
   availableUnits = 0,
   summary,
+  children,
 }: {
-  data?: any[];
-  summary?: ISummary;
+  data: IMostAvailableUnits[];
+  summary?: IPropertySummary;
   availableUnits?: number | string;
+  children?: React.ReactNode;
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+
   const chartData = [
     {
       label: "available",
@@ -130,6 +115,7 @@ export const AvailableUnits = ({
     },
     { label: "closed", data: summary?.closedSales ?? 0, fill: "#1FDBF4" },
   ];
+
   return (
     <>
       <DashboardStatsCard
@@ -137,7 +123,7 @@ export const AvailableUnits = ({
         icon={<House size="24" color="#1FDBF4" />}
         data={availableUnits}
         theme=""
-        // className="cursor-auto"
+        className="cursor-auto"
         onClick={toggleModal}
       />
 
@@ -147,7 +133,7 @@ export const AvailableUnits = ({
           heading="Available Units"
           className="max-w-[MIN(100%,600px)]"
         >
-          <section className="flex flex-col w-full gap-4">
+          <section className="flex flex-1 flex-col w-full gap-4">
             <div className="w-full flex flex-col">
               <PieChart chartConfig={chartConfig} chartData={chartData} />
               <div className="flex w-full rounded-xl text-sm py-[10px] flex-wrap gap-2 text-white">
@@ -155,19 +141,20 @@ export const AvailableUnits = ({
                   <span className="size-3 rounded-full bg-[#7A7F83]" />
                   <div className="flex flex-col">
                     <p className="text-grey-400">Total Listing</p>
-                    <p className="text-grey-600">
-                      {summary?.totalAvailableUnits ?? 0}
-                    </p>
+                    <p className="text-grey-600">{summary?.totalUnits ?? 0}</p>
                   </div>
                 </div>
-                {chartData.map(({ label, data, fill }) => {
-                  const bg = `bg-[${fill}]`;
+                {chartData.map(({ label, data, fill: background }) => {
+                  const bg = `bg-[${background}]`;
                   return (
                     <div
                       key={label}
                       className="flex flex-[20%] gap-2 items-center"
                     >
-                      <span className={cn("size-3 rounded-full", bg)} />
+                      <span
+                        style={{ background }}
+                        className={cn("size-3 rounded-full", bg)}
+                      />
                       <div className="flex flex-col">
                         <p className="text-grey-400 capitalize">{label}</p>
                         <p className="text-grey-600">{data}</p>
@@ -184,7 +171,7 @@ export const AvailableUnits = ({
               </h2>
 
               <Link
-                href="/"
+                href="properties/all?sortBy=availableUnits"
                 className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
               >
                 View all <ArrowRight size={14} color="currentColor" />
@@ -195,8 +182,13 @@ export const AvailableUnits = ({
               <DataTable columns={columns} data={data} />
             </div>
 
-            <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+            <div className="flex mt-auto justify-end gap-4 items-center">
+              <Button
+                onClick={closeModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
 

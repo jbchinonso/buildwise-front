@@ -4,6 +4,7 @@ import { revalidateTag } from "next/cache";
 import { baseUrl, getError } from "../utils";
 import { authFetch } from "./auth.service";
 import { URLSearchParams } from "url";
+import { IClientOverview, IClientRecentlyReserved } from "../type";
 
 export const getAllClients = async (
   params: {
@@ -19,14 +20,18 @@ export const getAllClients = async (
       query.set(key, String(value));
     });
 
+    const url = `/clients/get-details/?${query.toString()}`;
+
+
     const { data, ...pagination } = await authFetch(
-      `/client?${query.toString()}`,
+      url,
       {
         next: {
           tags: ["clients"],
           revalidate: 8400,
         },
       }
+      // NOTE: This need to match the UI especially payments
     );
     return { data, pagination };
   } catch (error) {
@@ -36,7 +41,7 @@ export const getAllClients = async (
 
 export const getClient = async (id: string) => {
   try {
-    const data = await authFetch(`/client/${id}`, {
+    const data = await authFetch(`/clients/${id}`, {
       next: {
         tags: ["client"],
         revalidate: 8400,
@@ -61,7 +66,7 @@ interface ICreateClientPayload {
 
 export const addClient = async (client: ICreateClientPayload) => {
   try {
-    const response = await baseUrl.post("/client", client);
+    const response = await baseUrl.post("/clients", client);
     revalidateTag("clients");
     return response?.data;
   } catch (error) {
@@ -83,6 +88,57 @@ export const getClientSummary = async () => {
       totalReservedProperties: number;
       totalCompletedSales: number;
     };
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getClientStats = async () => {
+  try {
+    const response = await authFetch(`/clients/stats`, {
+      next: {
+        tags: ["client"],
+        revalidate: 8400,
+      },
+    });
+
+    return response as {
+      totalClients: number;
+      totalReserved: number;
+      totalClosed: number;
+    };
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getClientOverview = async () => {
+  try {
+    const response = await authFetch(`/clients/overview`, {
+      next: {
+        tags: ["client"],
+        revalidate: 8400,
+      },
+    });
+
+    return response as IClientOverview;
+    // NOTE: need to return client id at /clients/overview
+    // NOTE: confirm totalPropertiesBoughtOrReserved is amount and not count
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getClientRecentlyReserved = async () => {
+  try {
+    const response = await authFetch("/clients/recently-reserved", {
+      next: {
+        tags: ["client"],
+        revalidate: 8400,
+      },
+    });
+
+    return response as IClientRecentlyReserved[];
   } catch (error) {
     throw getError(error);
   }

@@ -9,6 +9,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowDown } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
+import { PropertiesSold } from "./PropertiesSold";
 
 import {
   DataTableColumnHeader,
@@ -118,7 +119,8 @@ export const RevenueOverview = ({ data }: { data: Transaction[] }) => {
       {isModalOpen && (
         <PageModal handleClose={closeModal} heading="Revenue Overview">
           <section className="flex flex-col w-full gap-4 ">
-            <RevenueChart />
+            
+             <PropertiesSold />
 
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
@@ -165,52 +167,3 @@ export const RevenueOverview = ({ data }: { data: Transaction[] }) => {
   );
 };
 
-const chartData = [
-  { month: "January", revenue: 186 },
-  { month: "February", revenue: 305 },
-  { month: "March", revenue: 237 },
-  { month: "April", revenue: 73 },
-  { month: "May", revenue: 209 },
-  { month: "June", revenue: 214 },
-];
-
-const chartConfig = {
-  revenue: {
-    label: "revenue",
-    color: "#926667",
-  },
-} satisfies ChartConfig;
-
-const RevenueChart = () => {
-  return (
-    <div className="w-full max-h-[762px] flex flex-col">
-      <div className="flex items-center justify-between p-4  w-full gap-4">
-        <div className="flex flex-col">
-          <p className="text-sm font-semibold">Revenue</p>
-          <span className="text-xs text-grey-400">Total: ₦1,495,00</span>
-        </div>
-
-        <div className="p-2 px-3 rounded-3xl bg-grey-50">
-          <p className="text-xs">Last 1 year</p>
-        </div>
-      </div>
-
-      <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-        <BarChart accessibilityLayer data={chartData}>
-          <Bar dataKey="revenue" fill="var(--color-revenue)" radius={4} />
-          <XAxis
-            dataKey="month"
-            tickMargin={10}
-            tickFormatter={(value) => value.slice(0, 3)}
-          />
-          <YAxis
-            dataKey="revenue"
-            tickMargin={0}
-            tickFormatter={(value) => value + "m"}
-          />
-          <ChartTooltip content={<ChartTooltipContent />} />
-        </BarChart>
-      </ChartContainer>
-    </div>
-  );
-};

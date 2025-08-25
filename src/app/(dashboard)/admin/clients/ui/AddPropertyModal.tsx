@@ -41,11 +41,7 @@ export const AddPropertyModal = ({ bankAccount = "O70 3456 6543" }) => {
                 options={[]}
               />
               <Input label="Plot number" placeholder="Enter plot number" />
-              <SelectScrollable
-                label="Payment options"
-                placeholder="Select payment plan"
-                options={[]}
-              />
+
               <SelectScrollable
                 label="Payment options"
                 placeholder="Select payment plan"
