@@ -4,18 +4,20 @@ import { ArrowRight, House2 } from "iconsax-react";
 import { Hourglass, House, KeyRound, Plus, Search } from "lucide-react";
 import { ClientOverview, ClientsTable } from "./ui/";
 import Link from "next/link";
-import { RevenueOverview, SalesOverview } from "../(dashboard-home)/ui";
+import { PropertiesSold, RevenueOverview, SalesOverview } from "../(dashboard-home)/ui";
+import { PropertyOverview } from "../(dashboard-home)/ui/PropertyOverview";
 
 const Properties = () => {
   return (
     <>
       <section className="w-full justify-between flex flex-wrap gap-4">
         <ClientOverview data={[]} />
-        <DashboardStatsCard
+        {/* <DashboardStatsCard
           title="Propeties sold"
           icon={<House size="24" color="#926667" />}
           data="2"
-        />
+        /> */}
+       <PropertyOverview data={[]}/>
         <RevenueOverview data={[]} />
         <SalesOverview data={[]} />
       </section>

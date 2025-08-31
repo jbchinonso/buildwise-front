@@ -4,21 +4,13 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
+import { Button, DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
+import { ArrowRight, Profile2User } from "iconsax-react";
+import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowDown } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
-import { Bar, BarChart, XAxis, YAxis } from "recharts";
-import { PropertiesSold } from "./PropertiesSold";
 
-import {
-  DataTableColumnHeader,
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  Button,
-} from "@/components/ui";
 
 type Transaction = {
   id: string;
@@ -54,41 +46,7 @@ const columns: ColumnDef<Transaction>[] = [
     ),
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
-  {
-    accessorKey: "last_payment",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Last payment" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("last_payment")}</div>,
-  },
-  {
-    accessorKey: "total_paid",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Paid" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("total_paid")}</div>,
-  },
-  {
-    accessorKey: "outstanding",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Outstanding" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("outstanding")}</div>,
-  },
-  {
-    accessorKey: "instalment",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Instalment" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("instalment")}</div>,
-  },
-  {
-    accessorKey: "payment_status",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Payment status" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("payment_status")}</div>,
-  },
+
   {
     id: "actions",
     cell: ({ row }) => {
@@ -104,52 +62,51 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const RevenueOverview = ({ data }: { data: Transaction[] }) => {
+export const TitanCommission = ({ data }: { data: Transaction[] }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
-        title="Total revenue"
-        icon={<ArrowDown size="24" color="#70F41F" />}
-        data="23.8B"
+        title="Commission From Titans"
+        icon={<Profile2User size="24" color="#1FDBF4" />}
+        data="15"
         theme=""
         onClick={toggleModal}
       />
 
       {isModalOpen && (
-        <PageModal handleClose={closeModal} heading="Revenue Overview">
+        <PageModal
+          handleClose={closeModal}
+          heading="Titans Overview"
+          className="max-w-[MIN(95%,620px)]"
+        >
           <section className="flex flex-col w-full gap-4 ">
-            
-             <PropertiesSold />
-
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-400">All Titans</p>
+                <p className="text-grey-600">100</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-400">Active</p>
+                <p className="text-grey-600">90</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
-              </div>
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-400">Inactive earned</p>
+                <p className="text-grey-600">10</p>
               </div>
             </div>
-            
-            <div className="flex items-baseline justify-between w-full gap-4">
-              <h2 className="font-semibold text-grey-600">Recent Sales</h2>
 
-              {/* <Link
+            <div className="flex items-baseline justify-between w-full gap-4">
+              <h2 className="font-semibold text-grey-600">
+                Recently onboarded agents
+              </h2>
+
+              <Link
                 href="/"
                 className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
               >
                 View all <ArrowRight size={14} color="currentColor" />
-              </Link> */}
+              </Link>
             </div>
 
             <div className="w-full my-2">
@@ -157,7 +114,10 @@ export const RevenueOverview = ({ data }: { data: Transaction[] }) => {
             </div>
 
             <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">Close</Button>
+              <Button size="xs" outline variant="secondary">
+                Close
+              </Button>
+
               <Button size="xs">Export PDF</Button>
             </div>
           </section>
@@ -166,4 +126,3 @@ export const RevenueOverview = ({ data }: { data: Transaction[] }) => {
     </>
   );
 };
-

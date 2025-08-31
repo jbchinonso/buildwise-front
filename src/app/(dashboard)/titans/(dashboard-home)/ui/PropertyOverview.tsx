@@ -7,9 +7,8 @@ import {
 import { useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowDown } from "iconsax-react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, House } from "lucide-react";
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
-import { PropertiesSold } from "./PropertiesSold";
 
 import {
   DataTableColumnHeader,
@@ -33,13 +32,13 @@ type Transaction = {
 };
 
 const columns: ColumnDef<Transaction>[] = [
-  {
-    accessorKey: "client",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Client" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
-  },
+//   {
+//     accessorKey: "client",
+//     header: ({ column }) => (
+//       <DataTableColumnHeader column={column} title="Client" />
+//     ),
+//     cell: ({ row }) => <div>{row.getValue("client")}</div>,
+//   },
   {
     accessorKey: "property",
     header: ({ column }) => (
@@ -55,33 +54,27 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
   {
-    accessorKey: "last_payment",
+    accessorKey: "buyer",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Last payment" />
+      <DataTableColumnHeader column={column} title="Buyer" />
     ),
-    cell: ({ row }) => <div>{row.getValue("last_payment")}</div>,
+    cell: ({ row }) => <div>{row.getValue("buyer")}</div>,
   },
   {
-    accessorKey: "total_paid",
+    accessorKey: "unit",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Paid" />
+      <DataTableColumnHeader column={column} title="Unit" />
     ),
-    cell: ({ row }) => <div>{row.getValue("total_paid")}</div>,
+    cell: ({ row }) => <div>{row.getValue("unit")}</div>,
   },
   {
-    accessorKey: "outstanding",
+    accessorKey: "price",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Outstanding" />
+      <DataTableColumnHeader column={column} title="Price" />
     ),
-    cell: ({ row }) => <div>{row.getValue("outstanding")}</div>,
+    cell: ({ row }) => <div>{row.getValue("price")}</div>,
   },
-  {
-    accessorKey: "instalment",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Instalment" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("instalment")}</div>,
-  },
+
   {
     accessorKey: "payment_status",
     header: ({ column }) => (
@@ -104,53 +97,42 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const RevenueOverview = ({ data }: { data: Transaction[] }) => {
+export const PropertyOverview = ({ data }: { data: Transaction[] }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
-        title="Total revenue"
-        icon={<ArrowDown size="24" color="#70F41F" />}
-        data="23.8B"
+       title="Propeties sold"
+       icon={<House size="24" color="#926667" />}
+       data="2"
         theme=""
         onClick={toggleModal}
       />
 
       {isModalOpen && (
-        <PageModal handleClose={closeModal} heading="Revenue Overview">
+        <PageModal handleClose={closeModal} heading="Propeties sold">
           <section className="flex flex-col w-full gap-4 ">
-            
-             <PropertiesSold />
-
+         
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-400">Property Sold</p>
+                <p className="text-grey-600">15</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-400">Paid</p>
+                <p className="text-grey-600">₦12,050,000</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-400">Outstanding</p>
+                <p className="text-grey-600">₦14,000</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-400">Closed Sales</p>
+                <p className="text-grey-600">2</p>
               </div>
             </div>
             
-            <div className="flex items-baseline justify-between w-full gap-4">
-              <h2 className="font-semibold text-grey-600">Recent Sales</h2>
-
-              {/* <Link
-                href="/"
-                className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
-              >
-                View all <ArrowRight size={14} color="currentColor" />
-              </Link> */}
-            </div>
+         
 
             <div className="w-full my-2">
               <DataTable columns={columns} data={data} />
@@ -166,4 +148,5 @@ export const RevenueOverview = ({ data }: { data: Transaction[] }) => {
     </>
   );
 };
+
 
