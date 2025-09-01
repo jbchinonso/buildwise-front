@@ -23,7 +23,7 @@ export const getAllClients = async (
     const url = `/clients/get-details/?${query.toString()}`;
 
 
-    const { data, ...pagination } = await authFetch(
+    const { data, pagination } = await authFetch(
       url,
       {
         next: {
