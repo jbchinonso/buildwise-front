@@ -16,6 +16,8 @@ const Properties = async () => {
     getRecentlyListedProperties(),
   ]);
 
+  console.log({ topSelling, recentlyListed });
+
   return (
     <section className="flex flex-wrap gap-4 flex-1 max-h-[601px]">
       <TopSellingProperties data={topSellingPropertiesDTO(topSelling) ?? []} />
