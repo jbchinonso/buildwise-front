@@ -279,3 +279,23 @@ interface IClientPaymentData {
   propertyName: string;
   agent: string;
 }
+
+interface ITitans {
+  id: string;
+  titan: string;
+  upline: string;
+  location: string;
+  propertiesSold: number;
+  commission: number;
+  status: string;
+  joined: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  referralCode: string;
+  directReferrals: number;
+  indirectReferrals: number;
+  totalReferrals: number;
+  totalEarnings: number;
+}

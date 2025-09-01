@@ -2,22 +2,24 @@
 import { Button, Input, SelectScrollable, SubmitButton } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
 import { createSale } from "@/lib/services";
-import { getError } from "@/lib/utils";
+import { getError, toAmount } from "@/lib/utils";
 import { useFormik } from "formik";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { DashboardModal } from "@/components/dashboard";
-import { IOption } from "@/lib/type";
+import { IOption, IPaymentOptions, IProperty } from "@/lib/type";
+import { useMemo } from "react";
 
 export const NewSaleForm = ({
   property,
   agents,
   clients,
 }: {
-  property: string;
+  property: Pick<IProperty, "_id" | "name" | "priceOptions" | "price">;
   agents?: IOption[];
   clients?: IOption[];
 }) => {
+  const router = useRouter()
   const { isModalOpen, closeModal, openModal } = useModal();
   const {
     handleBlur,
@@ -31,14 +33,16 @@ export const NewSaleForm = ({
     setFieldValue,
   } = useFormik({
     initialValues: {
-      propertyId: property,
+      propertyId: property?._id,
       agentId: "",
+      agentName: "",
       clientId: "",
+      clientName: "",
       plotNumber: "",
       unitNumber: "",
       plotSize: "",
       amountPaid: "",
-      price: "",
+      priceOptions: "",
       paymentDate: "",
       instalmentDuration: "",
       paymentPlan: "",
@@ -53,16 +57,66 @@ export const NewSaleForm = ({
     },
   });
 
+  const priceOptions = useMemo(() => {
+    const options = property?.priceOptions as IPaymentOptions;
+    const plans = options?.plans || [];
+    return [
+      {
+        label: `Full payment (${toAmount(options?.instantPrice)})`,
+        value: `Full payment (${toAmount(options?.instantPrice)})`,
+        data: {
+          price: options?.instantPrice,
+          instalmentDuration: "0 months",
+          paymentPlan: "Full payment",
+        },
+      },
+      ...plans?.map((plan) => ({
+        label: `${plan?.duration} (${toAmount(plan?.price)})`,
+        value: `${plan?.duration} (${toAmount(plan?.price)})`,
+        data: {
+          price: plan?.price,
+          instalmentDuration: plan?.duration,
+          paymentPlan: plan?.duration,
+        },
+      })),
+    ];
+  }, [property?.priceOptions]);
+
+  const payload = useMemo(() => {
+    const pricePlan = priceOptions?.find(
+      (plan) => plan.value === values?.priceOptions
+    )?.data;
+    return {
+      propertyId: values?.propertyId,
+      agentId: values?.agentId,
+      clientId: values?.clientId,
+      unitNumber: values?.unitNumber,
+      amountPaid: Number(values?.amountPaid || 0),
+      paymentDate: values?.paymentDate,
+      plotNumber: Number(values?.plotNumber || 0),
+      plotSize: values?.plotSize || 0,
+      ...pricePlan,
+    };
+  }, [values]);
+
   const handleSelect = (name: string, value: any) => {
     setFieldValue(name, value);
+    if (name === "clientId") {
+      const client = clients?.find((v) => v?.value === value);
+      setFieldValue("clientName", client?.label);
+    }
+    if (name === "agentId") {
+      const agent = agents?.find((v) => v?.value === value);
+      setFieldValue("agentName", agent?.label);
+    }
   };
 
   const submitForm = async () => {
     try {
-      const result = await createSale(values);
+      await createSale(payload);
+      router.replace(`/admin/properties/all/${property?._id||''}`);
       toast.success("Sale recorded successfully");
       resetForm();
-      redirect(`/properties/all/${property}`);
     } catch (error) {
       toast.error(getError(error));
     }
@@ -97,11 +151,11 @@ export const NewSaleForm = ({
         />
         <Input
           label="Property units/ plot"
-          name="plotSize"
-          id="plotSize"
+          name="unitNumber"
+          id="unitNumber"
           type="text"
-          placeholder="1plot/ 420sqm"
-          value={values.plotSize}
+          placeholder="e.g 1plot/420sqm"
+          value={values.unitNumber}
           onChange={handleChange}
           onBlur={handleBlur}
           labelStyle="text-[#292A2C]"
@@ -111,7 +165,7 @@ export const NewSaleForm = ({
           label="Plot number"
           name="plotNumber"
           id="plotNumber"
-          type="text"
+          type="tel"
           placeholder="Enter plot number"
           value={values.plotNumber}
           onChange={handleChange}
@@ -120,17 +174,28 @@ export const NewSaleForm = ({
           containerStyle="flex-[100%] md:flex-[45%] md:max-w-[MIN(100%,470px)]"
         />
         <Input
-          label="Payment options"
-          name="price"
-          id="price"
-          placeholder="Select payment options"
+          label="Plot Size"
+          name="plotSize"
+          id="plotSize"
           type="text"
-          value={values.price}
+          placeholder="e.g 420sqm"
+          value={values.plotSize}
           onChange={handleChange}
           onBlur={handleBlur}
           labelStyle="text-[#292A2C]"
           containerStyle="flex-[100%] md:flex-[45%] md:max-w-[MIN(100%,470px)]"
         />
+        <SelectScrollable
+          label="Payment options"
+          name="priceOptions"
+          placeholder="Select payment options"
+          value={values.priceOptions}
+          onChange={(v) => handleSelect("priceOptions", v)}
+          options={priceOptions ?? []}
+          labelStyle="text-[#292A2C]"
+          className="flex-[100%] md:flex-[45%] md:max-w-[MIN(100%,470px)]"
+        />
+
         <Input
           label="Amount paid"
           name="amountPaid"
@@ -153,6 +218,7 @@ export const NewSaleForm = ({
           value={values.paymentDate}
           onChange={handleChange}
           onBlur={handleBlur}
+          max={new Date().toISOString().split("T")[0]}
           labelStyle="text-[#292A2C]"
           containerStyle="flex-[100%] md:flex-[45%] md:max-w-[MIN(100%,470px)]"
         />
@@ -183,37 +249,43 @@ export const NewSaleForm = ({
               <div className="flex items-center justify-between w-full border-b">
                 <p className="text-xs capitalize text-grey-400">Client</p>
                 <p className="text-sm font-bold text-grey-600">
-                  {values.clientId}
+                  {values.clientName}
                 </p>
               </div>
               <div className="flex items-center justify-between w-full border-b">
                 <p className="text-xs capitalize text-grey-400">Agent</p>
                 <p className="text-sm font-bold text-grey-600">
-                  {values.agentId}
+                  {values.agentName}
                 </p>
               </div>
               <div className="flex items-center justify-between w-full border-b">
                 <p className="text-xs capitalize text-grey-400">Property</p>
                 <p className="text-sm font-bold text-grey-600">
-                  {values.propertyId}
+                  {property?.name}
                 </p>
               </div>
               <div className="flex items-center justify-between w-full border-b">
                 <p className="text-xs capitalize text-grey-400">Plot number</p>
                 <p className="text-sm font-bold text-grey-600">
-                  Plot {values.plotNumber}
+                  {values.plotNumber ? `Plot ${values.plotNumber}` : ""}
+                </p>
+              </div>
+              <div className="flex items-center justify-between w-full border-b">
+                <p className="text-xs capitalize text-grey-400">Plot Size</p>
+                <p className="text-sm font-bold text-grey-600">
+                  {values.plotSize}
                 </p>
               </div>
               <div className="flex items-center justify-between w-full border-b">
                 <p className="text-xs capitalize text-grey-400">Units</p>
                 <p className="text-sm font-bold text-grey-600">
-                  {values.unitNumber} plot(s)
+                  {values.unitNumber}
                 </p>
               </div>
               <div className="flex items-center justify-between w-full border-b">
                 <p className="text-xs capitalize text-grey-400">Price</p>
                 <p className="text-sm font-bold text-grey-600">
-                  {values.unitNumber}
+                  {values.priceOptions}
                 </p>
               </div>
               <div className="flex items-center justify-between w-full border-b">
@@ -221,7 +293,7 @@ export const NewSaleForm = ({
                   Amount deposited
                 </p>
                 <p className="text-sm font-bold text-grey-600">
-                  ₦{values.amountPaid}
+                  {toAmount(values.amountPaid)}
                 </p>
               </div>
             </div>
@@ -241,7 +313,7 @@ export const NewSaleForm = ({
                 size="sm"
                 className="my-4"
               >
-                Sell Property
+                Confirm sales
               </SubmitButton>
             </div>
           </form>

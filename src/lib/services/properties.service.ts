@@ -145,7 +145,7 @@ export const getProperty = async (id: string) => {
   try {
     const data = await authFetch(`/properties/${id}`, {
       next: {
-        tags: ["property"],
+        tags: [`property`, `property-${id}`],
         revalidate: 8400,
       },
     });
