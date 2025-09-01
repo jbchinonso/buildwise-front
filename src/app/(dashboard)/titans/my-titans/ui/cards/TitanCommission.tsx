@@ -9,7 +9,8 @@ import { useModal } from "@/lib/hooks";
 import { ArrowRight, Profile2User } from "iconsax-react";
 import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Network } from "lucide-react";
+
 
 
 type Transaction = {
@@ -26,25 +27,39 @@ type Transaction = {
 
 const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "client",
+    accessorKey: "date",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Client" />
+      <DataTableColumnHeader column={column} title="Date" />
     ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    cell: ({ row }) => <div>{row.getValue("date")}</div>,
   },
   {
-    accessorKey: "property",
+    accessorKey: "titan",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Property" />
+      <DataTableColumnHeader column={column} title="Titan" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    cell: ({ row }) => <div>{row.getValue("titan")}</div>,
   },
   {
-    accessorKey: "location",
+    accessorKey: "type",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Location" />
+      <DataTableColumnHeader column={column} title="Type" />
     ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
+    cell: ({ row }) => <div>{row.getValue("type")}</div>,
+  },
+  {
+    accessorKey: "amount",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Amount" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("amount")}</div>,
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("status")}</div>,
   },
 
   {
@@ -67,9 +82,9 @@ export const TitanCommission = ({ data }: { data: Transaction[] }) => {
   return (
     <>
       <DashboardStatsCard
-        title="Commission From Titans"
-        icon={<Profile2User size="24" color="#1FDBF4" />}
-        data="15"
+        title="My Titans Commission"
+        icon={<Network size="24" color="#1FDBF4" className="rotate-90"/>}
+        data="500k"
         theme=""
         onClick={toggleModal}
       />
@@ -83,16 +98,16 @@ export const TitanCommission = ({ data }: { data: Transaction[] }) => {
           <section className="flex flex-col w-full gap-4 ">
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">All Titans</p>
-                <p className="text-grey-600">100</p>
+                <p className="text-grey-400">Total Commission</p>
+                <p className="text-grey-600 font-medium">100</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Active</p>
-                <p className="text-grey-600">90</p>
+                <p className="text-grey-400">Commission from Titans</p>
+                <p className="text-grey-600 font-medium">90</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Inactive earned</p>
-                <p className="text-grey-600">10</p>
+                <p className="text-grey-400">Comission from Sub-titans</p>
+                <p className="text-grey-600 font-medium">10</p>
               </div>
             </div>
 

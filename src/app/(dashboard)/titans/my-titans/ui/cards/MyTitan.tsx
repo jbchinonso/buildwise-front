@@ -4,7 +4,8 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-import { Button, DataTableColumnHeader } from "@/components/ui";
+
+import { Button, DataTableColumnHeader, Table } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
 import { ArrowRight, Profile2User } from "iconsax-react";
 import Link from "next/link";
@@ -14,39 +15,161 @@ import { ChevronRight } from "lucide-react";
 
 type Transaction = {
   id: string;
-  client: string;
-  property: string;
-  location: string;
-  last_payment: string;
-  totalPaid: string;
-  outstanding: string;
-  instalment: string;
-  payment_status: string;
+  titan: string;
+  sales: string;
+  revenue: string;
+  commission: string;
+  joined: string;
+  status: string;
+  // instalment: string;
+  // payment_status: string;
 };
+const titanData: Transaction[] = [
+  {
+    id: "1",
+    titan: "Robert Fox",
+    sales: "--",
+    revenue: "--",
+    commission: "--",
+    joined: "Today",
+    status: "Pending",
+  },
+  {
+    id: "2",
+    titan: "Annette Black",
+    sales: "4",
+    revenue: "₦17,000,000",
+    commission: "₦83,500",
+    joined: "2yrs ago",
+    status: "Active",
+  },
+  {
+    id: "3",
+    titan: "Cody Fisher",
+    sales: "1",
+    revenue: "₦17,000,000",
+    commission: "₦83,500",
+    joined: "1y 5m ago",
+    status: "Suspended",
+  },
+  {
+    id: "4",
+    titan: "Jerome Bell",
+    sales: "3",
+    revenue: "₦17,000,000",
+    commission: "₦83,500",
+    joined: "1y 5m ago",
+    status: "Active",
+  },
+  {
+    id: "5",
+    titan: "Floyd Miles",
+    sales: "3",
+    revenue: "₦17,000,000",
+    commission: "₦83,500",
+    joined: "1y 5m ago",
+    status: "Active",
+  },
+  {
+    id: "6",
+    titan: "Courtney Henry",
+    sales: "3",
+    revenue: "₦17,000,000",
+    commission: "₦83,500",
+    joined: "1y 5m ago",
+    status: "Active",
+  },
+  {
+    id: "7",
+    titan: "Albert Flores",
+    sales: "3",
+    revenue: "₦17,000,000",
+    commission: "₦83,500",
+    joined: "1y 5m ago",
+    status: "Active",
+  },
+  {
+    id: "8",
+    titan: "Jacob Jones",
+    sales: "3",
+    revenue: "₦17,000,000",
+    commission: "₦83,500",
+    joined: "1y 5m ago",
+    status: "Active",
+  },
+  {
+    id: "9",
+    titan: "Arlene McCoy",
+    sales: "3",
+    revenue: "₦17,000,000",
+    commission: "₦83,500",
+    joined: "1y 5m ago",
+    status: "Active",
+  },
+  {
+    id: "10",
+    titan: "Dianne Russell",
+    sales: "3",
+    revenue: "₦17,000,000",
+    commission: "₦83,500",
+    joined: "1y 5m ago",
+    status: "Active",
+  },
+  {
+    id: "11",
+    titan: "Wade Warren",
+    sales: "3",
+    revenue: "₦17,000,000",
+    commission: "₦83,500",
+    joined: "1y 5m ago",
+    status: "Active",
+  },
+];
+
 
 const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "client",
+    accessorKey: "titan",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Client" />
+      <DataTableColumnHeader column={column} title="Titan" />
     ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    cell: ({ row }) => <div>{row.getValue("titan")}</div>,
   },
   {
-    accessorKey: "property",
+    accessorKey: "sales",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Property" />
+      <DataTableColumnHeader column={column} title="Sales" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    cell: ({ row }) => <div>{row.getValue("sales")}</div>,
   },
   {
-    accessorKey: "location",
+    accessorKey: "revenue",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Location" />
+      <DataTableColumnHeader column={column} title="Revenue" />
     ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
+    cell: ({ row }) => <div>{row.getValue("revenue")}</div>,
   },
-
+  {
+    accessorKey: "commission",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="My Commission" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("commission")}</div>,
+  },
+  {
+    accessorKey: "joined",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Joined" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("joined")}</div>,
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("status")}</div>,
+  },
   {
     id: "actions",
     cell: ({ row }) => {
@@ -68,7 +191,7 @@ export const MyTitan = ({ data }: { data: Transaction[] }) => {
     <>
       <DashboardStatsCard
         title="My Titans"
-        icon={<Profile2User size="24" color="#1FDBF4" />}
+        icon={<Profile2User size="24" color="#926667"  />}
         data="15"
         theme=""
         onClick={toggleModal}
@@ -77,40 +200,31 @@ export const MyTitan = ({ data }: { data: Transaction[] }) => {
       {isModalOpen && (
         <PageModal
           handleClose={closeModal}
-          heading="Titans Overview"
+          heading="My Titans Overview"
           className="max-w-[MIN(95%,620px)]"
         >
           <section className="flex flex-col w-full gap-4 ">
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">All Titans</p>
-                <p className="text-grey-600">100</p>
+                <p className="text-grey-400">My Titans</p>
+                <p className="text-grey-600 font-medium">15</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Active</p>
-                <p className="text-grey-600">90</p>
+                <p className="text-grey-400">Commission from Titans</p>
+                <p className="text-grey-600 font-medium">300,050</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Inactive earned</p>
-                <p className="text-grey-600">10</p>
+                <p className="text-grey-400">Titans total revenue</p>
+                <p className="text-grey-600 font-medium">220,000,000</p>
               </div>
             </div>
 
             <div className="flex items-baseline justify-between w-full gap-4">
-              <h2 className="font-semibold text-grey-600">
-                Recently onboarded agents
-              </h2>
-
-              <Link
-                href="/"
-                className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
-              >
-                View all <ArrowRight size={14} color="currentColor" />
-              </Link>
+              
             </div>
 
             <div className="w-full my-2">
-              <DataTable columns={columns} data={data} />
+              <DataTable columns={columns} data={titanData} />
             </div>
 
             <div className="flex justify-end gap-4 items-center">
