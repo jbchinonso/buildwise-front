@@ -38,10 +38,13 @@ const Property = async (props: {
   ]);
 
   const clientOwnerData = propertyClientOwnershipDTO(clientOwner?.data);
+
   const clientOwnerOptions = clientOwnerData?.map((client) => ({
     value: client?.id,
     label: client?.client,
   }));
+
+
 
   return (
     <section className="flex flex-1 flex-col gap-4">

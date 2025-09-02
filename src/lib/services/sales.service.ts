@@ -10,11 +10,11 @@ interface ISalePayload {
   agentId: string;
   plotNumber: number | string;
   unitNumber: string;
-  plotSize: string;
+  plotSize: number | string;
   amountPaid: number | string;
-  price: number | string;
-  instalmentDuration?: string;
-  paymentPlan: string;
+  price?: number | string;
+  instalmentDuration?: string | number;
+  paymentPlan?: string;
   paymentDate: string;
 }
 
@@ -22,6 +22,8 @@ export const createSale = async (sale: ISalePayload) => {
   try {
     const response = await baseUrl.post("/sales", sale);
     revalidateTag("sales");
+    revalidateTag("property-sales");
+    revalidateTag(`property-${sale.propertyId}`);
     return response?.data;
   } catch (error) {
     throw getError(error);
@@ -101,7 +103,7 @@ export const getClientPaymentData = async ({
 
     const url = `/sales/clients/${clientId}/payments/`;
 
-    console.log({url})
+    console.log({ url });
 
     const response = await authFetch(url, {
       next: {

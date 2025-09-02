@@ -39,7 +39,7 @@ const TransactionHistory = async (props: {
     (v: IPropertySale) => v._id === searchParams?.receipt
   );
 
-  console.log({sale})
+  console.log({data})
 
   let receiptData;
 

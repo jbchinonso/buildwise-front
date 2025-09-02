@@ -1,11 +1,11 @@
 import { BreadCrumbs } from "@/components/ui";
-import { getAllClients, getProperty } from "@/lib/services";
-import React from "react";
+import { getAllClients, getProperty, getTitans } from "@/lib/services";
 import { NewSaleForm } from "./NewSaleForm";
 import { clientSelectDTO } from "@/lib/dtos";
+import { ITitans } from "@/lib/type";
 
 type Params = Promise<{ property: string }>;
-type SearchParams = Promise<{ page?: string; limit?: string, search?: string }>;
+type SearchParams = Promise<{ page?: string; limit?: string; search?: string }>;
 
 const NewSale = async (props: {
   params: Params;
@@ -16,11 +16,21 @@ const NewSale = async (props: {
   const id = params.property;
   const page = searchParams.page || 1;
   const limit = searchParams.page || 10;
-  const search = searchParams.search || '';
+  const search = searchParams.search || "";
 
   const property = await getProperty(id);
-  const [clients] = await Promise.all([getAllClients({page, limit, search})]);
+
+  const [clients, titans] = await Promise.all([
+    getAllClients({ page, limit, search }),
+    getTitans({ page, limit, search }),
+  ]);
+
   const clientOptions = clientSelectDTO(clients?.data);
+
+  const titanOptions = (titans?.data || [])?.map((v: ITitans) => ({
+    label: v?.titan,
+    value: v?.id,
+  }));
 
   return (
     <section className="flex flex-1 flex-col gap-4">
@@ -42,7 +52,16 @@ const NewSale = async (props: {
           <p>New Sales</p>
         </header>
 
-        <NewSaleForm property={id} clients={clientOptions} />
+        <NewSaleForm
+          property={{
+            _id: property?._id,
+            priceOptions: property?.priceOptions,
+            name: property?.name,
+            price: property?.price,
+          }}
+          clients={clientOptions}
+          agents={titanOptions}
+        />
       </div>
     </section>
   );
