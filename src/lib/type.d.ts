@@ -7,6 +7,7 @@ interface IDashboardStatsCardProps {
   icon?: React.ReactNode | string;
   theme?: string;
   data?: string | number;
+  isLoading?: boolean;
   onClick?: () => void;
 }
 
