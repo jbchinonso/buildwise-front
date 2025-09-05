@@ -1,5 +1,6 @@
 "use client";
 import { DataTable } from "@/components/dashboard";
+import { DataTableColumnHeader } from "@/components/ui";
 import { ColumnDef } from "@tanstack/react-table";
 import React, { PropsWithChildren } from "react";
 
@@ -19,46 +20,53 @@ const TableHead: React.FC<PropsWithChildren & {title?: string}> = ({ children, t
 
 const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "property",
-    header: ({ column }) => <TableHead title="Property" />,
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    accessorKey: "date",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Date" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("date")}</div>,
   },
   {
-    accessorKey: "commission",
+    accessorKey: "name",
     header: ({ column }) => (
-      <TableHead title="Commission" />
+      <DataTableColumnHeader column={column} title="Name" />
     ),
-    cell: ({ row }) => <div>{row.getValue("commission")}</div>,
+    cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "commission_id",
+    accessorKey: "type",
     header: ({ column }) => (
-      <TableHead title="Commission ID" />
+      <DataTableColumnHeader column={column} title="Type" />
     ),
-    cell: ({ row }) => <div>{row.getValue("commission_id")}</div>,
+    cell: ({ row }) => <div>{row.getValue("type")}</div>,
   },
-
+  {
+    accessorKey: "amount",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Amount" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("amount")}</div>,
+  },
+ 
   {
     accessorKey: "status",
     header: ({ column }) => (
-      <TableHead title="Status" />
+      <DataTableColumnHeader column={column} title="Status" />
     ),
-    cell: ({ row }) => (
-      <div
-        className={`${
-          row.getValue("status") == "Paid" ? "text-[#4FAB15]" : "text-[#F4BB1F]"
-        }`}
-      >
-        {row.getValue("status")}
-      </div>
-    ),
+    cell: ({ row }) => <div>{row.getValue("status")}</div>,
   },
   {
-    accessorKey: "date_paid",
-    header: ({ column }) => (
-      <TableHead title="Date paid" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("date_paid")}</div>,
+    id: "actions",
+    cell: ({ row }) => {
+      return (
+        <div className="flex justify-end">
+          <button id="button">
+            {/* <ChevronRight className="size-4" /> */}
+            <span className="sr-only">View details</span>
+          </button>
+        </div>
+      );
+    },
   },
 ];
 

@@ -10,6 +10,7 @@ import { ArrowRight, Profile2User } from "iconsax-react";
 import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, Network } from "lucide-react";
+import { TitanCommissionOverview } from "../TitanCommissionOverview";
 
 
 
@@ -77,6 +78,8 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
+
+
 export const TitanCommission = ({ data }: { data: Transaction[] }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
@@ -92,10 +95,13 @@ export const TitanCommission = ({ data }: { data: Transaction[] }) => {
       {isModalOpen && (
         <PageModal
           handleClose={closeModal}
-          heading="Titans Overview"
+          heading="My Titans Overview"
           className="max-w-[MIN(95%,620px)]"
         >
+           
           <section className="flex flex-col w-full gap-4 ">
+          <TitanCommissionOverview/>
+           
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Total Commission</p>
@@ -113,11 +119,11 @@ export const TitanCommission = ({ data }: { data: Transaction[] }) => {
 
             <div className="flex items-baseline justify-between w-full gap-4">
               <h2 className="font-semibold text-grey-600">
-                Recently onboarded agents
+                Recently earned Commissions
               </h2>
 
               <Link
-                href="/"
+                  href="/titans/my-titans/commission-breakdown"
                 className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
               >
                 View all <ArrowRight size={14} color="currentColor" />
