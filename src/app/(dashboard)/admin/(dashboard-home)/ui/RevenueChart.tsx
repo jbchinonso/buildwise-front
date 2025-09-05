@@ -2,16 +2,18 @@
 
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { toAmountWithPrefix } from "@/lib/utils";
 
-const chartData = [
-  { month: "January", revenue: 186 },
-  { month: "February", revenue: 305 },
-  { month: "March", revenue: 237 },
-  { month: "April", revenue: 73 },
-  { month: "May", revenue: 209 },
-  { month: "June", revenue: 214 },
-];
+interface IChartData {
+  month: string;
+  revenue: number;
+}
 
 const chartConfig = {
   revenue: {
@@ -20,7 +22,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function RevenueChart() {
+export function RevenueChart({
+  chartData,
+}: {
+  chartData?: IChartData[];
+}) {
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart accessibilityLayer data={chartData}>
@@ -33,7 +39,7 @@ export function RevenueChart() {
         <YAxis
           dataKey="revenue"
           tickMargin={0}
-          tickFormatter={(value) => value + "m"}
+          tickFormatter={(value) => toAmountWithPrefix(value||0)}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
       </BarChart>

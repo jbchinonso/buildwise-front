@@ -18,6 +18,7 @@ import {
   ChartTooltipContent,
   Button,
 } from "@/components/ui";
+import { toAmount, toAmountWithPrefix } from "@/lib/utils";
 
 type Transaction = {
   id: string;
@@ -103,14 +104,21 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const RevenueOverview = ({ data }: { data: Transaction[] }) => {
+export const RevenueOverview = ({
+  data,
+  stats = 0,
+}: {
+  data: Transaction[];
+  stats?: number;
+}) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
         title="Total revenue"
         icon={<ArrowDown size="24" color="#70F41F" />}
-        data="23.8B"
+        data={toAmountWithPrefix(stats)}
+        value={"Total revenue - " + toAmount(stats)}
         theme=""
         onClick={toggleModal}
       />
@@ -138,7 +146,7 @@ export const RevenueOverview = ({ data }: { data: Transaction[] }) => {
                 <p className="text-grey-600">₦51,208,009</p>
               </div>
             </div>
-            
+
             <div className="flex items-baseline justify-between w-full gap-4">
               <h2 className="font-semibold text-grey-600">Recent Sales</h2>
 
@@ -155,7 +163,9 @@ export const RevenueOverview = ({ data }: { data: Transaction[] }) => {
             </div>
 
             <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">Close</Button>
+              <Button size="xs" outline variant="secondary">
+                Close
+              </Button>
               <Button size="xs">Export PDF</Button>
             </div>
           </section>

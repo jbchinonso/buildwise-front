@@ -9,6 +9,7 @@ import { useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, House } from "lucide-react";
 import { PropertiesSold } from "./PropertiesSold";
+import { toAmount, toAmountWithPrefix } from "@/lib/utils";
 
 type Transaction = {
   id: string;
@@ -94,15 +95,21 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const SalesOverview = ({ data }: { data: Transaction[] }) => {
+export const SalesOverview = ({
+  data,
+  stats = 0,
+}: {
+  data: Transaction[];
+  stats?: number;
+}) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
         title="Total sales"
         icon={<House size="24" color="#1FDBF4" />}
-        data="23.8B"
-        theme=""
+        data={toAmountWithPrefix(stats, false)}
+        value={"Total sales - " + toAmount(stats, false)}
         onClick={toggleModal}
       />
 

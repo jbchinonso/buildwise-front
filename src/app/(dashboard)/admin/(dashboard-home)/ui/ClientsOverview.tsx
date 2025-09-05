@@ -6,6 +6,7 @@ import {
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
+import { toAmount, toAmountWithPrefix } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight, Profile2User } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
@@ -82,14 +83,21 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const ClientOverview = ({ data }: { data: Transaction[] }) => {
+export const ClientOverview = ({
+  data,
+  stats = 0,
+}: {
+  data: Transaction[];
+  stats?: number;
+}) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
         title="Total Clients"
         icon={<Profile2User size="24" color="#9747FF" />}
-        data="23.8B"
+        data={toAmountWithPrefix(stats, false)}
+        value={"Total clients - " + toAmount(stats, false)}
         theme=""
         onClick={toggleModal}
       />
@@ -114,7 +122,6 @@ export const ClientOverview = ({ data }: { data: Transaction[] }) => {
                 <p className="text-grey-400">Closed sales</p>
                 <p className="text-grey-600">₦51,208,009</p>
               </div>
-             
             </div>
 
             <div className="flex items-baseline justify-between w-full gap-4">

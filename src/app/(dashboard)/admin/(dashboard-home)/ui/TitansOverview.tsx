@@ -6,6 +6,7 @@ import {
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
+import { toAmount, toAmountWithPrefix } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight } from "iconsax-react";
 import { ChevronRight, Network } from "lucide-react";
@@ -47,7 +48,6 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
 
- 
   {
     id: "actions",
     cell: ({ row }) => {
@@ -63,15 +63,21 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const TitansOverview = ({ data }: { data: Transaction[] }) => {
+export const TitansOverview = ({
+  data,
+  stats = 0,
+}: {
+  data: Transaction[];
+  stats?: number;
+}) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
         title="Total titans"
         icon={<Network size="24" color="#926667" className="rotate-90" />}
-        data="23.8B"
-        theme=""
+        data={toAmountWithPrefix(stats, false)}
+        value={"Total titans - " + toAmount(stats, false)}
         onClick={toggleModal}
       />
 
