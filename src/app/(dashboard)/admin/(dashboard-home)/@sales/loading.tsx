@@ -1,6 +1,6 @@
 const Loading = () => {
   return (
-    <>
+    <div className="flex flex-1 flex-col">
       <div className="flex items-center animate-pulse justify-between p-4  w-full gap-4">
         <div className="flex flex-col">
           <p className="text-sm font-semibold">Revenue</p>
@@ -11,10 +11,9 @@ const Loading = () => {
           <p className="text-xs">Last 1 year</p>
         </div>
       </div>
-      <div className="flex flex-1 animate-pulse w-full my-4 p-1 overflow-x-auto">
-        <span className="m-auto text-grey-300 animate-pulse">Loading...</span>
-      </div>
-    </>
+
+      <span className="m-auto text-grey-300 animate-pulse loader" />
+    </div>
   );
 };
 

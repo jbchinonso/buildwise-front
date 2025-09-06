@@ -244,6 +244,7 @@ export const toAmount = (value: string | number, isCurrency = true) => {
   }
   const formatter = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
   });
   if (isCurrency) {
     return "₦" + formatter.format(Number(value));

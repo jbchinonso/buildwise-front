@@ -5,11 +5,12 @@ import {
   PageModal,
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader } from "@/components/ui";
-import { useModal } from "@/lib/hooks";
+import { useClientFetch, useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, House } from "lucide-react";
 import { PropertiesSold } from "./PropertiesSold";
 import { toAmount, toAmountWithPrefix } from "@/lib/utils";
+import { dashboardService } from "@/lib/services/dashboard.service";
 
 type Transaction = {
   id: string;
@@ -25,18 +26,18 @@ type Transaction = {
 
 const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "client",
+    accessorKey: "clientName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    cell: ({ row }) => <div>{row.getValue("clientName")}</div>,
   },
   {
-    accessorKey: "property",
+    accessorKey: "propertyName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Property" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    cell: ({ row }) => <div>{row.getValue("propertyName")}</div>,
   },
   {
     accessorKey: "location",
@@ -53,11 +54,11 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("last_payment")}</div>,
   },
   {
-    accessorKey: "total_paid",
+    accessorKey: "paid",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Total Paid" />
     ),
-    cell: ({ row }) => <div>{row.getValue("total_paid")}</div>,
+    cell: ({ row }) => <div>{row.getValue("paid")}</div>,
   },
   {
     accessorKey: "outstanding",
@@ -103,6 +104,19 @@ export const SalesOverview = ({
   stats?: number;
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+
+  const {
+    data: salesData,
+    isLoading: isSalesLoading,
+    error: salesError,
+  } = useClientFetch({
+    action: async () => {
+      const res = await dashboardService.getSalesData();
+      return res || [];
+    },
+    isModalOpen,
+  });
+
   return (
     <>
       <DashboardStatsCard
@@ -116,23 +130,35 @@ export const SalesOverview = ({
       {isModalOpen && (
         <PageModal handleClose={closeModal} heading="Total Sales Overview">
           <section className="flex flex-col w-full gap-4 ">
-            <PropertiesSold />
+            {isSalesLoading ? (
+              <span className="loader m-auto my-10" />
+            ) : (
+              <PropertiesSold chartData={salesData?.monthlySales || []} />
+            )}
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-400">Property sold</p>
+                <p className="text-grey-600">
+                  {toAmount(salesData?.propertySold || 0, false)}
+                </p>
+              </div>
+              <div className="flex flex-col flex-[25] gap-2">
+                <p className="text-grey-400">Completed purchase</p>
+                <p className="text-grey-600">
+                  {toAmount(salesData?.completedPurchase || 0, false)}
+                </p>
+              </div>
+              <div className="flex flex-col flex-[25] gap-2">
+                <p className="text-grey-400">Ongoing instalment</p>
+                <p className="text-grey-600">
+                  {toAmount(salesData?.ongoingInstalment || 0)}
+                </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
-              </div>
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
-              </div>
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-600">
+                  {toAmount(salesData?.totalRevenue || 0)}
+                </p>
               </div>
             </div>
 
@@ -148,7 +174,10 @@ export const SalesOverview = ({
             </div>
 
             <div className="w-full my-2">
-              <DataTable columns={columns} data={data} />
+              <DataTable
+                columns={columns}
+                data={salesData?.recentSales || []}
+              />
             </div>
 
             <div className="flex justify-end gap-4 items-center">

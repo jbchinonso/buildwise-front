@@ -59,17 +59,21 @@ class DashboardService {
 
   chartDTO = (
     data: {
+      _id: string;
       date: string;
       totalSales: number;
       totalRevenue: number;
+      revenue: number;
     }[]
   ) =>
     data?.map((item) => ({
-      month: Date.parse(item.date)
-        ? new Date(item.date).toLocaleString("default", { month: "long" })
-        : item.date,
+      month: Date.parse(item.date || item?._id)
+        ? new Date(item.date || item?._id).toLocaleString("default", {
+            month: "long",
+          })
+        : item.date || item?._id,
       sales: item.totalSales,
-      revenue: item.totalRevenue,
+      revenue: item?.totalRevenue || item?.revenue,
     }));
 
   async getDashboarSalesChart(
@@ -106,6 +110,42 @@ class DashboardService {
     } catch (error) {
       return { error: getError(error) };
       throw new Error(getError(error));
+    }
+  }
+
+  async getRevenueData() {
+    try {
+      const response = await authFetch(`/dashboard/total-revenue`, {
+        next: {
+          revalidate: 8400,
+          tags: [CACHETAGS.sales],
+        },
+      });
+
+      return {
+        ...response,
+        monthlyRevenue: this.chartDTO(response.monthlyRevenue || []),
+      };
+    } catch (error) {
+      return { error: getError(error) };
+    }
+  }
+
+  async getSalesData() {
+    try {
+      const response = await authFetch(`/dashboard/total-sales`, {
+        next: {
+          revalidate: 8400,
+          tags: [CACHETAGS.sales],
+        },
+      });
+
+      return {
+        ...response,
+        monthlySales: this.chartDTO(response.monthlySales || []),
+      };
+    } catch (error) {
+      return { error: getError(error) };
     }
   }
 }

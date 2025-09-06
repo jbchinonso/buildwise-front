@@ -30,16 +30,26 @@ export function RevenueChart({
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart accessibilityLayer data={chartData}>
-        <Bar dataKey="revenue" fill="var(--color-revenue)" radius={4} />
+        <Bar
+          dataKey="revenue"
+          fill="var(--color-revenue)"
+          radius={4}
+          widths={50}
+          width={50}
+        />
         <XAxis
           dataKey="month"
           tickMargin={10}
+          widths={50}
+          width={50}
           tickFormatter={(value) => value.slice(0, 3)}
         />
         <YAxis
           dataKey="revenue"
           tickMargin={0}
-          tickFormatter={(value) => toAmountWithPrefix(value||0)}
+          widths={50}
+          width={50}
+          tickFormatter={(value) => toAmountWithPrefix(value || 0)}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
       </BarChart>
