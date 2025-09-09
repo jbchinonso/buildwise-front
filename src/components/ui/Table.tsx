@@ -129,7 +129,9 @@ function DataTableColumnHeader<TData, TValue>({
   }
 
   return (
-    <div className={cn("flex items-center space-x-2 text-sm", className)}>
+    <div
+      className={cn("flex items-center space-x-2 text-sm", className)}
+    >
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
@@ -147,7 +149,7 @@ function DataTableColumnHeader<TData, TValue>({
             )}
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
+        <DropdownMenuContent align="start" className="!z-[999] ">
           <DropdownMenuItem onClick={() => column.toggleSorting(false)}>
             <ArrowUp className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Asc

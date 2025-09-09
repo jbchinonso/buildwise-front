@@ -2,21 +2,19 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/dashboard";
-import { DataTableColumnHeader, Button } from "@/components/ui";
+import { DataTableColumnHeader } from "@/components/ui";
 import { ChevronRight } from "lucide-react";
 import { ArrowRight } from "iconsax-react";
 import Link from "next/link";
+import { toAmount } from "@/lib/utils";
 
 type Transaction = {
-  id: string;
   client: string;
   property: string;
-  location: string;
-  last_payment: string;
-  totalPaid: string;
-  outstanding: string;
-  instalment: string;
-  payment_status: string;
+  totalPaid: number;
+  outstanding?: number;
+  instalment?: number;
+  paymentStatus?: string;
 };
 
 const columns: ColumnDef<Transaction>[] = [
@@ -49,32 +47,32 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("last_payment")}</div>,
   },
   {
-    accessorKey: "total_paid",
+    accessorKey: "totalPaid",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Total Paid" />
     ),
-    cell: ({ row }) => <div>{row.getValue("total_paid")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("totalPaid") || 0)}</div>,
   },
   {
     accessorKey: "outstanding",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Outstanding" />
     ),
-    cell: ({ row }) => <div>{row.getValue("outstanding")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("outstanding") || 0)}</div>,
   },
   {
     accessorKey: "instalment",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Instalment" />
     ),
-    cell: ({ row }) => <div>{row.getValue("instalment")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("instalment") || 0)}</div>,
   },
   {
-    accessorKey: "payment_status",
+    accessorKey: "paymentStatus",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Payment status" />
     ),
-    cell: ({ row }) => <div>{row.getValue("payment_status")}</div>,
+    cell: ({ row }) => <div>{row.getValue("paymentStatus")}</div>,
   },
   {
     id: "actions",
@@ -91,7 +89,13 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const RecentTransactions = ({ data }: { data: Transaction[] }) => {
+export const RecentTransactions = ({
+  data,
+  error,
+}: {
+  data: Transaction[];
+  error?: string;
+}) => {
   return (
     <section className="flex flex-col w-full">
       <div className="flex items-baseline justify-between w-full gap-4">
@@ -105,7 +109,15 @@ export const RecentTransactions = ({ data }: { data: Transaction[] }) => {
         </Link>
       </div>
 
-      <DataTable columns={columns} data={data} />
+      {!error ? (
+        <DataTable columns={columns} data={data} />
+      ) : (
+        <div className="w-full flex p-4 bg-white rounded-lg mt-4 border border-grey-50 min-h-[200px]">
+          <p className="text-sm text-red-500 m-auto">
+            There was an error fetching transactions
+          </p>
+        </div>
+      )}
     </section>
   );
 };

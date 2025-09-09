@@ -190,6 +190,48 @@ export function myImageLoader({
   )}&w=${width}&q=${quality || 75}`;
 }
 
+export const toAmountWithPrefix = (value: string | number, isCurrency = true) => {
+  const numValue = Number(value);
+
+  // If the value is not a valid number, return the original string.
+  if (isNaN(numValue)) {
+    return String(value);
+  }
+
+  let formattedValue;
+  let suffix = "";
+
+  // Handle numbers in the billions.
+  if (Math.abs(numValue) >= 1_000_000_000) {
+    formattedValue = numValue / 1_000_000_000;
+    suffix = "B";
+  } 
+  // Handle numbers in the millions.
+  else if (Math.abs(numValue) >= 1_000_000) {
+    formattedValue = numValue / 1_000_000;
+    suffix = "M";
+  } 
+  // Handle numbers in the thousands.
+  else if (Math.abs(numValue) >= 1_000) {
+    formattedValue = numValue / 1_000;
+    suffix = "K";
+  } 
+  // For numbers less than 1000, keep the original value.
+  else {
+    formattedValue = numValue;
+  }
+
+  // Format the number to one decimal place to avoid very long numbers after division.
+  const formatter = new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 1, 
+  });
+
+  const finalFormattedString = formatter.format(formattedValue) + suffix;
+
+  return isCurrency ? "₦" + finalFormattedString : finalFormattedString;
+};
+
 /**
  * Converts a string or number to a currency string
  *
@@ -198,13 +240,14 @@ export function myImageLoader({
  */
 export const toAmount = (value: string | number, isCurrency = true) => {
   if (isNaN(Number(value))) {
-    return value;
+    return value as string;
   }
   const formatter = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
   });
   if (isCurrency) {
-    return "₦ " + formatter.format(Number(value));
+    return "₦" + formatter.format(Number(value));
   }
   return formatter.format(Number(value));
 };

@@ -1,33 +1,34 @@
 "use client";
 
-import { Bar, BarChart, Line, LineChart, XAxis, YAxis } from "recharts";
+import { Line, LineChart, XAxis, YAxis } from "recharts";
 
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-
-const chartData = [
-  { month: "January", revenue: 186 },
-  { month: "February", revenue: 305 },
-  { month: "March", revenue: 237 },
-  { month: "April", revenue: 73 },
-  { month: "May", revenue: 209 },
-  { month: "June", revenue: 214 },
-];
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { toAmountWithPrefix } from "@/lib/utils";
 
 const chartConfig = {
-  revenue: {
-    label: "revenue",
+  sales: {
+    label: "sales",
     color: "#1FDBF4",
   },
 } satisfies ChartConfig;
 
-export function PropertiesSold() {
+export function PropertiesSold({
+  chartData,
+}: {
+  chartData?: { month: string; sales: number }[];
+}) {
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] min-w-full">
       <LineChart accessibilityLayer data={chartData}>
         <Line
-          dataKey="revenue"
+          dataKey="sales"
           type="linear"
-          stroke="var(--color-revenue)"
+          stroke="var(--color-sales)"
           strokeWidth={2}
           dot={false}
         />
@@ -37,9 +38,9 @@ export function PropertiesSold() {
           tickFormatter={(value) => value.slice(0, 3)}
         />
         <YAxis
-          dataKey="revenue"
+          dataKey="sales"
           tickMargin={0}
-          tickFormatter={(value) => value + "m"}
+          tickFormatter={(value) => toAmountWithPrefix(value || 0, false)}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
       </LineChart>
