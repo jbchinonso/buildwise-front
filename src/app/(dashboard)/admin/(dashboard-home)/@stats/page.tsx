@@ -11,10 +11,10 @@ const TitanStats = async () => {
 
   return (
     <>
-      <RevenueOverview data={data} stats={data?.totalRevenue} />
-      <SalesOverview data={data as any} stats={data?.totalSales} />
-      <TitansOverview data={data as any} stats={data?.titanCount} />
-      <ClientOverview data={data as any} stats={data?.clientCount} />
+      <RevenueOverview stats={data?.totalRevenue} />
+      <SalesOverview stats={data?.totalSales} />
+      <TitansOverview stats={data?.titanCount} />
+      <ClientOverview stats={data?.clientCount} />
     </>
   );
 };

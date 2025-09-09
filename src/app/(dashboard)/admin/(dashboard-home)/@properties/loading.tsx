@@ -1,3 +1,5 @@
+import { Skeleton } from "@/components/ui";
+
 const Loading = () => {
   return (
     <>
@@ -11,9 +13,7 @@ const Loading = () => {
           <p className="text-xs">Last 1 year</p>
         </div>
       </div>
-      <div className="flex flex-1 animate-pulse w-full my-4 p-1 overflow-x-auto">
-        <span className="m-auto text-grey-300 animate-pulse">Loading...</span>
-      </div>
+      <Skeleton className="h-60" />
     </>
   );
 };

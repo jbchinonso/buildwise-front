@@ -15,7 +15,7 @@
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(27.719% 0.07627 150.056 / 0.272);
+  --muted: oklch(38.666% 0.00004 271.152 / 0.102);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
@@ -39,6 +39,7 @@
 }
 
 @custom-variant data-active (&[data-ui~="active"]);
+@custom-variant data-loading (&[data-ui~="loading"]);
 
 @theme inline {
   /* colors */

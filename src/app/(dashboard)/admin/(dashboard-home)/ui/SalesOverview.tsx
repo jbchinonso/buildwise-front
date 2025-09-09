@@ -4,7 +4,7 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-import { Button, DataTableColumnHeader } from "@/components/ui";
+import { Button, DataTableColumnHeader, Skeleton } from "@/components/ui";
 import { useClientFetch, useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, House } from "lucide-react";
@@ -96,13 +96,7 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const SalesOverview = ({
-  data,
-  stats = 0,
-}: {
-  data: Transaction[];
-  stats?: number;
-}) => {
+export const SalesOverview = ({ stats = 0 }: { stats?: number }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
 
   const {
@@ -131,36 +125,42 @@ export const SalesOverview = ({
         <PageModal handleClose={closeModal} heading="Total Sales Overview">
           <section className="flex flex-col w-full gap-4 ">
             {isSalesLoading ? (
-              <span className="loader m-auto my-10" />
+              <Skeleton className="h-60 w-full rounded-xl">
+                <span className="loader m-auto my-10" />
+              </Skeleton>
             ) : (
               <PropertiesSold chartData={salesData?.monthlySales || []} />
             )}
-            <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Property sold</p>
-                <p className="text-grey-600">
-                  {toAmount(salesData?.propertySold || 0, false)}
-                </p>
+            {isSalesLoading ? (
+              <Skeleton className="h-24 w-full rounded-xl" />
+            ) : (
+              <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
+                <div className="flex flex-col flex-[25] gap-2">
+                  <p className="text-grey-400">Property sold</p>
+                  <p className="text-grey-600">
+                    {toAmount(salesData?.propertySold || 0, false)}
+                  </p>
+                </div>
+                <div className="flex flex-col flex-[25] gap-2">
+                  <p className="text-grey-400">Completed purchase</p>
+                  <p className="text-grey-600">
+                    {toAmount(salesData?.completedPurchase || 0, false)}
+                  </p>
+                </div>
+                <div className="flex flex-col flex-[25] gap-2">
+                  <p className="text-grey-400">Ongoing instalment</p>
+                  <p className="text-grey-600">
+                    {toAmount(salesData?.ongoingInstalment || 0)}
+                  </p>
+                </div>
+                <div className="flex flex-col flex-[25] gap-2">
+                  <p className="text-grey-400">Total revenue</p>
+                  <p className="text-grey-600">
+                    {toAmount(salesData?.totalRevenue || 0)}
+                  </p>
+                </div>
               </div>
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Completed purchase</p>
-                <p className="text-grey-600">
-                  {toAmount(salesData?.completedPurchase || 0, false)}
-                </p>
-              </div>
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Ongoing instalment</p>
-                <p className="text-grey-600">
-                  {toAmount(salesData?.ongoingInstalment || 0)}
-                </p>
-              </div>
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">
-                  {toAmount(salesData?.totalRevenue || 0)}
-                </p>
-              </div>
-            </div>
+            )}
 
             <div className="flex items-baseline justify-between w-full gap-4">
               <h2 className="font-semibold text-grey-600">Recent Sales</h2>
@@ -173,18 +173,29 @@ export const SalesOverview = ({
               </Link> */}
             </div>
 
-            <div className="w-full my-2">
-              <DataTable
-                columns={columns}
-                data={salesData?.recentSales || []}
-              />
-            </div>
+            {isSalesLoading ? (
+              <>
+                <Skeleton className="h-8" />
+                <Skeleton className="h-8" />
+                <Skeleton className="h-8" />
+                <Skeleton className="h-8" />
+              </>
+            ) : (
+              <div className="w-full my-2">
+                <DataTable
+                  columns={columns}
+                  data={salesData?.recentSales || []}
+                />
+              </div>
+            )}
 
             <div className="flex justify-end gap-4 items-center">
               <Button size="xs" outline variant="secondary">
                 Close
               </Button>
-              <Button size="xs">Export PDF</Button>
+              <Button disabled={isSalesLoading} size="xs">
+                Export PDF
+              </Button>
             </div>
           </section>
         </PageModal>

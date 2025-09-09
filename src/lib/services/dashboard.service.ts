@@ -148,6 +148,58 @@ class DashboardService {
       return { error: getError(error) };
     }
   }
+
+  async getAgentData() {
+    try {
+      const response = await authFetch(`/dashboard/agent-overview`, {
+        next: {
+          revalidate: 8400,
+          tags: [CACHETAGS.titans],
+        },
+      });
+
+      return response as {
+        totalTitans: number;
+        activeTitans: number;
+        commissionsEarned: number;
+        commissionsPaidOut: number;
+        recentlyOnboardedAgents: {
+          titan: string;
+          upline: string;
+          joined: string;
+        }[];
+      };
+    } catch (error) {
+      throw new Error(getError(error));
+      // return { error: getError(error) };
+    }
+  }
+  
+  async getClientData() {
+    try {
+      const response = await authFetch(`/dashboard/client-overview`, {
+        next: {
+          revalidate: 8400,
+          tags: [CACHETAGS.clients],
+        },
+      });
+
+      return response as {
+        allClients: number;
+        activeBuyers: number;
+        closedSales: number;
+        recentlyOnboardedClients: {
+          clientName: string;
+          propertiesBought: string;
+          payment: string;
+          joined: string;
+        }[];
+      };
+    } catch (error) {
+      throw new Error(getError(error));
+      // return { error: getError(error) };
+    }
+  }
 }
 
 export const dashboardService = new DashboardService();

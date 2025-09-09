@@ -13,3 +13,4 @@ export * from "./select";
 export * from "./RecoverPasswordModal";
 export * from "./Modal";
 export * from "./CardError";
+export * from "./Skeleton";

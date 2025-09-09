@@ -1,3 +1,5 @@
+import { Skeleton } from "@/components/ui";
+
 const Loading = () => {
   return (
     <div className="flex flex-1 flex-col">
@@ -12,7 +14,7 @@ const Loading = () => {
         </div>
       </div>
 
-      <span className="m-auto text-grey-300 animate-pulse loader" />
+      <Skeleton className="h-60" />
     </div>
   );
 };

@@ -4,8 +4,9 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-import { Button, DataTableColumnHeader } from "@/components/ui";
-import { useModal } from "@/lib/hooks";
+import { Button, DataTableColumnHeader, Skeleton } from "@/components/ui";
+import { useClientFetch, useModal } from "@/lib/hooks";
+import { dashboardService } from "@/lib/services/dashboard.service";
 import { toAmount, toAmountWithPrefix } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight } from "iconsax-react";
@@ -13,39 +14,37 @@ import { ChevronRight, Network } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-type Transaction = {
-  id: string;
-  client: string;
-  property: string;
-  location: string;
-  last_payment: string;
-  totalPaid: string;
-  outstanding: string;
-  instalment: string;
-  payment_status: string;
+type Agent = {
+  titan: string;
+  upline: string;
+  joined: string;
 };
 
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<Agent>[] = [
   {
-    accessorKey: "client",
+    accessorKey: "titan",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Client" />
+      <DataTableColumnHeader column={column} title="Titan" />
     ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("titan")}</div>
+    ),
   },
   {
-    accessorKey: "property",
+    accessorKey: "upline",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Property" />
+      <DataTableColumnHeader column={column} title="Upline" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("upline")}</div>
+    ),
   },
   {
-    accessorKey: "location",
+    accessorKey: "joined",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Location" />
+      <DataTableColumnHeader column={column} title="Joined" />
     ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
+    cell: ({ row }) => <div>{row.getValue("joined")}</div>,
   },
 
   {
@@ -63,14 +62,20 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const TitansOverview = ({
-  data,
-  stats = 0,
-}: {
-  data: Transaction[];
-  stats?: number;
-}) => {
+export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+
+  const {
+    data: agentData,
+    isLoading: isAgentLoading,
+    error: agentError,
+  } = useClientFetch({
+    action: async () => {
+      const res = await dashboardService.getAgentData();
+      return res || [];
+    },
+    isModalOpen,
+  });
   return (
     <>
       <DashboardStatsCard
@@ -87,27 +92,43 @@ export const TitansOverview = ({
           heading="Titans Overview"
           className="max-w-[MIN(95%,620px)]"
         >
-          <section className="flex flex-col w-full gap-4 ">
-            <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">All Titans</p>
-                <p className="text-grey-600">100</p>
+          <section className="flex flex-1 flex-col w-full gap-4 ">
+            {isAgentLoading ? (
+              <Skeleton className="h-20 w-full rounded-xl" />
+            ) : (
+              <div
+                className={
+                  "flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white"
+                }
+              >
+                <div className="flex flex-col flex-[25] gap-2">
+                  <p className="text-grey-400">All Titans</p>
+                  <p className="text-grey-600">
+                    {toAmount(agentData?.totalTitans || 0, false)}
+                  </p>
+                </div>
+                <div className="flex flex-col flex-[25] gap-2">
+                  <p className="text-grey-400">Active Titan</p>
+                  <p className="text-grey-600">
+                    {toAmount(agentData?.activeTitans || 0, false)}
+                  </p>
+                </div>
+                <div className="flex flex-col flex-[25] gap-2">
+                  <p className="text-grey-400">Commissions earned</p>
+                  <p className="text-grey-600">
+                    {toAmount(agentData?.commissionsEarned || 0)}
+                  </p>
+                </div>
+                <div className="flex flex-col flex-[25] gap-2">
+                  <p className="text-grey-400">Commissions paid-out</p>
+                  <p className="text-grey-600">
+                    {toAmount(agentData?.commissionsPaidOut || 0)}
+                  </p>
+                </div>
               </div>
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Active Titan</p>
-                <p className="text-grey-600">208</p>
-              </div>
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Commissions earned</p>
-                <p className="text-grey-600">₦51,208,009</p>
-              </div>
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Commissions paid-out</p>
-                <p className="text-grey-600">₦51,208,009</p>
-              </div>
-            </div>
+            )}
 
-            <div className="flex items-baseline justify-between w-full gap-4">
+            <div className="flex items-baseline justify-between w-full gap-4 mt-6">
               <h2 className="font-semibold text-grey-600">
                 Recently onboarded agents
               </h2>
@@ -120,16 +141,30 @@ export const TitansOverview = ({
               </Link>
             </div>
 
-            <div className="w-full my-2">
-              <DataTable columns={columns} data={data} />
-            </div>
+            {isAgentLoading ? (
+              <>
+                <Skeleton className="h-8" />
+                <Skeleton className="h-8" />
+                <Skeleton className="h-8" />
+                <Skeleton className="h-8" />
+              </>
+            ) : (
+              <div className="w-full">
+                <DataTable
+                  columns={columns}
+                  data={agentData?.recentlyOnboardedAgents || []}
+                />
+              </div>
+            )}
 
-            <div className="flex justify-end gap-4 items-center">
+            <div className="flex mt-auto justify-end gap-4 items-center">
               <Button size="xs" outline variant="secondary">
                 Close
               </Button>
 
-              <Button size="xs">Export PDF</Button>
+              <Button disabled={isAgentLoading} size="xs">
+                Export PDF
+              </Button>
             </div>
           </section>
         </PageModal>
