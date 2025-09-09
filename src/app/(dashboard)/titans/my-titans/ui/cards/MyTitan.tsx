@@ -11,6 +11,7 @@ import { ArrowRight, Profile2User } from "iconsax-react";
 import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 
 type Transaction = {
@@ -173,18 +174,21 @@ const columns: ColumnDef<Transaction>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
+      const router = useRouter(); // keep inside cell scope if using App Router
+      const titanId = row.original.id;
+  
       return (
-        <div className="flex justify-end">
-          <button id="button">
-            <ChevronRight className="size-4" />
-            {/* <span className="sr-only">View details</span> */}
-          </button>
-        </div>
+        <button
+          onClick={() => router.push("/titans/my-titans/titan-profile/")}
+          className="flex items-center justify-center"
+        >
+          <ChevronRight className="size-4 text-gray-500 hover:text-gray-800 transition" />
+        </button>
       );
     },
   },
 ];
-
+// onClick={() => router.push(`/titans/my-titans/titan-profile/${titanId}`)}
 export const MyTitan = ({ data }: { data: Transaction[] }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (

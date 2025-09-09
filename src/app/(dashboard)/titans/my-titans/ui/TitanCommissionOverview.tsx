@@ -58,14 +58,14 @@ export function TitanCommissionOverview() {
       </ChartContainer>
 
       {/* Custom Legend (Flexed Between) */}
-      <div className="flex justify-between my-4 text-sm">
+      <div className="flex justify-between my-5 mx-6 text-sm">
         <div className="flex items-center gap-2 ">
           <span
             className="w-3 h-3 rounded-full"
             style={{ backgroundColor: "#1FDBF4" }}
           ></span>
           <div className="flex flex-col leading-tight">
-            <p className="text-gray-600">Commission from my Titans</p>
+            <p className="text-gray-600 ">Commission from my Titans</p>
             <p className="text-xs text-gray-500">Total: ₦500,050 (60%)</p>
           </div>
         </div>

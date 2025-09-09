@@ -1,54 +1,100 @@
 "use client";
 
 import { DataTable, PageModal } from "@/components/dashboard";
-// import { Button, Input } from "@/components/ui";
 import { useState } from "react";
-import { Button, DataTableColumnHeader, Table,Input } from "@/components/ui";
-import { useModal } from "@/lib/hooks";
-import { ArrowRight, Profile2User } from "iconsax-react";
-import Link from "next/link";
+import { Button, DataTableColumnHeader, Input } from "@/components/ui";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 
 type Transaction = {
-    id: string;
-    titan: string;
-    sales: string;
-    revenue: string;
-    commission: string;
-    joined: string;
-    status: string;
-    // instalment: string;
-    // payment_status: string;
-  };
+  id: string;
+  titan: string;
+  sales: string;
+  revenue: string;
+  commission: string;
+  joined: string;
+  status: string;
+};
+
 const columns: ColumnDef<Transaction>[] = [
     {
-      accessorKey: "titan",
+      accessorKey: "property",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Titan" />
+        <DataTableColumnHeader column={column} title="Property" />
       ),
-      cell: ({ row }) => <div>{row.getValue("titan")}</div>,
+      cell: ({ row }) => <div>{row.getValue("property")}</div>,
     },
     {
-      accessorKey: "sales",
+      accessorKey: "location",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Sales" />
+        <DataTableColumnHeader column={column} title="Location" />
       ),
-      cell: ({ row }) => <div>{row.getValue("sales")}</div>,
+      cell: ({ row }) => <div>{row.getValue("location")}</div>,
     },
     {
-      accessorKey: "revenue",
+      accessorKey: "buyer",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Revenue" />
+        <DataTableColumnHeader column={column} title="Buyer" />
       ),
-      cell: ({ row }) => <div>{row.getValue("revenue")}</div>,
+      cell: ({ row }) => <div>{row.getValue("buyer")}</div>,
     },
     {
-      accessorKey: "commission",
+      accessorKey: "unit",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="My Commission" />
+        <DataTableColumnHeader column={column} title="Unit" />
       ),
-      cell: ({ row }) => <div>{row.getValue("commission")}</div>,
+      cell: ({ row }) => <div>{row.getValue("unit")}</div>,
+    },
+    {
+      accessorKey: "price",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Price" />
+      ),
+      cell: ({ row }) => <div>{row.getValue("price")}</div>,
+    },
+    {
+        accessorKey: "payment status",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Payment Status" />
+        ),
+        cell: ({ row }) => <div>{row.getValue("payment status")}</div>,
+      },
+  
+    {
+      id: "actions",
+      cell: ({ row }) => {
+        return (
+          <div className="flex justify-end">
+            <button id="button">
+              <ChevronRight className="size-4" />
+              <span className="sr-only">View details</span>
+            </button>
+          </div>
+        );
+      },
+    },
+  ];
+  const subTitanColumns: ColumnDef<Transaction>[] = [
+    {
+      accessorKey: "name",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Name" />
+      ),
+      cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    },
+    {
+      accessorKey: "property sold",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Property sold" />
+      ),
+      cell: ({ row }) => <div>{row.getValue("property sold")}</div>,
+    },
+    {
+      accessorKey: "my commission",
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="My commission" />
+      ),
+      cell: ({ row }) => <div>{row.getValue("buyer")}</div>,
     },
     {
       accessorKey: "joined",
@@ -57,13 +103,8 @@ const columns: ColumnDef<Transaction>[] = [
       ),
       cell: ({ row }) => <div>{row.getValue("joined")}</div>,
     },
-    {
-      accessorKey: "status",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Status" />
-      ),
-      cell: ({ row }) => <div>{row.getValue("status")}</div>,
-    },
+    
+  
     {
       id: "actions",
       cell: ({ row }) => {
@@ -79,130 +120,33 @@ const columns: ColumnDef<Transaction>[] = [
     },
   ];
 const titanData: Transaction[] = [
-    {
-      id: "1",
-      titan: "Robert Fox",
-      sales: "--",
-      revenue: "--",
-      commission: "--",
-      joined: "Today",
-      status: "Pending",
-    },
-    {
-      id: "2",
-      titan: "Annette Black",
-      sales: "4",
-      revenue: "₦17,000,000",
-      commission: "₦83,500",
-      joined: "2yrs ago",
-      status: "Active",
-    },
-    {
-      id: "3",
-      titan: "Cody Fisher",
-      sales: "1",
-      revenue: "₦17,000,000",
-      commission: "₦83,500",
-      joined: "1y 5m ago",
-      status: "Suspended",
-    },
-    {
-      id: "4",
-      titan: "Jerome Bell",
-      sales: "3",
-      revenue: "₦17,000,000",
-      commission: "₦83,500",
-      joined: "1y 5m ago",
-      status: "Active",
-    },
-    {
-      id: "5",
-      titan: "Floyd Miles",
-      sales: "3",
-      revenue: "₦17,000,000",
-      commission: "₦83,500",
-      joined: "1y 5m ago",
-      status: "Active",
-    },
-    {
-      id: "6",
-      titan: "Courtney Henry",
-      sales: "3",
-      revenue: "₦17,000,000",
-      commission: "₦83,500",
-      joined: "1y 5m ago",
-      status: "Active",
-    },
-    {
-      id: "7",
-      titan: "Albert Flores",
-      sales: "3",
-      revenue: "₦17,000,000",
-      commission: "₦83,500",
-      joined: "1y 5m ago",
-      status: "Active",
-    },
-    {
-      id: "8",
-      titan: "Jacob Jones",
-      sales: "3",
-      revenue: "₦17,000,000",
-      commission: "₦83,500",
-      joined: "1y 5m ago",
-      status: "Active",
-    },
-    {
-      id: "9",
-      titan: "Arlene McCoy",
-      sales: "3",
-      revenue: "₦17,000,000",
-      commission: "₦83,500",
-      joined: "1y 5m ago",
-      status: "Active",
-    },
-    {
-      id: "10",
-      titan: "Dianne Russell",
-      sales: "3",
-      revenue: "₦17,000,000",
-      commission: "₦83,500",
-      joined: "1y 5m ago",
-      status: "Active",
-    },
-    {
-      id: "11",
-      titan: "Wade Warren",
-      sales: "3",
-      revenue: "₦17,000,000",
-      commission: "₦83,500",
-      joined: "1y 5m ago",
-      status: "Active",
-    },
-  ];
+// existing data
+];
+
 export default function Activities() {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState("");
+  const [modalType, setModalType] = useState<"properties" | "subtitans" | null>(null);
 
-  const openModal = (title: string) => {
-    setModalTitle(title);
+  const openModal = (type: "properties" | "subtitans") => {
+    setModalType(type);
     setModalOpen(true);
   };
 
   const closeModal = () => setModalOpen(false);
 
   return (
-    <form  className="w-full flex flex-wrap justify-between gap-4 gap-x-20">
+    <form className="w-full flex flex-wrap justify-between gap-4">
       <Input
         label="Properties sold"
         value="4"
         name="propertiesSold"
-        id="protertiesSold"
+        id="propertiesSold"
         type="text"
-        labelStyle="text-[#292A2C]"
+        labelStyle="text-[#7A7F83]"
         readOnly
         clickable
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        onClick={() => openModal("Properties Sold")}
+        onClick={() => openModal("properties")}
       />
 
       <Input
@@ -211,85 +155,80 @@ export default function Activities() {
         name="clients"
         id="clients"
         type="text"
-        labelStyle="text-[#292A2C]"
+        labelStyle="text-[#7A7F83]"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
-        <Input
+
+      <Input
         label="Sub-titans"
         value="8"
         name="subtitans"
         id="subtitans"
         type="text"
-        labelStyle="text-[#292A2C]"
+        labelStyle="text-[#7A7F83]"
         readOnly
         clickable
-        onClick={() => openModal("Sub-titans")}
+        onClick={() => openModal("subtitans")}
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
-      
+
       <Input
         label="Total revenue"
         value="₦17,000,000"
-        name="total revenue"
-        id="totalrevenue"
+        name="totalRevenue"
+        id="totalRevenue"
         type="text"
-        labelStyle="text-[#292A2C]"
+        labelStyle="text-[#7A7F83]"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
-      <Input
-       label="My referral commission"
-        value="₦67,000"
-        name="referral commission"
-        id="referral revenue"
-        type="text"
-        labelStyle="text-[#292A2C]"
-        readOnly
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-      />
-      
 
-     {isModalOpen && (
-            <PageModal
-              handleClose={closeModal}
-              heading="My Titans Overview"
-              className="max-w-[MIN(95%,620px)]"
-            >
-              <section className="flex flex-col w-full gap-4 ">
-                <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
-                  <div className="flex flex-col flex-[25] gap-2">
-                    <p className="text-grey-400">My Titans</p>
-                    <p className="text-grey-600 font-medium">15</p>
-                  </div>
-                  <div className="flex flex-col flex-[25] gap-2">
-                    <p className="text-grey-400">Commission from Titans</p>
-                    <p className="text-grey-600 font-medium">300,050</p>
-                  </div>
-                  <div className="flex flex-col flex-[25] gap-2">
-                    <p className="text-grey-400">Titans total revenue</p>
-                    <p className="text-grey-600 font-medium">220,000,000</p>
-                  </div>
-                </div>
-    
-                <div className="flex items-baseline justify-between w-full gap-4">
-                  
-                </div>
-    
-                <div className="w-full my-2">
+      <Input
+        label="My referral commission"
+        value="₦67,000"
+        name="referralCommission"
+        id="referralCommission"
+        type="text"
+        labelStyle="text-[#7A7F83]"
+        readOnly
+        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+      />
+
+      {isModalOpen && (
+        <PageModal
+          handleClose={closeModal}
+          heading={
+            modalType === "properties"
+              ? "Properties Sold"
+              : "Sub-titans"
+          }
+          className="max-w-[MIN(95%,620px)]"
+        >
+          <section className="flex flex-col w-full gap-4">
+            {modalType === "properties" ? (
+              <>
+                <div className="text-sm text-gray-700">
                   <DataTable columns={columns} data={titanData} />
                 </div>
-    
-                <div className="flex justify-end gap-4 items-center">
-                  <Button size="xs" outline variant="secondary">
-                    Close
-                  </Button>
-    
-                  <Button size="xs">Export PDF</Button>
+              </>
+            ) : (
+              <>
+                <div className="text-sm text-gray-700">
+                  <DataTable columns={subTitanColumns} data={titanData} />
                 </div>
-              </section>
-            </PageModal>
-          )}
+              </>
+            )}
+
+            <div className="flex justify-end gap-4 items-center mt-4">
+              <Button size="xs" outline variant="secondary" onClick={closeModal}>
+                Close
+              </Button>
+              <Button size="xs">Export PDF</Button>
+            </div>
+          </section>
+        </PageModal>
+      )}
     </form>
   );
 }

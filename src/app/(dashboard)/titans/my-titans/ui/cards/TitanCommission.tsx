@@ -99,7 +99,7 @@ export const TitanCommission = ({ data }: { data: Transaction[] }) => {
           className="max-w-[MIN(95%,620px)]"
         >
            
-          <section className="flex flex-col w-full gap-4 ">
+          <section className="flex flex-col w-full gap-y-4 ">
           <TitanCommissionOverview/>
            
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">

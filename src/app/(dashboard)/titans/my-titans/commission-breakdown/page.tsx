@@ -1,7 +1,6 @@
 import { CommissionsTable } from "@/app/(dashboard)/titans/titans/ui";
 import { BreadCrumbs, Filters, SearchInput } from "@/components/ui";
 import { getCommissions } from "@/lib/services";
-// import { CommissionsTable } from "../../../ui";
 
 type Params = Promise<{ titan: string }>;
 
