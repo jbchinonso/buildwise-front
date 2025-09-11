@@ -1,5 +1,6 @@
 "use client";
 import { DataTable } from "@/components/dashboard";
+import { DataTableColumnHeader } from "@/components/ui";
 import { ColumnDef } from "@tanstack/react-table";
 import React, { PropsWithChildren } from "react";
 
@@ -20,20 +21,22 @@ const TableHead: React.FC<PropsWithChildren & {title?: string}> = ({ children, t
 const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "property",
-    header: ({ column }) => <TableHead title="Property" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Property" />
+    ),
     cell: ({ row }) => <div>{row.getValue("property")}</div>,
   },
   {
     accessorKey: "commission",
     header: ({ column }) => (
-      <TableHead title="Commission" />
+      <DataTableColumnHeader column={column} title="Commission" />
     ),
     cell: ({ row }) => <div>{row.getValue("commission")}</div>,
   },
   {
     accessorKey: "commission_id",
     header: ({ column }) => (
-      <TableHead title="Commission ID" />
+      <DataTableColumnHeader column={column} title="Commission id" />
     ),
     cell: ({ row }) => <div>{row.getValue("commission_id")}</div>,
   },
@@ -41,7 +44,7 @@ const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => (
-      <TableHead title="Status" />
+      <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => (
       <div
