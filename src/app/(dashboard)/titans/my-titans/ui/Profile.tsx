@@ -5,6 +5,7 @@ import { editTitanProfile } from "@/lib/services";
 import { IUser } from "@/lib/type";
 import { getError, profileValidationSchema, stripFormData } from "@/lib/utils";
 import { useFormik } from "formik";
+import { ChevronRight } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
@@ -54,7 +55,7 @@ const Profile = () => {
           action={onEdit}
           className="w-full flex flex-wrap justify-between gap-4 gap-x-20"
         >
-          <Input
+          {/* <Input
             label="Phone number"
             name="phone"
             id="phone"
@@ -63,8 +64,20 @@ const Profile = () => {
             defaultValue={values.phone}
             labelStyle="text-[#7A7F83]"
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-          />
-    
+          /> */}
+     
+     <Input
+        label="Phone number"
+        name="phone"
+        id="phone"
+        type="text"
+        readOnly
+        // onClick={toggleModal}
+        labelStyle="text-[#7A7F83]"
+        containerStyle="flex-[45%] max-w-[MIN(100%,470px)] cursor-pointer"
+        defaultValue={values.phone}
+        
+      />
           <Input
             label="Email address"
             name="email"
@@ -73,7 +86,7 @@ const Profile = () => {
             type="email"
             labelStyle="text-[#7A7F83]"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)] cursor-pointer"
           />
           <Input
             label="Residential Address"
@@ -81,9 +94,8 @@ const Profile = () => {
             id="address"
             type="text"
             value={values?.address}
-            // placeholder="Enter client residential address"
             labelStyle="text-[#7A7F83]"
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)] cursor-pointer"
           />
     
           <Input
@@ -94,7 +106,7 @@ const Profile = () => {
             value={session?.user?.created_at || "N/A"}
             readOnly
             labelStyle="text-[#7A7F83]"
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="flex-[45%] max-w-[MIN(100%,470px)] cursor-pointer"
           />
         </form>
   );
