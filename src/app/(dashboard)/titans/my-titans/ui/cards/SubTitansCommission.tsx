@@ -6,7 +6,7 @@ import {
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
-import { ArrowRight, Profile2User } from "iconsax-react";
+import { ArrowRight, Money, Moneys, Profile2User } from "iconsax-react";
 import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
@@ -68,8 +68,8 @@ export const SubTitanCommission = ({ data }: { data: Transaction[] }) => {
     <>
       <DashboardStatsCard
         title="Commission from Sub-titans"
-        icon={<Profile2User size="24" color="#1FDBF4" />}
-        data="15"
+        icon={<Moneys size="24" color="#926667" />}
+        data="300k"
         theme=""
         onClick={toggleModal}
       />

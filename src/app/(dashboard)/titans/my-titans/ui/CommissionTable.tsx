@@ -20,53 +20,48 @@ const TableHead: React.FC<PropsWithChildren & {title?: string}> = ({ children, t
 
 const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "date",
+    accessorKey: "property",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date" />
+      <DataTableColumnHeader column={column} title="Property" />
     ),
-    cell: ({ row }) => <div>{row.getValue("date")}</div>,
+    cell: ({ row }) => <div>{row.getValue("property")}</div>,
   },
   {
-    accessorKey: "name",
+    accessorKey: "commission",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title="Commission" />
     ),
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    cell: ({ row }) => <div>{row.getValue("commission")}</div>,
   },
   {
-    accessorKey: "type",
+    accessorKey: "commission_id",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Type" />
+      <DataTableColumnHeader column={column} title="Commission id" />
     ),
-    cell: ({ row }) => <div>{row.getValue("type")}</div>,
+    cell: ({ row }) => <div>{row.getValue("commission_id")}</div>,
   },
-  {
-    accessorKey: "amount",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Amount" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("amount")}</div>,
-  },
- 
+
   {
     accessorKey: "status",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Status" />
     ),
-    cell: ({ row }) => <div>{row.getValue("status")}</div>,
+    cell: ({ row }) => (
+      <div
+        className={`${
+          row.getValue("status") == "Paid" ? "text-[#4FAB15]" : "text-[#F4BB1F]"
+        }`}
+      >
+        {row.getValue("status")}
+      </div>
+    ),
   },
   {
-    id: "actions",
-    cell: ({ row }) => {
-      return (
-        <div className="flex justify-end">
-          <button id="button">
-            {/* <ChevronRight className="size-4" /> */}
-            <span className="sr-only">View details</span>
-          </button>
-        </div>
-      );
-    },
+    accessorKey: "date_paid",
+    header: ({ column }) => (
+      <TableHead title="Date paid" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("date_paid")}</div>,
   },
 ];
 

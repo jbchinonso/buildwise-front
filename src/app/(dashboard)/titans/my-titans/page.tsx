@@ -10,9 +10,7 @@ const { data = [] } = await getTransactions();
   return (
     <>
       <section className="w-full justify-between flex flex-wrap gap-4">
-        {/* <MyTitans/> */}
-        {/* <ActiveTitans />
-        <InActiveTitans /> */}
+    
         <MyTitan data={data}/>
         <TitanCommission data={data}/>
         <SubTitanCommission data={data}/>
@@ -21,7 +19,6 @@ const { data = [] } = await getTransactions();
       <section className="flex flex-wrap gap-4 flex-1 max-h-[601px]">
         <DownlineActivity/>
         <TopPerformingTitans />
-        {/* <CommissionsDue /> */}
       </section>
     </>
   );
