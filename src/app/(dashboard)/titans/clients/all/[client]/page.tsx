@@ -1,6 +1,6 @@
-import { BreadCrumbs, Button, Input, ProfileAvatar } from "@/components/ui";
-import { UpdatePaymentModal, AddPropertyModal } from "../../ui";
-// import { Clients, PropertiesSold, SubTitians } from "./tiles";
+import { BreadCrumbs, Button, Input, Avatar } from "@/components/ui";
+import {  AddPropertyModal } from "../../ui";
+import { getTitanClientProfile } from "@/lib/services";
 
 type Params = Promise<{ client: string }>;
 
@@ -8,15 +8,7 @@ const ClientProfile = async (props: { params: Params }) => {
   const params = await props.params;
   const id = params.client;
 
-  const personalInformation = {
-    phone_number: "070 3456 6543",
-    firstName: "Courtney",
-    lastName: "Henry",
-    email: "AnnetteBlack@gmail.com",
-    state: "Lagos",
-    lga: "Ikeja",
-    residential_address: "2464 Royal Ln. Mesa, New Jersey 45463",
-  };
+  const profile = await getTitanClientProfile(id);
 
   return (
     <section className="flex flex-1 flex-col gap-4">
@@ -30,10 +22,12 @@ const ClientProfile = async (props: { params: Params }) => {
 
       <div className="flex p-2 flex-col gap-8 flex-1 w-full gap max-w-[MIN(100%,1052px)]">
         <div className="flex w-full justify-between gap-4 flex-wrap items-center">
-          <ProfileAvatar name="Annette Black" />
+          <Avatar
+            name={`${profile?.firstName || ""} ${profile?.lastName || ""}`}
+          />
 
           <div className="flex gap-4 items-center">
-            <UpdatePaymentModal />
+            {/* <UpdatePaymentModal /> */}
 
             <Button
               asLink
@@ -59,7 +53,7 @@ const ClientProfile = async (props: { params: Params }) => {
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.firstName}
+            defaultValue={profile?.firstName}
           />
           <Input
             label="Last name"
@@ -68,17 +62,17 @@ const ClientProfile = async (props: { params: Params }) => {
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.lastName}
+            defaultValue={profile?.lastName}
           />
 
           <Input
             label="Phone number"
-            name="phone_number"
-            id="phone_number"
+            name="phoneNumber"
+            id="phoneNumber"
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.phone_number}
+            defaultValue={profile?.phoneNumber}
           />
           <Input
             label="Email Address"
@@ -87,7 +81,7 @@ const ClientProfile = async (props: { params: Params }) => {
             type="email"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.email}
+            defaultValue={profile?.email}
           />
           <Input
             label="State"
@@ -96,7 +90,7 @@ const ClientProfile = async (props: { params: Params }) => {
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.state}
+            defaultValue={profile?.state}
           />
           <Input
             label="LGA"
@@ -105,17 +99,17 @@ const ClientProfile = async (props: { params: Params }) => {
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.lga}
+            defaultValue={profile?.lga}
           />
 
           <Input
             label="Residential address"
-            name="residential_address"
-            id="residential_address"
+            name="residentialAddress"
+            id="residentialAddress"
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={personalInformation.residential_address}
+            defaultValue={profile?.residentialAddress}
           />
         </div>
         {/* Activities info */}

@@ -18,8 +18,8 @@ import {
   Button,
   Skeleton,
 } from "@/components/ui";
-import { toAmount, toAmountWithPrefix } from "@/lib/utils";
-import { dashboardService } from "@/lib/services/dashboard.service";
+import { toAmount, toAmountWithSuffix } from "@/lib/utils";
+import { getRevenueData } from "@/lib/services/dashboard.service";
 
 type Transaction = {
   id: string;
@@ -120,7 +120,7 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: number }) => {
     error: revenueError,
   } = useClientFetch({
     action: async () => {
-      const res = await dashboardService.getRevenueData();
+      const res = await getRevenueData();
       console.log({ res });
       return res || [];
     },
@@ -132,7 +132,7 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: number }) => {
       <DashboardStatsCard
         title="Total revenue"
         icon={<ArrowDown size="24" color="#70F41F" />}
-        data={toAmountWithPrefix(stats)}
+        data={toAmountWithSuffix(stats)}
         value={"Total revenue - " + toAmount(stats)}
         theme=""
         onClick={toggleModal}
@@ -270,7 +270,7 @@ const RevenueChart = ({
           <YAxis
             dataKey="revenue"
             tickMargin={0}
-            tickFormatter={(value) => toAmountWithPrefix(value || 0)}
+            tickFormatter={(value) => toAmountWithSuffix(value || 0)}
           />
           <ChartTooltip content={<ChartTooltipContent />} />
         </BarChart>

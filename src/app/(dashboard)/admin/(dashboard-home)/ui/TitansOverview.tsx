@@ -6,8 +6,8 @@ import {
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader, Skeleton } from "@/components/ui";
 import { useClientFetch, useModal } from "@/lib/hooks";
-import { dashboardService } from "@/lib/services/dashboard.service";
-import { toAmount, toAmountWithPrefix } from "@/lib/utils";
+import { getAgentData } from "@/lib/services/dashboard.service";
+import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight } from "iconsax-react";
 import { ChevronRight, Network } from "lucide-react";
@@ -71,7 +71,7 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
     error: agentError,
   } = useClientFetch({
     action: async () => {
-      const res = await dashboardService.getAgentData();
+      const res = await getAgentData();
       return res || [];
     },
     isModalOpen,
@@ -81,7 +81,7 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
       <DashboardStatsCard
         title="Total titans"
         icon={<Network size="24" color="#926667" className="rotate-90" />}
-        data={toAmountWithPrefix(stats, false)}
+        data={toAmountWithSuffix(stats, false)}
         value={"Total titans - " + toAmount(stats, false)}
         onClick={toggleModal}
       />

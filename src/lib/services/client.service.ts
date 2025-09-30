@@ -4,7 +4,14 @@ import { revalidateTag } from "next/cache";
 import { baseUrl, getError } from "../utils";
 import { authFetch } from "./auth.service";
 import { URLSearchParams } from "url";
-import { IClientOverview, IClientRecentlyReserved } from "../type";
+import {
+  IClientOverview,
+  IClientRecentlyReserved,
+  IClientRecentTransactions,
+  IPaymentHistorySales,
+  IPaymentHistoryTransactionDTO,
+  IUser,
+} from "../type";
 
 export const getAllClients = async (
   params: {
@@ -21,7 +28,6 @@ export const getAllClients = async (
     });
 
     const url = `/clients/get-details/?${query.toString()}`;
-
 
     const { data, pagination } = await authFetch(
       url,
@@ -139,6 +145,109 @@ export const getClientRecentlyReserved = async () => {
     });
 
     return response as IClientRecentlyReserved[];
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getTitanClientRecentTransactions = async () => {
+  try {
+    const response = await authFetch("/titans/recent-transactions", {
+      next: {
+        tags: ["transactions"],
+        revalidate: 8400,
+      },
+    });
+
+    return response as IClientRecentTransactions[];
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getAllTitanClients = async () => {
+  try {
+    const response = await authFetch("/titans/all-client", {
+      next: {
+        tags: ["clients"],
+        revalidate: 8400,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getTitanClientProfile = async (id: string) => {
+  try {
+    const response = await authFetch(`/clients/personal-info/${id}`, {
+      next: {
+        tags: ["clients-" + id],
+        revalidate: 8400,
+      },
+    });
+
+    return response as {
+      _id: string;
+      firstName: string;
+      lastName: string;
+      state: string;
+      lga: string;
+      phoneNumber: string;
+      email: string;
+      residentialAddress: string;
+    };
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getTitanClientPaymentHistory = async (id: string) => {
+  try {
+    const response = await authFetch(`/clients/${id}/payment-history`, {
+      next: {
+        tags: ["clients-" + id + "-payment", "payments"],
+        revalidate: 8400,
+      },
+    });
+
+    const sales = response?.sales as IPaymentHistorySales[];
+
+    const uniquePropertiesMap = new Map();
+
+    const allTransactions =
+      sales.reduce((acc, cv) => {
+        const transactions = cv?.transactions?.map((v) => {
+          return {
+            propertyId: cv?.property?._id,
+            property: cv?.property?.name,
+            date: v?.createdAt,
+            amount: v?.amountPaid,
+            plotNumber: cv?.plotNumber,
+            status: v?.status,
+            id: v?._id,
+          };
+        });
+
+        const propertyId = cv.property?._id;
+        const propertyName = cv.property?.name;
+
+        if (!uniquePropertiesMap.has(propertyId)) {
+          uniquePropertiesMap.set(propertyId, {
+            propertyId,
+            propertyName,
+          });
+        }
+
+        return [...acc, ...transactions];
+      }, [] as IPaymentHistoryTransactionDTO[]) || [];
+
+    return {
+      allTransactions,
+      properties: Array.from(uniquePropertiesMap.values()) || [],
+    };
   } catch (error) {
     throw getError(error);
   }

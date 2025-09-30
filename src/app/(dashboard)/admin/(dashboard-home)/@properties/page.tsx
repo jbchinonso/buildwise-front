@@ -1,8 +1,8 @@
 import { PropertiesSold } from "../ui";
-import { dashboardService } from "@/lib/services/dashboard.service";
+import { getDashboarSalesChart } from "@/lib/services/dashboard.service";
 
 const PropertiesChart = async () => {
-  const { data } = await dashboardService.getDashboarSalesChart();
+  const { data } = await getDashboarSalesChart();
   return (
     <div className="rounded-2xl min-w-[MIN(100%,518px)] bg-white w-full flex-1 border border-grey-50">
       <div className="flex items-center justify-between p-4  w-full gap-4">

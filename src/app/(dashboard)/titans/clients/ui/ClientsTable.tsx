@@ -1,27 +1,27 @@
 "use client";
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
+import { IClientRecentTransactions } from "@/lib/type";
+import { toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-type Client = {
-  id: string;
-  client: string;
-  location: string;
-  properties: number;
-  last_payment: string;
-  payment_status: string;
-  joined: string;
-};
-
-const columns: ColumnDef<Client>[] = [
+const columns: ColumnDef<IClientRecentTransactions>[] = [
   {
-    accessorKey: "client",
+    accessorKey: "clientName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    cell: ({ row }) => <div>{row.getValue("clientName")}</div>,
+  },
+
+  {
+    accessorKey: "propertyName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Properties" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("propertyName")}</div>,
   },
   {
     accessorKey: "location",
@@ -31,60 +31,56 @@ const columns: ColumnDef<Client>[] = [
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
   {
-    accessorKey: "properties",
+    accessorKey: "lastPayment",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Properties" />
+      <DataTableColumnHeader column={column} title="Last Payment" />
     ),
-    cell: ({ row }) => <div>{row.getValue("properties")}</div>,
+    cell: ({ row }) => <div>{row.getValue("lastPayment")}</div>,
   },
 
   {
-    accessorKey: "last_payment",
+    accessorKey: "totalPaid",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Last payment" />
+      <DataTableColumnHeader column={column} title="Total Paid" />
     ),
-    cell: ({ row }) => <div>{row.getValue("last_payment")}</div>,
+    cell: ({ row }) => <div>{row.getValue("totalPaid")}</div>,
   },
-  {
-    accessorKey: "payment_status",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Payment Status" />
-    ),
-    cell: ({ row }) => (
-      <div
-        className={`text-center ${
-          row.getValue("payment_status") == "Active" ? "text-[#09A4B9]" : ""
-        }`}
-      >
-        {row.getValue("payment_status")}
-      </div>
-    ),
-  },
+
   {
     accessorKey: "outstanding",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Outstanding" />
     ),
-    cell: ({ row }) => <div>{row.getValue("outstanding")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("outstanding") || 0)}</div>,
   },
   {
-    accessorKey: "joined",
+    accessorKey: "instalment",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Joined" />
+      <DataTableColumnHeader column={column} title="Instalment" />
     ),
-    cell: ({ row }) => <div>{row.getValue("joined")}</div>,
+    cell: ({ row }) => <div>{row.getValue("instalment")}</div>,
+  },
+
+  {
+    accessorKey: "paymentStatus",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Payment Status" />
+    ),
+    cell: ({ row }) => (
+      <div className={"text-center"}>{row.getValue("paymentStatus")}</div>
+    ),
   },
 
   {
     // id: "actions",
-    accessorKey: "id",
+    accessorKey: "_id",
     header: () => null,
     cell: ({ row }) => {
-      const id = String(row.getValue("id")) || String(row?.id);
+      const id = String(row.getValue("_id")) || String(row?.id);
 
       return (
         <div className="flex justify-center px-4">
-          <Link href={`/admin/clients/all/${id}`} id="button">
+          <Link href={`clients/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
           </Link>
@@ -94,6 +90,10 @@ const columns: ColumnDef<Client>[] = [
   },
 ];
 
-export const ClientsTable = ({ data = [] }: { data: Client[] }) => {
+export const ClientsTable = ({
+  data = [],
+}: {
+  data: IClientRecentTransactions[];
+}) => {
   return <DataTable columns={columns} data={data} />;
 };

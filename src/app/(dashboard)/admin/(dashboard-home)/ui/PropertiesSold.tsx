@@ -8,7 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { toAmountWithPrefix } from "@/lib/utils";
+import { toAmountWithSuffix } from "@/lib/utils";
 
 const chartConfig = {
   sales: {
@@ -40,7 +40,7 @@ export function PropertiesSold({
         <YAxis
           dataKey="sales"
           tickMargin={0}
-          tickFormatter={(value) => toAmountWithPrefix(value || 0, false)}
+          tickFormatter={(value) => toAmountWithSuffix(value || 0, false)}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
       </LineChart>

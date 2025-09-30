@@ -190,7 +190,7 @@ export function myImageLoader({
   )}&w=${width}&q=${quality || 75}`;
 }
 
-export const toAmountWithPrefix = (value: string | number, isCurrency = true) => {
+export const toAmountWithSuffix = (value: string | number, isCurrency = true) => {
   const numValue = Number(value);
 
   // If the value is not a valid number, return the original string.

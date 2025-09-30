@@ -264,6 +264,17 @@ interface IClientRecentlyReserved {
   dateReserved: string;
 }
 
+interface IClientRecentTransactions {
+  _id: string;
+  totalPaid: number;
+  outstanding: number;
+  clientName: string;
+  propertyName: string;
+  location: string;
+  instalment: string;
+  paymentStatus: string;
+}
+
 interface IClientPaymentData {
   clientName: string;
   units: string;
@@ -299,4 +310,41 @@ interface ITitans {
   indirectReferrals: number;
   totalReferrals: number;
   totalEarnings: number;
+}
+
+interface IPaymentHistoryTransaction {
+  _id: string;
+  description: string;
+  status: string;
+  partialPaymentForSale: boolean;
+  date: Date | string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  totalPaid: number;
+  amountPaid: number;
+  outstanding: number;
+}
+
+interface IPaymentHistorySales {
+  _id: string;
+  property: {
+    _id: string;
+    name: string;
+  };
+  plotNumber: number;
+  unitNumber: string;
+  price: string;
+  transactions: IPaymentHistoryTransaction[];
+  totalPaid: number;
+  outstanding: number;
+}
+
+interface IPaymentHistoryTransactionDTO {
+  propertyId: string;
+  property: string;
+  date: string | Date;
+  amount: number;
+  plotNumber: number;
+  status: string;
+  id: string;
 }

@@ -1,4 +1,4 @@
-import { dashboardService } from "@/lib/services/dashboard.service";
+import { getDashboardData } from "@/lib/services/dashboard.service";
 import {
   ClientOverview,
   RevenueOverview,
@@ -7,7 +7,7 @@ import {
 } from "../ui";
 
 const TitanStats = async () => {
-  const { data = {} } = await dashboardService.getDashboardData();
+  const { data = {} } = await getDashboardData();
 
   return (
     <>

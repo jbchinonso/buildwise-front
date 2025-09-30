@@ -8,7 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { toAmountWithPrefix } from "@/lib/utils";
+import { toAmountWithSuffix } from "@/lib/utils";
 
 interface IChartData {
   month: string;
@@ -49,7 +49,7 @@ export function RevenueChart({
           tickMargin={0}
           widths={50}
           width={50}
-          tickFormatter={(value) => toAmountWithPrefix(value || 0)}
+          tickFormatter={(value) => toAmountWithSuffix(value || 0)}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
       </BarChart>

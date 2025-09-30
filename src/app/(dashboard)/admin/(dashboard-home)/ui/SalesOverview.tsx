@@ -9,8 +9,8 @@ import { useClientFetch, useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, House } from "lucide-react";
 import { PropertiesSold } from "./PropertiesSold";
-import { toAmount, toAmountWithPrefix } from "@/lib/utils";
-import { dashboardService } from "@/lib/services/dashboard.service";
+import { toAmount, toAmountWithSuffix } from "@/lib/utils";
+import { getSalesData } from "@/lib/services/dashboard.service";
 
 type Transaction = {
   id: string;
@@ -105,7 +105,7 @@ export const SalesOverview = ({ stats = 0 }: { stats?: number }) => {
     error: salesError,
   } = useClientFetch({
     action: async () => {
-      const res = await dashboardService.getSalesData();
+      const res = await getSalesData();
       return res || [];
     },
     isModalOpen,
@@ -116,7 +116,7 @@ export const SalesOverview = ({ stats = 0 }: { stats?: number }) => {
       <DashboardStatsCard
         title="Total sales"
         icon={<House size="24" color="#1FDBF4" />}
-        data={toAmountWithPrefix(stats, false)}
+        data={toAmountWithSuffix(stats, false)}
         value={"Total sales - " + toAmount(stats, false)}
         onClick={toggleModal}
       />

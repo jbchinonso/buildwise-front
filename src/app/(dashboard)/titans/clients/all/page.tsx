@@ -1,8 +1,10 @@
 import React from "react";
 import { ClientsTable } from "../ui";
 import { BreadCrumbs, Filters, SearchInput } from "@/components/ui";
+import { getAllTitanClients } from "@/lib/services";
 
-const AllClients = () => {
+const AllClients = async () => {
+  const allClients = await getAllTitanClients()
   return (
     <section className="flex flex-1 flex-col gap-4">
       <BreadCrumbs

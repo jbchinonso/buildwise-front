@@ -1,28 +1,15 @@
-
-import { getTransactions } from "@/lib/services";
 import {
-  ClientOverview,
   PropertiesSold,
   RecentTransactions,
-  RevenueChart,
-  RevenueOverview,
-  SalesOverview,
-  TitansOverview,
+  RevenueChart
 } from "./ui";
+import { getTitanDashboardSummary} from "@/lib/services/dashboard.service";
 
 const Dashboard = async () => {
-  const { data = [] } = await getTransactions();
+  const data = await getTitanDashboardSummary();
 
   return (
     <>
-      {/* Cards */}
-      <section className="flex flex-wrap justify-between w-full gap-4 py-2">
-        <RevenueOverview data={data as any} />
-        <SalesOverview data={data as any} />
-        <TitansOverview data={data as any} />
-        <ClientOverview data={data as any} />
-      </section>
-
       {/* chart */}
       <section className="flex flex-wrap gap-4">
         <div className="rounded-2xl min-w-[MIN(100%,518px)] bg-white w-full flex-1 border border-grey-50">

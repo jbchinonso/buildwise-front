@@ -3,13 +3,14 @@ import {
   DashboardStatsCard,
   DataTable,
   PageModal,
+  PieChartCard,
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, House } from "lucide-react";
 import { PropertiesSold } from "./PropertiesSold";
-import { PieChartCard } from "./PieChartCard";
+import { toAmountWithSuffix } from "@/lib/utils";
 
 type Transaction = {
   id: string;
@@ -22,8 +23,6 @@ type Transaction = {
   instalment: string;
   payment_status: string;
 };
-
-
 
 const columns: ColumnDef<Transaction>[] = [
   {
@@ -47,7 +46,7 @@ const columns: ColumnDef<Transaction>[] = [
     ),
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
- 
+
   {
     accessorKey: "payment_status",
     header: ({ column }) => (
@@ -70,39 +69,43 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 const generateChartData = (data: Transaction[]) => {
-  const closed = data.filter((tx) => tx.payment_status === 'Closed').length;
-  const ongoing = data.filter((tx) => tx.payment_status === 'Ongoing').length;
+  const closed = data.filter((tx) => tx.payment_status === "Closed").length;
+  const ongoing = data.filter((tx) => tx.payment_status === "Ongoing").length;
 
   if (closed + ongoing === 0) {
     return [
-      { name: 'Closed sales', value: 3 },
-      { name: 'Ongoing sales', value: 17 },
+      { name: "Closed sales", value: 3 },
+      { name: "Ongoing sales", value: 17 },
     ];
   }
 
   return [
-    { name: 'Closed sales', value: closed },
-    { name: 'Ongoing sales', value: ongoing },
+    { name: "Closed sales", value: closed },
+    { name: "Ongoing sales", value: ongoing },
   ];
 };
-export const SalesOverview = ({ data }: { data: Transaction[] }) => {
-  const chartData = generateChartData(data);
+export const SalesOverview = ({
+  data,
+  stats = 0,
+}: {
+  data: Transaction[];
+  stats?: string | number;
+}) => {
+  const chartData = generateChartData([]);
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
         title="Total sales"
         icon={<House size="24" color="#1FDBF4" />}
-        data="23.8B"
-        theme=""
+        data={toAmountWithSuffix(stats, false)}
         onClick={toggleModal}
       />
 
       {isModalOpen && (
         <PageModal handleClose={closeModal} heading="Closed Sales">
           <section className="flex flex-col w-full gap-4 ">
-
-            <PieChartCard data={chartData} colors={['#4FAB15', '#6E3334']} />
+            <PieChartCard data={chartData} colors={["#4FAB15", "#6E3334"]} />
 
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
@@ -117,7 +120,6 @@ export const SalesOverview = ({ data }: { data: Transaction[] }) => {
                 <p className="text-grey-400">Closed salesrevenue</p>
                 <p className="text-grey-600">₦7,000,000</p>
               </div>
-             
             </div>
 
             <div className="flex items-baseline justify-between w-full gap-4">
@@ -129,7 +131,6 @@ export const SalesOverview = ({ data }: { data: Transaction[] }) => {
               >
                 View all <ArrowRight size={14} color="currentColor" />
               </Link> */}
-              
             </div>
 
             <div className="w-full my-2">
