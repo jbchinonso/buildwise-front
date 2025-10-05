@@ -23,17 +23,18 @@ const eslintConfig = [
   ...compat.extends("next/core-web-vitals"),
   ...compat.extends("next/typescript"),
   ...compat.extends("prettier"),
-  // {
-  //   plugins: {
-  //     prettier: prettier,
-  //   },
-  //   rules: {
-  //     "prettier": "error",
-  //     "react/no-unescaped-entities": "off",
-  //     "@next/next/no-page-custom-font": "off",
-  //     "@typescript-eslint/no-explicit-any": "off",
-  //   },
-  // },
+  {
+    // plugins: ["prettier"],
+    plugins: {
+      prettier: prettier,
+    },
+    rules: {
+      // "prettier/prettier": "error",
+      "react/no-unescaped-entities": "off",
+      "@next/next/no-page-custom-font": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
 ];
 
 export default eslintConfig;
