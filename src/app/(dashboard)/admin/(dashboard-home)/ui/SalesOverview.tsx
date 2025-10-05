@@ -4,7 +4,12 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-import { Button, DataTableColumnHeader, Skeleton } from "@/components/ui";
+import {
+  Button,
+  DataTableColumnHeader,
+  Skeleton,
+  TableSkeleton,
+} from "@/components/ui";
 import { useClientFetch, useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, House } from "lucide-react";
@@ -174,12 +179,7 @@ export const SalesOverview = ({ stats = 0 }: { stats?: number }) => {
             </div>
 
             {isSalesLoading ? (
-              <>
-                <Skeleton className="h-8" />
-                <Skeleton className="h-8" />
-                <Skeleton className="h-8" />
-                <Skeleton className="h-8" />
-              </>
+              <TableSkeleton />
             ) : (
               <div className="w-full my-2">
                 <DataTable

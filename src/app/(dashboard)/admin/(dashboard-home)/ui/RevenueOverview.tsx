@@ -17,6 +17,7 @@ import {
   ChartTooltipContent,
   Button,
   Skeleton,
+  TableSkeleton,
 } from "@/components/ui";
 import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 import { getRevenueData } from "@/lib/services/dashboard.service";
@@ -192,12 +193,7 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: number }) => {
             </div>
 
             {isRevenueLoading ? (
-              <>
-                <Skeleton className="h-8" />
-                <Skeleton className="h-8" />
-                <Skeleton className="h-8" />
-                <Skeleton className="h-8" />
-              </>
+              <TableSkeleton />
             ) : (
               <div className="w-full my-2">
                 <DataTable

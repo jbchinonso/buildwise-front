@@ -9,7 +9,7 @@ export function CardError({
   className,
 }: {
   message: string;
-  error: string;
+  error?: string;
   reset: () => void;
   className?: string;
 }) {

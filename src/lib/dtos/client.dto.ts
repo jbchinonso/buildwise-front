@@ -1,4 +1,4 @@
-import { IOption, IPropertyClientOwnership } from "../type";
+import { IOption } from "../type";
 import { Client, IClientsData } from "../types/client";
 import { formatDistanceToNow } from "date-fns";
 

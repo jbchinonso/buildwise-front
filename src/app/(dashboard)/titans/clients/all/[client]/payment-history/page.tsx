@@ -30,9 +30,9 @@ const PaymentHistoryPage = async (props: {
     <section className="flex flex-col flex-1 gap-4">
       <BreadCrumbs
         paths={[
-          { title: "Home", path: "/admin/clients" },
-          { title: "All Clients", path: "/admin/clients/all" },
-          { title: "Profile", path: `/admin/clients/all/${id}` },
+          { title: "Home", path: "/titans/clients" },
+          { title: "All Clients", path: "/titans/clients/all" },
+          { title: "Profile", path: `/titans/clients/all/${id}` },
           {
             title: "Payment history",
             path: "",

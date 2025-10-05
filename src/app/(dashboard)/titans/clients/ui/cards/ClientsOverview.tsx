@@ -4,28 +4,23 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-import { Button, DataTableColumnHeader } from "@/components/ui";
-import { useModal } from "@/lib/hooks";
-import { toAmountWithSuffix } from "@/lib/utils";
+import { Button, DataTableColumnHeader, TableSkeleton } from "@/components/ui";
+import { useClientFetch, useModal } from "@/lib/hooks";
+import { getTitanClientOverview } from "@/lib/services";
+import { IRecentTitanClient } from "@/lib/type";
+import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight, Profile2User } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-type Transaction = {
-  id: string;
-  client: string;
-  location: string;
-  agent: string;
-};
-
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<IRecentTitanClient>[] = [
   {
-    accessorKey: "client",
+    accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
   {
     accessorKey: "location",
@@ -35,35 +30,44 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
   {
-    accessorKey: "agent",
+    accessorKey: "agentName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Agent" />
     ),
-    cell: ({ row }) => <div>{row.getValue("agent")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("agentName")}</div>
+    ),
   },
   {
-    id: "actions",
+    // id: "actions",
+    accessorKey: "id",
+    header: () => null,
     cell: ({ row }) => {
+      const id = String(row.getValue("id")) || String(row?.id);
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center px-4">
+          <Link href={`clients/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
   },
 ];
 
-export const ClientOverview = ({
-  data = [],
-  stats = 0,
-}: {
-  data?: Transaction[];
-  stats?: string | number;
-}) => {
+export const ClientOverview = ({ stats = 0 }: { stats?: string | number }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+
+  const { data, isLoading, error } = useClientFetch({
+    action: async () => {
+      const res = await getTitanClientOverview();
+      return res || [];
+    },
+    isModalOpen,
+  });
+
   return (
     <>
       <DashboardStatsCard
@@ -83,15 +87,22 @@ export const ClientOverview = ({
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">All Clients</p>
-                <p className="text-grey-600">100</p>
+                <p className="text-grey-600">
+                  {toAmount(data?.totalClients || 0, false)}
+                </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Active Buyers</p>
-                <p className="text-grey-600">208</p>
+                <p className="text-grey-600">
+                  {toAmount(data?.activeBuyersCount || 0, false)}
+                </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Properties bought/reserved</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-600">
+                  {" "}
+                  {toAmount(data?.totalPropertiesBoughtOrReserved || 0, false)}
+                </p>
               </div>
             </div>
 
@@ -107,7 +118,11 @@ export const ClientOverview = ({
             </div>
 
             <div className="w-full my-2">
-              <DataTable columns={columns} data={data} />
+              {isLoading ? (
+                <TableSkeleton />
+              ) : (
+                <DataTable columns={columns} data={data?.recentClients || []} />
+              )}
             </div>
 
             <div className="flex mt-auto justify-end gap-4 items-center">

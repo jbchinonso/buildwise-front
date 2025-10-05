@@ -69,8 +69,8 @@ const chartDTO = (
           month: "long",
         })
       : item.date || item?._id,
-    sales: item.totalSales,
-    revenue: item?.totalRevenue || item?.revenue,
+    sales: item.totalSales || 0,
+    revenue: item?.totalRevenue || item?.revenue || 0,
   }));
 
 export const getDashboarSalesChart = async (
@@ -105,7 +105,7 @@ export const getDashboarSalesChart = async (
 
     return { data: chartDTO(data) };
   } catch (error) {
-    return { error: getError(error) };
+    // return { error: getError(error) };
     throw new Error(getError(error));
   }
 };

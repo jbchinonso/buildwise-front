@@ -14,9 +14,9 @@ const ClientProfile = async (props: { params: Params }) => {
     <section className="flex flex-1 flex-col gap-4">
       <BreadCrumbs
         paths={[
-          { title: "Home", path: "/admin/clients" },
-          { title: "All Clients", path: "/admin/clients/all" },
-          { title: "Profile", path: "/admin/clients/:profile" },
+          { title: "Home", path: "/titans/clients" },
+          { title: "All Clients", path: "/titans/clients/all" },
+          { title: "Profile", path: "/titans/clients/:profile" },
         ]}
       />
 

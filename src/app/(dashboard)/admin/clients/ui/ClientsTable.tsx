@@ -60,7 +60,7 @@ const columns: ColumnDef<Client>[] = [
       <div
         className="text-center"
       >
-        {Number(row.getValue("paymentStatus") || 0).toFixed(2) + "% completed"}
+        {Number(row.getValue("paymentStatus") || 0).toFixed(1) + "% completed"}
       </div>
     ),
   },

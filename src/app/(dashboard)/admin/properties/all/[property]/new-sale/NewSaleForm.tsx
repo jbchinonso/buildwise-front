@@ -4,7 +4,7 @@ import { useModal } from "@/lib/hooks";
 import { createSale } from "@/lib/services";
 import { getError, toAmount } from "@/lib/utils";
 import { useFormik } from "formik";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { DashboardModal } from "@/components/dashboard";
 import { IOption, IPaymentOptions, IProperty } from "@/lib/type";
@@ -19,7 +19,7 @@ export const NewSaleForm = ({
   agents?: IOption[];
   clients?: IOption[];
 }) => {
-  const router = useRouter()
+  const router = useRouter();
   const { isModalOpen, closeModal, openModal } = useModal();
   const {
     handleBlur,
@@ -86,6 +86,7 @@ export const NewSaleForm = ({
     const pricePlan = priceOptions?.find(
       (plan) => plan.value === values?.priceOptions
     )?.data;
+
     return {
       propertyId: values?.propertyId,
       agentId: values?.agentId,
@@ -95,9 +96,14 @@ export const NewSaleForm = ({
       paymentDate: values?.paymentDate,
       plotNumber: Number(values?.plotNumber || 0),
       plotSize: values?.plotSize || 0,
-      ...pricePlan,
+      price: Number(pricePlan?.price || 0),
+      instalmentDuration: pricePlan?.instalmentDuration || "",
+      paymentPlan: pricePlan?.paymentPlan || "",
     };
+
   }, [values]);
+
+   
 
   const handleSelect = (name: string, value: any) => {
     setFieldValue(name, value);
@@ -114,7 +120,7 @@ export const NewSaleForm = ({
   const submitForm = async () => {
     try {
       await createSale(payload);
-      router.replace(`/admin/properties/all/${property?._id||''}`);
+      router.replace(`/admin/properties/all/${property?._id || ""}`);
       toast.success("Sale recorded successfully");
       resetForm();
     } catch (error) {

@@ -348,3 +348,32 @@ interface IPaymentHistoryTransactionDTO {
   status: string;
   id: string;
 }
+
+interface IRecentTitanClient {
+  id: string;
+  name: string;
+  agentName: string;
+  location: string;
+  joinedDate: string | Date;
+}
+interface ITitanClientOverview {
+  totalClients: number;
+  activeBuyersCount: number;
+  totalPropertiesBoughtOrReserved: number;
+  recentClients: IRecentTitanClient[];
+}
+
+interface IReceipt {
+  date: Date | string;
+  clientName: string;
+  agentName: string;
+  propertyName: string;
+  plotNumber: number;
+  units: string;
+  price: number;
+  amountDeposited: number;
+  totalPaid: number;
+  outstanding: number;
+  status: string;
+  paymentMethod: string;
+}

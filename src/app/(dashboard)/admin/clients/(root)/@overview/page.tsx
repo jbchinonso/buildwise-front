@@ -1,13 +1,10 @@
-import { getClientOverview, getClientStats } from "@/lib/services";
+import { getClientStats } from "@/lib/services";
 import { ClientOverview } from "../../ui";
 
-const ListedProperties = async () => {
-  const [stats, overview] = await Promise.all([
-    getClientStats(),
-    getClientOverview(),
-  ]);
+const ClientOverviewCard = async () => {
+  const stats = await getClientStats();
 
-  return <ClientOverview data={overview} clients={stats?.totalClients || 0} />;
+  return <ClientOverview clients={stats?.totalClients || 0} />;
 };
 
-export default ListedProperties;
+export default ClientOverviewCard;

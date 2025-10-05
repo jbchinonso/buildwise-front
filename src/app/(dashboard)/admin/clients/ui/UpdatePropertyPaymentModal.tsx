@@ -28,8 +28,8 @@ export const UpdatePropertyPaymentModal = ({
             throw new Error("Select client");
           }
           console.log({clientId})
-          // const queryParams = new URLSearchParams(searchparams);
-          const response = await getClientPaymentData({ clientId });
+
+          const response = await getClientPaymentData(clientId);
           const data = response
             ? [
                 {

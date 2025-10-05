@@ -1,19 +1,12 @@
-import React from "react";
 import { ClientsTable } from "../ui";
-import { BreadCrumbs, Filters, SearchInput } from "@/components/ui";
+import { Filters, SearchInput } from "@/components/ui";
 import { getAllTitanClients } from "@/lib/services";
 
 const AllClients = async () => {
-  const allClients = await getAllTitanClients()
-  return (
-    <section className="flex flex-1 flex-col gap-4">
-      <BreadCrumbs
-        paths={[
-          { title: "Home", path: "/admin/clients" },
-          { title: "All Clients", path: "/admin/clients/all" },
-        ]}
-      />
+  const allClients = await getAllTitanClients();
 
+  return (
+    <>
       <div className="w-full my-2 flex items-baseline justify-between">
         <p className="font-bold flex gap-2">
           All Clients
@@ -21,13 +14,12 @@ const AllClients = async () => {
         </p>
 
         <div className="flex gap-2 items-center">
-
           <Filters />
           <SearchInput />
         </div>
       </div>
       <ClientsTable data={[]} />
-    </section>
+    </>
   );
 };
 

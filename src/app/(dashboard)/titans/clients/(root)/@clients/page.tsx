@@ -3,12 +3,7 @@ import { ClientOverview } from "../../ui";
 
 const Clients = async () => {
   const response = await getTitanDashboardSummary();
-  return (
-    <ClientOverview
-      stats={response?.totalClients as any}
-      data={response?.totalClients as any}
-    />
-  );
+  return <ClientOverview stats={response?.totalClients as any} />;
 };
 
 export default Clients;

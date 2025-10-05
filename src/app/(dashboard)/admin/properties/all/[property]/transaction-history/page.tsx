@@ -39,112 +39,112 @@ const TransactionHistory = async (props: {
     (v: IPropertySale) => v._id === searchParams?.receipt
   );
 
-  console.log({data})
+  // console.log({data, sale})
 
-  let receiptData;
+  // let receiptData;
 
-  if (sale) {
-    const reciept = await getReceiptData(sale._id);
-    receiptData = {
-      amount: sale?.amountPaid,
-      data: [
-        {
-          item: "client",
-          label: "Client name",
-          data:
-            sale?.client || sale?.clientDetails
-              ? `${sale?.clientDetails?.lastName} ${sale?.clientDetails?.firstName}`
-              : "N/A",
-        },
-        {
-          item: "agent",
-          data:
-            sale?.agent || sale?.agentDetails
-              ? `${sale?.agentDetails?.lastName} ${sale?.agentDetails?.firstName}`
-              : "N/A",
-        },
-        {
-          item: "property",
-          data: "Silvercrest vill",
-        },
-        {
-          item: "units",
-          data: sale?.plotNumber,
-        },
-        {
-          item: "installment_period",
-          label: "Instalment period",
-          data: "18 May 2025 - 18 Nov 2026",
-        },
-        {
-          item: "total_amount",
-          label: "Total amount",
-          data: "₦3,500,000",
-        },
-        {
-          item: "amount_due",
-          label: "Amount due",
-          data: "₦1,500,000",
-        },
-        {
-          item: "amount_paid",
-          label: "Amount paid",
-          data: toAmount(sale?.amountPaid || 0),
-        },
-      ],
-    };
-  }
+  // if (sale) {
+  //   const reciept = await getReceiptData(sale._id);
+  //   receiptData = {
+  //     amount: sale?.amountPaid,
+  //     data: [
+  //       {
+  //         item: "client",
+  //         label: "Client name",
+  //         data:
+  //           sale?.client || sale?.clientDetails
+  //             ? `${sale?.clientDetails?.lastName} ${sale?.clientDetails?.firstName}`
+  //             : "N/A",
+  //       },
+  //       {
+  //         item: "agent",
+  //         data:
+  //           sale?.agent || sale?.agentDetails
+  //             ? `${sale?.agentDetails?.lastName} ${sale?.agentDetails?.firstName}`
+  //             : "N/A",
+  //       },
+  //       {
+  //         item: "property",
+  //         data: "Silvercrest vill",
+  //       },
+  //       {
+  //         item: "units",
+  //         data: sale?.plotNumber,
+  //       },
+  //       {
+  //         item: "installment_period",
+  //         label: "Instalment period",
+  //         data: "18 May 2025 - 18 Nov 2026",
+  //       },
+  //       {
+  //         item: "total_amount",
+  //         label: "Total amount",
+  //         data: "₦3,500,000",
+  //       },
+  //       {
+  //         item: "amount_due",
+  //         label: "Amount due",
+  //         data: "₦1,500,000",
+  //       },
+  //       {
+  //         item: "amount_paid",
+  //         label: "Amount paid",
+  //         data: toAmount(sale?.amountPaid || 0),
+  //       },
+  //     ],
+  //   };
+  // }
 
-  receiptData = sale
-    ? {
-        amount: sale?.amountPaid,
-        data: [
-          {
-            item: "client",
-            label: "Client name",
-            data:
-              sale?.client || sale?.clientDetails
-                ? `${sale?.clientDetails?.lastName} ${sale?.clientDetails?.firstName}`
-                : "N/A",
-          },
-          {
-            item: "agent",
-            data:
-              sale?.agent || sale?.agentDetails
-                ? `${sale?.agentDetails?.lastName} ${sale?.agentDetails?.firstName}`
-                : "N/A",
-          },
-          {
-            item: "property",
-            data: "Silvercrest vill",
-          },
-          {
-            item: "units",
-            data: sale?.plotNumber,
-          },
-          {
-            item: "installment_period",
-            label: "Instalment period",
-            data: "18 May 2025 - 18 Nov 2026",
-          },
-          {
-            item: "total_amount",
-            label: "Total amount",
-            data: "₦3,500,000",
-          },
-          {
-            item: "amount_due",
-            label: "Amount due",
-            data: "₦1,500,000",
-          },
-          {
-            item: "amount_paid",
-            label: "Amount paid",
-            data: toAmount(sale?.amountPaid || 0),
-          },
-        ],
-      }
-    : null;
+  // receiptData = sale
+  //   ? {
+  //       amount: sale?.amountPaid,
+  //       data: [
+  //         {
+  //           item: "client",
+  //           label: "Client name",
+  //           data:
+  //             sale?.client || sale?.clientDetails
+  //               ? `${sale?.clientDetails?.lastName} ${sale?.clientDetails?.firstName}`
+  //               : "N/A",
+  //         },
+  //         {
+  //           item: "agent",
+  //           data:
+  //             sale?.agent || sale?.agentDetails
+  //               ? `${sale?.agentDetails?.lastName} ${sale?.agentDetails?.firstName}`
+  //               : "N/A",
+  //         },
+  //         {
+  //           item: "property",
+  //           data: "Silvercrest vill",
+  //         },
+  //         {
+  //           item: "units",
+  //           data: sale?.plotNumber,
+  //         },
+  //         {
+  //           item: "installment_period",
+  //           label: "Instalment period",
+  //           data: "18 May 2025 - 18 Nov 2026",
+  //         },
+  //         {
+  //           item: "total_amount",
+  //           label: "Total amount",
+  //           data: "₦3,500,000",
+  //         },
+  //         {
+  //           item: "amount_due",
+  //           label: "Amount due",
+  //           data: "₦1,500,000",
+  //         },
+  //         {
+  //           item: "amount_paid",
+  //           label: "Amount paid",
+  //           data: toAmount(sale?.amountPaid || 0),
+  //         },
+  //       ],
+  //     }
+  //   : null;
 
   return (
     <>
@@ -166,9 +166,9 @@ const TransactionHistory = async (props: {
 
         <TransactionTable data={data} />
       </section>
-      {receiptData && (
-        <ReceiptModal data={receiptData?.data} amount={receiptData?.amount} />
-      )}
+
+      
+      {Boolean(sale) && <ReceiptModal saleId={sale._id} />}
     </>
   );
 };

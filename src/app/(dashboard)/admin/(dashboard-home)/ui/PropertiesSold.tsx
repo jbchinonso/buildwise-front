@@ -9,6 +9,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { toAmountWithSuffix } from "@/lib/utils";
+import { EmptyChartData } from "@/components/ui";
 
 const chartConfig = {
   sales: {
@@ -22,7 +23,7 @@ export function PropertiesSold({
 }: {
   chartData?: { month: string; sales: number }[];
 }) {
-  return (
+  return chartData?.length ? (
     <ChartContainer config={chartConfig} className="min-h-[200px] min-w-full">
       <LineChart accessibilityLayer data={chartData}>
         <Line
@@ -31,6 +32,7 @@ export function PropertiesSold({
           stroke="var(--color-sales)"
           strokeWidth={2}
           dot={false}
+          // connectNulls={false} 
         />
         <XAxis
           dataKey="month"
@@ -45,5 +47,7 @@ export function PropertiesSold({
         <ChartTooltip content={<ChartTooltipContent />} />
       </LineChart>
     </ChartContainer>
+  ) : (
+    <EmptyChartData />
   );
 }

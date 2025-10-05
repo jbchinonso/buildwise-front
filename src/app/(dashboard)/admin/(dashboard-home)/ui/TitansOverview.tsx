@@ -4,7 +4,7 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-import { Button, DataTableColumnHeader, Skeleton } from "@/components/ui";
+import { Button, DataTableColumnHeader, Skeleton, TableSkeleton } from "@/components/ui";
 import { useClientFetch, useModal } from "@/lib/hooks";
 import { getAgentData } from "@/lib/services/dashboard.service";
 import { toAmount, toAmountWithSuffix } from "@/lib/utils";
@@ -142,12 +142,7 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
             </div>
 
             {isAgentLoading ? (
-              <>
-                <Skeleton className="h-8" />
-                <Skeleton className="h-8" />
-                <Skeleton className="h-8" />
-                <Skeleton className="h-8" />
-              </>
+             <TableSkeleton/>
             ) : (
               <div className="w-full">
                 <DataTable

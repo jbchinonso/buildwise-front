@@ -9,6 +9,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { toAmountWithSuffix } from "@/lib/utils";
+import { EmptyChartData } from "@/components/ui";
 
 interface IChartData {
   month: string;
@@ -22,12 +23,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function RevenueChart({
-  chartData,
-}: {
-  chartData?: IChartData[];
-}) {
-  return (
+export function RevenueChart({ chartData }: { chartData?: IChartData[] }) {
+  return chartData?.length ? (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart accessibilityLayer data={chartData}>
         <Bar
@@ -54,5 +51,7 @@ export function RevenueChart({
         <ChartTooltip content={<ChartTooltipContent />} />
       </BarChart>
     </ChartContainer>
+  ) : (
+    <EmptyChartData />
   );
 }

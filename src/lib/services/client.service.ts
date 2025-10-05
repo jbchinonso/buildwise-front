@@ -10,6 +10,7 @@ import {
   IClientRecentTransactions,
   IPaymentHistorySales,
   IPaymentHistoryTransactionDTO,
+  ITitanClientOverview,
   IUser,
 } from "../type";
 
@@ -127,8 +128,8 @@ export const getClientOverview = async () => {
       },
     });
 
+
     return response as IClientOverview;
-    // NOTE: need to return client id at /clients/overview
     // NOTE: confirm totalPropertiesBoughtOrReserved is amount and not count
   } catch (error) {
     throw getError(error);
@@ -248,6 +249,21 @@ export const getTitanClientPaymentHistory = async (id: string) => {
       allTransactions,
       properties: Array.from(uniquePropertiesMap.values()) || [],
     };
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getTitanClientOverview = async () => {
+  try {
+    const response = await authFetch("/clients/overview", {
+      next: {
+        tags: ["clients"],
+        revalidate: 8400,
+      },
+    });
+
+    return response as ITitanClientOverview;
   } catch (error) {
     throw getError(error);
   }
