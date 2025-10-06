@@ -4,7 +4,6 @@ import { getAllTitanClients } from "@/lib/services";
 
 const AllClients = async () => {
   const allClients = await getAllTitanClients();
-
   return (
     <>
       <div className="w-full my-2 flex items-baseline justify-between">
@@ -18,7 +17,7 @@ const AllClients = async () => {
           <SearchInput />
         </div>
       </div>
-      <ClientsTable data={[]} />
+      <ClientsTable data={allClients||[]} />
     </>
   );
 };
