@@ -73,14 +73,14 @@ const columns: ColumnDef<IClientRecentTransactions>[] = [
 
   {
     // id: "actions",
-    accessorKey: "_id",
+    accessorKey: "id",
     header: () => null,
     cell: ({ row }) => {
-      const id = String(row.getValue("_id")) || String(row?.id);
+      const id = String(row.getValue("id")) || String(row?.id);
 
       return (
         <div className="flex justify-center px-4">
-          <Link href={`clients/all/${id}`} id="button">
+          <Link href={`all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
           </Link>

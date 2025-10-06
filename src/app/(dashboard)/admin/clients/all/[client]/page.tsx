@@ -3,7 +3,6 @@ import {
   BreadCrumbs,
   Button,
   Input,
-  ProfileAvatar,
 } from "@/components/ui";
 import { UpdatePaymentModal, AddPropertyModal } from "../../ui";
 import { getClient } from "@/lib/services";
