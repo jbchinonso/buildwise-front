@@ -37,17 +37,19 @@ export function useExportPDF(): ExportPDFResult {
           await Promise.all([import("html2canvas-pro"), import("jspdf")]);
 
         // Capture the element as canvas
-        const canvas = await html2canvas(element, {
-          scale: quality,
-          useCORS: true,
-          allowTaint: true,
-          backgroundColor: null,
-          removeContainer: true,
-          imageTimeout: 0,
-          logging: false,
-          width: options?.width,
-          height: options?.height
-        });
+        const canvas = await html2canvas(element, 
+        //   {
+        //   scale: quality,
+        //   useCORS: true,
+        //   allowTaint: true,
+        //   backgroundColor: null,
+        //   removeContainer: true,
+        //   imageTimeout: 0,
+        //   logging: false,
+        //   width: options?.width,
+        //   height: options?.height
+        // }
+      );
 
         // Get canvas dimensions
         const imgWidth = canvas.width;
@@ -85,7 +87,7 @@ export function useExportPDF(): ExportPDFResult {
 
         // Calculate image dimensions to fit in PDF with margins
         const availableWidth = pdfWidth - margin * 2;
-        const availableHeight = pdfHeight - margin * 2;
+        const availableHeight = pdfHeight - margin;
 
         const aspectRatio = imgWidth / imgHeight;
         let finalWidth = availableWidth;

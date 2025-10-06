@@ -27,8 +27,9 @@ export const UpdatePropertyPaymentModal = ({
           if (!clientId) {
             throw new Error("Select client");
           }
-          // const queryParams = new URLSearchParams(searchparams);
-          const response = await getClientPaymentData({ clientId });
+          console.log({clientId})
+
+          const response = await getClientPaymentData(clientId);
           const data = response
             ? [
                 {

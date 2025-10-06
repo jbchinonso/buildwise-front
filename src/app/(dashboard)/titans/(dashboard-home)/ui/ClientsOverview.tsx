@@ -4,32 +4,23 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-import { Button, DataTableColumnHeader } from "@/components/ui";
-import { useModal } from "@/lib/hooks";
+import { Button, DataTableColumnHeader, TableSkeleton } from "@/components/ui";
+import { useClientFetch, useModal } from "@/lib/hooks";
+import { getTitanClientOverview } from "@/lib/services";
+import { IRecentTitanClient } from "@/lib/type";
+import { formatDateToNow, toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight, Profile2User } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-type Transaction = {
-  id: string;
-  client: string;
-  property: string;
-  location: string;
-  last_payment: string;
-  totalPaid: string;
-  outstanding: string;
-  instalment: string;
-  payment_status: string;
-};
-
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<IRecentTitanClient>[] = [
   {
-    accessorKey: "client",
+    accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
   {
     accessorKey: "property",
@@ -56,17 +47,18 @@ const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "payment_status",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Payment status" />
+      <DataTableColumnHeader column={column} title="Payment" />
     ),
     cell: ({ row }) => <div>{row.getValue("payment_status")}</div>,
   },
   {
-    accessorKey: "total_paid",
+    accessorKey: "joined",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Joined" />
+      <DataTableColumnHeader column={column} title="Payment" />
     ),
-    cell: ({ row }) => <div>{row.getValue("total_paid")}</div>,
+    cell: ({ row }) => <div>{formatDateToNow(row.getValue("joined"))}</div>,
   },
+
   {
     id: "actions",
     cell: ({ row }) => {
@@ -82,15 +74,23 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const ClientOverview = ({ data }: { data: Transaction[] }) => {
+export const ClientOverview = ({ stats = 0 }: { stats?: number }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+
+  const { data, isLoading, error } = useClientFetch({
+    action: async () => {
+      const res = await getTitanClientOverview();
+      return res || [];
+    },
+    isModalOpen,
+  });
+
   return (
     <>
       <DashboardStatsCard
         title="Total Clients"
         icon={<Profile2User size="24" color="#9747FF" />}
-        data="23.8B"
-        theme=""
+        data={toAmount(stats, false)}
         onClick={toggleModal}
       />
 
@@ -98,7 +98,7 @@ export const ClientOverview = ({ data }: { data: Transaction[] }) => {
         <PageModal
           handleClose={closeModal}
           heading="Clients Overview"
-          className="max-w-[MIN(95%,600px)]"
+          className="max-w-[MIN(95%,750px)]"
         >
           <section className="flex flex-col w-full gap-4 ">
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
@@ -114,7 +114,6 @@ export const ClientOverview = ({ data }: { data: Transaction[] }) => {
                 <p className="text-grey-400">Closed sales</p>
                 <p className="text-grey-600">₦51,208,009</p>
               </div>
-             
             </div>
 
             <div className="flex items-baseline justify-between w-full gap-4">
@@ -129,9 +128,13 @@ export const ClientOverview = ({ data }: { data: Transaction[] }) => {
                 View all <ArrowRight size={14} color="currentColor" />
               </Link>
             </div>
-
+            
             <div className="w-full my-2">
-              <DataTable columns={columns} data={data} />
+              {isLoading ? (
+                <TableSkeleton />
+              ) : (
+                <DataTable columns={columns} data={data?.recentClients || []} />
+              )}
             </div>
 
             <div className="flex justify-end gap-4 items-center">

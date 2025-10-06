@@ -2,7 +2,8 @@
 import { revalidateTag } from "next/cache";
 import { baseUrl, getError } from "../utils";
 import { authFetch } from "./auth.service";
-import { IClientPaymentData, IPagination } from "../type";
+import { IClientPaymentData, IPagination, IReceipt } from "../type";
+import { receiptDTO } from "../dtos/sale.dto";
 
 interface ISalePayload {
   propertyId: string;
@@ -10,11 +11,11 @@ interface ISalePayload {
   agentId: string;
   plotNumber: number | string;
   unitNumber: string;
-  plotSize: string;
+  plotSize: number | string;
   amountPaid: number | string;
-  price: number | string;
-  instalmentDuration?: string;
-  paymentPlan: string;
+  price?: number | string;
+  instalmentDuration?: string | number;
+  paymentPlan?: string;
   paymentDate: string;
 }
 
@@ -22,6 +23,8 @@ export const createSale = async (sale: ISalePayload) => {
   try {
     const response = await baseUrl.post("/sales", sale);
     revalidateTag("sales");
+    revalidateTag("property-sales");
+    revalidateTag(`property-${sale.propertyId}`);
     return response?.data;
   } catch (error) {
     throw getError(error);
@@ -73,9 +76,9 @@ export const getPropertySales = async ({
   }
 };
 
-export const getReceiptData = async ({ salesId }: { salesId: string }) => {
+export const getReceiptData = async (saleId?: string) => {
   try {
-    const url = `/receipts/transaction/${salesId}`;
+    const url = `/receipts/transaction/${saleId}`;
 
     const response = await authFetch(url, {
       next: {
@@ -84,24 +87,21 @@ export const getReceiptData = async ({ salesId }: { salesId: string }) => {
       },
     });
 
-    return response;
+    return receiptDTO(response as IReceipt);
   } catch (error) {
     console.error("Error fetching sales:", getError(error));
     throw new Error(getError(error));
   }
 };
 
-export const getClientPaymentData = async ({
-  clientId,
-}: {
-  clientId: string;
-}) => {
+export const getClientPaymentData = async (clientId: string) => {
   try {
+    // console.log({clientId})
     if (!clientId?.trim()) return;
 
     const url = `/sales/clients/${clientId}/payments/`;
 
-    console.log({url})
+    console.log({ url });
 
     const response = await authFetch(url, {
       next: {

@@ -60,7 +60,7 @@ export const PageModal = ({
   return (
     <section
       ref={modalRef}
-      className="fixed top-0 translate-x-0 translate-y-0 left-0 z-[999] flex flex-col items-center justify-center w-screen min-h-dvh"
+      className="absolute top-0 left-0 z-[999] flex flex-col items-center justify-center w-full w.-screen min-h-full"
     >
       <button
         type="button"
@@ -77,7 +77,7 @@ export const PageModal = ({
           transition={{ duration: 0.3 }}
           key={"modal-div"}
           className={twMerge(
-            "w-full max-w-[MIN(95%,880px)] rounded-4xl flex-1 text-grey-600 p-4 min-h-full pb-2 overflow-hidden m-auto mr-4 bg-white flex flex-col relative z-[999] max-h-[calc(100dvh+48px-var(--scroll-padding))]",
+            "w-full max-w-[MIN(95%,880px)] rounded-4xl flex-1 text-grey-600 p-4 min-h-full pb-2 overflow-hidden m-auto mr-4 bg-white flex flex-col relative mb-auto z-[999] max-h-[MIN(1920px,calc(100dvh+48px-var(--scroll-padding)))]",
             className
           )}
         >

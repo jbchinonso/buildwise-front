@@ -20,7 +20,7 @@ export default function Layout({
           Add new client
         </Button>
       </div>
-      <section className="w-full justify-start flex flex-wrap gap-4">
+      <section className="w-full flex flex-wrap gap-4">
         {overview}
         {reserved}
         {closed}

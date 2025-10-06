@@ -23,7 +23,7 @@ const AllProperties = async (props: { searchParams: SearchParams }) => {
         <Button
           size="xs"
           asLink
-          href="properties/add-property"
+          href="add-property"
           className="!text-xs"
         >
           <Plus color="currentColor" size={20} />

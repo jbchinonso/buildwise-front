@@ -4,9 +4,11 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-import { Button, DataTableColumnHeader } from "@/components/ui";
-import { useModal } from "@/lib/hooks";
-import { IClientOverview, IClientOverviewRecentCLients } from "@/lib/type";
+import { Button, DataTableColumnHeader, TableSkeleton } from "@/components/ui";
+import { SpinLoadingAnimation } from "@/components/ui/SpinLoadingAnimation";
+import { useClientFetch, useModal } from "@/lib/hooks";
+import { getClientOverview } from "@/lib/services";
+import { IClientOverviewRecentCLients } from "@/lib/type";
 import { toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight, Profile2User } from "iconsax-react";
@@ -33,17 +35,23 @@ const columns: ColumnDef<IClientOverviewRecentCLients>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Agent" />
     ),
-    cell: ({ row }) => <div>{row.getValue("agentName")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("agentName")}</div>
+    ),
   },
   {
-    id: "actions",
+    // id: "actions",
+    accessorKey: "id",
+    header: () => null,
     cell: ({ row }) => {
+      const id = String(row.getValue("id")) || String(row?.id);
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center">
+          <Link href={`/admin/clients/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
@@ -51,13 +59,20 @@ const columns: ColumnDef<IClientOverviewRecentCLients>[] = [
 ];
 
 export const ClientOverview = ({
-  data,
   clients = 0,
 }: {
-  data: IClientOverview;
   clients?: string | number;
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+
+  const { data, isLoading, error } = useClientFetch({
+    action: async () => {
+      const res = await getClientOverview();
+      return res || [];
+    },
+    isModalOpen,
+  });
+
   return (
     <>
       <DashboardStatsCard
@@ -107,8 +122,12 @@ export const ClientOverview = ({
               </Link>
             </div>
 
-            <div className="w-full my-2">
-              <DataTable columns={columns} data={data?.recentClients || []} />
+            <div className="w-full my-2 min-h-24 relative flex">
+              {isLoading ? (
+                <TableSkeleton />
+              ) : (
+                <DataTable columns={columns} data={data?.recentClients || []} />
+              )}
             </div>
 
             <div className="flex mt-auto justify-end gap-4 items-center">

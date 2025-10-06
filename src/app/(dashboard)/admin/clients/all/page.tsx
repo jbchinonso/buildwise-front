@@ -1,8 +1,7 @@
-import React from "react";
 import { ClientsTable } from "../ui";
 import { BreadCrumbs, Filters, SearchInput } from "@/components/ui";
 import { getAllClients } from "@/lib/services/client.service";
-import { clientTableDTO } from "@/lib/dtos";
+
 
 type SearchParams = Promise<{ page?: string; limit?: string; search?: string }>;
 
@@ -32,7 +31,7 @@ const AllClients = async (props: { searchParams: SearchParams }) => {
           <SearchInput />
         </div>
       </div>
-      <ClientsTable data={clientTableDTO(data)} />
+      <ClientsTable data={data} />
     </section>
   );
 };

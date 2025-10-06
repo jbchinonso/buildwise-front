@@ -1,18 +1,10 @@
-import { getClientRecentlyReserved, getClientStats } from "@/lib/services";
+import { getClientStats } from "@/lib/services";
 import { ReservedUnits } from "../../ui";
 
 const ReservedProperties = async () => {
-  const [stats, reserved] = await Promise.all([
-    getClientStats(),
-    getClientRecentlyReserved(),
-  ]);
+  const stats = await getClientStats();
 
-  return (
-    <ReservedUnits
-      data={reserved ?? []}
-      reservedUnits={stats?.totalReserved || 0}
-    />
-  );
+  return <ReservedUnits reservedUnits={stats?.totalReserved || 0} />;
 };
 
 export default ReservedProperties;

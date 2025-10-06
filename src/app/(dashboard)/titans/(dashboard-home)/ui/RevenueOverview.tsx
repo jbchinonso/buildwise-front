@@ -19,6 +19,7 @@ import {
   ChartTooltipContent,
   Button,
 } from "@/components/ui";
+import { toAmountWithSuffix } from "@/lib/utils";
 
 type Transaction = {
   id: string;
@@ -104,15 +105,14 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const RevenueOverview = ({ data }: { data: Transaction[] }) => {
+export const RevenueOverview = ({ data, stats=0 }: { data: Transaction[], stats?: number}) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
         title="Total revenue"
         icon={<ArrowDown size="24" color="#70F41F" />}
-        data="23.8B"
-        theme=""
+        data={toAmountWithSuffix(stats)}
         onClick={toggleModal}
       />
 

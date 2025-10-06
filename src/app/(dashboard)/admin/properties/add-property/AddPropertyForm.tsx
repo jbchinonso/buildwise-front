@@ -79,12 +79,21 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
   }, [values.state]);
 
   const price = useMemo(() => {
-    const prices = `${values.priceOptions?.instantPrice}`;
+    // const prices = `${values.priceOptions?.instantPrice}`;
 
-    return (
-      values.priceOptions?.instantPrice && JSON.stringify(values.priceOptions)
-    );
-    return prices;
+    // return (
+    //   values.priceOptions?.instantPrice && JSON.stringify(values.priceOptions)
+    // );
+     const priceOption =
+       values?.priceOptions?.plans?.length &&
+       values?.priceOptions?.instantPrice
+         ? "Outright, Instalment"
+         : values?.priceOptions?.instantPrice
+         ? "Outright"
+         : values?.priceOptions?.plans?.length
+         ? "Installment"
+         : "";
+    return priceOption;
   }, [values.priceOptions]);
 
   const submitForm = async () => {

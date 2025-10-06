@@ -215,6 +215,7 @@ function SelectScrollable({
 }: IScrollSelectProps & {
   options: IOption[];
 }) {
+   const hasOptions = options.length > 0;
   return (
     <Select onValueChange={onChange} name={name} {...props}>
       <SelectTrigger
@@ -248,15 +249,24 @@ function SelectScrollable({
         </div>
       </SelectTrigger>
       <SelectContent id="name" className="z-[9999]">
-        {options.map(({ label = "", value = "" }, index) => (
-          <SelectItem
-            id={value}
-            key={`${name}-${index}-${label}-${value}`}
-            value={value}
+        {hasOptions ? (
+          options.map(({ label = "", value = "" }, index) => (
+            <SelectItem
+              id={value}
+              key={`${name}-${index}-${label}-${value}`}
+              value={value}
+            >
+              {label}
+            </SelectItem>
+          ))
+        ) : (
+          <div
+            className="py-2 px-4 text-center text-sm text-gray-500"
+            onMouseDown={(e) => e.preventDefault()}
           >
-            {label}
-          </SelectItem>
-        ))}
+            No available options 😔
+          </div>
+        )}
       </SelectContent>
     </Select>
   );

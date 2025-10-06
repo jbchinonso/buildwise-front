@@ -7,6 +7,7 @@ interface IDashboardStatsCardProps {
   icon?: React.ReactNode | string;
   theme?: string;
   data?: string | number;
+  isLoading?: boolean;
   onClick?: () => void;
 }
 
@@ -263,6 +264,17 @@ interface IClientRecentlyReserved {
   dateReserved: string;
 }
 
+interface IClientRecentTransactions {
+  _id: string;
+  totalPaid: number;
+  outstanding: number;
+  clientName: string;
+  propertyName: string;
+  location: string;
+  instalment: string;
+  paymentStatus: string;
+}
+
 interface IClientPaymentData {
   clientName: string;
   units: string;
@@ -278,4 +290,90 @@ interface IClientPaymentData {
   saleId: string;
   propertyName: string;
   agent: string;
+}
+
+interface ITitans {
+  id: string;
+  titan: string;
+  upline: string;
+  location: string;
+  propertiesSold: number;
+  commission: number;
+  status: string;
+  joined: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  referralCode: string;
+  directReferrals: number;
+  indirectReferrals: number;
+  totalReferrals: number;
+  totalEarnings: number;
+}
+
+interface IPaymentHistoryTransaction {
+  _id: string;
+  description: string;
+  status: string;
+  partialPaymentForSale: boolean;
+  date: Date | string;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  totalPaid: number;
+  amountPaid: number;
+  outstanding: number;
+}
+
+interface IPaymentHistorySales {
+  _id: string;
+  property: {
+    _id: string;
+    name: string;
+  };
+  plotNumber: number;
+  unitNumber: string;
+  price: string;
+  transactions: IPaymentHistoryTransaction[];
+  totalPaid: number;
+  outstanding: number;
+}
+
+interface IPaymentHistoryTransactionDTO {
+  propertyId: string;
+  property: string;
+  date: string | Date;
+  amount: number;
+  plotNumber: number;
+  status: string;
+  id: string;
+}
+
+interface IRecentTitanClient {
+  id: string;
+  name: string;
+  agentName: string;
+  location: string;
+  joinedDate: string | Date;
+}
+interface ITitanClientOverview {
+  totalClients: number;
+  activeBuyersCount: number;
+  totalPropertiesBoughtOrReserved: number;
+  recentClients: IRecentTitanClient[];
+}
+
+interface IReceipt {
+  date: Date | string;
+  clientName: string;
+  agentName: string;
+  propertyName: string;
+  plotNumber: number;
+  units: string;
+  price: number;
+  amountDeposited: number;
+  totalPaid: number;
+  outstanding: number;
+  status: string;
+  paymentMethod: string;
 }
