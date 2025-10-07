@@ -4,10 +4,10 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-import { Button, DataTableColumnHeader, Skeleton } from "@/components/ui";
+import { Button, DataTableColumnHeader, Skeleton, TableSkeleton } from "@/components/ui";
 import { useClientFetch, useModal } from "@/lib/hooks";
-import { dashboardService } from "@/lib/services/dashboard.service";
-import { toAmount, toAmountWithPrefix } from "@/lib/utils";
+import { getClientData } from "@/lib/services/dashboard.service";
+import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight, Profile2User } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
@@ -77,7 +77,7 @@ export const ClientOverview = ({
     error: clientsError,
   } = useClientFetch({
     action: async () => {
-      const res = await dashboardService.getClientData();
+      const res = await getClientData();
       return res || [];
     },
     isModalOpen,
@@ -87,7 +87,7 @@ export const ClientOverview = ({
       <DashboardStatsCard
         title="Total Clients"
         icon={<Profile2User size="24" color="#9747FF" />}
-        data={toAmountWithPrefix(stats, false)}
+        data={toAmountWithSuffix(stats, false)}
         value={"Total clients - " + toAmount(stats, false)}
         theme=""
         onClick={toggleModal}
@@ -139,12 +139,7 @@ export const ClientOverview = ({
             </div>
 
             {isClientsLoading ? (
-              <>
-                <Skeleton className="h-8" />
-                <Skeleton className="h-8" />
-                <Skeleton className="h-8" />
-                <Skeleton className="h-8" />
-              </>
+              <TableSkeleton/>
             ) : (
               <div className="w-full my-2">
                 <DataTable

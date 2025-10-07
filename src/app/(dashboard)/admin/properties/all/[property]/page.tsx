@@ -1,7 +1,6 @@
 import { BreadCrumbs, Button, Input } from "@/components/ui";
 import {
   getActiveAgents,
-  getAllClients,
   getClientAndOwnership,
   getProperty,
 } from "@/lib/services";
@@ -23,16 +22,11 @@ const Property = async (props: {
   searchParams: SearchParams;
 }) => {
   const params = await props.params;
-  const searchParams = await props.searchParams;
   const id = params.property;
-  const page = searchParams.page || 1;
-  const limit = searchParams.page || 10;
-  const search = searchParams.search || "";
 
   const property = await getProperty(id);
 
-  const [clients, clientOwner, activeAgents] = await Promise.all([
-    getAllClients({ page, limit, search }),
+  const [clientOwner, activeAgents] = await Promise.all([
     getClientAndOwnership({ id }),
     getActiveAgents(),
   ]);
@@ -44,7 +38,15 @@ const Property = async (props: {
     label: client?.client,
   }));
 
-
+  const priceOption =
+    property?.priceOptions?.plans?.length &&
+    property?.priceOptions?.instantPrice
+      ? "Outright, Instalment"
+      : property?.priceOptions?.instantPrice
+      ? "Outright"
+      : property?.priceOptions?.plans?.length
+      ? "Installment"
+      : "N/A";
 
   return (
     <section className="flex flex-1 flex-col gap-4">
@@ -125,11 +127,7 @@ const Property = async (props: {
             type="text"
             readOnly
             containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={
-              property?.priceOptions?.plans?.length
-                ? "Outright, Installment"
-                : property?.priceOptions ?? ""
-            }
+            defaultValue={priceOption}
           />
 
           <Input

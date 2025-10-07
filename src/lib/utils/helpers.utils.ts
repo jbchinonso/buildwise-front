@@ -1,5 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
-import { format } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 import { User } from "next-auth";
 import toast from "react-hot-toast";
 import { twMerge } from "tailwind-merge";
@@ -190,7 +190,7 @@ export function myImageLoader({
   )}&w=${width}&q=${quality || 75}`;
 }
 
-export const toAmountWithPrefix = (value: string | number, isCurrency = true) => {
+export const toAmountWithSuffix = (value: string | number, isCurrency = true) => {
   const numValue = Number(value);
 
   // If the value is not a valid number, return the original string.
@@ -291,6 +291,21 @@ export const formatDate = (
       throw new Error();
     }
     return format(date, formatString);
+  } catch {
+    return "N/A";
+  }
+};
+
+export const formatDateToNow = (
+  date: string | null | undefined
+) => {
+  try {
+    if (!date) {
+      throw new Error();
+    }
+    return date
+          ? formatDistanceToNow(date) + " ago"
+          : "N/A"
   } catch {
     return "N/A";
   }

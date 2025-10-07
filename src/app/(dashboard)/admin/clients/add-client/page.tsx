@@ -3,8 +3,12 @@ import { AddClientForm } from "./AddClientForm";
 import { getStates, getTitans } from "@/lib/services";
 
 const AddClient = async () => {
-  const [agents, states] = await Promise.all([getTitans(), getStates()]);
+  const [{ data: agents = [] }, states] = await Promise.all([
+    getTitans(),
+    getStates(),
+  ]);
 
+  console.log({ agents });
 
   return (
     <section className="flex flex-1 flex-col gap-4">
@@ -20,9 +24,9 @@ const AddClient = async () => {
         </header>
 
         <AddClientForm
-          agents={agents?.map((v: any) => ({
-            label: v?.fullname,
-            value: v?._id,
+          agents={(agents || [])?.map((v: any) => ({
+            label: `${v?.firstName} ${v?.lastName}`,
+            value: v?.id,
           }))}
           states={states}
         />

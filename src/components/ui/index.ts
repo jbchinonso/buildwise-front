@@ -14,3 +14,5 @@ export * from "./RecoverPasswordModal";
 export * from "./Modal";
 export * from "./CardError";
 export * from "./Skeleton";
+export * from "./TableSkeleton";
+export * from "./EmptyChartData";

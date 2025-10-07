@@ -8,7 +8,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { toAmountWithPrefix } from "@/lib/utils";
+import { toAmountWithSuffix } from "@/lib/utils";
+import { EmptyChartData } from "@/components/ui";
 
 interface IChartData {
   month: string;
@@ -22,12 +23,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function RevenueChart({
-  chartData,
-}: {
-  chartData?: IChartData[];
-}) {
-  return (
+export function RevenueChart({ chartData }: { chartData?: IChartData[] }) {
+  return chartData?.length ? (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart accessibilityLayer data={chartData}>
         <Bar
@@ -49,10 +46,12 @@ export function RevenueChart({
           tickMargin={0}
           widths={50}
           width={50}
-          tickFormatter={(value) => toAmountWithPrefix(value || 0)}
+          tickFormatter={(value) => toAmountWithSuffix(value || 0)}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
       </BarChart>
     </ChartContainer>
+  ) : (
+    <EmptyChartData />
   );
 }

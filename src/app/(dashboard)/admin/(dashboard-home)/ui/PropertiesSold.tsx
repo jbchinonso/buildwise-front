@@ -8,7 +8,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { toAmountWithPrefix } from "@/lib/utils";
+import { toAmountWithSuffix } from "@/lib/utils";
+import { EmptyChartData } from "@/components/ui";
 
 const chartConfig = {
   sales: {
@@ -22,7 +23,7 @@ export function PropertiesSold({
 }: {
   chartData?: { month: string; sales: number }[];
 }) {
-  return (
+  return chartData?.length ? (
     <ChartContainer config={chartConfig} className="min-h-[200px] min-w-full">
       <LineChart accessibilityLayer data={chartData}>
         <Line
@@ -31,6 +32,7 @@ export function PropertiesSold({
           stroke="var(--color-sales)"
           strokeWidth={2}
           dot={false}
+          // connectNulls={false} 
         />
         <XAxis
           dataKey="month"
@@ -40,10 +42,12 @@ export function PropertiesSold({
         <YAxis
           dataKey="sales"
           tickMargin={0}
-          tickFormatter={(value) => toAmountWithPrefix(value || 0, false)}
+          tickFormatter={(value) => toAmountWithSuffix(value || 0, false)}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
       </LineChart>
     </ChartContainer>
+  ) : (
+    <EmptyChartData />
   );
 }

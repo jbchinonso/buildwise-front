@@ -2,51 +2,48 @@
 import { DashboardModal, DataTable } from "@/components/dashboard";
 import { Button, DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
+import { IPaymentHistoryTransactionDTO } from "@/lib/type";
+import { formatDate, toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { Check, TickCircle } from "iconsax-react";
+import { format } from "date-fns";
+import { TickCircle } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
-type PaymentHistory = {
-  id: string;
-  date: string;
-  amount: string;
-  property: number;
-  plot_no: string;
-  status: string;
-};
-
-const columns: (toggleModal: () => void) => ColumnDef<PaymentHistory>[] = (
+const columns: (
   toggleModal: () => void
-) => [
+) => ColumnDef<IPaymentHistoryTransactionDTO>[] = (toggleModal: () => void) => [
   {
     accessorKey: "date",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date" />
     ),
-    cell: ({ row }) => <div>{row.getValue("date")}</div>,
+    cell: ({ row }) => (
+      <div>{formatDate(row.getValue("date") || "", "dd/MM/yyyy, HH:MMa")}</div>
+    ),
   },
   {
     accessorKey: "amount",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Amount" />
     ),
-    cell: ({ row }) => <div>{row.getValue("amount")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("amount") || 0)}</div>,
   },
   {
     accessorKey: "property",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Property" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    cell: ({ row }) => {
+      return <div>{row.getValue("property")}</div>;
+    },
   },
   {
-    accessorKey: "plot_no",
+    accessorKey: "plotNumber",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Plot No." />
     ),
-    cell: ({ row }) => <div>{row.getValue("plot_no")}</div>,
+    cell: ({ row }) => <div>{row.getValue("plotNumber")}</div>,
   },
   {
     accessorKey: "status",
@@ -56,7 +53,9 @@ const columns: (toggleModal: () => void) => ColumnDef<PaymentHistory>[] = (
     cell: ({ row }) => (
       <div
         className={`${
-          row.getValue("status") == "Active" ? "text-[#09A4B9]" : ""
+          row.getValue("status") == "completed"
+            ? "text-[rgba(79,171,21,1)]"
+            : ""
         }`}
       >
         {row.getValue("status")}
@@ -78,7 +77,7 @@ const columns: (toggleModal: () => void) => ColumnDef<PaymentHistory>[] = (
             id="button"
             className="flex items-center gap-1"
           >
-            <span>View details</span>
+            <span>View receipt</span>
             <ChevronRight className="size-4" />
           </button>
         </div>
@@ -90,7 +89,7 @@ const columns: (toggleModal: () => void) => ColumnDef<PaymentHistory>[] = (
 export const PaymentHistoryTable = ({
   data = [],
 }: {
-  data: PaymentHistory[];
+  data: IPaymentHistoryTransactionDTO[];
 }) => {
   const { isModalOpen, closeModal, toggleModal } = useModal();
 
@@ -169,7 +168,13 @@ export const PaymentHistoryTable = ({
             })}
           </div>
           <div className="relative flex w-full my-4">
-            <Image src="/image/sign.png" alt="" width={100} height={100} unoptimized />
+            <Image
+              src="/image/sign.png"
+              alt=""
+              width={100}
+              height={100}
+              unoptimized
+            />
           </div>
           <div className="flex mt-auto py-4 gap-4 justify-stretch w-full  *:w-full">
             <Button

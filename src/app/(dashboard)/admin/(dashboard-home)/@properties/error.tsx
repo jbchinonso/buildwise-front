@@ -20,7 +20,7 @@ export default function Error({
     <CardError
       reset={() => reset()}
       message="Error fetching data!"
-      error={getError(error)}
+      // error={getError(error)}
       className="gap-10"
     />
   );

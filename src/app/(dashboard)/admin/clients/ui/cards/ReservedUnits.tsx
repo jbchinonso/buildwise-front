@@ -10,7 +10,8 @@ import {
   DataTableColumnHeader,
   PieChart,
 } from "@/components/ui";
-import { useModal } from "@/lib/hooks";
+import { useClientFetch, useModal } from "@/lib/hooks";
+import { getClientRecentlyReserved } from "@/lib/services";
 import { IClientRecentlyReserved, IPropertySummary } from "@/lib/type";
 import { cn, formatAddress } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
@@ -99,11 +100,9 @@ const columns: ColumnDef<IClientRecentlyReserved>[] = [
 ];
 
 export const ReservedUnits = ({
-  data = [],
   reservedUnits = 0,
   summary,
 }: {
-  data?: IClientRecentlyReserved[];
   summary?: IPropertySummary;
   reservedUnits?: number | string;
 }) => {
@@ -121,14 +120,25 @@ export const ReservedUnits = ({
     },
     { label: "closed", data: summary?.closedSales ?? 0, fill: "#1FDBF4" },
   ];
+
+  const {
+    data,
+    isLoading: isClientsLoading,
+    error: clientsError,
+  } = useClientFetch({
+    action: async () => {
+      const res = await getClientRecentlyReserved();
+      return res || [];
+    },
+    isModalOpen,
+  });
+
   return (
     <>
       <DashboardStatsCard
         title="Reserved units"
         icon={<Hourglass size="24" color="#926667" />}
         data={reservedUnits}
-        theme=""
-        // className="cursor-auto"
         onClick={toggleModal}
       />
 
@@ -184,7 +194,7 @@ export const ReservedUnits = ({
             </div>
 
             <div className="w-full my-1">
-              <DataTable columns={columns} data={data} />
+              <DataTable columns={columns} data={data||[]} />
             </div>
 
             <div className="flex mt-auto justify-end gap-4 items-center">

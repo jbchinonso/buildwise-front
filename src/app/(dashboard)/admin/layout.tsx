@@ -14,7 +14,7 @@ export default async function AdminLayout({
     return redirect("/login");
   }
   return (
-    <section className="bg-[#F8F8F8] mb-auto flex-1">
+    <section className="bg-[#F8F8F8] mb-auto flex-1 flex flex-col">
       <section className="flex flex-col flex-1 relative mb-auto w-full min-h-fit bg-[#F8F8F8] max-w-[MIN(2440px,100%)] mx-auto">
         <Header />
 
