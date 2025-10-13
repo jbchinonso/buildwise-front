@@ -6,7 +6,7 @@ import {
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
-import { ArrowRight, Money, Moneys, Profile2User } from "iconsax-react";
+import { ArrowRight, Moneys } from "iconsax-react";
 import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
@@ -48,14 +48,20 @@ const columns: ColumnDef<Transaction>[] = [
   },
 
   {
-    id: "actions",
+    accessorKey: "_id",
+    header: () => null,
     cell: ({ row }) => {
+      const id =
+        String(row.getValue("_id")) ||
+        String(row?.original?.id) ||
+        String(row.getValue("_id"));
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center px-4">
+          <Link href={`/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },

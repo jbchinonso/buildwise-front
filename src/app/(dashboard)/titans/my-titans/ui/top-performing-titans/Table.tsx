@@ -2,7 +2,6 @@
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
 import { ColumnDef } from "@tanstack/react-table";
-import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 type Transaction = {
@@ -30,14 +29,14 @@ const columns: ColumnDef<Transaction>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Revenue" />
     ),
-    cell: ({ row }) => <div>₦83,500,000</div>,
+    cell: ({  }) => <div>₦83,500,000</div>,
   },
   {
     accessorKey: "location",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="My Commission" />
     ),
-    cell: ({ row }) => <div>₦500,000</div>,
+    cell: ({  }) => <div>₦500,000</div>,
   },
 
   {
@@ -45,7 +44,7 @@ const columns: ColumnDef<Transaction>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Sub-titans" />
     ),
-    cell: ({ row }) => <div>15</div>,
+    cell: ({  }) => <div>15</div>,
   },
   {
       // id: "actions",

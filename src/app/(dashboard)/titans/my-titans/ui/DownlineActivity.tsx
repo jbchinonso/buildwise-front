@@ -1,5 +1,3 @@
-
-import { ArrowDown } from "iconsax-react";
 import { ActivityCard } from "./cards/ActivityCard";
 
 export default function DownlineActivity() {

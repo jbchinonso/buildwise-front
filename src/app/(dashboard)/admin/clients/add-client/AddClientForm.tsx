@@ -15,7 +15,6 @@ export const AddClientForm = ({
   agents: IOption[];
 }) => {
   const {
-    handleSubmit,
     touched,
     errors,
     handleBlur,
@@ -50,6 +49,7 @@ export const AddClientForm = ({
         value: lga,
       })) ?? []
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.state]);
 
   const handleSelect = (name: string, value: any) => {

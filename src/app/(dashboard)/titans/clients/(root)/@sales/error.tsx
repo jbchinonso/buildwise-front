@@ -21,7 +21,7 @@ export default function Error({
       reset={() => reset()}
       message="Error fetching data!"
       error={getError(error)}
-      className="gap-10"
+      className="gap-8"
     />
   );
 }

@@ -15,13 +15,6 @@ import { PaymentOptionsModal } from "../ui";
 import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
- // NOTE ?? should commission rate be typed in?
-const comissionOptions = [
-  { label: "5% of property value", value: "5" },
-  { label: "10% of property value", value: "10" },
-  { label: "15% of property value", value: "15" },
-  { label: "20% of property value", value: "20" },
-];
 
 export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
   const router = useRouter();
@@ -76,6 +69,7 @@ export const AddPropertyForm = ({ states = [] }: { states: IState[] }) => {
         value: lga,
       })) ?? []
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.state]);
 
   const price = useMemo(() => {

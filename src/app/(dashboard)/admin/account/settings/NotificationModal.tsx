@@ -8,17 +8,7 @@ import { ChevronRight } from "lucide-react";
 export const NotificationModal = () => {
   const { closeModal, isModalOpen, toggleModal } = useModal();
 
-  const {
-    values,
-    handleChange,
-    handleReset,
-    handleBlur,
-    errors,
-    isValid,
-    dirty,
-    touched,
-    resetForm,
-  } = useFormik({
+  const { dirty } = useFormik({
     initialValues: {
       sms: "",
       email: "",

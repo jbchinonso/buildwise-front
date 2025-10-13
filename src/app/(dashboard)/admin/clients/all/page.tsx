@@ -2,9 +2,7 @@ import { ClientsTable } from "../ui";
 import { BreadCrumbs, Filters, SearchInput } from "@/components/ui";
 import { getAllClients } from "@/lib/services/client.service";
 
-
 type SearchParams = Promise<{ page?: string; limit?: string; search?: string }>;
-
 
 const AllClients = async (props: { searchParams: SearchParams }) => {
   const searchParams = await props.searchParams;

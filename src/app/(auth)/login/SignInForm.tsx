@@ -4,12 +4,11 @@ import { getError, signInValidationSchema } from "@/lib/utils";
 import { useFormik } from "formik";
 import { signIn, SignInOptions } from "next-auth/react";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 export const SignInForm = () => {
   const searchParams = useSearchParams();
-  const pathname = usePathname();
   const callbackUrl = "/dashboard";
   const router = useRouter();
   const isModalOpen = searchParams.get("forgot-password");

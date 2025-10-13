@@ -16,6 +16,7 @@ import { ChevronRight, House } from "lucide-react";
 import { PropertiesSold } from "./PropertiesSold";
 import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 import { getSalesData } from "@/lib/services/dashboard.service";
+import Link from "next/link";
 
 type Transaction = {
   id: string;
@@ -87,14 +88,17 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("payment_status")}</div>,
   },
   {
-    id: "actions",
+    accessorKey: "_id",
+    header: () => null,
     cell: ({ row }) => {
+      const id = String(row.getValue("id")) || String(row.getValue("_id"));
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center px-4">
+          <Link href={`${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
@@ -107,7 +111,7 @@ export const SalesOverview = ({ stats = 0 }: { stats?: number }) => {
   const {
     data: salesData,
     isLoading: isSalesLoading,
-    error: salesError,
+    // error: salesError,
   } = useClientFetch({
     action: async () => {
       const res = await getSalesData();

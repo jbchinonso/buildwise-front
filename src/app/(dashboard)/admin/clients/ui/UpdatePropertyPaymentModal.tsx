@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { DashboardModal } from "@/components/dashboard";
 import { Button, Input, SelectScrollable, SubmitButton } from "@/components/ui";

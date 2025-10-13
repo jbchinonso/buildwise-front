@@ -1,6 +1,6 @@
 import { BreadCrumbs } from "@/components/ui";
 import { ActiveTabs, PaymentHistoryTable } from "../../../ui";
-import { getClient, getClientPaymentData } from "@/lib/services";
+import { getClient } from "@/lib/services";
 import { clientProfileDTO } from "@/lib/dtos";
 
 type Params = Promise<{ client: string }>;

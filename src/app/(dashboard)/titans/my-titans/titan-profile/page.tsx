@@ -1,11 +1,8 @@
-import { CommissionsTable } from "@/app/(dashboard)/titans/titans/ui";
 import {
   BreadCrumbs,
-  Filters,
   ProfileAvatar,
-  SearchInput,
 } from "@/components/ui";
-import { getCommissions } from "@/lib/services";
+// import { getCommissions } from "@/lib/services";
 import Profile from "../ui/Profile";
 import Activities from "../ui/Activities";
 import { getServerSession } from "next-auth";
@@ -13,10 +10,11 @@ import { authOptions } from "@/lib/utils";
 
 type Params = Promise<{ titan: string }>;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CommissionHistory = async (props: { params: Params }) => {
-  const params = await props.params;
-  const id = params.titan;
-  const { data = [] } = await getCommissions();
+  // const params = await props.params;
+  // const id = params.titan;
+  // const { data = [] } = await getCommissions();
   const session = await getServerSession(authOptions);
   return (
     <section className="flex flex-1 flex-col">

@@ -26,7 +26,7 @@ export function CardError({
       </p>
       <button
         onClick={reset}
-        className="cursor-pointer  w-fit border rounded-full py-1 p-3 text-xs my-1"
+        className="cursor-pointer mt-auto w-fit border rounded-full py-1 p-3 text-xs my-1"
       >
         Try again
       </button>

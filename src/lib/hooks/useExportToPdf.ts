@@ -25,7 +25,7 @@ export function useExportPDF(): ExportPDFResult {
     async (element: HTMLElement, options: ExportPDFOptions = {}) => {
       const {
         filename = "export.pdf",
-        quality = 2,
+        // quality = 2,
         format = "a4",
         orientation = "portrait",
         margin = 10,

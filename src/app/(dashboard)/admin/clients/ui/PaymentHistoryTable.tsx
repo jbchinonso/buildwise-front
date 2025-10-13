@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { DashboardModal, DataTable } from "@/components/dashboard";
 import { Button, DataTableColumnHeader } from "@/components/ui";
@@ -7,6 +8,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { TickCircle } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 // import Link from "next/link";
 
 const columns: (toggleModal: () => void) => ColumnDef<IClientPaymentData>[] = (
@@ -57,22 +59,20 @@ const columns: (toggleModal: () => void) => ColumnDef<IClientPaymentData>[] = (
   },
 
   {
-    // id: "actions",
     accessorKey: "id",
     header: () => null,
     cell: ({ row }) => {
-      const id = String(row.getValue("id")) || String(row?.id);
+      const id =
+        String(row.getValue("id")) ||
+        // String(row?.original) ||
+        String(row.getValue("_id"));
 
       return (
         <div className="flex justify-center px-4">
-          <button
-            onClick={toggleModal}
-            id="button"
-            className="flex items-center gap-1"
-          >
-            <span>View details</span>
+          <Link href={`/${id}`} id="button">
             <ChevronRight className="size-4" />
-          </button>
+            <span className="sr-only">View details</span>
+          </Link>
         </div>
       );
     },

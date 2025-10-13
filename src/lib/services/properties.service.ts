@@ -219,7 +219,9 @@ export const getMostAvaliableUnits = async (
       }
     );
 
-    const { data, ...pagination } = response;
+    // const { data, ...pagination } = response as {
+    //   data: IPagination;
+    // } & IPagination;
 
     return response as IMostAvailableUnits[];
   } catch (error) {

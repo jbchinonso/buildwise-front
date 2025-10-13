@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { DashboardModal } from "@/components/dashboard";
-import { Button, Input, Select, SelectScrollable } from "@/components/ui";
+import { Button, Input, SelectScrollable } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
 import { Plus } from "lucide-react";
 

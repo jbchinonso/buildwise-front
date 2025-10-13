@@ -17,7 +17,6 @@ import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ArrowRight, House2 } from "iconsax-react";
-import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 

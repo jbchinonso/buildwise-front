@@ -58,7 +58,7 @@ const columns: ColumnDef<Transaction>[] = [
   },
   {
     accessorKey: "date_paid",
-    header: ({ column }) => (
+    header: ({ }) => (
       <TableHead title="Date paid" />
     ),
     cell: ({ row }) => <div>{row.getValue("date_paid")}</div>,

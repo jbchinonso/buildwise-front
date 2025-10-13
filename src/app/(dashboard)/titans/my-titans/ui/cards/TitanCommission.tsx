@@ -6,13 +6,11 @@ import {
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
-import { ArrowRight, Profile2User } from "iconsax-react";
+import { ArrowRight } from "iconsax-react";
 import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, Network } from "lucide-react";
 import { TitanCommissionOverview } from "../TitanCommissionOverview";
-
-
 
 type Transaction = {
   id: string;
@@ -64,21 +62,25 @@ const columns: ColumnDef<Transaction>[] = [
   },
 
   {
-    id: "actions",
+    accessorKey: "_id",
+    header: () => null,
     cell: ({ row }) => {
+      const id =
+        String(row.getValue("_id")) ||
+        String(row?.original?.id) ||
+        String(row.getValue("_id"));
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center px-4">
+          <Link href={`/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
   },
 ];
-
-
 
 export const TitanCommission = ({ data }: { data: Transaction[] }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
@@ -86,7 +88,7 @@ export const TitanCommission = ({ data }: { data: Transaction[] }) => {
     <>
       <DashboardStatsCard
         title="My Titans Commission"
-        icon={<Network size="24" color="#1FDBF4" className="rotate-90"/>}
+        icon={<Network size="24" color="#1FDBF4" className="rotate-90" />}
         data="500k"
         theme=""
         onClick={toggleModal}
@@ -98,10 +100,9 @@ export const TitanCommission = ({ data }: { data: Transaction[] }) => {
           heading="My Titans Overview"
           className="max-w-[MIN(95%,620px)]"
         >
-           
           <section className="flex flex-col w-full gap-y-4 ">
-          <TitanCommissionOverview/>
-           
+            <TitanCommissionOverview />
+
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Total Commission</p>
@@ -123,7 +124,7 @@ export const TitanCommission = ({ data }: { data: Transaction[] }) => {
               </h2>
 
               <Link
-                  href="/titans/my-titans/commission-breakdown"
+                href="/titans/my-titans/commission-breakdown"
                 className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
               >
                 View all <ArrowRight size={14} color="currentColor" />

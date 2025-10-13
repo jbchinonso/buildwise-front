@@ -1,6 +1,6 @@
 import { DashboardStatsCard } from "@/components/dashboard";
-import { ArrowDown, Flash, House, Profile2User } from "iconsax-react";
-import { Ban, Network } from "lucide-react";
+import { ArrowDown, House, Profile2User } from "iconsax-react";
+import {  Network } from "lucide-react";
 
 const CardLoading = () => {
   return (

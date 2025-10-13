@@ -1,11 +1,18 @@
 import { ClientsTable } from "../ui";
-import { Filters, SearchInput } from "@/components/ui";
+import { BreadCrumbs, Filters, SearchInput } from "@/components/ui";
 import { getAllTitanClients } from "@/lib/services";
 
 const AllClients = async () => {
   const allClients = await getAllTitanClients();
+  
   return (
     <>
+      <BreadCrumbs
+        paths={[
+          { title: "Home", path: "/titans/clients" },
+          { title: "All Clients", path: "/titans/clients/all" },
+        ]}
+      />
       <div className="w-full my-2 flex items-baseline justify-between">
         <p className="font-bold flex gap-2">
           All Clients
@@ -17,7 +24,7 @@ const AllClients = async () => {
           <SearchInput />
         </div>
       </div>
-      <ClientsTable data={allClients||[]} />
+      <ClientsTable data={allClients || []} />
     </>
   );
 };

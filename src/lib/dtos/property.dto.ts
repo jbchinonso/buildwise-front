@@ -1,4 +1,3 @@
-import { format, formatDistanceToNow } from "date-fns";
 import {
   IPropertyClientOwnership,
   IRecentlyReservedPropertyData,

@@ -14,35 +14,35 @@ interface PieChartProps {
 }
 
 // Custom label renderer to ensure labels are visible
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  index,
-  value,
-}: any) => {
-  const RADIAN = Math.PI / 180;
-  // Position the label further out from the pie
-  const radius = outerRadius * 1.1;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+// const renderCustomizedLabel = ({
+//   cx,
+//   cy,
+//   midAngle,
+//   innerRadius,
+//   outerRadius,
+//   percent,
+//   index,
+//   value,
+// }: any) => {
+//   const RADIAN = Math.PI / 180;
+//   // Position the label further out from the pie
+//   const radius = outerRadius * 1.1;
+//   const x = cx + radius * Math.cos(-midAngle * RADIAN);
+//   const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
-  return (
-    <text
-      x={x}
-      y={y}
-      fill="hsl(var(--primary))"
-      textAnchor={x > cx ? "start" : "end"}
-      dominantBaseline="central"
-      fontSize="12"
-    >
-      {value}
-    </text>
-  );
-};
+//   return (
+//     <text
+//       x={x}
+//       y={y}
+//       fill="hsl(var(--primary))"
+//       textAnchor={x > cx ? "start" : "end"}
+//       dominantBaseline="central"
+//       fontSize="12"
+//     >
+//       {value}
+//     </text>
+//   );
+// };
 
 export function PieChart({ chartConfig, chartData }: PieChartProps) {
   return (

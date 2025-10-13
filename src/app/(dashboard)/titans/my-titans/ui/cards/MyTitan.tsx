@@ -5,14 +5,13 @@ import {
   PageModal,
 } from "@/components/dashboard";
 
-import { Button, DataTableColumnHeader, Table } from "@/components/ui";
+import { Button, DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
-import { ArrowRight, Profile2User } from "iconsax-react";
-import Link from "next/link";
+import { Profile2User } from "iconsax-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
-
+// import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type Transaction = {
   id: string;
@@ -127,7 +126,6 @@ const titanData: Transaction[] = [
   },
 ];
 
-
 const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "titan",
@@ -171,31 +169,36 @@ const columns: ColumnDef<Transaction>[] = [
     ),
     cell: ({ row }) => <div>{row.getValue("status")}</div>,
   },
+
   {
-    id: "actions",
+    accessorKey: "id",
+    header: () => null,
     cell: ({ row }) => {
-      const router = useRouter(); // keep inside cell scope if using App Router
-      const titanId = row.original.id;
-  
+      const id =
+        String(row.getValue("id")) ||
+        String(row?.original?.id) ||
+        String(row.getValue("_id"));
+
       return (
-        <button
-          onClick={() => router.push("/titans/my-titans/titan-profile/")}
-          className="flex items-center justify-center"
-        >
-          <ChevronRight className="size-4 text-gray-500 hover:text-gray-800 transition" />
-        </button>
+        <div className="flex justify-center px-4">
+          <Link href={`/${id}`} id="button">
+            <ChevronRight className="size-4" />
+            <span className="sr-only">View details</span>
+          </Link>
+        </div>
       );
     },
   },
 ];
 // onClick={() => router.push(`/titans/my-titans/titan-profile/${titanId}`)}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const MyTitan = ({ data }: { data: Transaction[] }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
         title="My Titans"
-        icon={<Profile2User size="24" color="#926667"  />}
+        icon={<Profile2User size="24" color="#926667" />}
         data="15"
         theme=""
         onClick={toggleModal}
@@ -223,9 +226,7 @@ export const MyTitan = ({ data }: { data: Transaction[] }) => {
               </div>
             </div>
 
-            <div className="flex items-baseline justify-between w-full gap-4">
-              
-            </div>
+            <div className="flex items-baseline justify-between w-full gap-4"></div>
 
             <div className="w-full my-2">
               <DataTable columns={columns} data={titanData} />

@@ -4,18 +4,6 @@ import Properties from "./Properties";
 import SubTitans from "./SubTitans";
 
 
-type Transaction = {
-  id: string;
-  titan: string;
-  sales: string;
-  revenue: string;
-  commission: string;
-  joined: string;
-  status: string;
-};
-
-
-
 export default function Activities() {
 
   return (

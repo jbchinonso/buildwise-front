@@ -6,7 +6,7 @@ export interface IClientsData {
   lastName: string;
   state: string;
   lga: string;
-  agent: [Object];
+  agent: object[];
   properties: [];
   sales: [];
   phoneNumber: string;

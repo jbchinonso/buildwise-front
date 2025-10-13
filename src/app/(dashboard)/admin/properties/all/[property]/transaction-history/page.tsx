@@ -1,14 +1,10 @@
 import { BreadCrumbs } from "@/components/ui";
 import {
-  getAllProperties,
   getProperty,
   getPropertySales,
-  getReceiptData,
 } from "@/lib/services";
 import React from "react";
 import { TransactionTable } from "./TransactionTable";
-import { IPagination } from "@/lib/type";
-import { toAmount } from "@/lib/utils";
 import { IPropertySale } from "@/lib/dtos/property.dto";
 import { ReceiptModal } from "./ReceiptModal";
 
@@ -30,7 +26,7 @@ const TransactionHistory = async (props: {
   const propertyId = params.property;
   const property = await getProperty(propertyId);
 
-  const { data = [], pagination = {} } = await getPropertySales({
+  const { data = [] } = await getPropertySales({
     propertyId,
     params: searchParams,
   }); //NOTE change this to property transactions

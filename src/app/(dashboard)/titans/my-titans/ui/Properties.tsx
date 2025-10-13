@@ -2,11 +2,11 @@
 "use client";
 
 import { DataTable, PageModal } from "@/components/dashboard";
-import { useState } from "react";
 import { Button, DataTableColumnHeader, Input } from "@/components/ui";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import { useModal } from "@/lib/hooks";
+import Link from "next/link";
 
 type Transaction = {
   id: string;
@@ -19,63 +19,69 @@ type Transaction = {
 };
 
 const columns: ColumnDef<Transaction>[] = [
-    {
-      accessorKey: "property",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Property" />
-      ),
-      cell: ({ row }) => <div>{row.getValue("property")}</div>,
+  {
+    accessorKey: "property",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Property" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+  },
+  {
+    accessorKey: "location",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Location" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("location")}</div>,
+  },
+  {
+    accessorKey: "buyer",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Buyer" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("buyer")}</div>,
+  },
+  {
+    accessorKey: "unit",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Unit" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("unit")}</div>,
+  },
+  {
+    accessorKey: "price",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Price" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("price")}</div>,
+  },
+  {
+    accessorKey: "payment status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Payment Status" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("payment status")}</div>,
+  },
+
+  {
+    accessorKey: "_id",
+    header: () => null,
+    cell: ({ row }) => {
+      const id =
+        String(row.getValue("id")) ||
+        String(row?.original?.id) ||
+        String(row.getValue("_id"));
+
+      return (
+        <div className="flex justify-center px-4">
+          <Link href={`/${id}`} id="button">
+            <ChevronRight className="size-4" />
+            <span className="sr-only">View details</span>
+          </Link>
+        </div>
+      );
     },
-    {
-      accessorKey: "location",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Location" />
-      ),
-      cell: ({ row }) => <div>{row.getValue("location")}</div>,
-    },
-    {
-      accessorKey: "buyer",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Buyer" />
-      ),
-      cell: ({ row }) => <div>{row.getValue("buyer")}</div>,
-    },
-    {
-      accessorKey: "unit",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Unit" />
-      ),
-      cell: ({ row }) => <div>{row.getValue("unit")}</div>,
-    },
-    {
-      accessorKey: "price",
-      header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Price" />
-      ),
-      cell: ({ row }) => <div>{row.getValue("price")}</div>,
-    },
-    {
-        accessorKey: "payment status",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Payment Status" />
-        ),
-        cell: ({ row }) => <div>{row.getValue("payment status")}</div>,
-      },
-  
-    {
-      id: "actions",
-      cell: ({ row }) => {
-        return (
-          <div className="flex justify-end">
-            <button id="button">
-              <ChevronRight className="size-4" />
-              <span className="sr-only">View details</span>
-            </button>
-          </div>
-        );
-      },
-    },
-  ];
+  },
+];
   const titanData: Transaction[] = [
     {
       id: "1",

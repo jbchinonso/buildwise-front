@@ -75,14 +75,19 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("paymentStatus")}</div>,
   },
   {
-    id: "actions",
+    accessorKey: "_id",
+    header: () => null,
     cell: ({ row }) => {
+      const id =
+        String(row.getValue("id")) ||
+        String(row.getValue("_id"));
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center px-4">
+          <Link href={`${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },

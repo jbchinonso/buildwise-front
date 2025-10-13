@@ -1,6 +1,5 @@
 "use client";
 import { useCallback, useEffect, useState, useRef } from "react";
-import { useModal } from "./useModal"; // Assuming this is your custom hook
 
 type AsyncAction<T> = () => Promise<T>;
 
@@ -33,7 +32,7 @@ export const useClientFetch = <T,>({
       } else {
         setData(response);
       }
-    } catch (err) {
+    } catch  {
       setError("Failed to load data");
     } finally {
       setIsLoading(false);

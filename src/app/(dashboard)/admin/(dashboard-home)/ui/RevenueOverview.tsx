@@ -21,6 +21,7 @@ import {
 } from "@/components/ui";
 import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 import { getRevenueData } from "@/lib/services/dashboard.service";
+import Link from "next/link";
 
 type Transaction = {
   id: string;
@@ -92,14 +93,17 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("payment_status")}</div>,
   },
   {
-    id: "actions",
+    accessorKey: "_id",
+    header: () => null,
     cell: ({ row }) => {
+      const id = String(row.getValue("id")) || String(row.getValue("_id"));
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center px-4">
+          <Link href={`${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
@@ -118,7 +122,7 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: number }) => {
   const {
     data: revenueData,
     isLoading: isRevenueLoading,
-    error: revenueError,
+    // error,
   } = useClientFetch({
     action: async () => {
       const res = await getRevenueData();
