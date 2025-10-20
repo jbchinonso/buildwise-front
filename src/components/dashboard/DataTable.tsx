@@ -61,8 +61,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="w-full">
-      <Table>
+    <div className="w-full flex flex-col flex-1 min-h-full">
+      <Table className="flex-1 min-h-full">
         <TableHeader className="bg-grey-50 rounded-lg mb-2">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -81,7 +81,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody className="bg-white rounded-lg my-2 p-4 text-sm">
+        <TableBody className="bg-white min-h-full rounded-lg my-2 p-4 text-sm flex-1">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
@@ -97,7 +97,10 @@ export function DataTable<TData, TValue>({
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={columns?.length||5} className="h-24 text-center text-sm">
+              <TableCell
+                colSpan={columns?.length || 5}
+                className="h-24 text-center text-sm"
+              >
                 No results.
               </TableCell>
             </TableRow>

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ChangePasswordModal } from "./ChangePasswordModal";
 import { copyTextToClipboard } from "@/lib/utils";
 import { Copy } from "iconsax-react";
+import { BankModal } from "./BankModal";
 import { NotificationSettings } from "@/components/dashboard";
 
 export const SettingsForm = () => {
@@ -13,10 +14,17 @@ export const SettingsForm = () => {
   const [inviteLink, setInviteLink] = useState(
     "http://localhost:3000/admin/account/settings"
   );
+  const [bankAccount, setBankAccount] = useState({
+    bankName: "GTB",
+    accountName: "",
+    accountNumber: "0494 3939 33",
+  });
+
   return (
     <>
       <div className="w-full flex supports-[grid]:grid md:grid-cols-2 flex-wrap justify-between gap-4 gap-x-20">
         <ChangePasswordModal />
+        <BankModal {...bankAccount} />
         <Input
           label="Invitation link"
           type="text"

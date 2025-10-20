@@ -10,9 +10,8 @@ const { data = [] } = await getTransactions();
   return (
     <>
       <section className="w-full justify-between flex flex-wrap gap-4">
-    
-        <MyTitan data={data}/>
-        <TitanCommission data={data}/>
+        <MyTitan stats={0}/>
+        <TitanCommission stats={0}/>
         <SubTitanCommission data={data}/>
       </section>
 

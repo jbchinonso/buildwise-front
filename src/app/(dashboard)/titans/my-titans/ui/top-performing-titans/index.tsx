@@ -1,8 +1,8 @@
-import { getTransactions } from "@/lib/services";
+import { getTopPerformingTitans } from "@/lib/services";
 import Table from "./Table";
 
 export const TopPerformingTitans = async () => {
-  const { data = [] } = await getTransactions();
+  const { data = [] } = await getTopPerformingTitans();
   return (
     <div className="rounded-2xl bg-white p-4 w-full sm:w-[60%] flex flex-col gap-4 border border-grey-50">
       <div className="flex w-full items-center justify-between gap-4">

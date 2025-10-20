@@ -20,7 +20,9 @@ const AdminLayout = async ({
           <p className="text-xs text-[rgba(122,127,131,1)]">User ID: {session?.user?.id || "N/A"}</p>
         </div>
       </div>
+
       <AccountTabs />
+      
       {children}
     </>
   );

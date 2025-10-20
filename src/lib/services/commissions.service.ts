@@ -1,4 +1,5 @@
 import { customFetch, getError } from "../utils";
+import { authFetch } from "./auth.service";
 
 export const getCommissions = async (): Promise<{
   data?: any[];
@@ -15,6 +16,21 @@ export const getCommissions = async (): Promise<{
     );
 
     return { data };
+  } catch (error) {
+    return { error: getError(error) };
+  }
+};
+
+export const getTotalCommissions = async () => {
+  try {
+    const data = await authFetch("/earning/titan", {
+      next: {
+        revalidate: 8400,
+        tags: ["commission"],
+      },
+    });
+
+    return { data } ;
   } catch (error) {
     return { error: getError(error) };
   }

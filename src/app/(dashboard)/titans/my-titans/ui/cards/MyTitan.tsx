@@ -4,16 +4,20 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-
-import { Button, DataTableColumnHeader } from "@/components/ui";
-import { useModal } from "@/lib/hooks";
+import { Button, DataTableColumnHeader, TableSkeleton } from "@/components/ui";
+import { useClientFetch, useModal } from "@/lib/hooks";
 import { Profile2User } from "iconsax-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
-// import { useRouter } from "next/navigation";
 import Link from "next/link";
+import {
+  getTitansOverviewList,
+  getTitansOverviewSummary,
+} from "@/lib/services";
+import { toAmount } from "@/lib/utils";
+import { IPagination } from "@/lib/type";
 
-type Transaction = {
+type Titan = {
   id: string;
   titan: string;
   sales: string;
@@ -24,109 +28,8 @@ type Transaction = {
   // instalment: string;
   // payment_status: string;
 };
-const titanData: Transaction[] = [
-  {
-    id: "1",
-    titan: "Robert Fox",
-    sales: "--",
-    revenue: "--",
-    commission: "--",
-    joined: "Today",
-    status: "Pending",
-  },
-  {
-    id: "2",
-    titan: "Annette Black",
-    sales: "4",
-    revenue: "₦17,000,000",
-    commission: "₦83,500",
-    joined: "2yrs ago",
-    status: "Active",
-  },
-  {
-    id: "3",
-    titan: "Cody Fisher",
-    sales: "1",
-    revenue: "₦17,000,000",
-    commission: "₦83,500",
-    joined: "1y 5m ago",
-    status: "Suspended",
-  },
-  {
-    id: "4",
-    titan: "Jerome Bell",
-    sales: "3",
-    revenue: "₦17,000,000",
-    commission: "₦83,500",
-    joined: "1y 5m ago",
-    status: "Active",
-  },
-  {
-    id: "5",
-    titan: "Floyd Miles",
-    sales: "3",
-    revenue: "₦17,000,000",
-    commission: "₦83,500",
-    joined: "1y 5m ago",
-    status: "Active",
-  },
-  {
-    id: "6",
-    titan: "Courtney Henry",
-    sales: "3",
-    revenue: "₦17,000,000",
-    commission: "₦83,500",
-    joined: "1y 5m ago",
-    status: "Active",
-  },
-  {
-    id: "7",
-    titan: "Albert Flores",
-    sales: "3",
-    revenue: "₦17,000,000",
-    commission: "₦83,500",
-    joined: "1y 5m ago",
-    status: "Active",
-  },
-  {
-    id: "8",
-    titan: "Jacob Jones",
-    sales: "3",
-    revenue: "₦17,000,000",
-    commission: "₦83,500",
-    joined: "1y 5m ago",
-    status: "Active",
-  },
-  {
-    id: "9",
-    titan: "Arlene McCoy",
-    sales: "3",
-    revenue: "₦17,000,000",
-    commission: "₦83,500",
-    joined: "1y 5m ago",
-    status: "Active",
-  },
-  {
-    id: "10",
-    titan: "Dianne Russell",
-    sales: "3",
-    revenue: "₦17,000,000",
-    commission: "₦83,500",
-    joined: "1y 5m ago",
-    status: "Active",
-  },
-  {
-    id: "11",
-    titan: "Wade Warren",
-    sales: "3",
-    revenue: "₦17,000,000",
-    commission: "₦83,500",
-    joined: "1y 5m ago",
-    status: "Active",
-  },
-];
 
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<Titan>[] = [
   {
     accessorKey: "titan",
     header: ({ column }) => (
@@ -190,17 +93,42 @@ const columns: ColumnDef<Transaction>[] = [
     },
   },
 ];
+
 // onClick={() => router.push(`/titans/my-titans/titan-profile/${titanId}`)}
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const MyTitan = ({ data }: { data: Transaction[] }) => {
+export const MyTitan = ({ stats }: { stats: number | string }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+
+  const { data, isLoading } = useClientFetch({
+    action: async () => {
+      const res = await getTitansOverviewList();
+
+      return res as {
+        response: any[];
+        meta: IPagination;
+      };
+    },
+    isModalOpen,
+  });
+
+  const { data: summary, isLoading: isSummaryLoading } = useClientFetch({
+    action: async () => {
+      const res = await getTitansOverviewSummary();
+
+      return res as {
+        titanCommission: number;
+        titanRevenue: number;
+        totalTitans: number;
+      };
+    },
+    isModalOpen,
+  });
+
   return (
     <>
       <DashboardStatsCard
         title="My Titans"
         icon={<Profile2User size="24" color="#926667" />}
-        data="15"
-        theme=""
+        data={toAmount(stats || 0, false)}
         onClick={toggleModal}
       />
 
@@ -208,32 +136,48 @@ export const MyTitan = ({ data }: { data: Transaction[] }) => {
         <PageModal
           handleClose={closeModal}
           heading="My Titans Overview"
-          className="max-w-[MIN(95%,620px)]"
+          className="max-w-[MIN(95%,880px)]"
         >
-          <section className="flex flex-col w-full gap-4 ">
-            <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
+          <section className="flex flex-1 flex-col w-full gap-4 ">
+            <div
+              data-ui={isSummaryLoading ? "loading" : ""}
+              className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white data-loading:animate-pulse"
+            >
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">My Titans</p>
-                <p className="text-grey-600 font-medium">15</p>
+                <p className="text-grey-600 font-medium">
+                  {toAmount(summary?.totalTitans || 0, false)}
+                </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Commission from Titans</p>
-                <p className="text-grey-600 font-medium">300,050</p>
+                <p className="text-grey-600 font-medium">
+                  {toAmount(summary?.titanCommission || 0)}
+                </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Titans total revenue</p>
-                <p className="text-grey-600 font-medium">220,000,000</p>
+                <p className="text-grey-600 font-medium">
+                  {toAmount(summary?.titanRevenue || 0)}
+                </p>
               </div>
             </div>
 
-            <div className="flex items-baseline justify-between w-full gap-4"></div>
-
             <div className="w-full my-2">
-              <DataTable columns={columns} data={titanData} />
+              {isLoading ? (
+                <TableSkeleton />
+              ) : (
+                <DataTable columns={columns} data={data?.response || []} />
+              )}
             </div>
 
-            <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+            <div className="flex mt-auto justify-end gap-4 items-center">
+              <Button
+                onClick={toggleModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
 

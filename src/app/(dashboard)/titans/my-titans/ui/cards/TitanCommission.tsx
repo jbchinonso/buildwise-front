@@ -4,24 +4,27 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-import { Button, DataTableColumnHeader } from "@/components/ui";
-import { useModal } from "@/lib/hooks";
+import { Button, DataTableColumnHeader, TableSkeleton } from "@/components/ui";
+import { useClientFetch, useModal } from "@/lib/hooks";
 import { ArrowRight } from "iconsax-react";
 import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, Network } from "lucide-react";
 import { TitanCommissionOverview } from "../TitanCommissionOverview";
+import {
+  getTitansCommissionChart,
+  getTitansCommissionList,
+  getTitansCommissionSummary,
+} from "@/lib/services";
+import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 
 type Transaction = {
   id: string;
-  client: string;
-  property: string;
-  location: string;
-  last_payment: string;
-  totalPaid: string;
-  outstanding: string;
-  instalment: string;
-  payment_status: string;
+  date: string;
+  titan: string;
+  type: string;
+  amount: string;
+  status: string;
 };
 
 const columns: ColumnDef<Transaction>[] = [
@@ -82,15 +85,46 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const TitanCommission = ({ data }: { data: Transaction[] }) => {
+export const TitanCommission = ({ stats }: { stats?: string | number }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+
+  const { data: summary, isLoading: isSummaryLoading } = useClientFetch({
+    action: async () => {
+      const res = await getTitansCommissionSummary();
+
+      return res as {
+        totalCommission: number;
+        titanCommission: number;
+        subTitanCommission: number;
+        bonusCommission: number;
+      };
+    },
+    isModalOpen,
+  });
+
+  const { data: chart, isLoading: isChartLoading } = useClientFetch({
+    action: async () => {
+      const res = await getTitansCommissionChart();
+
+      return res as any[];
+    },
+    isModalOpen,
+  });
+
+  const { data, isLoading } = useClientFetch({
+    action: async () => {
+      // const res = await getTitansCommissionList();
+      // return res as any[];
+    },
+    isModalOpen,
+  });
+
   return (
     <>
       <DashboardStatsCard
         title="My Titans Commission"
         icon={<Network size="24" color="#1FDBF4" className="rotate-90" />}
-        data="500k"
-        theme=""
+        data={toAmountWithSuffix(stats || 0)}
         onClick={toggleModal}
       />
 
@@ -100,21 +134,30 @@ export const TitanCommission = ({ data }: { data: Transaction[] }) => {
           heading="My Titans Overview"
           className="max-w-[MIN(95%,620px)]"
         >
-          <section className="flex flex-col w-full gap-y-4 ">
-            <TitanCommissionOverview />
+          <section className="flex flex-1 flex-col w-full gap-y-4 ">
+            {/* <TitanCommissionOverview /> */}
 
-            <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
+            <div
+              data-ui={isSummaryLoading ? "loading" : ""}
+              className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white data-loading:animate-pulse"
+            >
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Total Commission</p>
-                <p className="text-grey-600 font-medium">100</p>
+                <p className="text-grey-600 font-medium">
+                  {toAmount(summary?.totalCommission || 0)}
+                </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Commission from Titans</p>
-                <p className="text-grey-600 font-medium">90</p>
+                <p className="text-grey-600 font-medium">
+                  {toAmount(summary?.titanCommission || 0)}
+                </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Comission from Sub-titans</p>
-                <p className="text-grey-600 font-medium">10</p>
+                <p className="text-grey-600 font-medium">
+                  {toAmount(summary?.subTitanCommission || 0)}
+                </p>
               </div>
             </div>
 
@@ -131,17 +174,26 @@ export const TitanCommission = ({ data }: { data: Transaction[] }) => {
               </Link>
             </div>
 
-            <div className="w-full my-2">
-              <DataTable columns={columns} data={data} />
+            {/* <div className="w-full my-2">
+              {isLoading ? (
+                <TableSkeleton />
+              ) : (
+                <DataTable columns={columns} data={data || []} />
+              )}
             </div>
 
             <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+              <Button
+                onClick={toggleModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
 
               <Button size="xs">Export PDF</Button>
-            </div>
+            </div> */}
           </section>
         </PageModal>
       )}

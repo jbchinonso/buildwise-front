@@ -1,7 +1,22 @@
-"use client"
-import { useCallback, useEffect, useRef, useState } from "react";
+"use client";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  createContext,
+  useContext,
+} from "react";
 
-export const useModal = () => {
+type UseModalReturn = {
+  isModalOpen: boolean;
+  openModal: () => void;
+  toggleModal: () => void;
+  closeModal: () => void;
+  modalRef: React.RefObject<HTMLDivElement | null>;
+};
+
+export const useModal = (): UseModalReturn => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = useCallback(() => setIsModalOpen(true), []);
   const closeModal = useCallback(() => setIsModalOpen(false), []);
@@ -45,4 +60,35 @@ export const useModal = () => {
     closeModal,
     modalRef,
   };
+};
+
+// Define the shape of the context value
+export type ModalContextType = UseModalReturn;
+
+export const useModalContext = (): ModalContextType => {
+  const context = useContext(ModalContext);
+
+  if (context === undefined) {
+    throw new Error("useModalContext must be used within a ModalProvider");
+  }
+
+  return context;
+};
+
+const ModalContext = createContext<ModalContextType | undefined>(
+  undefined
+);
+
+interface ModalProviderProps {
+  children: React.ReactNode;
+}
+
+export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
+  const modalControls = useModal(); // Use your existing hook
+
+  return (
+    <ModalContext.Provider value={modalControls}>
+      {children}
+    </ModalContext.Provider>
+  );
 };

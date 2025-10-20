@@ -96,7 +96,7 @@ export const Input = ({
                 isPasswordInput && isPasswordVisible ? "text" : props.type
               }`}
               className={twMerge(
-                "border-none px-4 autofill:bg-white ring-0 outline-none rounded w-full placeholder:font-body bg-inherit",
+                "border-none px-4 max-w-full autofill:bg-white ring-0 outline-none rounded w-full placeholder:font-body bg-inherit",
                 isPasswordInput && "pr-12",
                 inputStyle
               )}
