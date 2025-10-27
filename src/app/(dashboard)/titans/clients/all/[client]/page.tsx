@@ -1,10 +1,9 @@
+import { ClientProperties } from "@/components/dashboard";
 import { BreadCrumbs, Button, Input, Avatar } from "@/components/ui";
 import {
   getTitanClientProfile,
   getTitanClientProfileProperty,
 } from "@/lib/services";
-import { IClientProperty } from "@/lib/type";
-import { toAmount } from "@/lib/utils";
 
 type Params = Promise<{ client: string; property: string }>;
 type SearchParams = Promise<{ property: string }>;
@@ -22,8 +21,6 @@ const ClientProfile = async (props: {
     getTitanClientProfile(id),
     getTitanClientProfileProperty(id),
   ]);
-
-  const selectedProperty = properties?.[property - 1];
 
   return (
     <section className="flex flex-1 flex-col gap-4">
@@ -127,93 +124,12 @@ const ClientProfile = async (props: {
             defaultValue={profile?.residentialAddress}
           />
         </div>
-        {/* Activities info */}
-        <div className="flex flex-1 flex-wrap justify-between gap-4 gap-x-20 w-full">
-          <div className="w-fit rounded-full border p-2 flex gap-1 bg-[rgba(232,233,235,1)]">
-            {(properties || [])?.map((v, i) => (
-              <Button
-                asLink
-                href={`?property=${i + 1}`}
-                replace={true}
-                scroll={false}
-                key={v?.propertyName + i}
-                size="xs"
-                className="!text-xs"
-                variant={property == i + 1 ? "primary" : "secondary"}
-              >
-                Property {i + 1}
-              </Button>
-            ))}
-          </div>
 
-          <Properties property={selectedProperty} />
-        </div>
+        {/* Activities info */}
+        <ClientProperties properties={properties || []} property={property} />
       </div>
     </section>
   );
 };
 
 export default ClientProfile;
-
-const Properties = ({ property }: { property: IClientProperty }) => {
-  return (
-    <div className="flex flex-wrap justify-between gap-4 gap-x-20 w-full">
-      <Input
-        label="State"
-        type="text"
-        readOnly
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={property?.state}
-      />
-      <Input
-        label="Property"
-        type="text"
-        readOnly
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={property?.propertyName}
-      />
-      <Input
-        label="Property Size"
-        type="text"
-        readOnly
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={property?.unitNumber}
-      />
-      <Input
-        label="Property ID"
-        type="text"
-        readOnly
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={property?.plotNumber}
-      />
-      <Input
-        label="Payment Plan"
-        type="text"
-        readOnly
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={property?.paymentPlan}
-      />
-      <Input
-        label="Total paid"
-        type="text"
-        readOnly
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={toAmount(property?.amountPaid || 0)}
-      />
-      <Input
-        label="Outstanding payment"
-        type="text"
-        readOnly
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={toAmount(property?.outstandingPayment || 0)}
-      />
-      <Input
-        label="Payment due"
-        type="text"
-        readOnly
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={toAmount(property?.paymentDue || 0)}
-      />
-    </div>
-  );
-};

@@ -10,15 +10,15 @@ import { ArrowRight } from "iconsax-react";
 import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, Network } from "lucide-react";
+// import { getTitansCommissionSummary } from "@/lib/services";
+import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 import { TitanCommissionOverview } from "../TitanCommissionOverview";
 import {
-  getTitansCommissionChart,
-  getTitansCommissionList,
+  getTitansCommissionListt,
   getTitansCommissionSummary,
 } from "@/lib/services";
-import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 
-type Transaction = {
+type Commission = {
   id: string;
   date: string;
   titan: string;
@@ -27,7 +27,7 @@ type Transaction = {
   status: string;
 };
 
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<Commission>[] = [
   {
     accessorKey: "date",
     header: ({ column }) => (
@@ -102,19 +102,11 @@ export const TitanCommission = ({ stats }: { stats?: string | number }) => {
     isModalOpen,
   });
 
-  const { data: chart, isLoading: isChartLoading } = useClientFetch({
-    action: async () => {
-      const res = await getTitansCommissionChart();
-
-      return res as any[];
-    },
-    isModalOpen,
-  });
-
   const { data, isLoading } = useClientFetch({
+    // action: getTitansCommissionListt,
     action: async () => {
-      // const res = await getTitansCommissionList();
-      // return res as any[];
+      const res = await getTitansCommissionListt();
+      return res as any;
     },
     isModalOpen,
   });
@@ -131,11 +123,11 @@ export const TitanCommission = ({ stats }: { stats?: string | number }) => {
       {isModalOpen && (
         <PageModal
           handleClose={closeModal}
-          heading="My Titans Overview"
-          className="max-w-[MIN(95%,620px)]"
+          heading="My Titan's Commission"
+          className="max-w-[MIN(95%,728px)]"
         >
           <section className="flex flex-1 flex-col w-full gap-y-4 ">
-            {/* <TitanCommissionOverview /> */}
+            <TitanCommissionOverview />
 
             <div
               data-ui={isSummaryLoading ? "loading" : ""}
@@ -174,15 +166,15 @@ export const TitanCommission = ({ stats }: { stats?: string | number }) => {
               </Link>
             </div>
 
-            {/* <div className="w-full my-2">
+            <div className="w-full my-2">
               {isLoading ? (
                 <TableSkeleton />
               ) : (
-                <DataTable columns={columns} data={data || []} />
+                <DataTable columns={columns} data={data as any || []} />
               )}
             </div>
 
-            <div className="flex justify-end gap-4 items-center">
+            <div className="flex mt-auto justify-end gap-4 items-center">
               <Button
                 onClick={toggleModal}
                 size="xs"
@@ -193,7 +185,7 @@ export const TitanCommission = ({ stats }: { stats?: string | number }) => {
               </Button>
 
               <Button size="xs">Export PDF</Button>
-            </div> */}
+            </div>
           </section>
         </PageModal>
       )}

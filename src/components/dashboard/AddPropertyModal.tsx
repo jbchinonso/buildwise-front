@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { DashboardModal } from "@/components/dashboard";
-import { Button, Input, Select, SelectScrollable } from "@/components/ui";
+import { Button, Input, SelectScrollable } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
+import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 
-export const AddPropertyModal = ({ bankAccount = "O70 3456 6543" }) => {
+export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
@@ -12,9 +14,9 @@ export const AddPropertyModal = ({ bankAccount = "O70 3456 6543" }) => {
         size="sm"
         onClick={toggleModal}
         variant="secondary"
-        className="ml-auto"
+        className={cn("ml-auto", isMini ? "rounded-full p-4" : "")}
       >
-        <Plus size={14} /> Add property
+        <Plus size={18} /> {!isMini && <span>Add property</span>}
       </Button>
 
       {isModalOpen && (
@@ -41,11 +43,7 @@ export const AddPropertyModal = ({ bankAccount = "O70 3456 6543" }) => {
                 options={[]}
               />
               <Input label="Plot number" placeholder="Enter plot number" />
-              <SelectScrollable
-                label="Payment options"
-                placeholder="Select payment plan"
-                options={[]}
-              />
+
               <SelectScrollable
                 label="Payment options"
                 placeholder="Select payment plan"

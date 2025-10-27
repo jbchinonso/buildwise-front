@@ -274,6 +274,7 @@ interface IClientRecentTransactions {
   paymentStatus: string;
 }
 interface IClientProperty {
+  id?: string;
   plotNumber: number;
   unitNumber: string;
   amountPaid: number;

@@ -1,3 +1,4 @@
+"use server";
 import { IPagination } from "../type";
 import { getError } from "../utils";
 import { authFetch } from "./auth.service";
@@ -48,6 +49,26 @@ export const getTitanStats = async () => {
       totalTitans: number;
       activeTitans: number;
       inactiveTitans: number;
+    };
+  } catch (error) {
+    console.error("Error fetching titans:", getError(error));
+    throw new Error(getError(error));
+  }
+};
+
+export const getTitanSummary = async () => {
+  try {
+    const response = await authFetch("/titans/titan-network-summary", {
+      next: {
+        revalidate: 8400,
+        tags: ["titans"],
+      },
+    });
+
+    return response as {
+      totalTitans: number;
+      titanCommission: number;
+      subTitanCommission: number;
     };
   } catch (error) {
     console.error("Error fetching titans:", getError(error));
@@ -114,6 +135,7 @@ export const getTitansCommissionSummary = async () => {
     // throw new Error(getError(error));
   }
 };
+
 export const getTitansCommissionChart = async () => {
   try {
     const response = await authFetch("/titans/commissions/chart", {
@@ -130,6 +152,24 @@ export const getTitansCommissionChart = async () => {
     // throw new Error(getError(error));
   }
 };
+
+export const getTitansCommissionListt = async () => {
+  try {
+    const response = await authFetch("/titans/commissions/chart", {
+      next: {
+        revalidate: 8400,
+        tags: ["titans"],
+      },
+    });
+
+    return response as any[];
+  } catch (error) {
+    return { error: getError(error) };
+    // console.error("Error fetching titans:", getError(error));
+    // throw new Error(getError(error));
+  }
+};
+
 export const getTitansCommissionList = async () => {
   try {
     const response = await authFetch("/titans/commissions/recent", {
@@ -138,6 +178,8 @@ export const getTitansCommissionList = async () => {
         tags: ["titans"],
       },
     });
+
+    console.log({ response });
 
     return response as any[];
   } catch (error) {
@@ -170,26 +212,19 @@ export const getTitansOverviewList = async () => {
   }
 };
 
-class TitansService {
-  getTitanStats = async () => {
-    try {
-      const response = await authFetch("/titans/dashboard/summary", {
-        next: {
-          revalidate: 8400,
-          tags: ["titans"],
-        },
-      });
+export const getTitanPropertiesSold = async (titan?: string) => {
+  try {
+    const response = await authFetch(`/titans/${titan}/properties-sold`, {
+      next: {
+        revalidate: 8400,
+        tags: ["titans"],
+      },
+    });
 
-      return response?.data as {
-        totalTitans: number;
-        activeTitans: number;
-        inactiveTitans: number;
-      };
-    } catch (error) {
-      console.error("Error fetching titans:", getError(error));
-      throw new Error(getError(error));
-    }
-  };
-}
-
-export const titanService = new TitansService();
+    return response;
+  } catch (error) {
+    return { error: getError(error) };
+    // console.error("Error fetching titans:", getError(error));
+    // throw new Error(getError(error));
+  }
+};

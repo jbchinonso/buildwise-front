@@ -17,6 +17,7 @@ export const useClientFetch = <T,>({
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasFetched, setHasFetched] = useState(false);
 
   const actionRef = useRef<AsyncAction<T>>(action);
   actionRef.current = action;
@@ -32,26 +33,25 @@ export const useClientFetch = <T,>({
       } else {
         setData(response);
       }
-    } catch  {
+    } catch {
       setError("Failed to load data");
     } finally {
       setIsLoading(false);
+      setHasFetched(true);
     }
   }, []);
 
-  const retry = () => {
+  const retry = useCallback(() => {
+    setHasFetched(false); // allow re-fetch on retry
     fetchData();
-  };
+  }, [fetchData]);
 
   useEffect(() => {
-    if (
-      autoFetch &&
-      isModalOpen &&
-      (data === null || (Array.isArray(data) && data.length === 0))
-    ) {
+    if (autoFetch && isModalOpen && !hasFetched) {
+      console.log({ hasFetched, data });
       fetchData();
     }
-  }, [isModalOpen, autoFetch, data, fetchData]);
+  }, [isModalOpen, autoFetch, hasFetched, fetchData]);
 
   return {
     data,

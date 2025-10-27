@@ -176,7 +176,7 @@ export const getClientAndOwnership = async (
       `/properties/${params.id}/clients-ownership?${query.toString()}`,
       {
         next: {
-          tags: ["property"],
+          tags: ["property", `property-${params.id}`],
           revalidate: 8400,
         },
       }

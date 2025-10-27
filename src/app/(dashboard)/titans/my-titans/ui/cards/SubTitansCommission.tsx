@@ -10,7 +10,7 @@ import { ArrowRight, Moneys } from "iconsax-react";
 import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
-
+import { toAmountWithSuffix } from "@/lib/utils";
 
 type Transaction = {
   id: string;
@@ -68,14 +68,18 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const SubTitanCommission = ({ data }: { data: Transaction[] }) => {
+export const SubTitanCommission = ({
+  stats = 0,
+}: {
+  stats: number | string;
+}) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
         title="Commission from Sub-titans"
         icon={<Moneys size="24" color="#926667" />}
-        data="300k"
+        data={toAmountWithSuffix(stats || 0)}
         theme=""
         onClick={toggleModal}
       />
@@ -116,11 +120,16 @@ export const SubTitanCommission = ({ data }: { data: Transaction[] }) => {
             </div>
 
             <div className="w-full my-2">
-              <DataTable columns={columns} data={data} />
+              <DataTable columns={columns} data={[]} />
             </div>
 
             <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+              <Button
+                onClick={toggleModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
 

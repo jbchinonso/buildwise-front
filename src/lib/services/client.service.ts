@@ -43,7 +43,6 @@ export const getAllClients = async (
       }
       // NOTE: This need to match the UI especially payments
     );
-    console.log({ data });
     return { data, pagination };
   } catch (error) {
     throw getError(error);

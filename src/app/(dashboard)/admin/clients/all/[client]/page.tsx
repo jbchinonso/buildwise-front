@@ -1,21 +1,32 @@
-import {
-  Avatar,
-  BreadCrumbs,
-  Button,
-  Input,
-} from "@/components/ui";
-import { UpdatePaymentModal, AddPropertyModal } from "../../ui";
-import { getClient } from "@/lib/services";
+import { Avatar, BreadCrumbs, Button, Input } from "@/components/ui";
+import { UpdatePaymentModal } from "../../ui";
+import { getClient, getTitanClientProfileProperty } from "@/lib/services";
 import { clientProfileDTO } from "@/lib/dtos";
-type Params = Promise<{ client: string }>;
+import { AddPropertyModal, ClientProperties } from "@/components/dashboard";
 
-const ClientProfile = async (props: { params: Params }) => {
+type Params = Promise<{ client: string; property: string }>;
+type SearchParams = Promise<{ property: string }>;
+
+const ClientProfile = async (props: {
+  params: Params;
+  searchParams: SearchParams;
+}) => {
   const params = await props.params;
+  const searchParams = await props.searchParams;
   const id = params.client;
+  const property = Number(searchParams?.property || 1);
 
-  const data = await getClient(id);
+  const [data, properties] = await Promise.all([
+    getClient(id),
+    getTitanClientProfileProperty(id),
+  ]);
 
   const personalInformation = clientProfileDTO(data);
+
+  const propertyOptions = (properties || [])?.map((property, index) => ({
+    label: `${property?.propertyName} - ${property?.unitNumber}`,
+    value: String(property?.id || index),
+  }));
 
   return (
     <section className="flex flex-1 flex-col gap-4">
@@ -32,7 +43,7 @@ const ClientProfile = async (props: { params: Params }) => {
           <Avatar name={personalInformation?.fullname} />
 
           <div className="flex gap-4 items-center">
-            <UpdatePaymentModal />
+            <UpdatePaymentModal properties={propertyOptions || []} />
 
             <Button
               asLink
@@ -117,12 +128,17 @@ const ClientProfile = async (props: { params: Params }) => {
             defaultValue={personalInformation.residential_address}
           />
         </div>
+
         {/* Activities info */}
-        <div className="flex flex-1 flex-wrap justify-between gap-4 gap-x-20 w-full">
-          <div className="w-full flex py-2 my-2 mt-auto">
-            <AddPropertyModal />
+        {properties?.length ? (
+          <ClientProperties properties={properties || []} property={property} />
+        ) : (
+          <div className="flex flex-1 flex-wrap justify-between gap-4 gap-x-20 w-full">
+            <div className="w-full flex py-2 my-2 mt-auto">
+              <AddPropertyModal />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

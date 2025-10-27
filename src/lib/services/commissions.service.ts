@@ -1,4 +1,5 @@
-import { customFetch, getError } from "../utils";
+import { getServerSession } from "next-auth";
+import { authOptions, customFetch, getError } from "../utils";
 import { authFetch } from "./auth.service";
 
 export const getCommissions = async (): Promise<{
@@ -21,6 +22,30 @@ export const getCommissions = async (): Promise<{
   }
 };
 
+export const getCommissionBreakdown = async (): Promise<{
+  data?: any[];
+  error?: string;
+}> => {
+  try {
+    // const session = await getServerSession(authOptions);
+    // const id = session?.user?.id;
+    // console.log({ id, session });
+
+    const data = await authFetch(`/titans/commissions/breakdown/`, {
+      next: {
+        revalidate: 8400,
+        tags: ["titans"],
+      },
+    });
+
+    console.log({data})
+
+    return { data };
+  } catch (error) {
+    return { error: getError(error) };
+  }
+};
+
 export const getTotalCommissions = async () => {
   try {
     const data = await authFetch("/earning/titan", {
@@ -30,7 +55,7 @@ export const getTotalCommissions = async () => {
       },
     });
 
-    return { data } ;
+    return { data };
   } catch (error) {
     return { error: getError(error) };
   }

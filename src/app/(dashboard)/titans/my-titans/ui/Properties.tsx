@@ -1,12 +1,14 @@
-
 "use client";
 
 import { DataTable, PageModal } from "@/components/dashboard";
 import { Button, DataTableColumnHeader, Input } from "@/components/ui";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
-import { useModal } from "@/lib/hooks";
+import { useClientFetch, useModal } from "@/lib/hooks";
 import Link from "next/link";
+import { toAmount } from "@/lib/utils";
+import { getTitanPropertiesSold } from "@/lib/services";
+import { useParams } from "next/navigation";
 
 type Transaction = {
   id: string;
@@ -82,48 +84,75 @@ const columns: ColumnDef<Transaction>[] = [
     },
   },
 ];
-  const titanData: Transaction[] = [
-    {
-      id: "1",
-      titan: "Titan 1",
-      sales: "10",
-      revenue: "₦2,000,000",
-      commission: "₦200,000",
-      joined: "2024-01-01",
-      status: "Active",
-    }]  
-  
-  export default function Properties() {
-    const { isModalOpen, toggleModal, closeModal } = useModal();
-    
-  
-    return (
-      <>
+
+const titanData: Transaction[] = [
+  {
+    id: "1",
+    titan: "Titan 1",
+    sales: "10",
+    revenue: "₦2,000,000",
+    commission: "₦200,000",
+    joined: "2024-01-01",
+    status: "Active",
+  },
+];
+
+export default function Properties({ data }: { data?: string | number }) {
+  const { isModalOpen, toggleModal, closeModal } = useModal();
+  const params = useParams();
+
+  const { data: propertiesSold } = useClientFetch({
+    action: async () => {
+      const res = await getTitanPropertiesSold(params?.titan as string);
+      return res;
+    },
+    isModalOpen,
+  });
+
+  return (
+    <>
+      <div
+        onClick={toggleModal}
+        tabIndex={0}
+        className="flex-[45%] max-w-[MIN(100%,470px)] cursor-pointer"
+      >
         <Input
           label="Properties sold"
-          defaultValue="4"
-          name="propertiesSold"
-          id="propertiesSold"
+          defaultValue={toAmount(data || 0, false)}
           type="text"
           readOnly
           labelStyle="text-[#7A7F83]"
-          rightIcon={<ChevronRight className="size-4 mb-8" onClick={toggleModal}/>}
-          containerStyle="flex-[45%] max-w-[MIN(100%,470px)] cursor-pointer"
+          rightIcon={
+            <ChevronRight className="size-4 mb-8" onClick={toggleModal} />
+          }
+          containerStyle="cursor-pointer"
           onClick={toggleModal}
         />
-  
-        {isModalOpen && (
-          <PageModal handleClose={closeModal} heading="Properties Sold" className="max-w-[MIN(95%,620px)]">
-            <section className="flex flex-col w-full gap-4">
-              <DataTable columns={columns} data={titanData} />
-  
-              <div className="flex justify-end gap-4 mt-4">
-                <Button size="xs" outline variant="secondary" onClick={closeModal}>Close</Button>
-                <Button size="xs">Export PDF</Button>
-              </div>
-            </section>
-          </PageModal>
-        )}
-      </>
-    );
-  }
+      </div>
+
+      {isModalOpen && (
+        <PageModal
+          handleClose={closeModal}
+          heading="Properties Sold"
+          className="max-w-[MIN(95%,620px)]"
+        >
+          <section className="flex flex-col w-full gap-4">
+            <DataTable columns={columns} data={titanData} />
+
+            <div className="flex justify-end gap-4 mt-4">
+              <Button
+                size="xs"
+                outline
+                variant="secondary"
+                onClick={closeModal}
+              >
+                Close
+              </Button>
+              <Button size="xs">Export PDF</Button>
+            </div>
+          </section>
+        </PageModal>
+      )}
+    </>
+  );
+}

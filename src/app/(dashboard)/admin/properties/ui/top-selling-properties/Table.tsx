@@ -43,7 +43,7 @@ export const columns: ColumnDef<ITopSellingDTO>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Unit sold" />
     ),
-    cell: ({ row }) => <div>{toAmount(row.getValue("unitSold") || 0)}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("unitSold") || 0, false)}</div>,
   },
   {
     // id: "actions",

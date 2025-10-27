@@ -16,6 +16,7 @@ const CommissionHistory = async (props: { params: Params }) => {
   // const id = params.titan;
   // const { data = [] } = await getCommissions();
   const session = await getServerSession(authOptions);
+  
   return (
     <section className="flex flex-1 flex-col">
       <BreadCrumbs

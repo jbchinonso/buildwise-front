@@ -6,6 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import { useModal } from "@/lib/hooks";
 import Link from "next/link";
+import { toAmount } from "@/lib/utils";
 
 type Transaction = {
   id: string;
@@ -77,25 +78,30 @@ const titanData: Transaction[] = [
     status: "Active",
   },
 ];
-export default function SubTitans() {
+export default function SubTitans({ data }: { data?: string | number }) {
   const { isModalOpen, toggleModal, closeModal } = useModal();
 
   return (
     <>
-      <Input
-        label="Sub-titans"
-        defaultValue="8"
-        name="subtitans"
-        id="subtitans"
-        type="text"
-        readOnly
-        labelStyle="text-[#7A7F83]"
-        rightIcon={
-          <ChevronRight className="size-4 mb-8" onClick={toggleModal} />
-        }
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)] cursor-pointer"
+      <div
         onClick={toggleModal}
-      />
+        tabIndex={0}
+        className="flex-[45%] max-w-[MIN(100%,470px)] cursor-pointer"
+      >
+        <Input
+          label="Sub-titans"
+          defaultValue={toAmount(data || 0, false)}
+          type="text"
+          readOnly
+          labelStyle="text-[#7A7F83]"
+          rightIcon={
+            <ChevronRight className="size-4 mb-8" onClick={toggleModal} />
+          }
+          className="cursor-pointer"
+          containerStyle="cursor-pointer"
+          onClick={toggleModal}
+        />
+      </div>
 
       {isModalOpen && (
         <PageModal
