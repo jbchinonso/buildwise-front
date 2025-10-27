@@ -1,41 +1,51 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+const Tab = ({
+  href = "",
+  className = "",
+  isActive,
+  children = "",
+}: {
+  href: string;
+  className?: string;
+  isActive?: boolean;
+  children?: React.ReactNode;
+}) => {
+  return (
+    <Link
+      href={href}
+      data-ui={isActive ? "active" : ""}
+      className={cn(
+        "p-4 py-2 flex- whitespace-nowrap rounded-3xl data-active:bg-white active:text-primary-400 hover:bg-white",
+        className
+      )}
+    >
+      {children}
+    </Link>
+  );
+};
 
 export const AccountTabs = () => {
   const pathname = usePathname();
 
   return (
-    <div className="flex gap-2 p-2 text-sm w-fit rounded-3xl bg-grey-50">
-      <Link
-        href={""}
-        data-ui={pathname.endsWith("account") ? "active" : ""}
-        className="p-4 py-2 rounded-3xl data-active:bg-white active:text-primary-400 hover:bg-white"
-      >
+    <div className="flex flex-wrap  gap-2 p-2 text-sm w-fit rounded-3xl bg-grey-50">
+      <Tab href="" isActive={pathname.endsWith("/titans/account")}>
         Personal information
-      </Link>
-      <Link
-        href={"account/performance"}
-        data-ui={pathname.endsWith("performance") ? "active" : ""}
-        className="p-4 py-2 rounded-3xl data-active:bg-white active:text-primary-400 hover:bg-white"
-      >
+      </Tab>
+      <Tab href={"/titans/account/performance"} isActive={pathname.endsWith("performance")}>
         Performance & earnings
-      </Link>
-      <Link
-        href={"account/titans"}
-        data-ui={pathname.endsWith("titans") ? "active" : ""}
-        className="p-4 py-2 rounded-3xl data-active:bg-white active:text-primary-400 hover:bg-white"
-      >
-        Titans
-      </Link>
-      <Link
-        href={"account/settings"}
-        data-ui={pathname.endsWith("settings") ? "active" : ""}
-        className="p-4 py-2 rounded-3xl data-active:bg-white active:text-primary-400 hover:bg-white"
-      >
+      </Tab>
+      <Tab href={"/titans/account/my-network"} isActive={pathname.endsWith("my-network")}>
+        My network
+      </Tab>
+      <Tab href={"/titans/account/settings"} isActive={pathname.endsWith("settings")}>
         Settings
-      </Link>
+      </Tab>
     </div>
   );
 };

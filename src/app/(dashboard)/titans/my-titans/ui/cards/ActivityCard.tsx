@@ -20,7 +20,7 @@ interface ActivityCardProps {
 export const ActivityCard: React.FC<ActivityCardProps> = ({
   title = "Downline activities",
   activities,
-  className,
+  // className,
 }) => {
   return (
     <>

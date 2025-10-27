@@ -61,7 +61,7 @@ export const ReceiptModal = ({ saleId }: IProps) => {
       ) : (
         <div ref={contentRef} className="flex flex-col flex-1">
           <Logo className="my-1" />
-          <div aria-sr className="flex flex-col mx-auto text-center">
+          <div  className="flex sr-only flex-col mx-auto text-center">
             <h1 className="text-3xl font-bold">
               {toAmount(data?.amount || 0)}
             </h1>

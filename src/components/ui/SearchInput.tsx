@@ -35,6 +35,7 @@ export const SearchInput = ({
       params.delete("search");
       router.replace(`?${params.toString()}`);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, searchParams]);
 
   return (

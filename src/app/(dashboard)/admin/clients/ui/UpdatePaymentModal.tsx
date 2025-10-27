@@ -2,9 +2,14 @@
 import { DashboardModal } from "@/components/dashboard";
 import { Button, Input, SelectScrollable } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
+import { IOption } from "@/lib/type";
 import { useState } from "react";
 
-export const UpdatePaymentModal = () => {
+export const UpdatePaymentModal = ({
+  properties = [],
+}: {
+  properties?: IOption[];
+}) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const [step, setStep] = useState(0);
 
@@ -72,18 +77,23 @@ export const UpdatePaymentModal = () => {
                       <p className="text-xs capitalize text-grey-400">
                         {data?.label || data?.item}
                       </p>
-                      <p className="text-sm font-bold text-grey-600">{data?.data}</p>
+                      <p className="text-sm font-bold text-grey-600">
+                        {data?.data}
+                      </p>
                     </div>
                   );
                 })}
 
-                <Input placeholder="₦ Enter amount"  containerStyle="mt-4 mb-10"/>
+                <Input
+                  placeholder="₦ Enter amount"
+                  containerStyle="mt-4 mb-10"
+                />
               </div>
             ) : (
               <SelectScrollable
                 placeholder="Select Property"
                 label="Property"
-                options={[]}
+                options={properties}
               />
             )}
 

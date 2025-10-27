@@ -1,5 +1,5 @@
 "use client";
-import { Button, Input, SubmitButton } from "@/components/ui";
+import { Input } from "@/components/ui";
 import { editTitanProfile } from "@/lib/services";
 import { IUser } from "@/lib/type";
 import { getError, profileValidationSchema, stripFormData } from "@/lib/utils";
@@ -9,21 +9,21 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 const ProfileForm = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isEditing, setIsEditing] = useState(false);
   const { data: session, update } = useSession();
 
-  const { touched, errors, handleBlur, handleChange, values, isValid, dirty } =
-    useFormik({
-      initialValues: {
-        phone: session?.user?.phone || "",
-        email: session?.user?.email || "",
-        state: session?.user?.state || "",
-        lga: session?.user?.lga || "",
-        address: session?.user?.address || "",
-      },
-      validationSchema: profileValidationSchema,
-      onSubmit: async () => {},
-    });
+  const { values } = useFormik({
+    initialValues: {
+      phone: session?.user?.phone || "",
+      email: session?.user?.email || "",
+      state: session?.user?.state || "",
+      lga: session?.user?.lga || "",
+      address: session?.user?.address || "",
+    },
+    validationSchema: profileValidationSchema,
+    onSubmit: async () => {},
+  });
 
   const onEdit = async () => {
     try {

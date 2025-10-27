@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
+import { SettingsForm } from "../ui";
 
 const Settings = () => {
-  return (
-    <div>Settings</div>
-  )
-}
+  return <SettingsForm />;
+};
 
-export default Settings
+export default Settings;

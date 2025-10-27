@@ -13,7 +13,7 @@ export default async function TitansLayout({
     return redirect("/login");
   }
   return (
-    <section className="flex flex-col flex-1 w-full min-h-full bg-[#F8F8F8] ">
+    <section className="flex flex-col flex-1 relative mb-auto w-full min-h-fit bg-[#F8F8F8] max-w-[MIN(2440px,100%)] mx-auto">
       <Header />
 
       <div className="w-full gap-4 flex flex-1 mb-8  max-h-[calc(100dvh-var(--scroll-padding))] overflow-hidden">

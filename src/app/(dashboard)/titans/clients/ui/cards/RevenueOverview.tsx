@@ -5,13 +5,18 @@ import {
   PageModal,
   PropertiesSold,
 } from "@/components/dashboard";
-import { useModal } from "@/lib/hooks";
+import { useClientFetch, useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowDown } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
 
-import { DataTableColumnHeader, Button } from "@/components/ui";
-import { toAmountWithSuffix } from "@/lib/utils";
+import { DataTableColumnHeader, Button, Skeleton } from "@/components/ui";
+import { toAmount, toAmountWithSuffix } from "@/lib/utils";
+import Link from "next/link";
+import {
+  getTitanClientRevenueChart,
+  getTitanClientRevenueSummary,
+} from "@/lib/services";
 
 type Transaction = {
   id: string;
@@ -41,25 +46,18 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("property")}</div>,
   },
   {
-    accessorKey: "location",
+    accessorKey: "price",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Location" />
+      <DataTableColumnHeader column={column} title="Sales price" />
     ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
+    cell: ({ row }) => <div>{row.getValue("price")}</div>,
   },
   {
-    accessorKey: "last_payment",
+    accessorKey: "revenue",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Last payment" />
+      <DataTableColumnHeader column={column} title="Revenue" />
     ),
-    cell: ({ row }) => <div>{row.getValue("last_payment")}</div>,
-  },
-  {
-    accessorKey: "total_paid",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Paid" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("total_paid")}</div>,
+    cell: ({ row }) => <div>{row.getValue("revenue")}</div>,
   },
   {
     accessorKey: "outstanding",
@@ -69,42 +67,50 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("outstanding")}</div>,
   },
   {
-    accessorKey: "instalment",
+    accessorKey: "commission",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Instalment" />
+      <DataTableColumnHeader column={column} title="Commission" />
     ),
-    cell: ({ row }) => <div>{row.getValue("instalment")}</div>,
-  },
-  {
-    accessorKey: "payment_status",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Payment status" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("payment_status")}</div>,
+    cell: ({ row }) => <div>{row.getValue("commission")}</div>,
   },
   {
     id: "actions",
     cell: ({ row }) => {
+      const id = String(row.getValue("_id")) || String(row?.id);
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center">
+          <Link href={`/titan/properties/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
   },
 ];
 
-export const RevenueOverview = ({
-  data = [],
-  stats = 0,
-}: {
-  data?: Transaction[];
-  stats?: string | number;
-}) => {
+export const RevenueOverview = ({ stats = 0 }: { stats?: string | number }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+
+  const {
+    data: chartData,
+    isLoading: isFetchingChartData,
+    // error: isClientsError,
+  } = useClientFetch({
+    action: async () => await getTitanClientRevenueChart(),
+    isModalOpen,
+  });
+
+  const {
+    data: summary,
+    isLoading: isSummaryLoading,
+    // error: isClientsError,
+  } = useClientFetch({
+    action: async () => await getTitanClientRevenueSummary(),
+    isModalOpen,
+  });
+
   return (
     <>
       <DashboardStatsCard
@@ -115,28 +121,53 @@ export const RevenueOverview = ({
       />
 
       {isModalOpen && (
-        <PageModal handleClose={closeModal} heading="Revenue Overview">
-          <section className="flex flex-col w-full gap-4 ">
-            <PropertiesSold />
+        <PageModal
+          handleClose={closeModal}
+          heading="Revenue Overview"
+          className="max-w-[MIN(95%,880px)]"
+        >
+          <section className="flex flex-col w-full flex-1 gap-4 ">
+            <PropertiesSold
+              chartData={chartData || []}
+              isLoading={isFetchingChartData}
+            />
 
-            <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
+            {isSummaryLoading ? (
+              <Skeleton className="h-16" />
+            ) : (
+              <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
+                <div className="flex flex-col flex-[25] gap-2">
+                  <p className="text-grey-400">Total revenue</p>
+                  <p className="text-grey-600">
+                    {toAmount(summary?.totalRevenue || 0)}
+                  </p>
+                </div>
+                <div className="flex flex-col flex-[25] gap-2">
+                  <p className="text-grey-400">Property sold</p>
+                  <p className="text-grey-600">
+                    {toAmount(summary?.propertySold || 0)}
+                  </p>
+                </div>
+                <div className="flex flex-col flex-[25] gap-2">
+                  <p className="text-grey-400">Avg. revenue per sale</p>
+                  <p className="text-grey-600">
+                    {toAmount(summary?.avgRevenuePerSale || 0)}
+                  </p>
+                </div>
+                <div className="flex flex-col flex-[25] gap-2">
+                  <p className="text-grey-400">Commission earned</p>
+                  <p className="text-grey-600">
+                    {toAmount(summary?.commissionEarned || 0)}
+                  </p>
+                </div>
+                <div className="flex flex-col flex-[25] gap-2">
+                  <p className="text-grey-400">Pending commission</p>
+                  <p className="text-grey-600">
+                    {toAmount(summary?.pendingCommission || 0)}
+                  </p>
+                </div>
               </div>
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
-              </div>
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
-              </div>
-              <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Total revenue</p>
-                <p className="text-grey-600">₦51,208,009</p>
-              </div>
-            </div>
+            )}
 
             <div className="flex items-baseline justify-between w-full gap-4">
               <h2 className="font-semibold text-grey-600">Recent Sales</h2>
@@ -150,11 +181,11 @@ export const RevenueOverview = ({
             </div>
 
             <div className="w-full my-2">
-              <DataTable columns={columns} data={data} />
+              <DataTable columns={columns} data={[]} />
             </div>
 
-            <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+            <div className="flex justify-end gap-4 items-center mt-auto">
+              <Button onClick={toggleModal} size="xs" outline variant="secondary">
                 Close
               </Button>
               <Button size="xs">Export PDF</Button>

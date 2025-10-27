@@ -28,3 +28,12 @@ export const getStates = async () => {
     throw new Error("Error getting states");
   }
 };
+
+
+export const getBanks = async()=>{
+  try {
+    
+  } catch (error) {
+    
+  }
+}

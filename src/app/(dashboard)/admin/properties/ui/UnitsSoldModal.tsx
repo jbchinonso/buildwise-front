@@ -3,13 +3,12 @@
 import { PageModal } from "@/components/dashboard";
 import { Button } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
-import { ArrowRight } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
 export const UnitsSoldModal = () => {
-  const { isModalOpen, toggleModal, closeModal } = useModal();
+  const { closeModal, toggleModal } = useModal();
   return (
     <PageModal
       handleClose={closeModal}
@@ -24,7 +23,7 @@ export const UnitsSoldModal = () => {
             href="/"
             className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
           >
-            View all 
+            View all
             <ChevronRight className="size-4" />
           </Link>
         </div>
@@ -34,7 +33,7 @@ export const UnitsSoldModal = () => {
         </div>
 
         <div className="flex justify-end gap-4 items-center">
-          <Button size="xs" outline variant="secondary">
+          <Button onClick={toggleModal} size="xs" outline variant="secondary">
             Close
           </Button>
 

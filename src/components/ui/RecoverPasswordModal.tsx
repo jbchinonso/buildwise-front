@@ -10,6 +10,7 @@ export const RecoverPasswordModal = () => {
   const [email, setEmail] = useState("");
 
   const router = useRouter();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const closeModal = useCallback(() => router.replace("?"), []);
 
   const handleRecover = async () => {

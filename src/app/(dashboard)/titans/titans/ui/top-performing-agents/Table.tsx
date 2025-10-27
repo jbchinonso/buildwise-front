@@ -5,68 +5,66 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-type Transaction = {
+type Titans = {
   id: string;
-  client: string;
-  property: string;
-  location: string;
-  last_payment: string;
-  totalPaid: string;
-  outstanding: string;
-  instalment: string;
-  payment_status: string;
+  titanName: string;
+  revenue: string;
+  commission: string;
+  subTitans: string;
 };
 
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<Titans>[] = [
   {
-    accessorKey: "client",
+    accessorKey: "titanName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Titans" />
+      <DataTableColumnHeader column={column} title="Titan Name" />
     ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    cell: ({ row }) => <div>{row.getValue("titanName")}</div>,
   },
   {
-    accessorKey: "property",
+    accessorKey: "revenue",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Revenue" />
     ),
-    cell: ({ row }) => <div>₦83,500,000</div>,
+    cell: ({ row }) => <div>{row.getValue("revenue")}</div>,
   },
   {
-    accessorKey: "location",
+    accessorKey: "commission",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Commission" />
+      <DataTableColumnHeader column={column} title="My Titans" />
     ),
-    cell: ({ row }) => <div>₦500,000</div>,
+    cell: ({ row }) => <div>{row.getValue("commission")}</div>,
   },
-
   {
-    accessorKey: "payment_status",
+    accessorKey: "subTitans",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Sub-titans" />
     ),
-    cell: ({ row }) => <div>15</div>,
+    cell: ({ row }) => <div>{row.getValue("subTitans")}</div>,
   },
   {
-      // id: "actions",
-      accessorKey: "id",
-      header: () => null,
-      cell: ({ row }) => {
-        const id = String(row.getValue("id")) || String(row?.id);
-  
-        return (
-          <div className="flex justify-center px-4">
-            <Link href={`/admin/titans/all/${id}`} id="button">
-              <ChevronRight className="size-4" />
-              <span className="sr-only">View details</span>
-            </Link>
-          </div>
-        );
-      },
+    accessorKey: "id",
+    header: () => null,
+    cell: ({ row }) => {
+      const id =
+        String(row.getValue("id")) ||
+        String(row?.original?.id) ||
+        String(row.getValue("_id"));
+
+      return (
+        <div className="flex justify-center px-4">
+          <Link href={`?titan=${id}`} id="button">
+            <ChevronRight className="size-4" />
+            <span className="sr-only">View details</span>
+          </Link>
+        </div>
+      );
     },
+  },
 ];
 
-const Table = ({ data = [] }: { data: Transaction[] }) => {
+
+const Table = ({ data = [] }: { data: Titans[] }) => {
   return <DataTable columns={columns} data={data} />;
 };
 

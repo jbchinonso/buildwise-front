@@ -46,17 +46,17 @@ const columns: ColumnDef<Transaction>[] = [
     ),
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
-
- 
   {
     id: "actions",
     cell: ({ row }) => {
+      const id = String(row.getValue("_id")) || String(row?.id);
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center">
+          <Link href={`/titan/properties/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
@@ -119,7 +119,12 @@ export const TitansOverview = ({ data }: { data: Transaction[] }) => {
             </div>
 
             <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+              <Button
+                onClick={toggleModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
 

@@ -1,7 +1,6 @@
-import { BreadCrumbs, Button } from "@/components/ui";
+import { BreadCrumbs } from "@/components/ui";
 import { AddPropertyForm } from "./AddPropertyForm";
-import { getStates, getTitans } from "@/lib/services";
-import { Plus } from "lucide-react";
+import { getStates } from "@/lib/services";
 
 const AddProperty = async () => {
   // const titans = await getTitans();

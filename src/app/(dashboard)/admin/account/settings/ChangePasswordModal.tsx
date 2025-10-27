@@ -10,13 +10,12 @@ export const ChangePasswordModal = () => {
   const {
     values,
     handleChange,
-    handleReset,
     handleBlur,
     errors,
     isValid,
     dirty,
     touched,
-    resetForm,
+    // resetForm,
   } = useFormik({
     initialValues: {
       newPassword: "",

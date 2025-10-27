@@ -4,7 +4,12 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-import { Button, DataTableColumnHeader, Skeleton, TableSkeleton } from "@/components/ui";
+import {
+  Button,
+  DataTableColumnHeader,
+  Skeleton,
+  TableSkeleton,
+} from "@/components/ui";
 import { useClientFetch, useModal } from "@/lib/hooks";
 import { getAgentData } from "@/lib/services/dashboard.service";
 import { toAmount, toAmountWithSuffix } from "@/lib/utils";
@@ -12,7 +17,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight } from "iconsax-react";
 import { ChevronRight, Network } from "lucide-react";
 import Link from "next/link";
-import React from "react";
 
 type Agent = {
   titan: string;
@@ -46,16 +50,18 @@ const columns: ColumnDef<Agent>[] = [
     ),
     cell: ({ row }) => <div>{row.getValue("joined")}</div>,
   },
-
   {
-    id: "actions",
+    accessorKey: "_id",
+    header: () => null,
     cell: ({ row }) => {
+      const id = String(row.getValue("id")) || String(row.getValue("_id"));
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center px-4">
+          <Link href={`${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
@@ -68,7 +74,7 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
   const {
     data: agentData,
     isLoading: isAgentLoading,
-    error: agentError,
+    // error: agentError,
   } = useClientFetch({
     action: async () => {
       const res = await getAgentData();
@@ -142,7 +148,7 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
             </div>
 
             {isAgentLoading ? (
-             <TableSkeleton/>
+              <TableSkeleton />
             ) : (
               <div className="w-full">
                 <DataTable

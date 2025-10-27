@@ -30,14 +30,14 @@ const columns: ColumnDef<Transaction>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Revenue" />
     ),
-    cell: ({ row }) => <div>₦83,500,000</div>,
+    cell: ({  }) => <div>₦83,500,000</div>,
   },
   {
     accessorKey: "location",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Commission" />
     ),
-    cell: ({ row }) => <div>₦500,000</div>,
+    cell: ({  }) => <div>₦500,000</div>,
   },
 
   {
@@ -45,7 +45,7 @@ const columns: ColumnDef<Transaction>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Sub-titans" />
     ),
-    cell: ({ row }) => <div>15</div>,
+    cell: ({  }) => <div>15</div>,
   },
   {
       // id: "actions",

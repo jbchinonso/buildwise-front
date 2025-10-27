@@ -10,7 +10,7 @@ export async function GET(
 
   try {
     if (tags) {
-      for (let tag of tags) {
+      for (const tag of tags) {
         revalidateTag(tag);
       }
     }

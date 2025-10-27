@@ -11,8 +11,6 @@ export interface IButtonProps
     HTMLButtonElement
   > {
   href?: Partial<Url> | string;
-  small?: boolean;
-  large?: boolean;
   replace?: boolean;
   scroll?: boolean;
   outline?: boolean;
@@ -31,7 +29,6 @@ const ButtonSizes = {
 };
 
 export function Button({
-  small,
   className,
   outline,
   asLink,
@@ -83,7 +80,7 @@ const ButtonWrapper = ({
   href?: Partial<Url> | string;
   scroll?: boolean;
   replace?: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   onClick?: any;
   children: React.ReactNode;
 } & IButtonProps) => {

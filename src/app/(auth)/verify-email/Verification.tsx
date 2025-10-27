@@ -136,6 +136,7 @@ export const VerificationSuccessful = () => {
     return () => {
       clearInterval(timerId.current!);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countdown]);
 
   return (

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { Button, Input, SelectScrollable, SubmitButton } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
