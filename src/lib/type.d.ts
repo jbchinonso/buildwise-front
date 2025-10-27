@@ -272,6 +272,7 @@ interface IClientRecentTransactions {
   location: string;
   instalment: string;
   paymentStatus: string;
+  propertiesCount: string | number;
 }
 interface IClientProperty {
   id?: string;
@@ -417,4 +418,13 @@ interface IReceipt {
   outstanding: number;
   status: string;
   paymentMethod: string;
+}
+
+interface SubTitan {
+  id: string;
+  name: string;
+  profileImage?: string;
+  propertiesSold: string | number;
+  commissionEarned: string | number;
+  joined: string;
 }

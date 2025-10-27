@@ -232,9 +232,9 @@ export const getTitanClientPaymentHistory = async (id: string) => {
       },
     });
 
-    
     const sales = response?.sales as IPaymentHistorySales[];
-    
+
+    console.log({sales})
 
     const uniquePropertiesMap = new Map();
 
