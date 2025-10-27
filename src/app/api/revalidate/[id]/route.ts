@@ -1,5 +1,3 @@
-// import { authOptions } from "@/lib/utils/auth.utils";
-import { getServerSession } from "next-auth";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 
@@ -20,12 +18,12 @@ export async function GET(req: NextRequest) {
     // }
     if (tags) {
       tags.forEach((tag) => {
-        revalidateTag(tag);
+        revalidateTag(tag, "max");
       });
     }
 
     if (path) {
-      revalidatePath(path);
+      revalidatePath(path, "page");
     }
 
     return NextResponse.json({

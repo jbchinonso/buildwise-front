@@ -20,7 +20,7 @@ const PaymentHistoryPage = async (props: {
     await Promise.all([
       getTitanClientProfile(id),
       getTitanClientPaymentHistory(id),
-    ]);
+    ]); 
 
   const filteredTransactions = searchParams?.property
     ? allTransactions?.filter((v) => v?.propertyId === searchParams?.property)

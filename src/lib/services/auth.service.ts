@@ -104,7 +104,7 @@ export const verifyEmail = async (verificationToken: string) => {
     const response = await baseUrl.get(
       `/users/verify-email/${verificationToken}`
     );
-    revalidateTag("profile");
+    revalidateTag("profile", "max");
     return response?.data;
   } catch (error: any) {
     throw getError(error);

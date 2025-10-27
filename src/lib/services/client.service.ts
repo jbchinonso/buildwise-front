@@ -77,7 +77,7 @@ interface ICreateClientPayload {
 export const addClient = async (client: ICreateClientPayload) => {
   try {
     const response = await baseUrl.post("/clients", client);
-    revalidateTag("clients");
+    revalidateTag("clients", "max");
     return response?.data;
   } catch (error) {
     throw getError(error);
@@ -232,9 +232,9 @@ export const getTitanClientPaymentHistory = async (id: string) => {
       },
     });
 
-    
     const sales = response?.sales as IPaymentHistorySales[];
-    
+
+    console.log({sales})
 
     const uniquePropertiesMap = new Map();
 

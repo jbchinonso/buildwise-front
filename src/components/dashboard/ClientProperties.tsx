@@ -1,15 +1,18 @@
+"use client";
 import { toAmount } from "@/lib/utils";
 import { Button, Input } from "../ui";
 import { IClientProperty } from "@/lib/type";
 import { AddPropertyModal } from "./AddPropertyModal";
+import { useSearchParams } from "next/navigation";
 
 export const ClientProperties = ({
   properties = [],
-  property = 1,
 }: {
   properties: IClientProperty[];
-  property?: string | number;
 }) => {
+  const searchParams = useSearchParams();
+  const property = Number(searchParams.get("property") || 1);
+
   const selectedProperty = properties?.[Number(property || 1) - 1];
 
   return (
@@ -41,6 +44,7 @@ export const ClientProperties = ({
 };
 
 const PropertyPreview = ({ property }: { property: IClientProperty }) => {
+  if (!property) return null;
   return (
     <div className="flex flex-wrap justify-between gap-4 gap-x-20 w-full">
       <Input
@@ -48,56 +52,56 @@ const PropertyPreview = ({ property }: { property: IClientProperty }) => {
         type="text"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={property?.state}
+        value={property?.state}
       />
       <Input
         label="Property"
         type="text"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={property?.propertyName}
+        value={property?.propertyName}
       />
       <Input
         label="Property Size"
         type="text"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={property?.unitNumber}
+        value={property?.unitNumber}
       />
       <Input
         label="Property ID"
         type="text"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={property?.plotNumber}
+        value={property?.plotNumber}
       />
       <Input
         label="Payment Plan"
         type="text"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={property?.paymentPlan}
+        value={property?.paymentPlan}
       />
       <Input
         label="Total paid"
         type="text"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={toAmount(property?.amountPaid || 0)}
+        value={toAmount(property?.amountPaid || 0)}
       />
       <Input
         label="Outstanding payment"
         type="text"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={toAmount(property?.outstandingPayment || 0)}
+        value={toAmount(property?.outstandingPayment || 0)}
       />
       <Input
         label="Payment due"
         type="text"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={toAmount(property?.paymentDue || 0)}
+        value={toAmount(property?.paymentDue || 0)}
       />
     </div>
   );

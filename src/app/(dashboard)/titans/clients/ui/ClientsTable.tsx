@@ -17,11 +17,11 @@ const columns: ColumnDef<IClientRecentTransactions>[] = [
   },
 
   {
-    accessorKey: "propertyName",
+    accessorKey: "propertiesCount",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Properties" />
     ),
-    cell: ({ row }) => <div>{row.getValue("propertyName")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("propertiesCount")||0, false)}</div>,
   },
   {
     accessorKey: "location",

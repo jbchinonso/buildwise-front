@@ -19,6 +19,7 @@ export const ActiveTabs = ({
       <Link
         href={"?"}
         data-ui={activeTab == 0 ? "active" : ""}
+        replace
         className="p-4 py-2 rounded-3xl data-active:bg-white active:text-primary-400 hover:bg-white"
       >
         All transactions
@@ -27,6 +28,7 @@ export const ActiveTabs = ({
         <Link
           href={`?property=${propertyId}`}
           key={propertyId}
+          replace
           data-ui={activeTab == propertyId ? "active" : ""}
           className="p-4 py-2 rounded-3xl data-active:bg-white active:text-primary-400 hover:bg-white"
         >

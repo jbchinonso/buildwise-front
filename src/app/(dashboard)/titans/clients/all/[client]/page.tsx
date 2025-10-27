@@ -13,9 +13,7 @@ const ClientProfile = async (props: {
   searchParams: SearchParams;
 }) => {
   const params = await props.params;
-  const searchParams = await props.searchParams;
   const id = params.client;
-  const property = Number(searchParams?.property || 1);
 
   const [profile, properties] = await Promise.all([
     getTitanClientProfile(id),
@@ -126,7 +124,7 @@ const ClientProfile = async (props: {
         </div>
 
         {/* Activities info */}
-        <ClientProperties properties={properties || []} property={property} />
+        <ClientProperties properties={properties || []}  />
       </div>
     </section>
   );

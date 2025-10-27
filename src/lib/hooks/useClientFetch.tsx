@@ -48,7 +48,6 @@ export const useClientFetch = <T,>({
 
   useEffect(() => {
     if (autoFetch && isModalOpen && !hasFetched) {
-      console.log({ hasFetched, data });
       fetchData();
     }
   }, [isModalOpen, autoFetch, hasFetched, fetchData]);

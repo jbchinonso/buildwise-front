@@ -6,7 +6,7 @@ type Params = Promise<{ titan: string }>;
 
 const CommissionHistory = async (props: { params: Params }) => {
   const params = await props.params;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const { data = [] } = await getCommissionBreakdown();
 
   return (
