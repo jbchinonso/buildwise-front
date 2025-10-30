@@ -1,10 +1,10 @@
-import { getTransactions } from "@/lib/services";
+import { getTopPerformingTitans } from "@/lib/services";
 import Table from "./Table";
 
 export const TopPerformingTitans = async () => {
-  const { data = [] } = await getTransactions();
+  const { data = [] } = await getTopPerformingTitans();
   return (
-    <div className="rounded-2xl bg-white p-4 w-full sm:w-[60%] flex flex-col gap-4 border border-grey-50">
+    <div className="rounded-2xl bg-white p-4 max-w-full flex-1 sm:flex-[60%] flex flex-col gap-4 border border-grey-50">
       <div className="flex w-full items-center justify-between gap-4">
         <div className="flex flex-col">
           <p className="text-lg font-semibold">Top performing titans</p>

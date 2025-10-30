@@ -4,7 +4,12 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-import { Button, DataTableColumnHeader, Skeleton, TableSkeleton } from "@/components/ui";
+import {
+  Button,
+  DataTableColumnHeader,
+  Skeleton,
+  TableSkeleton,
+} from "@/components/ui";
 import { useClientFetch, useModal } from "@/lib/hooks";
 import { getClientData } from "@/lib/services/dashboard.service";
 import { toAmount, toAmountWithSuffix } from "@/lib/utils";
@@ -32,7 +37,11 @@ const columns: ColumnDef<Client>[] = [
   {
     accessorKey: "propertiesBought",
     header: ({ column }) => (
-      <DataTableColumnHeader className="whitespace-break-spaces" column={column} title="Property Bought" />
+      <DataTableColumnHeader
+        className="whitespace-break-spaces"
+        column={column}
+        title="Property Bought"
+      />
     ),
     cell: ({ row }) => <div>{row.getValue("propertiesBought")}</div>,
   },
@@ -51,30 +60,32 @@ const columns: ColumnDef<Client>[] = [
     cell: ({ row }) => <div>{row.getValue("joined")}</div>,
   },
   {
-    id: "actions",
+    accessorKey: "_id",
+    header: () => null,
     cell: ({ row }) => {
+      const id =
+        String(row.getValue("id")) ||
+        String(row?.original?.id) ||
+        String(row.getValue("_id"));
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center px-4">
+          <Link href={`clients/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
   },
 ];
 
-export const ClientOverview = ({
-  stats = 0,
-}: {
-  stats?: number;
-}) => {
+export const ClientOverview = ({ stats = 0 }: { stats?: number }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const {
     data: clientsData,
     isLoading: isClientsLoading,
-    error: clientsError,
+    // error: clientsError,
   } = useClientFetch({
     action: async () => {
       const res = await getClientData();
@@ -139,7 +150,7 @@ export const ClientOverview = ({
             </div>
 
             {isClientsLoading ? (
-              <TableSkeleton/>
+              <TableSkeleton />
             ) : (
               <div className="w-full my-2">
                 <DataTable

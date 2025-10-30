@@ -76,11 +76,14 @@ const columns: ColumnDef<IClientRecentTransactions>[] = [
     accessorKey: "id",
     header: () => null,
     cell: ({ row }) => {
-      const id = String(row.getValue("id")) || String(row?.id);
+      const id =
+        String(row.getValue("id")) ||
+        String(row.getValue("_id")) ||
+        String(row?.id);
 
       return (
         <div className="flex justify-center px-4">
-          <Link href={`all/${id}`} id="button">
+          <Link href={`/titans/clients/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
           </Link>
@@ -95,5 +98,6 @@ export const ClientsTable = ({
 }: {
   data: IClientRecentTransactions[];
 }) => {
+
   return <DataTable columns={columns} data={data} />;
 };

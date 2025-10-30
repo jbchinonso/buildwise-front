@@ -6,11 +6,11 @@ import {
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
-import { ArrowRight, Money, Moneys, Profile2User } from "iconsax-react";
+import { ArrowRight, Moneys } from "iconsax-react";
 import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
-
+import { toAmountWithSuffix } from "@/lib/utils";
 
 type Transaction = {
   id: string;
@@ -48,28 +48,38 @@ const columns: ColumnDef<Transaction>[] = [
   },
 
   {
-    id: "actions",
+    accessorKey: "_id",
+    header: () => null,
     cell: ({ row }) => {
+      const id =
+        String(row.getValue("_id")) ||
+        String(row?.original?.id) ||
+        String(row.getValue("_id"));
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center px-4">
+          <Link href={`/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
   },
 ];
 
-export const SubTitanCommission = ({ data }: { data: Transaction[] }) => {
+export const SubTitanCommission = ({
+  stats = 0,
+}: {
+  stats: number | string;
+}) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
       <DashboardStatsCard
         title="Commission from Sub-titans"
         icon={<Moneys size="24" color="#926667" />}
-        data="300k"
+        data={toAmountWithSuffix(stats || 0)}
         theme=""
         onClick={toggleModal}
       />
@@ -110,11 +120,16 @@ export const SubTitanCommission = ({ data }: { data: Transaction[] }) => {
             </div>
 
             <div className="w-full my-2">
-              <DataTable columns={columns} data={data} />
+              <DataTable columns={columns} data={[]} />
             </div>
 
             <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+              <Button
+                onClick={toggleModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
 

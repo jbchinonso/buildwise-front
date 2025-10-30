@@ -1,20 +1,23 @@
 import { CommissionsTable } from "@/app/(dashboard)/titans/titans/ui";
 import { BreadCrumbs, Filters, SearchInput } from "@/components/ui";
-import { getCommissions } from "@/lib/services";
+import { getCommissionBreakdown } from "@/lib/services";
 
 type Params = Promise<{ titan: string }>;
 
 const CommissionHistory = async (props: { params: Params }) => {
   const params = await props.params;
-  const id = params.titan;
-  const { data = [] } = await getCommissions();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data = [] } = await getCommissionBreakdown();
 
   return (
     <section className="flex flex-1 flex-col gap-4">
       <BreadCrumbs
         paths={[
           { title: "Home", path: "/titans/my-titans/" },
-          { title: "Commission breakdown", path: "/titans/my-titans/commission-breakdown" },
+          {
+            title: "Commission breakdown",
+            path: "/titans/my-titans/commission-breakdown",
+          },
         ]}
       />
 

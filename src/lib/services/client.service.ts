@@ -1,16 +1,20 @@
 "use server";
 
 import { revalidateTag } from "next/cache";
-import { baseUrl, getError } from "../utils";
+import { baseUrl, getError, getMonth } from "../utils";
 import { authFetch } from "./auth.service";
 import { URLSearchParams } from "url";
 import {
+  IActiveTitanClient,
   IClientOverview,
+  IClientProperty,
   IClientRecentlyReserved,
   IClientRecentTransactions,
   IPaymentHistorySales,
   IPaymentHistoryTransactionDTO,
-  ITitanClientOverview,
+  ITitanClientSummary,
+  ITitanClosedSales,
+  ITitanClosedSalesPiechart,
 } from "../type";
 
 export const getAllClients = async (
@@ -39,7 +43,6 @@ export const getAllClients = async (
       }
       // NOTE: This need to match the UI especially payments
     );
-    console.log({data})
     return { data, pagination };
   } catch (error) {
     throw getError(error);
@@ -128,7 +131,6 @@ export const getClientOverview = async () => {
       },
     });
 
-
     return response as IClientOverview;
     // NOTE: confirm totalPropertiesBoughtOrReserved is amount and not count
   } catch (error) {
@@ -205,6 +207,22 @@ export const getTitanClientProfile = async (id: string) => {
   }
 };
 
+export const getTitanClientProfileProperty = async (id: string) => {
+  try {
+    const response = await authFetch(`/clients/${id}/properties`, {
+      next: {
+        tags: ["clients-" + id, "sales", "properties"],
+        revalidate: 8400,
+      },
+    });
+
+    return response as IClientProperty[];
+
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
 export const getTitanClientPaymentHistory = async (id: string) => {
   try {
     const response = await authFetch(`/clients/${id}/payment-history`, {
@@ -214,7 +232,9 @@ export const getTitanClientPaymentHistory = async (id: string) => {
       },
     });
 
+    
     const sales = response?.sales as IPaymentHistorySales[];
+    
 
     const uniquePropertiesMap = new Map();
 
@@ -256,14 +276,135 @@ export const getTitanClientPaymentHistory = async (id: string) => {
 
 export const getTitanClientOverview = async () => {
   try {
-    const response = await authFetch("/clients/overview", {
+    const response = await authFetch("/titans/active-clients-summary", {
       next: {
         tags: ["clients"],
         revalidate: 8400,
       },
     });
 
-    return response as ITitanClientOverview;
+    return response as ITitanClientSummary;
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getActiveTitanClient = async () => {
+  try {
+    const response = await authFetch("/titans/active-clients", {
+      next: {
+        tags: ["clients"],
+        revalidate: 8400,
+      },
+    });
+
+    return {
+      clients: response?.data || [],
+      meta: response?.meta || { total: 0 },
+    } as { clients: IActiveTitanClient[]; meta: { total: number } };
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getTitanClosedSales = async () => {
+  try {
+    const response = await authFetch("/titans/closed", {
+      next: {
+        tags: ["sales"],
+        revalidate: 8400,
+      },
+    });
+
+    return {
+      sales: response?.data || [],
+      meta: response?.meta || { total: 0 },
+    } as {
+      meta: {
+        total: number;
+      };
+      sales: ITitanClosedSales[];
+    };
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getTitanClosedSalesChart = async () => {
+  try {
+    const response = await authFetch("/titans/closed/pie-chart", {
+      next: {
+        tags: ["sales"],
+        revalidate: 8400,
+      },
+    });
+
+    return response as ITitanClosedSalesPiechart;
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getTitanClosedSalesSummary = async () => {
+  try {
+    const response = await authFetch("/titans/closed/summary", {
+      next: {
+        tags: ["sales"],
+        revalidate: 8400,
+      },
+    });
+
+    return response as {
+      totalProperties: number;
+      completedPurchases: number;
+      closedRevenue: number;
+    };
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getTitanClientRevenueSummary = async () => {
+  try {
+    const response = await authFetch("/titans/revenue-summary", {
+      next: {
+        tags: ["revenue"],
+        revalidate: 8400,
+      },
+    });
+
+    return response as {
+      totalRevenue: number;
+      propertySold: number;
+      avgRevenuePerSale: number;
+      commissionEarned: number;
+      pendingCommission: number;
+    };
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getTitanClientRevenueChart = async () => {
+  try {
+    const response = await authFetch("/titans/revenue-chart", {
+      next: {
+        tags: ["revenue"],
+        revalidate: 8400,
+      },
+    });
+
+    interface IData {
+      month: number | string;
+      revenue: number;
+    }
+
+    const result = (response || []).map((v: IData) => ({
+      month: getMonth(v?.month || 1),
+      revenue: v?.revenue || 0,
+    }));
+
+    return result;
   } catch (error) {
     throw getError(error);
   }

@@ -1,14 +1,26 @@
+import { ClientProperties } from "@/components/dashboard";
 import { BreadCrumbs, Button, Input, Avatar } from "@/components/ui";
-import {  AddPropertyModal } from "../../ui";
-import { getTitanClientProfile } from "@/lib/services";
+import {
+  getTitanClientProfile,
+  getTitanClientProfileProperty,
+} from "@/lib/services";
 
-type Params = Promise<{ client: string }>;
+type Params = Promise<{ client: string; property: string }>;
+type SearchParams = Promise<{ property: string }>;
 
-const ClientProfile = async (props: { params: Params }) => {
+const ClientProfile = async (props: {
+  params: Params;
+  searchParams: SearchParams;
+}) => {
   const params = await props.params;
+  const searchParams = await props.searchParams;
   const id = params.client;
+  const property = Number(searchParams?.property || 1);
 
-  const profile = await getTitanClientProfile(id);
+  const [profile, properties] = await Promise.all([
+    getTitanClientProfile(id),
+    getTitanClientProfileProperty(id),
+  ]);
 
   return (
     <section className="flex flex-1 flex-col gap-4">
@@ -112,44 +124,9 @@ const ClientProfile = async (props: { params: Params }) => {
             defaultValue={profile?.residentialAddress}
           />
         </div>
+
         {/* Activities info */}
-        <div className="flex flex-1 flex-wrap justify-between gap-4 gap-x-20 w-full">
-          {/* <header className="w-full text-grey-400 font-bold">
-            <p>Activities</p>
-          </header>
-
-          <Input
-            label="Total revenue"
-            name="total_revenue"
-            id="total_revenue"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={activities.total_revenue}
-          />
-          <Input
-            label="Sales commission"
-            name="sales_commission"
-            id="sales_commission"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={activities.sales_commission}
-          />
-          <Input
-            label="Referral commission"
-            name="referral_commission"
-            id="referral_commission"
-            type="text"
-            readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-            defaultValue={activities.referral_commission}
-          /> */}
-
-          <div className="w-full flex py-2 my-2 mt-auto">
-            <AddPropertyModal />
-          </div>
-        </div>
+        <ClientProperties properties={properties || []} property={property} />
       </div>
     </section>
   );

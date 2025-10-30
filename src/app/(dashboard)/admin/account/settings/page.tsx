@@ -1,11 +1,7 @@
 import { SettingsForm } from "./SettingsForm";
 
 const Settings = () => {
-  return (
-    <div>
-      <SettingsForm />
-    </div>
-  );
+  return <SettingsForm />;
 };
 
 export default Settings;

@@ -6,19 +6,11 @@ import {
 } from "@/components/dashboard";
 import { useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowDown } from "iconsax-react";
 import { ChevronRight, House } from "lucide-react";
-import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
-import {
-  DataTableColumnHeader,
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  Button,
-} from "@/components/ui";
+import { DataTableColumnHeader, Button } from "@/components/ui";
 import { toAmountWithSuffix } from "@/lib/utils";
+import Link from "next/link";
 
 type Transaction = {
   id: string;
@@ -86,12 +78,14 @@ const columns: ColumnDef<Transaction>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
+      const id = String(row.getValue("_id")) || String(row?.id);
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center">
+          <Link href={`/titan/properties/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
@@ -109,7 +103,7 @@ export const PropertyOverview = ({
   return (
     <>
       <DashboardStatsCard
-        title="Propeties sold"
+        title="Properties sold"
         icon={<House size="24" color="#926667" />}
         data={toAmountWithSuffix(stats, false)}
         onClick={toggleModal}
@@ -117,7 +111,7 @@ export const PropertyOverview = ({
 
       {isModalOpen && (
         <PageModal handleClose={closeModal} heading="Propeties sold">
-          <section className="flex flex-col w-full gap-4 ">
+          <section className="flex flex-col flex-1 w-full gap-4 ">
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Property Sold</p>
@@ -141,8 +135,13 @@ export const PropertyOverview = ({
               <DataTable columns={columns} data={data} />
             </div>
 
-            <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+            <div className="flex justify-end gap-4 items-center mt-auto">
+              <Button
+                onClick={toggleModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
               <Button size="xs">Export PDF</Button>

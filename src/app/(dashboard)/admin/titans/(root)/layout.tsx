@@ -1,4 +1,3 @@
-import { TitanStatsTable } from "../ui/TitanStatsTable";
 
 export default async function Layout({
   children,

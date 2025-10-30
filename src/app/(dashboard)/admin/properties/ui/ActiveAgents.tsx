@@ -5,7 +5,6 @@ import { useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 type Titan = {
   id: string;
@@ -58,9 +57,8 @@ interface IProps {
   agents?:any[];
 }
 
-export const ActiveAgents = ({ id, agents=[], total=0 }: IProps) => {
+export const ActiveAgents = ({  agents=[], total=0 }: IProps) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
-  const router = useRouter();
   return (
     <>
       <Input

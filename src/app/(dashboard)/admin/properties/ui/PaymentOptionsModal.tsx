@@ -87,9 +87,9 @@ export const PaymentOptionsModal = ({
       return;
     }
 
-    const plans = paymentPrice?.plans ?? {};
-    const planKeys = Object.keys(plans);
-    const lastKey = planKeys[planKeys.length];
+    // const plans = paymentPrice?.plans ?? {};
+    // const planKeys = Object.keys(plans);
+    // const lastKey = planKeys[planKeys.length];
 
     setPaymentPrice((prev) => ({
       ...prev,
@@ -124,6 +124,7 @@ export const PaymentOptionsModal = ({
         {}
       ),
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

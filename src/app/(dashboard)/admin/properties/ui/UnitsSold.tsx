@@ -1,11 +1,12 @@
 "use client";
 import { DataTable, PageModal } from "@/components/dashboard";
-import {  DataTableColumnHeader, Input } from "@/components/ui";
+import { DataTableColumnHeader, Input } from "@/components/ui";
 import { ISoldUnitsDTO } from "@/lib/dtos/property.dto";
 import { useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+
 
 interface IProps {
   id?: string;
@@ -67,24 +68,30 @@ const columns: ColumnDef<Transaction>[] = [
     ),
     cell: ({ row }) => <div>{row.getValue("status")}</div>,
   },
+
   {
-    id: "actions",
+    accessorKey: "id",
+    header: () => null,
     cell: ({ row }) => {
+      const id =
+        String(row.getValue("id")) ||
+        String(row?.original?.id) ||
+        String(row.getValue("_id"));
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center px-4">
+          <Link href={`/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
   },
 ];
 
-export const UnitsSold = ({ id, unitsSold }: IProps) => {
+export const UnitsSold = ({ unitsSold }: IProps) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
-  const router = useRouter()
   return (
     <>
       <Input
@@ -106,13 +113,9 @@ export const UnitsSold = ({ id, unitsSold }: IProps) => {
           className="max-w-[MIN(100%,600px)]"
         >
           <section className="flex flex-col w-full gap-4">
-           
-
             <div className="w-full my-1 flex-1">
               <DataTable columns={columns} data={[]} />
             </div>
-
-            
           </section>
         </PageModal>
       )}

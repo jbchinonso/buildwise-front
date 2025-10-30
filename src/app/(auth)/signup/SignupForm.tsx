@@ -13,7 +13,7 @@ const SignupForm = () => {
   const { isModalOpen, toggleModal } = useModal();
   const [email, setEmail] = useState("");
   const baseUrl = window?.location?.origin;
-  const [modalType, setModalType] = useState<"success" | "error">("success");
+  // const [modalType, setModalType] = useState<"success" | "error">("success");
 
   const {
     touched,

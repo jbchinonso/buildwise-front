@@ -11,13 +11,11 @@ import {
   PieChart,
 } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
-import { getMostAvaliableUnits } from "@/lib/services";
 import { IMostAvailableUnits, IPropertySummary } from "@/lib/type";
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowRight, ChevronRight, House } from "lucide-react";
+import { ArrowRight, House } from "lucide-react";
 import Link from "next/link";
-import { use } from "react";
 
 const chartConfig = {
   available: {
@@ -93,7 +91,7 @@ export const AvailableUnits = ({
   data,
   availableUnits = 0,
   summary,
-  children,
+  // children,
 }: {
   data: IMostAvailableUnits[];
   summary?: IPropertySummary;

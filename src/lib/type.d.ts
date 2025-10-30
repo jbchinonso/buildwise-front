@@ -1,6 +1,5 @@
-import NextAuth from "next-auth/next";
 import { DefaultUser, DefaultSession } from "next-auth";
-import { JWT, DefaultJWT } from "next-auth/jwt";
+import { DefaultJWT } from "next-auth/jwt";
 
 interface IDashboardStatsCardProps {
   title?: string;
@@ -274,6 +273,20 @@ interface IClientRecentTransactions {
   instalment: string;
   paymentStatus: string;
 }
+interface IClientProperty {
+  id?: string;
+  plotNumber: number;
+  unitNumber: string;
+  amountPaid: number;
+  price: number;
+  paymentPlan: string;
+  instalmentDuration: string;
+  propertyName: string;
+  state: string;
+  lga: string;
+  outstandingPayment: number;
+  paymentDue: number;
+}
 
 interface IClientPaymentData {
   clientName: string;
@@ -356,11 +369,39 @@ interface IRecentTitanClient {
   location: string;
   joinedDate: string | Date;
 }
-interface ITitanClientOverview {
+interface ITitanClientSummary {
+  activeBuyers: number;
+  closedSales: number;
+  properties: number;
   totalClients: number;
-  activeBuyersCount: number;
-  totalPropertiesBoughtOrReserved: number;
-  recentClients: IRecentTitanClient[];
+}
+
+interface IActiveTitanClient {
+  _id: string;
+  clientName: string;
+  joined: string;
+  properties: string;
+  status: string;
+  payment: string;
+}
+
+interface ITitanClosedSales {
+  _id: string;
+  clientName: string;
+  location: string;
+  property: string;
+  price: string;
+  status: string;
+}
+
+interface ITitanClosedSalesPiechart {
+  closed: number;
+  ongoing: number;
+  total: number;
+  percentage: {
+    closed: number;
+    ongoing: number;
+  };
 }
 
 interface IReceipt {

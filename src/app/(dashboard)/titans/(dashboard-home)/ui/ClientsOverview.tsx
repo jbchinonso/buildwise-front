@@ -6,80 +6,81 @@ import {
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader, TableSkeleton } from "@/components/ui";
 import { useClientFetch, useModal } from "@/lib/hooks";
-import { getTitanClientOverview } from "@/lib/services";
-import { IRecentTitanClient } from "@/lib/type";
-import { formatDateToNow, toAmount } from "@/lib/utils";
+import { getActiveTitanClient } from "@/lib/services";
+import { IActiveTitanClient } from "@/lib/type";
+import { toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight, Profile2User } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-const columns: ColumnDef<IRecentTitanClient>[] = [
+const columns: ColumnDef<IActiveTitanClient>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "clientName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    cell: ({ row }) => <div>{row.getValue("clientName")}</div>,
   },
   {
-    accessorKey: "property",
+    accessorKey: "properties",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Property" />
+      <DataTableColumnHeader column={column} title="Properties" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    cell: ({ row }) => <div>{row.getValue("properties")}</div>,
   },
   {
-    accessorKey: "location",
+    accessorKey: "status",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Location" />
+      <DataTableColumnHeader column={column} title="Status" />
     ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("status")}</div>
+    ),
   },
   {
-    accessorKey: "last_payment",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Last payment" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("last_payment")}</div>,
-  },
-
-  {
-    accessorKey: "payment_status",
+    accessorKey: "payment",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Payment" />
     ),
-    cell: ({ row }) => <div>{row.getValue("payment_status")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("payment")}</div>
+    ),
   },
   {
     accessorKey: "joined",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Payment" />
+      <DataTableColumnHeader column={column} title="Joined" />
     ),
-    cell: ({ row }) => <div>{formatDateToNow(row.getValue("joined"))}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("joined")}</div>
+    ),
   },
-
   {
-    id: "actions",
+    accessorKey: "_id",
+    header: () => null,
     cell: ({ row }) => {
+      const id = String(row.getValue("_id")) || String(row?.original?._id);
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center px-4">
+          <Link href={`clients/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
   },
 ];
 
+
 export const ClientOverview = ({ stats = 0 }: { stats?: number }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
 
   const { data, isLoading, error } = useClientFetch({
     action: async () => {
-      const res = await getTitanClientOverview();
+      const res = await getActiveTitanClient();
       return res || [];
     },
     isModalOpen,
@@ -133,12 +134,12 @@ export const ClientOverview = ({ stats = 0 }: { stats?: number }) => {
               {isLoading ? (
                 <TableSkeleton />
               ) : (
-                <DataTable columns={columns} data={data?.recentClients || []} />
+                <DataTable columns={columns} data={data?.clients || []} />
               )}
             </div>
 
             <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+              <Button onClick={toggleModal} size="xs" outline variant="secondary">
                 Close
               </Button>
 

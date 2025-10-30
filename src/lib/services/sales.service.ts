@@ -25,6 +25,7 @@ export const createSale = async (sale: ISalePayload) => {
     revalidateTag("sales");
     revalidateTag("property-sales");
     revalidateTag(`property-${sale.propertyId}`);
+    revalidateTag("agents");
     return response?.data;
   } catch (error) {
     throw getError(error);

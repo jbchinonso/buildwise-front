@@ -7,7 +7,6 @@ import { toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 const columns: ColumnDef<IPropertyClientOwnershipTable>[] = [
   {
@@ -72,9 +71,9 @@ interface IProps {
   clientOwners?: IPropertyClientOwnershipTable[];
 }
 
-export const ClientsOwnersModal = ({ id, owners, clientOwners }: IProps) => {
+export const ClientsOwnersModal = ({  owners, clientOwners }: IProps) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
-  const router = useRouter();
+
   return (
     <>
       <Input

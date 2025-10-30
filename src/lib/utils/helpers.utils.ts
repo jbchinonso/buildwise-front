@@ -48,7 +48,7 @@ export const copyTextToClipboard = (textToCopy: string, name = "Text") => {
 };
 
 export function exclude(user: User, keys: string[]) {
-  for (let key of keys) {
+  for (const key of keys) {
     delete user[key as keyof User];
   }
   return user;
@@ -310,3 +310,17 @@ export const formatDateToNow = (
     return "N/A";
   }
 };
+
+
+
+
+export const getMonth = (index: number|string = 1) => {
+  if(typeof index !== "number") return
+  const months = [
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+  ];
+  // Ensure index is between 1 and 12
+  if (index < 1 || index > 12) return "";
+  return months[index - 1];
+}

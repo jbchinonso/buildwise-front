@@ -14,17 +14,15 @@ export default async function AdminLayout({
     return redirect("/login");
   }
   return (
-    <section className="bg-[#F8F8F8] mb-auto flex-1 flex flex-col">
-      <section className="flex flex-col flex-1 relative mb-auto w-full min-h-fit bg-[#F8F8F8] max-w-[MIN(2440px,100%)] mx-auto">
-        <Header />
+    <section className="flex flex-col flex-1 relative mb-auto w-full min-h-fit bg-[#F8F8F8] max-w-[MIN(2440px,100%)] mx-auto">
+      <Header />
 
-        <div className="w-full gap-4 flex flex-1 mb-8 max-h-[MIN(1920px,calc(100dvh-var(--scroll-padding)))] overflow-hidden">
-          <AdminSidebar />
-          <div className="w-full flex flex-col gap-6 flex-[80] py-2 px-4 overflow-auto">
-            {children}
-          </div>
+      <div className="w-full gap-4 flex flex-1 mb-8 max-h-[MIN(1920px,calc(100dvh-var(--scroll-padding)))] overflow-hidden">
+        <AdminSidebar />
+        <div className="w-full flex flex-col gap-6 flex-[80] py-2 px-4 overflow-auto">
+          {children}
         </div>
-      </section>
+      </div>
     </section>
   );
 }

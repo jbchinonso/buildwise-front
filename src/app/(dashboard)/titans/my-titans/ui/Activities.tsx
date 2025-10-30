@@ -1,43 +1,31 @@
-"use client";
 import { Input } from "@/components/ui";
 import Properties from "./Properties";
 import SubTitans from "./SubTitans";
-
-
-type Transaction = {
-  id: string;
-  titan: string;
-  sales: string;
-  revenue: string;
-  commission: string;
-  joined: string;
-  status: string;
-};
-
-
+import { toAmount } from "@/lib/utils";
 
 export default function Activities() {
-
+  const activities = {
+    properties: 0,
+    clients: 0,
+    subTitans: 0,
+    totalRevenue: 0,
+    referralCommission: 0,
+  };
   return (
-    <form className="w-full flex flex-wrap justify-between gap-4">
-  
-      <Properties/>
+    <section className="w-full flex flex-wrap justify-between gap-4">
+      <Properties data={activities?.subTitans || 0} />
       <Input
         label="Clients"
-        defaultValue="3"
-        name="clients"
-        id="clients"
+        defaultValue={toAmount(activities?.clients || 0, false)}
         type="text"
         labelStyle="text-[#7A7F83]"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)] cursor-pointer"
       />
-      <SubTitans/>
+      <SubTitans data={activities?.subTitans || 0} />
       <Input
         label="Total revenue"
-        defaultValue="₦17,000,000"
-        name="totalRevenue"
-        id="totalRevenue"
+        defaultValue={toAmount(activities?.totalRevenue || 0)}
         type="text"
         labelStyle="text-[#7A7F83]"
         readOnly
@@ -46,14 +34,12 @@ export default function Activities() {
 
       <Input
         label="My referral commission"
-        defaultValue="₦67,000"
-        name="referralCommission"
-        id="referralCommission"
+        defaultValue={toAmount(activities?.referralCommission || 0)}
         type="text"
         labelStyle="text-[#7A7F83]"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)] cursor-pointer"
       />
-    </form>
+    </section>
   );
 }

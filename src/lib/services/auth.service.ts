@@ -31,7 +31,7 @@ export const authFetch = async (url: string, options?: any) => {
 export const googleLogin = async (form: any) => {
   try {
     const response = await baseUrl.post("/auth/google/login", form);
-    const data = response?.data?.data;
+    // const data = response?.data?.data;
     const token = response?.data?.data?.token;
     const user = response?.data?.data?.data;
     const formattedData: any = {

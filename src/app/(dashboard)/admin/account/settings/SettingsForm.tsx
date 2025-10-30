@@ -1,12 +1,12 @@
 "use client";
 
-import { Button, Input, SubmitButton } from "@/components/ui";
+import { Button, Input } from "@/components/ui";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
 import { ChangePasswordModal } from "./ChangePasswordModal";
-import { NotificationModal } from "./NotificationModal";
 import { copyTextToClipboard } from "@/lib/utils";
 import { Copy } from "iconsax-react";
+import { NotificationSettings } from "@/components/dashboard";
 
 export const SettingsForm = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -35,7 +35,7 @@ export const SettingsForm = () => {
             />
           }
         />
-        <NotificationModal />
+        <NotificationSettings />
       </div>
       <div className="w-full flex my-10 gap-4 items-center">
         <Button
