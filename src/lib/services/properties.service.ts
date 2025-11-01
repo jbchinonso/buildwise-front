@@ -134,7 +134,7 @@ export const getReservedProperties = async ({
 export const addProperty = async (property: ICreatePropertyPayload) => {
   try {
     const response = await baseUrl.post("/properties", property);
-    revalidateTag("properties");
+    revalidateTag("properties", "max");
     return response?.data;
   } catch (error) {
     throw getError(error);

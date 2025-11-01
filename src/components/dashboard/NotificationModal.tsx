@@ -1,14 +1,17 @@
 "use client";
 import { Button, Input, Modal, SubmitButton, Toggle } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
+import { editTitanNotification } from "@/lib/services";
+import { getError } from "@/lib/utils";
 import { useFormik } from "formik";
 import { ChevronRight } from "lucide-react";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 export const NotificationSettings = () => {
-  const { closeModal, isModalOpen, toggleModal, modalRef } = useModal();
+  const { closeModal, isModalOpen, toggleModal } = useModal();
 
-  const { dirty, values, setFieldValue, resetForm } = useFormik({
+  const { dirty, values, setFieldValue, resetForm, handleReset } = useFormik({
     initialValues: {
       sms: false,
       email: false,
@@ -16,7 +19,15 @@ export const NotificationSettings = () => {
     onSubmit: () => {},
   });
 
-  const onSubmit = () => {};
+  const onSubmit = async () => {
+    try {
+      await editTitanNotification(values);
+      resetForm();
+      toast.success("Profile information updated successfully");
+    } catch (error) {
+      toast.error(getError(error));
+    }
+  };
 
   useEffect(() => {
     // reset form on modal close
@@ -55,11 +66,12 @@ export const NotificationSettings = () => {
           handleClose={closeModal}
           className="w-[400px]"
         >
-          <form action={onSubmit} className="w-full flex-1 flex flex-col gap-4">
-            <div
-              // ref={modalRef}
-              className="flex w-full p-4 py-3 border rounded-xl items-center justify-between"
-            >
+          <form
+            onReset={handleReset}
+            action={onSubmit}
+            className="w-full flex-1 flex flex-col gap-4"
+          >
+            <div className="flex w-full p-4 py-3 border rounded-xl items-center justify-between">
               <label
                 className="Label"
                 htmlFor="email"

@@ -78,10 +78,7 @@ export const ClientOverview = ({ stats = 0 }: { stats?: string | number }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
 
   const { data, isLoading } = useClientFetch({
-    action: async () => {
-      const res = await getTitanClientOverview();
-      return res || [];
-    },
+    action: getTitanClientOverview,
     isModalOpen,
   });
 
@@ -90,7 +87,7 @@ export const ClientOverview = ({ stats = 0 }: { stats?: string | number }) => {
     isLoading: isFetchingClients,
     // error: isClientsError,
   } = useClientFetch({
-    action: async () => await getActiveTitanClient(),
+    action: getActiveTitanClient,
     isModalOpen,
   });
 

@@ -6,7 +6,7 @@ import { getReceiptData } from "@/lib/services";
 import { getError, toAmount } from "@/lib/utils";
 import { TickCircle } from "iconsax-react";
 import Image from "next/image";
-import React, { useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 import toast from "react-hot-toast";
 
 interface IProps {
@@ -55,13 +55,16 @@ export const ReceiptModal = ({ saleId }: IProps) => {
       className="sm:max-w-[MIN(90%,520px)]"
     >
       {isLoading ? (
+        <>
+        <p className="text-sm text-center my-2 animate-pulse">Fetching receipt...</p>
         <TableSkeleton />
+        </>
       ) : error ? (
         <p className="p-4 m-auto">An error occured fetching receipt data</p>
       ) : (
         <div ref={contentRef} className="flex flex-col flex-1">
-          <Logo className="my-1" />
-          <div  className="flex sr-only flex-col mx-auto text-center">
+          <Logo className="my-1 hidden print:flex" />
+          <div  className="flex s.r-only flex-col mx-auto text-center">
             <h1 className="text-3xl font-bold">
               {toAmount(data?.amount || 0)}
             </h1>

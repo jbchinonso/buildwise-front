@@ -25,19 +25,19 @@ export const PieChartCard: React.FC<PieChartCardProps> = ({
   const total = data.reduce((acc, item) => acc + item.value, 0);
   const isDataEmpty = total === 0;
 
-  // const formatLabel = (value: number) =>
-  //   `${Math.round((value / total) * 100)} %`;
+  const formatLabel = (value: number) =>
+    `${Math.round((value / total) * 100)}%`;
 
   return (
     <>
-      <div className="w-full flex flex-col flex-1" style={{ height: height }}>
+      <div className="w-full flex flex-col flex-1" style={{ height }}>
         {isDataEmpty ? (
           <div className="text-center text-gray-500 mt-8">
             No sales data available
           </div>
         ) : (
-          <>
-            <ResponsiveContainer width="100%" height={"100%"}>
+          <div className="flex flex-1 flex-col items-center justify-center">
+            <ResponsiveContainer width="100%" height={height}>
               <PieChart>
                 <Pie
                   data={data}
@@ -82,7 +82,7 @@ export const PieChartCard: React.FC<PieChartCardProps> = ({
                     />
                   ))}
                 </Pie>
-                <Tooltip />
+                <Tooltip formatter={formatLabel}/>
               </PieChart>
             </ResponsiveContainer>
             <div className="flex justify-center gap-8 my-2 text-sm">
@@ -94,7 +94,7 @@ export const PieChartCard: React.FC<PieChartCardProps> = ({
                       style={{
                         backgroundColor: colors[index % colors.length],
                       }}
-                    ></span>
+                    />
                     <span className="text-gray-700 font-medium">
                       {entry.name}
                     </span>
@@ -105,7 +105,7 @@ export const PieChartCard: React.FC<PieChartCardProps> = ({
                 </div>
               ))}
             </div>
-          </>
+          </div>
         )}
       </div>
     </>

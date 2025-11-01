@@ -3,7 +3,8 @@ import { PropertyOverview } from "../../ui";
 
 const PropertiesSold = async () => {
   const response = await getTitanDashboardSummary();
-  return <PropertyOverview stats={response?.totalPlotsSold} data={[]} />;
+
+  return <PropertyOverview stats={response?.totalPlotsSold}/>;
 };
 
 export default PropertiesSold;

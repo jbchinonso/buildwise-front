@@ -1,13 +1,13 @@
 "use client";
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
-import { IClientRecentTransactions } from "@/lib/type";
+import { IRecentClients } from "@/lib/type";
 import { toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-const columns: ColumnDef<IClientRecentTransactions>[] = [
+const columns: ColumnDef<IRecentClients>[] = [
   {
     accessorKey: "clientName",
     header: ({ column }) => (
@@ -17,11 +17,19 @@ const columns: ColumnDef<IClientRecentTransactions>[] = [
   },
 
   {
-    accessorKey: "propertyName",
+    // accessorKey: "propertiesCount",
+    id: "properties",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Properties" />
     ),
-    cell: ({ row }) => <div>{row.getValue("propertyName")}</div>,
+    cell: ({ row }) => (
+      <div>
+        {toAmount(
+          row.original?.properties || row.original?.propertiesCount || 0,
+          false
+        )}
+      </div>
+    ),
   },
   {
     accessorKey: "location",
@@ -35,7 +43,7 @@ const columns: ColumnDef<IClientRecentTransactions>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Last Payment" />
     ),
-    cell: ({ row }) => <div>{row.getValue("lastPayment")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("lastPayment") || 0)}</div>,
   },
 
   {
@@ -43,7 +51,7 @@ const columns: ColumnDef<IClientRecentTransactions>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Total Paid" />
     ),
-    cell: ({ row }) => <div>{row.getValue("totalPaid")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("totalPaid") || 0)}</div>,
   },
 
   {
@@ -72,14 +80,10 @@ const columns: ColumnDef<IClientRecentTransactions>[] = [
   },
 
   {
-    // id: "actions",
-    accessorKey: "id",
+    id: "actions",
     header: () => null,
     cell: ({ row }) => {
-      const id =
-        String(row.getValue("id")) ||
-        String(row.getValue("_id")) ||
-        String(row?.id);
+      const id = String(row.original?._id || row.original?.id);
 
       return (
         <div className="flex justify-center px-4">
@@ -93,11 +97,6 @@ const columns: ColumnDef<IClientRecentTransactions>[] = [
   },
 ];
 
-export const ClientsTable = ({
-  data = [],
-}: {
-  data: IClientRecentTransactions[];
-}) => {
-
+export const ClientsTable = ({ data = [] }: { data: IRecentClients[] }) => {
   return <DataTable columns={columns} data={data} />;
 };

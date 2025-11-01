@@ -3,6 +3,7 @@ import Table from "./Table";
 
 export const TopPerformingTitans = async () => {
   const { data = [] } = await getTopPerformingTitans();
+
   return (
     <div className="rounded-2xl bg-white p-4 max-w-full flex-1 sm:flex-[60%] flex flex-col gap-4 border border-grey-50">
       <div className="flex w-full items-center justify-between gap-4">

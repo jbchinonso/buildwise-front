@@ -22,10 +22,10 @@ interface ISalePayload {
 export const createSale = async (sale: ISalePayload) => {
   try {
     const response = await baseUrl.post("/sales", sale);
-    revalidateTag("sales");
-    revalidateTag("property-sales");
-    revalidateTag(`property-${sale.propertyId}`);
-    revalidateTag("agents");
+    revalidateTag("sales", "max");
+    revalidateTag("property-sales", "max");
+    revalidateTag(`property-${sale.propertyId}`, "max");
+    revalidateTag("agents", "max");
     return response?.data;
   } catch (error) {
     throw getError(error);

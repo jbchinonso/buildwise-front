@@ -4,13 +4,14 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-import { useModal } from "@/lib/hooks";
+import { useClientFetch, useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, House } from "lucide-react";
 
-import { DataTableColumnHeader, Button } from "@/components/ui";
-import { toAmountWithSuffix } from "@/lib/utils";
+import { DataTableColumnHeader, Button, TableSkeleton } from "@/components/ui";
+import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 import Link from "next/link";
+import { getPropertiesSold, getTitanPropertiesSummary } from "@/lib/services";
 
 type Transaction = {
   id: string;
@@ -93,13 +94,22 @@ const columns: ColumnDef<Transaction>[] = [
 ];
 
 export const PropertyOverview = ({
-  data = [],
   stats = 0,
 }: {
-  data?: Transaction[];
   stats?: string | number;
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+
+  const { data: summary, isLoading: isFetchingSummary } = useClientFetch({
+    action: getTitanPropertiesSummary,
+    isModalOpen,
+  });
+
+  const { data, isLoading: isFetchingProperties } = useClientFetch({
+    action: getPropertiesSold,
+    isModalOpen,
+  });
+
   return (
     <>
       <DashboardStatsCard
@@ -110,41 +120,59 @@ export const PropertyOverview = ({
       />
 
       {isModalOpen && (
-        <PageModal handleClose={closeModal} heading="Propeties sold">
+        <PageModal handleClose={closeModal} heading="Properties sold">
           <section className="flex flex-col flex-1 w-full gap-4 ">
-            <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
+            <div
+              data-ui={isFetchingSummary ? "loading" : ""}
+              className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white data-loading:animate-pulse"
+            >
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Property Sold</p>
-                <p className="text-grey-600">15</p>
+                <p className="text-grey-600">
+                  {toAmount(summary?.totalUnits || 0, false)}
+                </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Paid</p>
-                <p className="text-grey-600">₦12,050,000</p>
+                <p className="text-grey-600">
+                  {toAmount(summary?.totalSoldUnits || 0)}
+                </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Outstanding</p>
-                <p className="text-grey-600">₦14,000</p>
+                <p className="text-grey-600">
+                  {toAmount(summary?.totalReservedUnits || 0)}
+                </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Closed Sales</p>
-                <p className="text-grey-600">2</p>
+                <p className="text-grey-600">
+                  {toAmount(summary?.closedSales || 0, false)}
+                </p>
               </div>
             </div>
 
             <div className="w-full my-2">
-              <DataTable columns={columns} data={data} />
+              {isFetchingProperties ? (
+                <TableSkeleton />
+              ) : (
+                <DataTable columns={columns} data={data?.properties || []} />
+              )}
             </div>
 
-            <div className="flex justify-end gap-4 items-center mt-auto">
-              <Button
-                onClick={toggleModal}
-                size="xs"
-                outline
-                variant="secondary"
-              >
-                Close
-              </Button>
-              <Button size="xs">Export PDF</Button>
+            <div className="flex w-full mt-auto justify-between gap-4 flex-wrap">
+              <div></div>
+              <div className="flex  justify-end gap-4 items-center mt-auto">
+                <Button
+                  onClick={toggleModal}
+                  size="xs"
+                  outline
+                  variant="secondary"
+                >
+                  Close
+                </Button>
+                <Button size="xs">Export PDF</Button>
+              </div>
             </div>
           </section>
         </PageModal>

@@ -1,5 +1,6 @@
-"use client"; // Error boundaries must be Client Components
+"use client";
 
+import { ErrorBoundary } from "@/components/ui";
 import { useEffect } from "react";
 
 export default function Error({
@@ -15,17 +16,9 @@ export default function Error({
   }, [error]);
 
   return (
-    <div>
-      <h2>Something went wrong!</h2>
-      <button
-        onClick={
-          // Attempt to recover by trying to re-render the segment
-          () => reset()
-        }
-        className="cursor-pointer"
-      >
-        Try again
-      </button>
-    </div>
+    <ErrorBoundary
+      message={"Failed to fetch client data!"}
+      reset={() => reset()}
+    />
   );
 }

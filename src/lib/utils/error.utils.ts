@@ -1,8 +1,10 @@
 import { AxiosError } from "axios";
 
-export const getError = (error: any) => {
+export const getError = (
+  error: any,
+  defaultMessage = "An unexpected error occurred. Please try again later."
+) => {
   if (typeof error === "string") {
-    
     return error;
   } else if (error instanceof AxiosError) {
     const axiosError = error as AxiosError;
@@ -25,12 +27,12 @@ export const getError = (error: any) => {
     } else if (response.status === 404) {
       return "Resource not found. Please try again later.";
     } else {
-      return "An unexpected error occurred. Please try again later.";
+      return defaultMessage;
     }
   } else if (error?.message) {
     return error?.message;
   } else {
-    return "An unexpected error occurred. Please try again later.";
+    return defaultMessage;
   }
 };
 
