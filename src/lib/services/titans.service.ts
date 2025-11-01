@@ -238,7 +238,50 @@ export const getTitanSubTitans = async (titan?: string) => {
       },
     });
 
-    return response  as SubTitan[] ;
+    return response as SubTitan[];
+  } catch (error) {
+    // return { error: getError(error) };
+    // console.error("Error fetching titans:", getError(error));
+    throw new Error(getError(error));
+  }
+};
+
+export const getPropertiesSold = async () => {
+  try {
+    const { data: properties, meta } = await authFetch(
+      "/titans/properties-sold",
+      {
+        next: {
+          revalidate: 8400,
+          tags: ["properties"],
+        },
+      }
+    );
+
+    return { properties, meta };
+  } catch (error) {
+    // return { error: getError(error) };
+    // console.error("Error fetching titans:", getError(error));
+    throw new Error(getError(error));
+  }
+};
+
+export const getTitanPropertiesSummary = async () => {
+  try {
+    const response = await authFetch("/titans/properties-summary", {
+      next: {
+        revalidate: 8400,
+        tags: ["properties"],
+      },
+    });
+
+    return response as {
+      closedSales: number;
+      totalAvailableUnits: number;
+      totalReservedUnits: number;
+      totalSoldUnits: number;
+      totalUnits: number;
+    };
   } catch (error) {
     // return { error: getError(error) };
     // console.error("Error fetching titans:", getError(error));

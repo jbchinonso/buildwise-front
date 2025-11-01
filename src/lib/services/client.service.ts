@@ -12,6 +12,7 @@ import {
   IClientRecentTransactions,
   IPaymentHistorySales,
   IPaymentHistoryTransactionDTO,
+  IRecentClients,
   ITitanClientSummary,
   ITitanClosedSales,
   ITitanClosedSalesPiechart,
@@ -167,17 +168,31 @@ export const getTitanClientRecentTransactions = async () => {
     throw getError(error);
   }
 };
-
-export const getAllTitanClients = async () => {
+export const getRecentClients = async () => {
   try {
-    const response = await authFetch("/titans/all-client", {
+    const { data = [] } = await authFetch("/titans/recent-clients", {
       next: {
         tags: ["clients"],
         revalidate: 8400,
       },
     });
 
-    return response;
+    return data as IRecentClients[];
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getAllTitanClients = async () => {
+  try {
+    const { data, ...pagination } = await authFetch("/titans/all-client", {
+      next: {
+        tags: ["clients"],
+        revalidate: 8400,
+      },
+    });
+
+    return { data, pagination };
   } catch (error) {
     throw getError(error);
   }
@@ -217,7 +232,6 @@ export const getTitanClientProfileProperty = async (id: string) => {
     });
 
     return response as IClientProperty[];
-
   } catch (error) {
     throw getError(error);
   }
@@ -233,8 +247,6 @@ export const getTitanClientPaymentHistory = async (id: string) => {
     });
 
     const sales = response?.sales as IPaymentHistorySales[];
-
-    console.log({sales})
 
     const uniquePropertiesMap = new Map();
 
@@ -254,19 +266,22 @@ export const getTitanClientPaymentHistory = async (id: string) => {
 
         const propertyId = cv.property?._id;
         const propertyName = cv.property?.name;
+        const plotNumber = cv?.plotNumber || "N/A";
 
         if (!uniquePropertiesMap.has(propertyId)) {
           uniquePropertiesMap.set(propertyId, {
             propertyId,
             propertyName,
+            plotNumber,
           });
         }
 
         return [...acc, ...transactions];
       }, [] as IPaymentHistoryTransactionDTO[]) || [];
 
+    
     return {
-      allTransactions,
+      sales,
       properties: Array.from(uniquePropertiesMap.values()) || [],
     };
   } catch (error) {
@@ -316,14 +331,11 @@ export const getTitanClosedSales = async () => {
       },
     });
 
-    return {
-      sales: response?.data || [],
-      meta: response?.meta || { total: 0 },
-    } as {
+    return response as {
       meta: {
         total: number;
       };
-      sales: ITitanClosedSales[];
+      data: ITitanClosedSales[];
     };
   } catch (error) {
     throw getError(error);
@@ -405,6 +417,21 @@ export const getTitanClientRevenueChart = async () => {
     }));
 
     return result;
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getTitanClientRecentSales = async () => {
+  try {
+    const response = await authFetch("/titans/titan-recent-sales", {
+      next: {
+        tags: ["revenue"],
+        revalidate: 8400,
+      },
+    });
+
+    return response;
   } catch (error) {
     throw getError(error);
   }

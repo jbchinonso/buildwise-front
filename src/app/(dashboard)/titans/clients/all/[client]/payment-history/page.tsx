@@ -16,15 +16,15 @@ const PaymentHistoryPage = async (props: {
   const searchParams = await props.searchParams;
   const id = params.client;
 
-  const [profile, { allTransactions = [], properties = [] }] =
+  const [profile, { sales = [], properties = [] }] =
     await Promise.all([
       getTitanClientProfile(id),
       getTitanClientPaymentHistory(id),
     ]); 
 
   const filteredTransactions = searchParams?.property
-    ? allTransactions?.filter((v) => v?.propertyId === searchParams?.property)
-    : allTransactions;
+    ? sales?.filter((v) => v?.property?._id === searchParams?.property)
+    : sales;
 
   return (
     <section className="flex flex-col flex-1 gap-4">

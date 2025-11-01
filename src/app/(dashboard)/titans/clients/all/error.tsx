@@ -1,6 +1,7 @@
 "use client"; // Error boundaries must be Client Components
 
 import { ErrorBoundary } from "@/components/ui";
+import { getError } from "@/lib/utils";
 import { useEffect } from "react";
 
 export default function Error({
@@ -17,7 +18,7 @@ export default function Error({
 
   return (
     <ErrorBoundary
-      message={"Failed to fetch client data!"}
+      message={getError(error, "Failed to fetch clients!")}
       reset={() => reset()}
     />
   );

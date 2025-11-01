@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { ArrowRight } from "iconsax-react";
 import { ClientsTable } from "../ui";
-import { getTitanClientRecentTransactions } from "@/lib/services";
+import { getRecentClients } from "@/lib/services";
 
-const Properties = async () => {
-  const transactions = await getTitanClientRecentTransactions();
+const RecentClients = async () => {
+  const recentClients = await getRecentClients();
 
   return (
     <section className="flex flex-wrap gap-4 flex-1 max-h-[601px]">
@@ -22,10 +22,10 @@ const Properties = async () => {
           </Link>
         </div>
 
-        <ClientsTable data={transactions} />
+        <ClientsTable data={recentClients} />
       </div>
     </section>
   );
 };
 
-export default Properties;
+export default RecentClients;

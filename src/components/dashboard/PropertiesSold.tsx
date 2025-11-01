@@ -7,7 +7,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { toAmountWithSuffix } from "@/lib/utils";
+import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 
 const chartConfig = {
   revenue: {
@@ -18,14 +18,14 @@ const chartConfig = {
 
 export function PropertiesSold({
   chartData = [],
-  isLoading
+  isLoading,
 }: {
   chartData?: { month: string | number; revenue: number }[];
   isLoading?: boolean;
 }) {
   return (
     <ChartContainer
-      data-ui={isLoading?"loading":""}
+      data-ui={isLoading ? "loading" : ""}
       config={chartConfig}
       className="min-h-[200px] min-w-full data-loading:animate-pulse"
     >

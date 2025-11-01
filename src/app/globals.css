@@ -249,8 +249,6 @@ body {
   border-radius: 8px;
 }
 
-
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -291,7 +289,8 @@ button {
   }
   &::after {
     border-color: #70f41f;
-    animation: prixClipFix 2s linear infinite,
+    animation:
+      prixClipFix 2s linear infinite,
       rotate 0.5s linear infinite reverse;
     inset: 6px;
   }
@@ -322,4 +321,8 @@ button {
   100% {
     clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
   }
+}
+
+.button {
+  @apply capitalize rounded-4xl whitespace-nowrap flex flex-nowrap items-center place-items-center text-sm md:text-base cursor-pointer relative p-4 px-16  disabled:pointer-events-none disabled:opacity-70 min-w-fit gap-1 transition-all duration-300 ease-out justify-center border border-transparent enabled:hover:border-primary-500;
 }

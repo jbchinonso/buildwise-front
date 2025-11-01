@@ -91,17 +91,17 @@ export const SalesOverview = ({ stats = 0 }: { stats?: string | number }) => {
     isLoading,
     // error: isClientsError,
   } = useClientFetch({
-    action: async () => await getTitanClosedSales(),
+    action: getTitanClosedSales,
     isModalOpen,
   });
 
   const { data: pieChart, isLoading: isChartLoading } = useClientFetch({
-    action: async () => await getTitanClosedSalesChart(),
+    action: getTitanClosedSalesChart,
     isModalOpen,
   });
 
   const { data: summary, isLoading: isSummaryLoading } = useClientFetch({
-    action: async () => await getTitanClosedSalesSummary(),
+    action: getTitanClosedSalesSummary,
     isModalOpen,
   });
 
@@ -146,24 +146,20 @@ export const SalesOverview = ({ stats = 0 }: { stats?: string | number }) => {
                   </p>
                 </div>
                 <div className="flex flex-col flex-[25] gap-2">
-                  <p className="text-grey-400">Closed salesrevenue</p>
+                  <p className="text-grey-400">Closed sales revenue</p>
                   <p className="text-grey-600">
-                    {" "}
                     {toAmount(summary?.closedRevenue || 0)}
                   </p>
                 </div>
               </div>
             )}
 
-            <div className="flex items-baseline justify-between w-full gap-4 mt-4">
-              <h2 className="font-semibold text-grey-600">Closed Sales</h2>
-            </div>
-
-            <div className="w-full">
+            <div className="w-full ">
+              <h2 className="font-semibold my-2 text-grey-600">Closed Sales</h2>
               {isLoading ? (
                 <TableSkeleton />
               ) : (
-                <DataTable columns={columns} data={data?.sales || []} />
+                <DataTable columns={columns} data={data?.data || []} />
               )}
             </div>
 

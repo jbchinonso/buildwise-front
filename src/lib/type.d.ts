@@ -74,6 +74,7 @@ export interface IUser {
   state: string;
   lga: string;
   address: string;
+  branch: string;
 
   isEmailVerified: boolean;
   is_verified: boolean;
@@ -82,7 +83,6 @@ export interface IUser {
   profile_image_cloudinary_id: string | null;
 
   isAdmin: boolean;
-  vendor?: any;
 }
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -263,6 +263,20 @@ interface IClientRecentlyReserved {
   dateReserved: string;
 }
 
+interface IRecentClients {
+  _id: string;
+  id: string;
+  totalPaid: number;
+  outstanding: number;
+  clientName: string;
+  propertyName: string;
+  location: string;
+  instalment: string;
+  paymentStatus: string;
+  properties: string | number;
+  propertiesCount: string | number;
+}
+
 interface IClientRecentTransactions {
   _id: string;
   totalPaid: number;
@@ -341,6 +355,7 @@ interface IPaymentHistoryTransaction {
 
 interface IPaymentHistorySales {
   _id: string;
+  id: string;
   property: {
     _id: string;
     name: string;
@@ -418,6 +433,7 @@ interface IReceipt {
   outstanding: number;
   status: string;
   paymentMethod: string;
+  installment: string
 }
 
 interface SubTitan {

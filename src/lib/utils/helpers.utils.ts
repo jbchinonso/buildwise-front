@@ -190,7 +190,10 @@ export function myImageLoader({
   )}&w=${width}&q=${quality || 75}`;
 }
 
-export const toAmountWithSuffix = (value: string | number, isCurrency = true) => {
+export const toAmountWithSuffix = (
+  value: string | number,
+  isCurrency = true
+) => {
   const numValue = Number(value);
 
   // If the value is not a valid number, return the original string.
@@ -205,17 +208,17 @@ export const toAmountWithSuffix = (value: string | number, isCurrency = true) =>
   if (Math.abs(numValue) >= 1_000_000_000) {
     formattedValue = numValue / 1_000_000_000;
     suffix = "B";
-  } 
+  }
   // Handle numbers in the millions.
   else if (Math.abs(numValue) >= 1_000_000) {
     formattedValue = numValue / 1_000_000;
     suffix = "M";
-  } 
+  }
   // Handle numbers in the thousands.
   else if (Math.abs(numValue) >= 1_000) {
     formattedValue = numValue / 1_000;
     suffix = "K";
-  } 
+  }
   // For numbers less than 1000, keep the original value.
   else {
     formattedValue = numValue;
@@ -224,7 +227,7 @@ export const toAmountWithSuffix = (value: string | number, isCurrency = true) =>
   // Format the number to one decimal place to avoid very long numbers after division.
   const formatter = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 0,
-    maximumFractionDigits: 1, 
+    maximumFractionDigits: 1,
   });
 
   const finalFormattedString = formatter.format(formattedValue) + suffix;
@@ -239,17 +242,22 @@ export const toAmountWithSuffix = (value: string | number, isCurrency = true) =>
  * @returns {(string | number)}
  */
 export const toAmount = (value: string | number, isCurrency = true) => {
-  if (isNaN(Number(value))) {
-    return value as string;
+  let _value = value;
+
+  if (typeof value === "string") {
+    _value = value.replace(/\D/gi, "").trim();
+  }
+  if (isNaN(Number(_value))) {
+    return _value as string;
   }
   const formatter = new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
   });
   if (isCurrency) {
-    return "₦" + formatter.format(Number(value));
+    return "₦" + formatter.format(Number(_value));
   }
-  return formatter.format(Number(value));
+  return formatter.format(Number(_value));
 };
 
 /**
@@ -283,7 +291,7 @@ export function formatAddress(
 }
 
 export const formatDate = (
-  date: string | null | undefined,
+  date: Date | string | null | undefined,
   formatString: string
 ) => {
   try {
@@ -296,31 +304,34 @@ export const formatDate = (
   }
 };
 
-export const formatDateToNow = (
-  date: string | null | undefined
-) => {
+export const formatDateToNow = (date: string | null | undefined) => {
   try {
     if (!date) {
       throw new Error();
     }
-    return date
-          ? formatDistanceToNow(date) + " ago"
-          : "N/A"
+    return date ? formatDistanceToNow(date) + " ago" : "N/A";
   } catch {
     return "N/A";
   }
 };
 
-
-
-
-export const getMonth = (index: number|string = 1) => {
-  if(typeof index !== "number") return
+export const getMonth = (index: number | string = 1) => {
+  if (typeof index !== "number") return;
   const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
   // Ensure index is between 1 and 12
   if (index < 1 || index > 12) return "";
   return months[index - 1];
-}
+};

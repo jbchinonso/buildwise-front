@@ -1,4 +1,3 @@
-import React from "react";
 import { SettingsForm } from "../ui";
 
 const Settings = () => {

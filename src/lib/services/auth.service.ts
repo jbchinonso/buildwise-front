@@ -1,9 +1,5 @@
 "use server";
-import {
-  authOptions,
-  getError,
-  stripFormData,
-} from "../utils";
+import { authOptions, getError, stripFormData } from "../utils";
 import baseUrl from "../utils/baseUrl.utils";
 import { ISignUpData, IUser } from "../type";
 import { getServerSession } from "next-auth";
@@ -21,7 +17,7 @@ export const authFetch = async (url: string, options?: any) => {
   });
 
   if (!res?.ok) {
-    const response = await res.json()
+    const response = await res.json();
     throw new Error(response?.message || "Failed to fetch data!");
   }
 
@@ -31,19 +27,14 @@ export const authFetch = async (url: string, options?: any) => {
 export const googleLogin = async (form: any) => {
   try {
     const response = await baseUrl.post("/auth/google/login", form);
-    // const data = response?.data?.data;
-    const token = response?.data?.data?.token;
-    const user = response?.data?.data?.data;
-    const formattedData: any = {
-      token,
-      data: stripFormData(user as any, [
-        "transactions",
-        "payment_links",
-        "vendor",
-        "last_login",
-      ]) as IUser,
-    };
-    return formattedData;
+
+    // const token = response?.data?.data?.token;
+    // const user = response?.data?.data?.data;
+    // const formattedData: any = {
+    //   token,
+    //   data: stripFormData(user as any, ["downlines"]) as IUser,
+    // };
+    return response?.data;
   } catch (error) {
     // console.log({ error: getError(error) });
     throw new Error(getError(error));
@@ -93,7 +84,7 @@ export const signUp = async (values: ISignUpData) => {
     const response = await baseUrl.post("/user/signup", values);
     return response?.data;
   } catch (error) {
-    throw getError(error) 
+    throw getError(error);
   }
 };
 
@@ -160,6 +151,32 @@ export const editTitanProfile = async (form: any) => {
   try {
     const response = await baseUrl.patch("/auth/profile", form);
     return response?.data;
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const getTitanNotification = async () => {
+  try {
+    const response = await authFetch("/user/notification", {
+      next: {
+        tags: ["notification"],
+      },
+    });
+    return response?.data;
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const editTitanNotification = async (form: {
+  email?: boolean;
+  sms?: boolean;
+}) => {
+  try {
+    await baseUrl.patch("/user/notification", form);
+
+    revalidateTag("notification", "max");
   } catch (error) {
     throw getError(error);
   }

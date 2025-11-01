@@ -34,7 +34,7 @@ export const signUpValidationSchema = Yup.object().shape({
 export const profileValidationSchema = Yup.object().shape({
   firstName: Yup.string().optional(),
   lastName: Yup.string().optional(),
-  phone: Yup.string().required("Phone is required"),
+  phone: Yup.string().optional(),
   address: Yup.string().required("*Address is required!"),
   state: Yup.string().required("*State is required!"),
   lga: Yup.string().required("*LGA is required!"),

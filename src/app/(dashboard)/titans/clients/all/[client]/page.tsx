@@ -124,7 +124,7 @@ const ClientProfile = async (props: {
         </div>
 
         {/* Activities info */}
-        <ClientProperties properties={properties || []}  />
+        <ClientProperties properties={properties || []} canAdd={false} />
       </div>
     </section>
   );

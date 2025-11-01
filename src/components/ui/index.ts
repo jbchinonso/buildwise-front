@@ -17,3 +17,4 @@ export * from "./Skeleton";
 export * from "./TableSkeleton";
 export * from "./EmptyChartData";
 export * from "./Switch";
+export * from "./ErrorBoundary";

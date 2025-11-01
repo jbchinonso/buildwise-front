@@ -95,14 +95,15 @@ export const authOptions: AuthOptions = {
     },
 
     async session({ session, token }) {
+      const { downlines = [], children = [], ...user } = token?.user as any;
       session.token = token.access_token as string;
-      session.user = token.user as any;
+      session.user = user as any;
       session.user.full_name = (
         session.user.firstName ||
         "" + " " + session.user?.lastName ||
         ""
       ).trim();
-    
+
       return session;
     },
   },
