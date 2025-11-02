@@ -131,7 +131,7 @@ const ClientProfile = async (props: {
 
         {/* Activities info */}
         {properties?.length ? (
-          <ClientProperties properties={properties || []} property={property} />
+          <ClientProperties properties={properties || []} />
         ) : (
           <div className="flex flex-1 flex-wrap justify-between gap-4 gap-x-20 w-full">
             <div className="w-full flex py-2 my-2 mt-auto">

@@ -13,7 +13,7 @@ export default function Activities() {
   };
   return (
     <section className="w-full flex flex-wrap justify-between gap-4">
-      <Properties data={activities?.subTitans || 0} />
+      <Properties data={activities?.properties || 0} />
       <Input
         label="Clients"
         defaultValue={toAmount(activities?.clients || 0, false)}

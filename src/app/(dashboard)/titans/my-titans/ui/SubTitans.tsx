@@ -1,43 +1,46 @@
 "use client";
 
+import Link from "next/link";
 import { DataTable, PageModal } from "@/components/dashboard";
-import { Button, DataTableColumnHeader, Input } from "@/components/ui";
+import {
+  Button,
+  DataTableColumnHeader,
+  Input,
+  TableSkeleton,
+} from "@/components/ui";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
-import { useModal } from "@/lib/hooks";
-import Link from "next/link";
+import { useClientFetch, useModal } from "@/lib/hooks";
 import { toAmount } from "@/lib/utils";
+import { useParams } from "next/navigation";
+import { getTitanSubTitans } from "@/lib/services";
+import { SubTitan } from "@/lib/type";
 
-type Transaction = {
-  id: string;
-  titan: string;
-  sales: string;
-  revenue: string;
-  commission: string;
-  joined: string;
-  status: string;
-};
-const subTitanColumns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<SubTitan>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "property sold",
+    accessorKey: "propertiesSold",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Property sold" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property sold")}</div>,
+    cell: ({ row }) => (
+      <div>{toAmount(row.getValue("propertiesSold") || 0, false)}</div>
+    ),
   },
   {
-    accessorKey: "my commission",
+    accessorKey: "commissionEarned",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="My commission" />
     ),
-    cell: ({ row }) => <div>{row.getValue("buyer")}</div>,
+    cell: ({ row }) => (
+      <div>{toAmount(row.getValue("commissionEarned") || 0)}</div>
+    ),
   },
   {
     accessorKey: "joined",
@@ -54,11 +57,11 @@ const subTitanColumns: ColumnDef<Transaction>[] = [
       const id =
         String(row.getValue("id")) ||
         String(row?.original?.id) ||
-        String(row.getValue("_id"));
+        String(row.getValue("id"));
 
       return (
         <div className="flex justify-center px-4">
-          <Link href={`/${id}`} id="button">
+          <Link href={`${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
           </Link>
@@ -67,19 +70,18 @@ const subTitanColumns: ColumnDef<Transaction>[] = [
     },
   },
 ];
-const titanData: Transaction[] = [
-  {
-    id: "1",
-    titan: "Titan 1",
-    sales: "10",
-    revenue: "₦2,000,000",
-    commission: "₦200,000",
-    joined: "2024-01-01",
-    status: "Active",
-  },
-];
+
 export default function SubTitans({ data }: { data?: string | number }) {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+  const params = useParams();
+
+  const { data: subTitans, isLoading } = useClientFetch({
+    action: async () => {
+      const res = await getTitanSubTitans(params?.titan as string);
+      return res;
+    },
+    isModalOpen,
+  });
 
   return (
     <>
@@ -109,10 +111,16 @@ export default function SubTitans({ data }: { data?: string | number }) {
           heading="Sub-titans"
           className="max-w-[MIN(95%,620px)]"
         >
-          <section className="flex flex-col w-full gap-4">
-            <DataTable columns={subTitanColumns} data={titanData} />
+          <section className="flex flex-1 flex-col w-full gap-4">
+            {isLoading ? (
+              <TableSkeleton />
+            ) : (
+              <div className="w-full my-2">
+                <DataTable columns={columns} data={subTitans || []} />
+              </div>
+            )}
 
-            <div className="flex justify-end gap-4 mt-4">
+            <div className="flex mt-auto justify-end gap-4">
               <Button
                 size="xs"
                 outline

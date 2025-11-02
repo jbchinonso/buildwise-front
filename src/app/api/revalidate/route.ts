@@ -11,7 +11,7 @@ export async function GET(
   try {
     if (tags) {
       for (const tag of tags) {
-        revalidateTag(tag);
+        revalidateTag(tag, "max");
       }
     }
 

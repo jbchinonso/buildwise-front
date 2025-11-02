@@ -38,8 +38,6 @@ export const getCommissionBreakdown = async (): Promise<{
       },
     });
 
-    console.log({data})
-
     return { data };
   } catch (error) {
     return { error: getError(error) };

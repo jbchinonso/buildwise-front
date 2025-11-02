@@ -1,45 +1,50 @@
 import { IReceipt } from "../type";
-import { toAmount } from "../utils";
+import { formatDate, toAmount } from "../utils";
 
 export const receiptDTO = (sale: IReceipt) => ({
   amount: sale?.amountDeposited,
   info: [
+    {
+      item: "date",
+      label: "Date",
+      data: formatDate(sale?.date, "dd, MMM yyyy"),
+    },
     {
       item: "client",
       label: "Client name",
       data: sale?.clientName || "N/A",
     },
     {
-      item: "agent",
-      data: sale?.agentName || "N/A",
-    },
-    {
       item: "property",
       data: sale?.propertyName || "N/A",
     },
+    // {
+    //   item: "agent",
+    //   data: sale?.agentName || "N/A",
+    // },
     {
-      item: "units",
+      item: "Plot number",
       data: sale?.plotNumber,
     },
+    // {
+    //   item: "installment_period",
+    //   label: "Instalment period",
+    //   data: sale?.installment||"N/A",
+    // },
     {
-      item: "installment_period",
-      label: "Instalment period",
-      data: "18 May 2025 - 18 Nov 2026",
+      item: "amountDeposited",
+      label: "Amount deposited",
+      data: toAmount(sale?.amountDeposited || 0),
     },
     {
-      item: "total_amount",
+      item: "totalPaid",
       label: "Total amount",
       data: toAmount(sale?.totalPaid || 0),
     },
     {
-      item: "amount_due",
-      label: "Amount due",
+      item: "outstanding",
+      label: "Outstanding",
       data: toAmount(sale?.outstanding || 0),
-    },
-    {
-      item: "amount_paid",
-      label: "Amount paid",
-      data: toAmount(sale?.amountDeposited || 0),
     },
   ],
 });

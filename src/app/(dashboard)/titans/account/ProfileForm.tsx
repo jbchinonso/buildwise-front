@@ -1,29 +1,66 @@
 "use client";
-import { Button, Input, SubmitButton } from "@/components/ui";
-import { editTitanProfile } from "@/lib/services";
+import { Button, Input, SelectScrollable, SubmitButton } from "@/components/ui";
+import { useClientFetch } from "@/lib/hooks";
+import { editTitanProfile, getStates } from "@/lib/services";
 import { IUser } from "@/lib/type";
-import { getError, profileValidationSchema, stripFormData } from "@/lib/utils";
+import {
+  getError,
+  getFormikError,
+  profileValidationSchema,
+  stripFormData,
+} from "@/lib/utils";
 import { useFormik } from "formik";
+import {  Edit2 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import React, { useState } from "react";
+import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 const ProfileForm = () => {
   const [isEditing, setIsEditing] = useState(false);
   const { data: session, update } = useSession();
 
-  const { touched, errors, handleBlur, handleChange, values, isValid, dirty } =
-    useFormik({
-      initialValues: {
-        phone: session?.user?.phone || "",
-        email: session?.user?.email || "",
-        state: session?.user?.state || "",
-        lga: session?.user?.lga || "",
-        address: session?.user?.address || "",
-      },
-      validationSchema: profileValidationSchema,
-      onSubmit: async () => {},
-    });
+  const { data: states = [], isLoading } = useClientFetch({
+    action: getStates,
+    isModalOpen: true,
+  });
+
+  const {
+    touched,
+    errors,
+    handleBlur,
+    handleChange,
+    values,
+    isValid,
+    dirty,
+    setFieldValue,
+  } = useFormik({
+    initialValues: {
+      phone: session?.user?.phone || "",
+      email: session?.user?.email || "",
+      state: session?.user?.state || "",
+      lga: session?.user?.lga || "",
+      address: session?.user?.address || "",
+      branch: session?.user?.branch || "",
+    },
+    validationSchema: profileValidationSchema,
+    onSubmit: async () => {},
+  });
+
+  const lgas = useMemo(() => {
+    const selectedState = states?.find((state) => state.name === values.state);
+
+    return (
+      selectedState?.lgas.map((lga) => ({
+        label: lga,
+        value: lga,
+      })) ?? []
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values.state]);
+
+  const handleSelect = (name: string, value: any) => {
+    setFieldValue(name, value);
+  };
 
   const onEdit = async () => {
     try {
@@ -76,35 +113,33 @@ const ProfileForm = () => {
         labelStyle="text-[#292A2C]"
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
-      <Input
+
+      <SelectScrollable
         label="State"
         name="state"
-        id="state"
+        disabled={isLoading || !isEditing}
         placeholder="Select state"
-        type="text"
-        value={values?.state}
+        value={values.state}
+        onChange={(value) => handleSelect("state", value)}
+        options={(states || [])?.map((state) => ({
+          label: state.name,
+          value: state.name,
+        }))}
         labelStyle="text-[#292A2C]"
-        disabled={!isEditing}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={
-          isEditing && touched?.state && errors?.state ? errors?.state : ""
-        }
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+        className="flex-[45%] max-w-[MIN(100%,470px)]"
+        error={getFormikError(touched?.state, errors?.state)}
       />
-      <Input
+      <SelectScrollable
         label="LGA"
         name="lga"
-        id="lga"
-        placeholder="Select Local Government Area"
-        type="text"
-        value={values?.lga}
+        options={lgas}
+        value={values.lga}
+        onChange={(value) => handleSelect("lga", value)}
+        disabled={!values.state || !isEditing}
+        placeholder="Select local government"
         labelStyle="text-[#292A2C]"
-        disabled={!isEditing}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        error={isEditing && touched?.lga && errors?.lga ? errors?.lga : ""}
-        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+        error={getFormikError(touched?.lga, errors?.lga)}
+        className="flex-[45%] max-w-[MIN(100%,470px)]"
       />
 
       <Input
@@ -121,6 +156,24 @@ const ProfileForm = () => {
         error={
           isEditing && touched?.address && errors?.address
             ? errors?.address
+            : ""
+        }
+        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+      />
+      <Input
+        label="Affiliate Branch"
+        name="branch"
+        id="branch"
+        type="text"
+        value={values?.branch}
+        placeholder="Alliate Branch"
+        labelStyle="text-[#292A2C]"
+        disabled={!isEditing}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={
+          isEditing && touched?.branch && errors?.branch
+            ? errors?.branch
             : ""
         }
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
@@ -148,7 +201,8 @@ const ProfileForm = () => {
             variant="secondary"
             onClick={() => setIsEditing(true)}
           >
-            Edit Information
+            <Edit2 size={14} color="currentColor" className="mx-1" /> Edit
+            Information
           </Button>
         )}
       </div>

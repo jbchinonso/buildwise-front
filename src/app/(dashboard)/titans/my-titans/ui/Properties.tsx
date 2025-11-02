@@ -1,7 +1,12 @@
 "use client";
 
 import { DataTable, PageModal } from "@/components/dashboard";
-import { Button, DataTableColumnHeader, Input } from "@/components/ui";
+import {
+  Button,
+  DataTableColumnHeader,
+  Input,
+  TableSkeleton,
+} from "@/components/ui";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import { useClientFetch, useModal } from "@/lib/hooks";
@@ -85,23 +90,11 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-const titanData: Transaction[] = [
-  {
-    id: "1",
-    titan: "Titan 1",
-    sales: "10",
-    revenue: "₦2,000,000",
-    commission: "₦200,000",
-    joined: "2024-01-01",
-    status: "Active",
-  },
-];
-
 export default function Properties({ data }: { data?: string | number }) {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const params = useParams();
 
-  const { data: propertiesSold } = useClientFetch({
+  const { data: propertiesSold, isLoading } = useClientFetch({
     action: async () => {
       const res = await getTitanPropertiesSold(params?.titan as string);
       return res;
@@ -136,10 +129,16 @@ export default function Properties({ data }: { data?: string | number }) {
           heading="Properties Sold"
           className="max-w-[MIN(95%,620px)]"
         >
-          <section className="flex flex-col w-full gap-4">
-            <DataTable columns={columns} data={titanData} />
+          <section className="flex flex-1 flex-col w-full gap-4">
+            {isLoading ? (
+              <TableSkeleton />
+            ) : (
+              <div className="w-full my-2">
+                <DataTable columns={columns} data={propertiesSold || []} />
+              </div>
+            )}
 
-            <div className="flex justify-end gap-4 mt-4">
+            <div className="flex mt-auto justify-end gap-4">
               <Button
                 size="xs"
                 outline

@@ -94,7 +94,6 @@ const columns: ColumnDef<Titan>[] = [
   },
 ];
 
-// onClick={() => router.push(`/titans/my-titans/titan-profile/${titanId}`)}
 export const MyTitan = ({ stats }: { stats: number | string }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
 

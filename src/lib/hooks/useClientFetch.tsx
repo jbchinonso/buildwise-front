@@ -5,8 +5,8 @@ type AsyncAction<T> = () => Promise<T>;
 
 interface UseClientFetchOptions<T> {
   action: AsyncAction<T>;
-  autoFetch?: boolean; // if true, will fetch when modal opens
-  isModalOpen?: boolean; // if true,
+  autoFetch?: boolean;
+  isModalOpen?: boolean;
 }
 
 export const useClientFetch = <T,>({
@@ -17,9 +17,8 @@ export const useClientFetch = <T,>({
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [hasFetched, setHasFetched] = useState(false);
 
-  const actionRef = useRef<AsyncAction<T>>(action);
+  const actionRef = useRef(action);
   actionRef.current = action;
 
   const fetchData = useCallback(async () => {
@@ -27,36 +26,26 @@ export const useClientFetch = <T,>({
     setError(null);
     try {
       const response = await Promise.resolve(actionRef.current());
-
-      if ((response as any)?.data) {
-        setData((response as any)?.data);
-      } else {
-        setData(response);
+      if ((response as any)?.error) {
+        throw (response as any)?.error;
       }
+      setData(response);
     } catch {
       setError("Failed to load data");
     } finally {
       setIsLoading(false);
-      setHasFetched(true);
     }
   }, []);
 
   const retry = useCallback(() => {
-    setHasFetched(false); // allow re-fetch on retry
     fetchData();
   }, [fetchData]);
 
   useEffect(() => {
-    if (autoFetch && isModalOpen && !hasFetched) {
-      console.log({ hasFetched, data });
+    if (autoFetch && isModalOpen) {
       fetchData();
     }
-  }, [isModalOpen, autoFetch, hasFetched, fetchData]);
+  }, [isModalOpen, autoFetch, fetchData]);
 
-  return {
-    data,
-    isLoading,
-    error,
-    retry,
-  };
+  return { data, isLoading, error, retry };
 };

@@ -1,5 +1,5 @@
 "use server";
-import { IPagination } from "../type";
+import { IPagination, SubTitan } from "../type";
 import { getError } from "../utils";
 import { authFetch } from "./auth.service";
 
@@ -78,14 +78,14 @@ export const getTitanSummary = async () => {
 
 export const getTopPerformingTitans = async () => {
   try {
-    const response = await authFetch("/titans/titan-counts", {
+    const response = await authFetch("/titans/top-performing-titans", {
       next: {
         revalidate: 8400,
         tags: ["titans"],
       },
     });
 
-    return response;
+    return { data: response };
   } catch (error) {
     return { error: getError(error) };
     console.error("Error fetching titans:", getError(error));
@@ -226,5 +226,65 @@ export const getTitanPropertiesSold = async (titan?: string) => {
     return { error: getError(error) };
     // console.error("Error fetching titans:", getError(error));
     // throw new Error(getError(error));
+  }
+};
+
+export const getTitanSubTitans = async (titan?: string) => {
+  try {
+    const response = await authFetch(`/titans/${titan}/sub-titans`, {
+      next: {
+        revalidate: 8400,
+        tags: ["titans"],
+      },
+    });
+
+    return response as SubTitan[];
+  } catch (error) {
+    // return { error: getError(error) };
+    // console.error("Error fetching titans:", getError(error));
+    throw new Error(getError(error));
+  }
+};
+
+export const getPropertiesSold = async () => {
+  try {
+    const { data: properties, meta } = await authFetch(
+      "/titans/properties-sold",
+      {
+        next: {
+          revalidate: 8400,
+          tags: ["properties"],
+        },
+      }
+    );
+
+    return { properties, meta };
+  } catch (error) {
+    // return { error: getError(error) };
+    // console.error("Error fetching titans:", getError(error));
+    throw new Error(getError(error));
+  }
+};
+
+export const getTitanPropertiesSummary = async () => {
+  try {
+    const response = await authFetch("/titans/properties-summary", {
+      next: {
+        revalidate: 8400,
+        tags: ["properties"],
+      },
+    });
+
+    return response as {
+      closedSales: number;
+      totalAvailableUnits: number;
+      totalReservedUnits: number;
+      totalSoldUnits: number;
+      totalUnits: number;
+    };
+  } catch (error) {
+    // return { error: getError(error) };
+    // console.error("Error fetching titans:", getError(error));
+    throw new Error(getError(error));
   }
 };

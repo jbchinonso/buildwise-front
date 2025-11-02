@@ -10,10 +10,16 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowDown } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
 
-import { DataTableColumnHeader, Button, Skeleton } from "@/components/ui";
+import {
+  DataTableColumnHeader,
+  Button,
+  Skeleton,
+  TableSkeleton,
+} from "@/components/ui";
 import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 import Link from "next/link";
 import {
+  getTitanClientRecentSales,
   getTitanClientRevenueChart,
   getTitanClientRevenueSummary,
 } from "@/lib/services";
@@ -98,7 +104,7 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: string | number }) => {
     isLoading: isFetchingChartData,
     // error: isClientsError,
   } = useClientFetch({
-    action: async () => await getTitanClientRevenueChart(),
+    action: getTitanClientRevenueChart,
     isModalOpen,
   });
 
@@ -107,7 +113,16 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: string | number }) => {
     isLoading: isSummaryLoading,
     // error: isClientsError,
   } = useClientFetch({
-    action: async () => await getTitanClientRevenueSummary(),
+    action: getTitanClientRevenueSummary,
+    isModalOpen,
+  });
+  
+  const {
+    data,
+    isLoading,
+    // error: isClientsError,
+  } = useClientFetch({
+    action: getTitanClientRecentSales,
     isModalOpen,
   });
 
@@ -132,60 +147,58 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: string | number }) => {
               isLoading={isFetchingChartData}
             />
 
-            {isSummaryLoading ? (
-              <Skeleton className="h-16" />
-            ) : (
-              <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
-                <div className="flex flex-col flex-[25] gap-2">
-                  <p className="text-grey-400">Total revenue</p>
-                  <p className="text-grey-600">
-                    {toAmount(summary?.totalRevenue || 0)}
-                  </p>
-                </div>
-                <div className="flex flex-col flex-[25] gap-2">
-                  <p className="text-grey-400">Property sold</p>
-                  <p className="text-grey-600">
-                    {toAmount(summary?.propertySold || 0)}
-                  </p>
-                </div>
-                <div className="flex flex-col flex-[25] gap-2">
-                  <p className="text-grey-400">Avg. revenue per sale</p>
-                  <p className="text-grey-600">
-                    {toAmount(summary?.avgRevenuePerSale || 0)}
-                  </p>
-                </div>
-                <div className="flex flex-col flex-[25] gap-2">
-                  <p className="text-grey-400">Commission earned</p>
-                  <p className="text-grey-600">
-                    {toAmount(summary?.commissionEarned || 0)}
-                  </p>
-                </div>
-                <div className="flex flex-col flex-[25] gap-2">
-                  <p className="text-grey-400">Pending commission</p>
-                  <p className="text-grey-600">
-                    {toAmount(summary?.pendingCommission || 0)}
-                  </p>
-                </div>
+            <div
+              data-ui={isSummaryLoading ? "loading" : ""}
+              className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white data-loading:animate-pulse"
+            >
+              <div className="flex flex-col flex-[25] gap-2">
+                <p className="text-grey-400">Total revenue</p>
+                <p className="text-grey-600">
+                  {toAmount(summary?.totalRevenue || 0)}
+                </p>
               </div>
-            )}
-
-            <div className="flex items-baseline justify-between w-full gap-4">
-              <h2 className="font-semibold text-grey-600">Recent Sales</h2>
-
-              {/* <Link
-                href="/"
-                className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
-              >
-                View all <ArrowRight size={14} color="currentColor" />
-              </Link> */}
+              <div className="flex flex-col flex-[25] gap-2">
+                <p className="text-grey-400">Property sold</p>
+                <p className="text-grey-600">
+                  {toAmount(summary?.propertySold || 0, false)}
+                </p>
+              </div>
+              <div className="flex flex-col flex-[25] gap-2">
+                <p className="text-grey-400">Avg. revenue per sale</p>
+                <p className="text-grey-600">
+                  {toAmount(summary?.avgRevenuePerSale || 0)}
+                </p>
+              </div>
+              <div className="flex flex-col flex-[25] gap-2">
+                <p className="text-grey-400">Commission earned</p>
+                <p className="text-grey-600">
+                  {toAmount(summary?.commissionEarned || 0)}
+                </p>
+              </div>
+              <div className="flex flex-col flex-[25] gap-2">
+                <p className="text-grey-400">Pending commission</p>
+                <p className="text-grey-600">
+                  {toAmount(summary?.pendingCommission || 0)}
+                </p>
+              </div>
             </div>
 
             <div className="w-full my-2">
-              <DataTable columns={columns} data={[]} />
+              <h2 className="font-semibold my-2 text-grey-600">Recent Sales</h2>
+              {isLoading ? (
+                <TableSkeleton />
+              ) : (
+                <DataTable columns={columns} data={data?.data || []} />
+              )}
             </div>
 
             <div className="flex justify-end gap-4 items-center mt-auto">
-              <Button onClick={toggleModal} size="xs" outline variant="secondary">
+              <Button
+                onClick={toggleModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
               <Button size="xs">Export PDF</Button>
