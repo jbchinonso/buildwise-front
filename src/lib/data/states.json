@@ -337,6 +337,17 @@
         ]
     },
     {
+        "name": "Federal Capital Territory",
+        "lgas": [
+            "Abaji",
+            "Abuja Municipal Area Council (AMAC)",
+            "Bwari",
+            "Gwagwalada",
+            "Kuje",
+            "Kwali"
+        ]
+    },
+    {
         "name": "Gombe",
         "lgas": [
             "Akko",

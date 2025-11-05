@@ -1,8 +1,11 @@
 import Image from "next/image";
 import SignupForm from "./SignupForm";
 import { Logo } from "@/components/ui";
+import { getStates } from "@/lib/services";
 
-const Signup = () => {
+const Signup = async () => {
+  const states = await getStates();
+
   return (
     <section className="flex flex-col flex-wrap sm:py-[MIN(50px,5%)] !max-h-[1080px] custom-width flex-1 w-full gap-x-10 lg:flex-row  m-auto">
       <div className="w-full flex-[45%]  max-h-[MIN(976px,90dvh)] hidden lg:flex sticky top-0">
@@ -39,7 +42,7 @@ const Signup = () => {
             <h2 className="text-2xl font-bold">Sign Up</h2>
             <p className="py-2">Create your account</p>
           </div>
-          <SignupForm />
+          <SignupForm states={states || []} />
         </div>
       </div>
     </section>

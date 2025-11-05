@@ -1,19 +1,18 @@
 "use client";
 import Link from "next/link";
-import { Input, SubmitButton, Modal } from "@/components/ui";
-import { getError, signUpValidationSchema } from "@/lib/utils";
+import { Input, SubmitButton, Modal, SelectScrollable } from "@/components/ui";
+import { getError, getFormikError, signUpValidationSchema } from "@/lib/utils";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Check } from "lucide-react";
 import { useModal } from "@/lib/hooks";
 import toast from "react-hot-toast";
 import { signUp } from "@/lib/services";
+import { IState } from "@/lib/type";
 
-const SignupForm = () => {
+const SignupForm = ({ states }: { states: IState[] }) => {
   const { isModalOpen, toggleModal } = useModal();
   const [email, setEmail] = useState("");
-  const baseUrl = window?.location?.origin;
-  // const [modalType, setModalType] = useState<"success" | "error">("success");
 
   const {
     touched,
@@ -24,6 +23,7 @@ const SignupForm = () => {
     isValid,
     resetForm,
     handleReset,
+    setFieldValue,
   } = useFormik({
     initialValues: {
       firstName: "",
@@ -35,7 +35,6 @@ const SignupForm = () => {
       lga: "",
       password: "",
       referralCode: "",
-      baseUrl,
     },
     validationSchema: signUpValidationSchema,
     onSubmit: async () => {},
@@ -54,41 +53,21 @@ const SignupForm = () => {
     }
   };
 
-  // const loginAction = async () => {
-  //   toast.dismiss();
+  const lgas = useMemo(() => {
+    const selectedState = states.find((state) => state.name === values.state);
 
-  //   const errors = await validateForm();
-  //   if (Object.keys(errors).length > 0) {
-  //     toast.error("Fill all required fields!");
-  //     return;
-  //   }
+    return (
+      selectedState?.lgas.map((lga) => ({
+        label: lga,
+        value: lga,
+      })) ?? []
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values.state]);
 
-  //   try {
-  //     const credentials: SignInOptions = {
-  //       ...values,
-  //       redirect: false,
-  //     };
-
-  //     const res = await signIn("credentials", credentials);
-
-  //     if (res?.error) {
-  //       throw new Error(res.error);
-  //     }
-
-  //     setModalType("success");
-  //     setModalMessage("Your account has been created successfully.");
-  //     setShowModal(true);
-
-  //     toast.success("Login successful, Redirecting...");
-  //     // router.replace(res.url); // Optional
-  //   } catch (error: any) {
-  //     const errMsg = getError(error) || "Login failed! Please try again.";
-  //     setModalType("error");
-  //     setModalMessage(errMsg);
-  //     setShowModal(true);
-  //     toast.error(errMsg);
-  //   }
-  // };
+  const handleSelect = (name: string, value: any) => {
+    setFieldValue(name, value);
+  };
 
   return (
     <>
@@ -154,29 +133,32 @@ const SignupForm = () => {
           required
           error={touched.address && errors.address ? errors.address : ""}
         />
-        <Input
-          type="text"
+        <SelectScrollable
+          label="State"
           name="state"
-          id="state"
-          label="State of residence"
+          // id="state"
           placeholder="Select state"
           value={values.state}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          required
-          error={touched.state && errors.state ? errors.state : ""}
+          onChange={(value) => handleSelect("state", value)}
+          options={states.map((state) => ({
+            label: state.name,
+            value: state.name,
+          }))}
+          labelStyle="text-[#292A2C]"
+         
+          error={getFormikError(touched?.state, errors?.state)}
         />
-        <Input
-          type="text"
-          name="lga"
-          id="lga"
+        <SelectScrollable
           label="LGA"
-          placeholder="Select local government "
+          name="lga"
+          options={lgas}
           value={values.lga}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          required
-          error={touched.lga && errors.lga ? errors.lga : ""}
+          onChange={(value) => handleSelect("lga", value)}
+          disabled={!values.state}
+          placeholder="Select local government"
+          labelStyle="text-[#292A2C]"
+          error={getFormikError(touched?.lga, errors?.lga)}
+         
         />
 
         <Input
@@ -189,6 +171,18 @@ const SignupForm = () => {
           onChange={handleChange}
           onBlur={handleBlur}
           error={touched.password && errors.password ? errors.password : ""}
+        />
+        <Input
+          type="text"
+          name="referralCode"
+          id="referralCode"
+          label="Referral Code"
+          placeholder="Enter referral Code"
+          value={values.referralCode}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          required
+          error={getFormikError(touched?.referralCode, errors?.referralCode)}
         />
 
         <SubmitButton disabled={!isValid} className="min-w-full my-2">
@@ -205,9 +199,9 @@ const SignupForm = () => {
           </Link>
         </p>
 
-        <p className="px-2 mt-3 ml-auto text-sm text-center">
+        {/* <p className="px-2 mt-3 ml-auto text-sm text-center">
           You are invited by Damilola Nkechi
-        </p>
+        </p> */}
       </form>
 
       {isModalOpen && (
