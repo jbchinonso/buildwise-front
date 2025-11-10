@@ -105,7 +105,7 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const RevenueOverview = ({ data, stats=0 }: { data: Transaction[], stats?: number}) => {
+export const RevenueOverview = ({ stats = 0 }: { stats?: number }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
@@ -119,8 +119,7 @@ export const RevenueOverview = ({ data, stats=0 }: { data: Transaction[], stats?
       {isModalOpen && (
         <PageModal handleClose={closeModal} heading="Revenue Overview">
           <section className="flex flex-col w-full gap-4 ">
-            
-             <PropertiesSold />
+            <PropertiesSold />
 
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
@@ -140,7 +139,7 @@ export const RevenueOverview = ({ data, stats=0 }: { data: Transaction[], stats?
                 <p className="text-grey-600">₦51,208,009</p>
               </div>
             </div>
-            
+
             <div className="flex items-baseline justify-between w-full gap-4">
               <h2 className="font-semibold text-grey-600">Recent Sales</h2>
 
@@ -153,11 +152,13 @@ export const RevenueOverview = ({ data, stats=0 }: { data: Transaction[], stats?
             </div>
 
             <div className="w-full my-2">
-              <DataTable columns={columns} data={data} />
+              <DataTable columns={columns} data={[]} />
             </div>
 
             <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">Close</Button>
+              <Button size="xs" outline variant="secondary">
+                Close
+              </Button>
               <Button size="xs">Export PDF</Button>
             </div>
           </section>
@@ -166,4 +167,3 @@ export const RevenueOverview = ({ data, stats=0 }: { data: Transaction[], stats?
     </>
   );
 };
-

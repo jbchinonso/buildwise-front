@@ -4,7 +4,7 @@ import { getTitanDashboardSummary } from "@/lib/services/dashboard.service";
 const TotalRevenue = async () => {
   const response = await getTitanDashboardSummary();
   return (
-    <RevenueOverview data={[]} stats={response?.totalSalesRevenue as any} />
+    <RevenueOverview stats={response?.totalSalesRevenue as any} />
   );
 };
 

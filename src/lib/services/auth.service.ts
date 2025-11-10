@@ -90,10 +90,9 @@ export const signUp = async (values: ISignUpData) => {
 
 // verify email
 export const verifyEmail = async (verificationToken: string) => {
-  // Your database call logic here
   try {
     const response = await baseUrl.get(
-      `/users/verify-email/${verificationToken}`
+      `/auth/verify-email?token=/${verificationToken}`
     );
     revalidateTag("profile", "max");
     return response?.data;
