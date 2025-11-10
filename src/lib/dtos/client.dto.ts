@@ -1,4 +1,4 @@
-import { IOption } from "../type";
+import { IClientProfile, IOption } from "../type";
 import { Client, IClientsData } from "../types/client";
 import { formatDistanceToNow } from "date-fns";
 
@@ -17,18 +17,6 @@ export const clientTableDTO = (data: IClientsData[]): Client[] =>
     outstanding: "N/A",
     properties: client?.properties?.length,
   }));
-
-interface IClientProfile {
-  phone_number: string;
-  firstName: string;
-  fullname?: string;
-  lastName: string;
-  email: string;
-  state: string;
-  lga: string;
-  residential_address: string;
-  id: string;
-}
 
 export const clientProfileDTO = (client: IClientsData): IClientProfile => ({
   id: client?._id,

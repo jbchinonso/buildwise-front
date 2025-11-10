@@ -43,7 +43,10 @@ const ClientProfile = async (props: {
           <Avatar name={personalInformation?.fullname} />
 
           <div className="flex gap-4 items-center">
-            <UpdatePaymentModal properties={propertyOptions || []} />
+            <UpdatePaymentModal
+              client={personalInformation}
+              properties={propertyOptions || []}
+            />
 
             <Button
               asLink

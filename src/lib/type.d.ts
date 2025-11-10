@@ -444,3 +444,16 @@ interface SubTitan {
   commissionEarned: string | number;
   joined: string;
 }
+
+
+interface IClientProfile {
+  phone_number: string;
+  firstName: string;
+  fullname?: string;
+  lastName: string;
+  email: string;
+  state: string;
+  lga: string;
+  residential_address: string;
+  id: string;
+}
