@@ -18,8 +18,9 @@ import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 import { getSalesData } from "@/lib/services/dashboard.service";
 import Link from "next/link";
 
+
 type Transaction = {
-  id: string;
+  _id: string;
   client: string;
   property: string;
   location: string;
@@ -36,7 +37,9 @@ const columns: ColumnDef<Transaction>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("clientName")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("clientName")}</div>
+    ),
   },
   {
     accessorKey: "propertyName",
@@ -46,52 +49,42 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("propertyName")}</div>,
   },
   {
-    accessorKey: "location",
+    accessorKey: "salesPrice",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Location" />
+      <DataTableColumnHeader column={column} title="Sales price" />
     ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
-  },
-  {
-    accessorKey: "last_payment",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Last payment" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("last_payment")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("salesPrice") || 0)}</div>,
   },
   {
     accessorKey: "paid",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Paid" />
+      <DataTableColumnHeader column={column} title="Paid" />
     ),
-    cell: ({ row }) => <div>{row.getValue("paid")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("paid"))}</div>,
   },
   {
     accessorKey: "outstanding",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Outstanding" />
     ),
-    cell: ({ row }) => <div>{row.getValue("outstanding")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("outstanding") || 0)}</div>,
   },
   {
-    accessorKey: "instalment",
+    accessorKey: "commissions",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Instalment" />
+      <DataTableColumnHeader column={column} title="Commissions" />
     ),
-    cell: ({ row }) => <div>{row.getValue("instalment")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("commissions") || 0)}</div>,
   },
-  {
-    accessorKey: "payment_status",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Payment status" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("payment_status")}</div>,
-  },
+
   {
     accessorKey: "_id",
     header: () => null,
     cell: ({ row }) => {
-      const id = String(row.getValue("id")) || String(row.getValue("_id"));
+      const id =
+        String(row.getValue("_id")) ||
+        String(row.original?._id) ||
+        String(row.getValue("id"));
 
       return (
         <div className="flex justify-center px-4">
@@ -113,10 +106,7 @@ export const SalesOverview = ({ stats = 0 }: { stats?: number }) => {
     isLoading: isSalesLoading,
     // error: salesError,
   } = useClientFetch({
-    action: async () => {
-      const res = await getSalesData();
-      return res || [];
-    },
+    action: getSalesData,
     isModalOpen,
   });
 
