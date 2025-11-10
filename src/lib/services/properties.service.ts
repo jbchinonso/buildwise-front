@@ -27,6 +27,8 @@ export const getAllProperties = async ({
         },
       }
     );
+
+    console.log({data})
     return { data, pagination };
   } catch (error) {
     throw getError(error);
