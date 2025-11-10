@@ -207,6 +207,7 @@ export const getTitanDashboardSummary = async () => {
       },
     });
 
+
     return response?.summary as {
       totalSalesRevenue: number;
       totalPaid: number;
@@ -215,7 +216,9 @@ export const getTitanDashboardSummary = async () => {
       totalPlotsSold: number;
       outstanding: number;
       totalClients: number;
+      totalSubtitans?: number;
     };
+
   } catch (error) {
     console.error("Error fetching titans:", getError(error));
     throw new Error(getError(error));
