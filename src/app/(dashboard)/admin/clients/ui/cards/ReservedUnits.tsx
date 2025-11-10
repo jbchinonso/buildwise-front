@@ -14,7 +14,7 @@ import {
 import { useClientFetch, useModal } from "@/lib/hooks";
 import { getClientRecentlyReserved } from "@/lib/services";
 import { IClientRecentlyReserved, IPropertySummary } from "@/lib/type";
-import { cn, formatAddress } from "@/lib/utils";
+import { cn, formatAddress, formatDate } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ArrowRight } from "iconsax-react";
@@ -80,7 +80,7 @@ const columns: ColumnDef<IClientRecentlyReserved>[] = [
     ),
     cell: ({ row }) => (
       <div className="whitespace-break-spaces">
-        {format(row.getValue("dateReserved") || "", "dd/MM/yyyy, HH:MMa")}
+        {formatDate(row.getValue("dateReserved") || "", "dd/MM/yyyy, HH:MMa")}
       </div>
     ),
   },

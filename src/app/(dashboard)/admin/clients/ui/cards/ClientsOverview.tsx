@@ -5,7 +5,6 @@ import {
   PageModal,
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader, TableSkeleton } from "@/components/ui";
-import { SpinLoadingAnimation } from "@/components/ui/SpinLoadingAnimation";
 import { useClientFetch, useModal } from "@/lib/hooks";
 import { getClientOverview } from "@/lib/services";
 import { IClientOverviewRecentCLients } from "@/lib/type";
