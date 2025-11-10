@@ -457,3 +457,14 @@ interface IClientProfile {
   residential_address: string;
   id: string;
 }
+
+interface IEarningsResponse {
+  salesCommissions: { month: number | string; amount: number }[];
+  subTitanCommissions: { month: number | string; amount: number }[];
+}
+interface IEarningsChartData {
+  month?: string;
+  salesCommission?: number;
+  subTitanCommission?: number;
+  amount?: number;
+}

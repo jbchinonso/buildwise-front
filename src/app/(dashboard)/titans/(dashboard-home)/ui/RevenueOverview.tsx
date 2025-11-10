@@ -4,7 +4,7 @@ import {
   DataTable,
   PageModal,
 } from "@/components/dashboard";
-import { useModal } from "@/lib/hooks";
+import { useClientFetch, useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowDown } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
@@ -18,8 +18,10 @@ import {
   ChartTooltip,
   ChartTooltipContent,
   Button,
+  TableSkeleton,
 } from "@/components/ui";
 import { toAmountWithSuffix } from "@/lib/utils";
+import { getTitanEarningsOverview } from "@/lib/services";
 
 type Transaction = {
   id: string;
@@ -107,6 +109,10 @@ const columns: ColumnDef<Transaction>[] = [
 
 export const RevenueOverview = ({ stats = 0 }: { stats?: number }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+  const { isLoading } = useClientFetch({
+    action: getTitanEarningsOverview,
+    isModalOpen,
+  });
   return (
     <>
       <DashboardStatsCard
@@ -140,7 +146,7 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: number }) => {
               </div>
             </div>
 
-            <div className="flex items-baseline justify-between w-full gap-4">
+            <div className="flex items-baseline justify-between w-full gap-4 mt-4">
               <h2 className="font-semibold text-grey-600">Recent Sales</h2>
 
               {/* <Link
@@ -151,12 +157,21 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: number }) => {
               </Link> */}
             </div>
 
-            <div className="w-full my-2">
-              <DataTable columns={columns} data={[]} />
+            <div className="w-full">
+              {isLoading ? (
+                <TableSkeleton />
+              ) : (
+                <DataTable columns={columns} data={[]} />
+              )}
             </div>
 
-            <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+            <div className="flex mt-auto justify-end gap-4 items-center">
+              <Button
+                onClick={closeModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
               <Button size="xs">Export PDF</Button>
