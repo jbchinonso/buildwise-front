@@ -18,7 +18,6 @@ import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 import { getSalesData } from "@/lib/services/dashboard.service";
 import Link from "next/link";
 
-
 type Transaction = {
   _id: string;
   client: string;
@@ -122,7 +121,7 @@ export const SalesOverview = ({ stats = 0 }: { stats?: number }) => {
 
       {isModalOpen && (
         <PageModal handleClose={closeModal} heading="Total Sales Overview">
-          <section className="flex flex-col w-full gap-4 ">
+          <section className="flex flex-col w-full gap-4 flex-1">
             {isSalesLoading ? (
               <Skeleton className="h-60 w-full rounded-xl">
                 <span className="loader m-auto my-10" />
@@ -161,30 +160,28 @@ export const SalesOverview = ({ stats = 0 }: { stats?: number }) => {
               </div>
             )}
 
-            <div className="flex items-baseline justify-between w-full gap-4">
+            <div className="flex flex-col items-baseline justify-between w-full gap-2 my-4">
               <h2 className="font-semibold text-grey-600">Recent Sales</h2>
 
-              {/* <Link
-                href="/"
-                className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
-              >
-                View all <ArrowRight size={14} color="currentColor" />
-              </Link> */}
+              {isSalesLoading ? (
+                <TableSkeleton />
+              ) : (
+                <div className="w-full my-2">
+                  <DataTable
+                    columns={columns}
+                    data={salesData?.recentSales || []}
+                  />
+                </div>
+              )}
             </div>
 
-            {isSalesLoading ? (
-              <TableSkeleton />
-            ) : (
-              <div className="w-full my-2">
-                <DataTable
-                  columns={columns}
-                  data={salesData?.recentSales || []}
-                />
-              </div>
-            )}
-
-            <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+            <div className="flex justify-end gap-4 mt-auto items-center">
+              <Button
+                onClick={toggleModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
               <Button disabled={isSalesLoading} size="xs">
