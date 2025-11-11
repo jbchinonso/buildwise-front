@@ -1,13 +1,8 @@
-import {
-  PropertiesSold,
-  RecentActivities,
-  RevenueChart
-} from "./ui";
-import { getTitanDashboardSummary} from "@/lib/services/dashboard.service";
+import { PropertiesSold, RecentActivities, RevenueChart } from "./ui";
+import { getTitanDashboardSummary } from "@/lib/services/dashboard.service";
 
 const Dashboard = async () => {
   const data = await getTitanDashboardSummary();
-  console.log({data})
 
   return (
     <>

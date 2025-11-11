@@ -1,4 +1,5 @@
 "use client";
+
 import {
   DashboardStatsCard,
   DataTable,
@@ -13,10 +14,7 @@ import {
 import { useClientFetch, useModal } from "@/lib/hooks";
 import { toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowRight } from "iconsax-react";
-import { ChevronRight, Network } from "lucide-react";
-import Link from "next/link";
-import React from "react";
+import { Network } from "lucide-react";
 
 type Commissions = {
   id: string;
