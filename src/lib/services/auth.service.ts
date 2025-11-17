@@ -1,5 +1,5 @@
 "use server";
-import { authOptions, getError, stripFormData } from "../utils";
+import { authOptions, getError } from "../utils";
 import baseUrl from "../utils/baseUrl.utils";
 import { ISignUpData, IUser } from "../type";
 import { getServerSession } from "next-auth";
@@ -155,28 +155,3 @@ export const editTitanProfile = async (form: any) => {
   }
 };
 
-export const getTitanNotification = async () => {
-  try {
-    const response = await authFetch("/user/notification", {
-      next: {
-        tags: ["notification"],
-      },
-    });
-    return response?.data;
-  } catch (error) {
-    throw getError(error);
-  }
-};
-
-export const editTitanNotification = async (form: {
-  email?: boolean;
-  sms?: boolean;
-}) => {
-  try {
-    await baseUrl.patch("/user/notification", form);
-
-    revalidateTag("notification", "max");
-  } catch (error) {
-    throw getError(error);
-  }
-};

@@ -1,7 +1,7 @@
 "use client";
 import { Button, Input, Modal, SubmitButton, Toggle } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
-import { editTitanNotification } from "@/lib/services";
+import { editNotificationSettings } from "@/lib/services";
 import { getError } from "@/lib/utils";
 import { useFormik } from "formik";
 import { ChevronRight } from "lucide-react";
@@ -21,9 +21,9 @@ export const NotificationSettings = () => {
 
   const onSubmit = async () => {
     try {
-      await editTitanNotification(values);
+      await editNotificationSettings(values);
       resetForm();
-      toast.success("Profile information updated successfully");
+      toast.success("Notification settings updated successfully");
     } catch (error) {
       toast.error(getError(error));
     }

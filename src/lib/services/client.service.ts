@@ -226,7 +226,7 @@ export const getTitanClientProfileProperty = async (id: string) => {
   try {
     const response = await authFetch(`/clients/${id}/properties`, {
       next: {
-        tags: ["clients-" + id, "sales", "properties"],
+        tags: [`clients-${id}`, "sales", "properties"],
         revalidate: 8400,
       },
     });
