@@ -200,22 +200,21 @@ export const getClientData = async () => {
 
 export const getTitanDashboardSummary = async () => {
   try {
-    const response = await authFetch("/titans/titan-dashboard-summary", {
+    const response = await authFetch("/titans/dashboard-summary", {
       next: {
         revalidate: 8400,
         tags: ["dashboard"],
       },
     });
 
-    return response?.summary as {
-      totalSalesRevenue: number;
-      totalPaid: number;
-      closedSales: number;
-      ongoingSales: number;
-      totalPlotsSold: number;
-      outstanding: number;
+
+    return response as {
+      totalRevenue: number;
       totalClients: number;
+      totalEarnings: number;
+      totalTitans: number;
     };
+
   } catch (error) {
     console.error("Error fetching titans:", getError(error));
     throw new Error(getError(error));

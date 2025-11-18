@@ -58,7 +58,7 @@ const columns: ColumnDef<Agent>[] = [
 
       return (
         <div className="flex justify-center px-4">
-          <Link href={`${id}`} id="button">
+          <Link href={`/admin/titans/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
           </Link>
@@ -76,10 +76,7 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
     isLoading: isAgentLoading,
     // error: agentError,
   } = useClientFetch({
-    action: async () => {
-      const res = await getAgentData();
-      return res || [];
-    },
+    action: getAgentData,
     isModalOpen,
   });
   return (
@@ -140,7 +137,7 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
               </h2>
 
               <Link
-                href="/"
+                href="/admin/titans"
                 className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
               >
                 View all <ArrowRight size={14} color="currentColor" />
@@ -159,7 +156,7 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
             )}
 
             <div className="flex mt-auto justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+              <Button onClick={closeModal} size="xs" outline variant="secondary">
                 Close
               </Button>
 

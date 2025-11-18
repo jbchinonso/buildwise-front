@@ -50,7 +50,7 @@ export function PieChart({ chartConfig, chartData }: PieChartProps) {
       <ChartContainer
         config={chartConfig}
         // className="mx-auto aspect-square max-h-[250px] [&_.recharts-text]:fill-background"
-        className="mx-auto border b.g-zinc-100 rounded-full text-black aspect-square max-h-[250px] [&_.recharts-text]:fill-black [&_.recharts-pie-label-text]:fill-black [&_.recharts-pie-label-line]:fill-black"
+        className="mx-auto bg-primary-50/20 rounded-full text-black aspect-square max-h-[250px] [&_.recharts-text]:fill-black [&_.recharts-pie-label-text]:fill-black [&_.recharts-pie-label-line]:fill-black"
       >
         <PieChartComponent className="w-full">
           <ChartTooltip

@@ -43,7 +43,10 @@ const ClientProfile = async (props: {
           <Avatar name={personalInformation?.fullname} />
 
           <div className="flex gap-4 items-center">
-            <UpdatePaymentModal properties={propertyOptions || []} />
+            <UpdatePaymentModal
+              client={personalInformation}
+              properties={propertyOptions || []}
+            />
 
             <Button
               asLink
@@ -68,8 +71,9 @@ const ClientProfile = async (props: {
             id="firstName"
             type="text"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="!capitalize flex-[45%] max-w-[MIN(100%,470px)]"
             defaultValue={personalInformation.firstName}
+            className="!capitalize"
           />
           <Input
             label="Last name"

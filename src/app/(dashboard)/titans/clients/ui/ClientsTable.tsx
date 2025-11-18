@@ -13,7 +13,7 @@ const columns: ColumnDef<IRecentClients>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("clientName")}</div>,
+    cell: ({ row }) => <div className="capitalize">{row.getValue("clientName")}</div>,
   },
 
   {

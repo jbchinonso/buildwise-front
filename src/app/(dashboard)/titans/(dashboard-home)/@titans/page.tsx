@@ -3,7 +3,7 @@ import { getTitanDashboardSummary } from "@/lib/services/dashboard.service";
 
 const Titans = async () => {
   const response = await getTitanDashboardSummary();
-  return <TitansOverview data={response?.totalClients as any} />;
+  return <TitansOverview stats={(response?.totalTitans as any) || 0} />;
 };
 
 export default Titans;

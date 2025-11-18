@@ -25,6 +25,9 @@ export const createSale = async (sale: ISalePayload) => {
     revalidateTag("sales", "max");
     revalidateTag("property-sales", "max");
     revalidateTag(`property-${sale.propertyId}`, "max");
+    revalidateTag(`clients-${sale.clientId}`, "max");
+    revalidateTag("sales", "max");
+    revalidateTag("property", "max");
     revalidateTag("agents", "max");
     return response?.data;
   } catch (error) {

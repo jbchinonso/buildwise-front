@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Input } from "@/components/ui";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 import { ChangePasswordModal } from "./ChangePasswordModal";
 import { copyTextToClipboard } from "@/lib/utils";
@@ -15,7 +15,7 @@ export const SettingsForm = () => {
   );
   return (
     <>
-      <div className="w-full flex supports-[grid]:grid md:grid-cols-2 flex-wrap justify-between gap-4 gap-x-20">
+      <div className="min-w-full flex supports-[grid]:grid grid-cols-1 md:grid-cols-2 flex-wrap justify-between gap-4 gap-x-20">
         <ChangePasswordModal />
         <Input
           label="Invitation link"

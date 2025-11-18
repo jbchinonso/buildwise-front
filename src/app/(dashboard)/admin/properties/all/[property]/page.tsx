@@ -11,6 +11,7 @@ import { propertyClientOwnershipDTO } from "@/lib/dtos/property.dto";
 import { toAmount } from "@/lib/utils";
 
 type Params = Promise<{ property: string }>;
+
 type SearchParams = Promise<{
   page?: string;
   limit?: string;

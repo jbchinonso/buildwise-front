@@ -19,7 +19,7 @@ import { getSalesData } from "@/lib/services/dashboard.service";
 import Link from "next/link";
 
 type Transaction = {
-  id: string;
+  _id: string;
   client: string;
   property: string;
   location: string;
@@ -36,7 +36,9 @@ const columns: ColumnDef<Transaction>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("clientName")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("clientName")}</div>
+    ),
   },
   {
     accessorKey: "propertyName",
@@ -46,52 +48,42 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("propertyName")}</div>,
   },
   {
-    accessorKey: "location",
+    accessorKey: "salesPrice",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Location" />
+      <DataTableColumnHeader column={column} title="Sales price" />
     ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
-  },
-  {
-    accessorKey: "last_payment",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Last payment" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("last_payment")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("salesPrice") || 0)}</div>,
   },
   {
     accessorKey: "paid",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Paid" />
+      <DataTableColumnHeader column={column} title="Paid" />
     ),
-    cell: ({ row }) => <div>{row.getValue("paid")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("paid"))}</div>,
   },
   {
     accessorKey: "outstanding",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Outstanding" />
     ),
-    cell: ({ row }) => <div>{row.getValue("outstanding")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("outstanding") || 0)}</div>,
   },
   {
-    accessorKey: "instalment",
+    accessorKey: "commissions",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Instalment" />
+      <DataTableColumnHeader column={column} title="Commissions" />
     ),
-    cell: ({ row }) => <div>{row.getValue("instalment")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("commissions") || 0)}</div>,
   },
-  {
-    accessorKey: "payment_status",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Payment status" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("payment_status")}</div>,
-  },
+
   {
     accessorKey: "_id",
     header: () => null,
     cell: ({ row }) => {
-      const id = String(row.getValue("id")) || String(row.getValue("_id"));
+      const id =
+        String(row.getValue("_id")) ||
+        String(row.original?._id) ||
+        String(row.getValue("id"));
 
       return (
         <div className="flex justify-center px-4">
@@ -113,10 +105,7 @@ export const SalesOverview = ({ stats = 0 }: { stats?: number }) => {
     isLoading: isSalesLoading,
     // error: salesError,
   } = useClientFetch({
-    action: async () => {
-      const res = await getSalesData();
-      return res || [];
-    },
+    action: getSalesData,
     isModalOpen,
   });
 
@@ -132,7 +121,7 @@ export const SalesOverview = ({ stats = 0 }: { stats?: number }) => {
 
       {isModalOpen && (
         <PageModal handleClose={closeModal} heading="Total Sales Overview">
-          <section className="flex flex-col w-full gap-4 ">
+          <section className="flex flex-col w-full gap-4 flex-1">
             {isSalesLoading ? (
               <Skeleton className="h-60 w-full rounded-xl">
                 <span className="loader m-auto my-10" />
@@ -171,30 +160,28 @@ export const SalesOverview = ({ stats = 0 }: { stats?: number }) => {
               </div>
             )}
 
-            <div className="flex items-baseline justify-between w-full gap-4">
+            <div className="flex flex-col items-baseline justify-between w-full gap-2 my-4">
               <h2 className="font-semibold text-grey-600">Recent Sales</h2>
 
-              {/* <Link
-                href="/"
-                className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
-              >
-                View all <ArrowRight size={14} color="currentColor" />
-              </Link> */}
+              {isSalesLoading ? (
+                <TableSkeleton />
+              ) : (
+                <div className="w-full my-2">
+                  <DataTable
+                    columns={columns}
+                    data={salesData?.recentSales || []}
+                  />
+                </div>
+              )}
             </div>
 
-            {isSalesLoading ? (
-              <TableSkeleton />
-            ) : (
-              <div className="w-full my-2">
-                <DataTable
-                  columns={columns}
-                  data={salesData?.recentSales || []}
-                />
-              </div>
-            )}
-
-            <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+            <div className="flex justify-end gap-4 mt-auto items-center">
+              <Button
+                onClick={toggleModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
               <Button disabled={isSalesLoading} size="xs">

@@ -5,7 +5,6 @@ import {
   PageModal,
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader, TableSkeleton } from "@/components/ui";
-import { SpinLoadingAnimation } from "@/components/ui/SpinLoadingAnimation";
 import { useClientFetch, useModal } from "@/lib/hooks";
 import { getClientOverview } from "@/lib/services";
 import { IClientOverviewRecentCLients } from "@/lib/type";
@@ -21,7 +20,7 @@ const columns: ColumnDef<IClientOverviewRecentCLients>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
   },
   {
     accessorKey: "location",
@@ -66,10 +65,7 @@ export const ClientOverview = ({
   const { isModalOpen, toggleModal, closeModal } = useModal();
 
   const { data, isLoading, error } = useClientFetch({
-    action: async () => {
-      const res = await getClientOverview();
-      return res || [];
-    },
+    action: getClientOverview,
     isModalOpen,
   });
 
@@ -122,7 +118,7 @@ export const ClientOverview = ({
               </Link>
             </div>
 
-            <div className="w-full my-2 min-h-24 relative flex">
+            <div className="w-full  min-h-24 relative flex">
               {isLoading ? (
                 <TableSkeleton />
               ) : (
@@ -131,7 +127,7 @@ export const ClientOverview = ({
             </div>
 
             <div className="flex mt-auto justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+              <Button onClick={closeModal} size="xs" outline variant="secondary">
                 Close
               </Button>
 

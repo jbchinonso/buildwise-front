@@ -1,6 +1,8 @@
+import { getNotificationSettings } from "@/lib/services";
 import { SettingsForm } from "./SettingsForm";
 
-const Settings = () => {
+const Settings = async() => {
+  // const res = await getNotificationSettings()
   return <SettingsForm />;
 };
 

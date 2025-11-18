@@ -30,6 +30,8 @@ export const UpdatePropertyPaymentModal = ({
           }
           console.log({clientId})
 
+          // NOTE: this fails because salesId and clientOwnership.id 
+          // are the same so it throws an internal server error
           const response = await getClientPaymentData(clientId);
           const data = response
             ? [
@@ -84,7 +86,7 @@ export const UpdatePropertyPaymentModal = ({
             : [];
 
           setPaymentData(data);
-          console.log({ data });
+          // console.log({ data });
           // queryParams.set("clientId", "");
           // router.replace(`?${queryParams?.toString()}`);
           break;
