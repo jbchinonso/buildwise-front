@@ -9,11 +9,12 @@ import {
   ChartConfig,
   DataTableColumnHeader,
   PieChart,
+  TableSkeleton,
 } from "@/components/ui";
 import { useClientFetch, useModal } from "@/lib/hooks";
 import { getClientRecentlyReserved } from "@/lib/services";
 import { IClientRecentlyReserved, IPropertySummary } from "@/lib/type";
-import { cn, formatAddress } from "@/lib/utils";
+import { cn, formatAddress, formatDate } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { ArrowRight } from "iconsax-react";
@@ -78,8 +79,8 @@ const columns: ColumnDef<IClientRecentlyReserved>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div>
-        {format(row.getValue("dateReserved") || "", "dd/MM/yyyy, HH:MMa")}
+      <div className="whitespace-break-spaces">
+        {formatDate(row.getValue("dateReserved") || "", "dd/MM/yyyy, HH:MMa")}
       </div>
     ),
   },
@@ -95,7 +96,7 @@ const columns: ColumnDef<IClientRecentlyReserved>[] = [
 
       return (
         <div className="flex justify-center px-4">
-          <Link href={`/${id}`} id="button">
+          <Link href={`/admin/properties/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
           </Link>
@@ -113,6 +114,7 @@ export const ReservedUnits = ({
   reservedUnits?: number | string;
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+
   const chartData = [
     {
       label: "available",
@@ -129,13 +131,10 @@ export const ReservedUnits = ({
 
   const {
     data,
-    // isLoading: isClientsLoading,
+    isLoading,
     // error: clientsError,
   } = useClientFetch({
-    action: async () => {
-      const res = await getClientRecentlyReserved();
-      return res || [];
-    },
+    action: getClientRecentlyReserved,
     isModalOpen,
   });
 
@@ -188,23 +187,27 @@ export const ReservedUnits = ({
               </div>
             </div>
 
-            <div className="flex items-baseline justify-between w-full gap-4 my-1">
+            <div className="flex items-baseline justify-between w-full gap-4 mt-4">
               <h2 className="font-semibold text-grey-600">Recently reserved</h2>
 
               <Link
-                href="/"
+                href="/admin/properties"
                 className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
               >
                 View all <ArrowRight size={14} color="currentColor" />
               </Link>
             </div>
 
-            <div className="w-full my-1">
-              <DataTable columns={columns} data={data||[]} />
+            <div className="w-full relative flex">
+              {isLoading ? (
+                <TableSkeleton />
+              ) : (
+                <DataTable columns={columns} data={data || []} />
+              )}
             </div>
 
             <div className="flex mt-auto justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+              <Button onClick={closeModal} size="xs" outline variant="secondary">
                 Close
               </Button>
 

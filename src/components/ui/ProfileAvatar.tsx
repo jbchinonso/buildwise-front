@@ -82,7 +82,7 @@ export const Avatar = ({ className, image, name, id }: IProfileAvatar) => {
       <ProfileAvatar img={image} name={name || "User"} />
 
       <div className="flex flex-col">
-        {name && <p className="font-semibold text-[#292A2C] text-xl">{name}</p>}
+        {name && <p className="font-semibold text-[#292A2C] text-xl capitalize">{name}</p>}
         {id && <span className="text-xs text-grey-400">User Id: {id}</span>}
       </div>
     </div>

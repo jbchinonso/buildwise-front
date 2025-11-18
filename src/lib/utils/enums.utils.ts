@@ -4,3 +4,8 @@ export enum CACHETAGS {
   titans="titans",
   clients="clients",
 }
+
+export enum PaymentOptions{
+  INSTALLMENT = "Installment",
+  FULL_PAYMENT = "Full payment",
+}

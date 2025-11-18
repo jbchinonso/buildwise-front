@@ -1,23 +1,27 @@
 "use client";
 import { DashboardModal } from "@/components/dashboard";
-import { Button, Input, SelectScrollable } from "@/components/ui";
+import { Button, Input, SelectScrollable, SubmitButton } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
-import { IOption } from "@/lib/type";
-import { useState } from "react";
+import { IClientProfile, IOption } from "@/lib/type";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const UpdatePaymentModal = ({
   properties = [],
+  client,
 }: {
   properties?: IOption[];
+  client?: IClientProfile;
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
-  const [step, setStep] = useState(0);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const isConfirmingPayment = searchParams.get("confirm-payment") || "";
 
   const data = [
     {
       item: "client",
       label: "Client  name",
-      data: "Courtney Henry",
+      data: `${client?.fullname}`.toUpperCase(),
     },
     {
       item: "agent",
@@ -53,6 +57,11 @@ export const UpdatePaymentModal = ({
     },
   ];
 
+  const close = () => {
+    router.replace("?");
+    closeModal();
+  };
+
   return (
     <>
       <Button size="sm" onClick={toggleModal}>
@@ -65,8 +74,8 @@ export const UpdatePaymentModal = ({
           handleClose={closeModal}
           className="sm:max-w-[MIN(90%,520px)]"
         >
-          <div className="flex flex-col flex-1 w-full gap-4 mt-auto">
-            {step ? (
+          <form className="flex flex-col flex-1 w-full gap-4 mt-auto">
+            {isConfirmingPayment ? (
               <div className="flex flex-col flex-1 w-full gap-4 mt-auto">
                 {data.map((data, index) => {
                   return (
@@ -99,22 +108,24 @@ export const UpdatePaymentModal = ({
 
             <div className="flex mt-auto gap-4 justify-stretch w-full  *:w-full">
               <Button
-                onClick={closeModal}
+                type="button"
+                onClick={close}
                 variant="secondary"
                 size="sm"
                 className="px-8"
               >
                 Cancel
               </Button>
-              {step ? (
-                <Button size="sm">Confirm Payment</Button>
+
+              {isConfirmingPayment ? (
+                <SubmitButton size="sm">Confirm Payment</SubmitButton>
               ) : (
-                <Button onClick={() => setStep(1)} size="sm">
+                <Button asLink replace href={`?confirm-payment=true`} size="sm">
                   Next
                 </Button>
               )}
             </div>
-          </div>
+          </form>
         </DashboardModal>
       )}
     </>

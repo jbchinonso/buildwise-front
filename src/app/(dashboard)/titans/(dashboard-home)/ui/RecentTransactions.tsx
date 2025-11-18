@@ -7,7 +7,7 @@ import { ChevronRight } from "lucide-react";
 import { ArrowRight } from "iconsax-react";
 import Link from "next/link";
 
-type Transaction = {
+type Activities = {
   id: string;
   client: string;
   property: string;
@@ -19,7 +19,7 @@ type Transaction = {
   payment_status: string;
 };
 
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<Activities>[] = [
   {
     accessorKey: "client",
     header: ({ column }) => (
@@ -91,18 +91,18 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const RecentTransactions = ({ data }: { data: Transaction[] }) => {
+export const RecentActivities = ({ data }: { data: Activities[] }) => {
   return (
     <section className="flex flex-col w-full">
       <div className="flex items-baseline justify-between w-full gap-4">
-        <h2 className="font-semibold text-grey-600">Recent Transactions</h2>
+        <h2 className="font-semibold text-grey-600">Recent Activities</h2>
 
-        <Link
+        {/* <Link
           href="/"
           className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
         >
           View all <ArrowRight size={14} color="currentColor" />
-        </Link>
+        </Link> */}
       </div>
 
       <DataTable columns={columns} data={data} />

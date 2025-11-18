@@ -16,17 +16,17 @@ export function CardError({
   return (
     <div
       className={cn(
-        "m-auto flex flex-1 py-2 items-center justify-center flex-col w-full px-4 text-red-500",
+        "m-auto flex flex-1 max-h-full py-2 items-center justify-center flex-col w-full px-4 text-red-500",
         className
       )}
     >
-      <p className="text-ellipsis my-auto line-clamp-3 text-sm">
+      <p className="text-ellipsis flex-1 h-full my-auto line-clamp-3 text-xs">
         {message}
         <br />*{getError(error)}
       </p>
       <button
         onClick={reset}
-        className="cursor-pointer mt-auto w-fit border rounded-full py-1 p-3 text-xs my-1"
+        className="cursor-pointer my-2 w-fit border rounded-full py-1 p-3 text-xs"
       >
         Try again
       </button>

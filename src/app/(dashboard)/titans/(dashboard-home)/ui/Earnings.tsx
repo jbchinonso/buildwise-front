@@ -3,16 +3,16 @@ import {
   DashboardStatsCard,
   DataTable,
   PageModal,
-  PieChartCard,
 } from "@/components/dashboard";
 import { Button, DataTableColumnHeader } from "@/components/ui";
-import { useModal } from "@/lib/hooks";
+import { useClientFetch, useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, House } from "lucide-react";
 import { PropertiesSold } from "./PropertiesSold";
-import { toAmountWithSuffix } from "@/lib/utils";
+import { Money } from "iconsax-react";
+import { getTitanEarningsOverview } from "@/lib/services";
 
-type Transaction = {
+type Earning = {
   id: string;
   client: string;
   property: string;
@@ -24,7 +24,7 @@ type Transaction = {
   payment_status: string;
 };
 
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<Earning>[] = [
   {
     accessorKey: "client",
     header: ({ column }) => (
@@ -46,11 +46,38 @@ const columns: ColumnDef<Transaction>[] = [
     ),
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
-
+  {
+    accessorKey: "last_payment",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Last payment" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("last_payment")}</div>,
+  },
+  {
+    accessorKey: "total_paid",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Total Paid" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("total_paid")}</div>,
+  },
+  {
+    accessorKey: "outstanding",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Outstanding" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("outstanding")}</div>,
+  },
+  {
+    accessorKey: "instalment",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Instalment" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("instalment")}</div>,
+  },
   {
     accessorKey: "payment_status",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
+      <DataTableColumnHeader column={column} title="Payment status" />
     ),
     cell: ({ row }) => <div>{row.getValue("payment_status")}</div>,
   },
@@ -68,69 +95,50 @@ const columns: ColumnDef<Transaction>[] = [
     },
   },
 ];
-const generateChartData = (data: Transaction[]) => {
-  const closed = data.filter((tx) => tx.payment_status === "Closed").length;
-  const ongoing = data.filter((tx) => tx.payment_status === "Ongoing").length;
 
-  if (closed + ongoing === 0) {
-    return [
-      { name: "Closed sales", value: 3 },
-      { name: "Ongoing sales", value: 17 },
-    ];
-  }
-
-  return [
-    { name: "Closed sales", value: closed },
-    { name: "Ongoing sales", value: ongoing },
-  ];
-};
-export const SalesOverview = ({
-  data,
-  stats = 0,
-}: {
-  data: Transaction[];
-  stats?: string | number;
-}) => {
-  const chartData = generateChartData([]);
+export const Earnings = ({ data }: { data: Earning[] }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+  const {} = useClientFetch({
+    action: getTitanEarningsOverview,
+    isModalOpen,
+  });
   return (
     <>
       <DashboardStatsCard
-        title="Total sales"
-        icon={<House size="24" color="#1FDBF4" />}
-        data={toAmountWithSuffix(stats, false)}
+        title="Earnings"
+        icon={<Money size="24" color="#1FDBF4" />}
+        data="23.8B"
+        theme=""
         onClick={toggleModal}
       />
 
       {isModalOpen && (
-        <PageModal handleClose={closeModal} heading="Closed Sales">
+        <PageModal handleClose={closeModal} heading="My Earnings">
           <section className="flex flex-col w-full gap-4 ">
-            <PieChartCard data={chartData} colors={["#4FAB15", "#6E3334"]} />
-
+            <PropertiesSold />
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Properties sold</p>
-                <p className="text-grey-600">15</p>
+                <p className="text-grey-400">Total earnings</p>
+                <p className="text-grey-600">₦51,208,009</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Completed purchase</p>
-                <p className="text-grey-600">2</p>
+                <p className="text-grey-400">Sales commission</p>
+                <p className="text-grey-600">₦51,208,009</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
-                <p className="text-grey-400">Closed salesrevenue</p>
-                <p className="text-grey-600">₦7,000,000</p>
+                <p className="text-grey-400">Titans commission</p>
+                <p className="text-grey-600">₦51,208,009</p>
+              </div>
+              <div className="flex flex-col flex-[25] gap-2">
+                <p className="text-grey-400">Total paid-in</p>
+                <p className="text-grey-600">₦51,208,009</p>
               </div>
             </div>
 
             <div className="flex items-baseline justify-between w-full gap-4">
-              <h2 className="font-semibold text-grey-600">Closed Sales</h2>
-
-              {/* <Link
-                href="/"
-                className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
-              >
-                View all <ArrowRight size={14} color="currentColor" />
-              </Link> */}
+              <h2 className="font-semibold text-grey-600 mt-6">
+                Earnings breakdown
+              </h2>
             </div>
 
             <div className="w-full my-2">

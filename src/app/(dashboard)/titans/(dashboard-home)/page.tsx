@@ -1,9 +1,5 @@
-import {
-  PropertiesSold,
-  RecentTransactions,
-  RevenueChart
-} from "./ui";
-import { getTitanDashboardSummary} from "@/lib/services/dashboard.service";
+import { PropertiesSold, RecentActivities, RevenueChart } from "./ui";
+import { getTitanDashboardSummary } from "@/lib/services/dashboard.service";
 
 const Dashboard = async () => {
   const data = await getTitanDashboardSummary();
@@ -45,7 +41,7 @@ const Dashboard = async () => {
       </section>
 
       {/* recent transactions */}
-      <RecentTransactions data={data as any} />
+      <RecentActivities data={data as any} />
     </>
   );
 };

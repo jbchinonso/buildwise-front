@@ -226,7 +226,7 @@ export const getTitanClientProfileProperty = async (id: string) => {
   try {
     const response = await authFetch(`/clients/${id}/properties`, {
       next: {
-        tags: ["clients-" + id, "sales", "properties"],
+        tags: [`clients-${id}`, "sales", "properties"],
         revalidate: 8400,
       },
     });
@@ -279,7 +279,6 @@ export const getTitanClientPaymentHistory = async (id: string) => {
         return [...acc, ...transactions];
       }, [] as IPaymentHistoryTransactionDTO[]) || [];
 
-    
     return {
       sales,
       properties: Array.from(uniquePropertiesMap.values()) || [],
@@ -319,6 +318,64 @@ export const getActiveTitanClient = async () => {
     } as { clients: IActiveTitanClient[]; meta: { total: number } };
   } catch (error) {
     throw getError(error);
+  }
+};
+
+export const getTitanClientOverviewSummary = async () => {
+  try {
+    const response = await authFetch("/titans/dashboard/summary", {
+      next: {
+        revalidate: 8400,
+        tags: ["dashboard"],
+      },
+    });
+
+    return response as {
+      totalClients: number;
+      totalProperties: number;
+      closedSales: number;
+      activeBuyers: number;
+      totalRevenue: number;
+    };
+  } catch (error) {
+    console.error("Error fetching titans:", getError(error));
+    throw new Error(getError(error));
+  }
+};
+
+export const getTitanEarningsOverview = async () => {
+  try {
+    const response = await authFetch("/titans/earnings-overview", {
+      next: {
+        revalidate: 8400,
+        tags: ["dashboard"],
+      },
+    });
+
+    console.log("response:::: ", response);
+
+    return response;
+  } catch (error) {
+    console.error("Error fetching titans:", getError(error));
+    throw new Error(getError(error));
+  }
+};
+export const getTitanEarningsChart = async () => {
+  try {
+    const response = await authFetch("/titans/earnings-overview", {
+      next: {
+        revalidate: 8400,
+        tags: ["dashboard"],
+      },
+    });
+
+    return response as {
+      salesCommissions: { month: number | string; amount: number }[];
+      subTitanCommissions: { month: number | string; amount: number }[];
+    };
+  } catch (error) {
+    console.error("Error fetching titans:", getError(error));
+    throw new Error(getError(error));
   }
 };
 

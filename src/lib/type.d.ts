@@ -444,3 +444,27 @@ interface SubTitan {
   commissionEarned: string | number;
   joined: string;
 }
+
+
+interface IClientProfile {
+  phone_number: string;
+  firstName: string;
+  fullname?: string;
+  lastName: string;
+  email: string;
+  state: string;
+  lga: string;
+  residential_address: string;
+  id: string;
+}
+
+interface IEarningsResponse {
+  salesCommissions: { month: number | string; amount: number }[];
+  subTitanCommissions: { month: number | string; amount: number }[];
+}
+interface IEarningsChartData {
+  month?: string;
+  salesCommission?: number;
+  subTitanCommission?: number;
+  amount?: number;
+}

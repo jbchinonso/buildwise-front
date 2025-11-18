@@ -32,7 +32,9 @@ const columns: ColumnDef<Client>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("clientName")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("clientName")}</div>
+    ),
   },
   {
     accessorKey: "propertiesBought",
@@ -43,7 +45,11 @@ const columns: ColumnDef<Client>[] = [
         title="Property Bought"
       />
     ),
-    cell: ({ row }) => <div>{row.getValue("propertiesBought")}</div>,
+    cell: ({ row }) => (
+      <div className="mx-auto text-center">
+        {row.getValue("propertiesBought")}
+      </div>
+    ),
   },
   {
     accessorKey: "payment",
@@ -64,13 +70,14 @@ const columns: ColumnDef<Client>[] = [
     header: () => null,
     cell: ({ row }) => {
       const id =
-        String(row.getValue("id")) ||
         String(row?.original?.id) ||
-        String(row.getValue("_id"));
+        String(row.getValue("_id")) ||
+        String(row.getValue("_id")) ||
+        "";
 
       return (
         <div className="flex justify-center px-4">
-          <Link href={`clients/all/${id}`} id="button">
+          <Link href={`/admin/clients/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
           </Link>
@@ -87,10 +94,7 @@ export const ClientOverview = ({ stats = 0 }: { stats?: number }) => {
     isLoading: isClientsLoading,
     // error: clientsError,
   } = useClientFetch({
-    action: async () => {
-      const res = await getClientData();
-      return res || [];
-    },
+    action: getClientData,
     isModalOpen,
   });
   return (
@@ -136,13 +140,13 @@ export const ClientOverview = ({ stats = 0 }: { stats?: number }) => {
               </div>
             )}
 
-            <div className="flex items-baseline justify-between w-full gap-4">
+            <div className="flex items-baseline justify-between w-full gap-4 mt-4">
               <h2 className="font-semibold text-grey-600">
-                Recently onboarded agents
+                Recently onboarded clients
               </h2>
 
               <Link
-                href="/"
+                href="/admin/clients"
                 className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
               >
                 View all <ArrowRight size={14} color="currentColor" />
@@ -152,7 +156,7 @@ export const ClientOverview = ({ stats = 0 }: { stats?: number }) => {
             {isClientsLoading ? (
               <TableSkeleton />
             ) : (
-              <div className="w-full my-2">
+              <div className="w-full">
                 <DataTable
                   columns={columns}
                   data={clientsData?.recentlyOnboardedClients || []}
@@ -161,7 +165,12 @@ export const ClientOverview = ({ stats = 0 }: { stats?: number }) => {
             )}
 
             <div className="flex mt-auto justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+              <Button
+                onClick={closeModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
 

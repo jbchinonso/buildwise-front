@@ -9,16 +9,16 @@ import {
   ChartConfig,
   DataTableColumnHeader,
   PieChart,
+  TableSkeleton,
 } from "@/components/ui";
-import { useModal } from "@/lib/hooks";
+import { useClientFetch, useModal } from "@/lib/hooks";
+import { getAllProperties } from "@/lib/services";
 import { IPropertySummary } from "@/lib/type";
-import { cn } from "@/lib/utils";
+import { cn, formatAddress, formatDate } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight } from "iconsax-react";
 import { ChevronRight, KeyRound } from "lucide-react";
 import Link from "next/link";
-import React from "react";
-
 
 const chartConfig = {
   available: {
@@ -35,15 +35,18 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-type Transaction = {
-  id: string;
+type Sale = {
+  _id: string;
   property: string;
   location: string;
+  address: string;
   plots: string;
   date_listed: string;
+  lga: string;
+  state: string;
 };
 
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<Sale>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => (
@@ -52,11 +55,19 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "location",
+    id: "location",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Location" />
     ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
+    cell: ({ row }) => (
+      <div className="whitespace-normal">
+        {formatAddress(
+          row.original?.address || "",
+          row.original?.lga || "",
+          row?.original?.state || ""
+        )}
+      </div>
+    ),
   },
   {
     accessorKey: "soldUnits",
@@ -70,35 +81,49 @@ const columns: ColumnDef<Transaction>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date closed" />
     ),
-    cell: ({ row }) => <div>{row.getValue("createdAt")}</div>,
+    cell: ({ row }) => (
+      <div className="whitespace-normal">
+        {formatDate(row.getValue("createdAt"), "dd/MM/yyyy, HH:MMa")}
+      </div>
+    ),
   },
-
   {
-    id: "actions",
+    // id: "actions",
+    accessorKey: "_id",
+    header: () => null,
     cell: ({ row }) => {
+      const id = String(row.getValue("_id")) || String(row?.original?._id);
+
       return (
-        <div className="flex justify-end">
-          <button id="button">
+        <div className="flex justify-center">
+          <Link href={`/admin/properties/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
-          </button>
+          </Link>
         </div>
       );
     },
   },
 ];
 
-
 export const ClosedSales = ({
-  data = [],
   closedSales = 0,
   summary,
 }: {
-  data?: any[];
   summary?: IPropertySummary;
   closedSales?: number | string;
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
+
+  const {
+    data: allProperties,
+    isLoading,
+    error,
+  } = useClientFetch({
+    action: async () => await getAllProperties({ limit: 5 }),
+    isModalOpen,
+  });
+
   const chartData = [
     {
       label: "available",
@@ -158,23 +183,32 @@ export const ClosedSales = ({
               </div>
             </div>
 
-            <div className="flex items-baseline justify-between w-full gap-4 my-1">
+            <div className="flex items-baseline justify-between w-full gap-4 mt-4">
               <h2 className="font-semibold text-grey-600">Recently closed</h2>
 
               <Link
-                href="properties/all?sortBy=closed"
+                href="/admin/properties/all?sortBy=closed"
                 className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
               >
                 View all <ArrowRight size={14} color="currentColor" />
               </Link>
             </div>
 
-            <div className="w-full my-1">
-              <DataTable columns={columns} data={data} />
+            <div className="w-full min-h-24 relative flex">
+              {isLoading ? (
+                <TableSkeleton />
+              ) : (
+                <DataTable columns={columns} data={allProperties?.data || []} />
+              )}
             </div>
 
             <div className="flex mt-auto justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+              <Button
+                onClick={closeModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
 

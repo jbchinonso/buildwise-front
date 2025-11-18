@@ -24,7 +24,7 @@ import { getRevenueData } from "@/lib/services/dashboard.service";
 import Link from "next/link";
 
 type Transaction = {
-  id: string;
+  _id: string;
   client: string;
   property: string;
   location: string;
@@ -41,7 +41,9 @@ const columns: ColumnDef<Transaction>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("clientName")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("clientName")}</div>
+    ),
   },
   {
     accessorKey: "propertyName",
@@ -51,52 +53,42 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("propertyName")}</div>,
   },
   {
-    accessorKey: "location",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Location" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
-  },
-  {
-    accessorKey: "lastPayment",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Last payment" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("lastPayment")}</div>,
-  },
-  {
     accessorKey: "salesPrice",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Paid" />
+      <DataTableColumnHeader column={column} title="Sales price" />
     ),
-    cell: ({ row }) => <div>{row.getValue("salesPrice")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("salesPrice") || 0)}</div>,
+  },
+  {
+    accessorKey: "paid",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Paid" />
+    ),
+    cell: ({ row }) => <div>{toAmount(row.getValue("paid"))}</div>,
   },
   {
     accessorKey: "outstanding",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Outstanding" />
     ),
-    cell: ({ row }) => <div>{row.getValue("outstanding")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("outstanding") || 0)}</div>,
   },
   {
-    accessorKey: "instalment",
+    accessorKey: "commissions",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Instalment" />
+      <DataTableColumnHeader column={column} title="Commissions" />
     ),
-    cell: ({ row }) => <div>{row.getValue("instalment")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("commissions") || 0)}</div>,
   },
-  {
-    accessorKey: "payment_status",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Payment status" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("payment_status")}</div>,
-  },
+
   {
     accessorKey: "_id",
     header: () => null,
     cell: ({ row }) => {
-      const id = String(row.getValue("id")) || String(row.getValue("_id"));
+      const id =
+        String(row.getValue("_id")) ||
+        String(row.original?._id) ||
+        String(row.getValue("id"));
 
       return (
         <div className="flex justify-center px-4">
@@ -124,11 +116,7 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: number }) => {
     isLoading: isRevenueLoading,
     // error,
   } = useClientFetch({
-    action: async () => {
-      const res = await getRevenueData();
-      console.log({ res });
-      return res || [];
-    },
+    action: getRevenueData,
     isModalOpen,
   });
 
@@ -145,7 +133,7 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: number }) => {
 
       {isModalOpen && (
         <PageModal handleClose={closeModal} heading="Revenue Overview">
-          <section className="flex flex-col w-full gap-4 ">
+          <section className="flex flex-col w-full gap-4 flex-1">
             {isRevenueLoading ? (
               <Skeleton className="h-60" />
             ) : (
@@ -207,8 +195,14 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: number }) => {
               </div>
             )}
 
-            <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+            <div className="flex justify-end gap-4 mt-auto items-center">
+              <Button
+                onClick={closeModal}
+                type="button"
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
               <Button disabled={isRevenueLoading} size="xs">

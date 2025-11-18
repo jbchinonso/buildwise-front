@@ -101,10 +101,7 @@ export const NewSaleForm = ({
       instalmentDuration: pricePlan?.instalmentDuration || "",
       paymentPlan: pricePlan?.paymentPlan || "",
     };
-
   }, [values]);
-
-   
 
   const handleSelect = (name: string, value: any) => {
     setFieldValue(name, value);
@@ -252,7 +249,7 @@ export const NewSaleForm = ({
             onReset={handleReset}
             className="flex flex-col flex-1 w-full gap-4 mt-auto"
           >
-            <div className="flex flex-col flex-1 w-full gap-6 my-6 px-6 ">
+            <div className="flex flex-col flex-1 w-full gap-6 my-4 px-6 ">
               <div className="flex items-center justify-between w-full border-b">
                 <p className="text-xs capitalize text-grey-400">Client</p>
                 <p className="text-sm font-bold text-grey-600">
@@ -306,20 +303,11 @@ export const NewSaleForm = ({
             </div>
 
             <div className="flex mt-auto px-6 gap-4 justify-stretch w-full  *:w-full">
-              <Button
-                onClick={closeModal}
-                variant="secondary"
-                size="sm"
-                className="my-4"
-              >
+              <Button onClick={closeModal} variant="secondary" size="sm">
                 Cancel
               </Button>
 
-              <SubmitButton
-                disabled={!dirty || !isValid}
-                size="sm"
-                className="my-4"
-              >
+              <SubmitButton disabled={!dirty || !isValid} size="sm">
                 Confirm sales
               </SubmitButton>
             </div>
