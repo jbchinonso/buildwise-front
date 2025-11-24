@@ -1,7 +1,7 @@
-import { redirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 
 const SystemSettings = () => {
-  redirect("/admin/settings/user-management");
+  permanentRedirect("/admin/settings/user-management");
 };
 
 export default SystemSettings;

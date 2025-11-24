@@ -24,7 +24,9 @@ export const useClientFetch = <T,>({
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
+
     try {
+      if (data) return data;
       const response = await Promise.resolve(actionRef.current());
       if ((response as any)?.error) {
         throw (response as any)?.error;

@@ -433,7 +433,7 @@ interface IReceipt {
   outstanding: number;
   status: string;
   paymentMethod: string;
-  installment: string
+  installment: string;
 }
 
 interface SubTitan {
@@ -444,7 +444,6 @@ interface SubTitan {
   commissionEarned: string | number;
   joined: string;
 }
-
 
 interface IClientProfile {
   phone_number: string;
@@ -467,4 +466,14 @@ interface IEarningsChartData {
   salesCommission?: number;
   subTitanCommission?: number;
   amount?: number;
+}
+
+interface INotification {
+  id: string;
+  title: string;
+  content: string;
+  type: string;
+  isRead: boolean;
+  createdAt: string;
+  formattedTime: string;
 }

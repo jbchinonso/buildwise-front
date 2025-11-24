@@ -1,5 +1,5 @@
 import { clsx, type ClassValue } from "clsx";
-import { format, formatDistanceToNow } from "date-fns";
+import { format, formatDistanceToNow, isToday } from "date-fns";
 import { User } from "next-auth";
 import toast from "react-hot-toast";
 import { twMerge } from "tailwind-merge";
@@ -335,3 +335,20 @@ export const getMonth = (index: number | string = 1) => {
   if (index < 1 || index > 12) return "";
   return months[index - 1];
 };
+
+export function formatTodayTime(date: string): string {
+  try {
+    if (!date || !Date.parse(date)) {
+      throw new Error();
+    }
+
+    if (isToday(date)) {
+      return `Today ${format(date, "h:mm a")}`;
+    }
+
+    // fallback for other dates
+    return format(date, "MMM d, h:mm a");
+  } catch {
+    return "N/A";
+  }
+}

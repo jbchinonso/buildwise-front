@@ -68,7 +68,7 @@ export const Input = ({
         <textarea
           {...props}
           className={twMerge(
-            `border focus:ring-1 r.ing-offset-1 focus:outline-none  border-[#D1D1D1] p-3 text-brand-black-100 px-4 rounded flex-1 w-full  placeholder:font-body ${
+            `border-none px-4 max-w-full autofill:bg-white ring-0 outline-none rounded w-full placeholder:font-body bg-inherit ${
               touched && error
                 ? "text-error-1 border-error-1"
                 : "border-[#CCC] text-[#020202]"

@@ -8,6 +8,7 @@ export * from "./DashboardModal"
 export * from "./DashboardTileCard"
 export * from "./PropertiesSold"
 export * from "./PieChartCard"
-export * from "./NotificationModal"
+export * from "./NotificationSettingsModal"
 export * from "./ClientProperties"
 export * from "./AddPropertyModal"
+export * from "./NotificationModal";

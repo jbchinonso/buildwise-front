@@ -40,6 +40,7 @@
 
 @custom-variant data-active (&[data-ui~="active"]);
 @custom-variant data-loading (&[data-ui~="loading"]);
+@custom-variant data-unread (&[data-ui~="unread"]);
 
 @theme inline {
   /* colors */

@@ -1,4 +1,5 @@
-import React from 'react'
+import { Input } from "@/components/ui";
+import { NotificationForm } from "../ui";
 
 const UserManagement = () => {
   return (
@@ -6,6 +7,8 @@ const UserManagement = () => {
       <div className="flex p-4 border rounded-2xl bg-white flex-[25%] max-h-fit max-w-fit">
         <p>Agent role management</p>
       </div>
+
+     <NotificationForm />
     </section>
   );
 }

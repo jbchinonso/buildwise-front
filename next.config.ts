@@ -5,6 +5,15 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [new URL("https://ui-avatars.com/**")],
   },
+  
+  async rewrites() {
+    return [
+      {
+        source: "/admin/settings",
+        destination: "/admin/settings/user-management",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

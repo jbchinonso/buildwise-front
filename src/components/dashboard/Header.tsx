@@ -1,10 +1,10 @@
 "use client";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { Logo, ProfileAvatar } from "../ui";
+import { NotificationModal } from "./NotificationModal";
 
 export const Header = () => {
   const topHeaderRef = useRef<HTMLElement | null>(null);
@@ -43,10 +43,7 @@ export const Header = () => {
             Hi {session?.user?.full_name || <small>...</small>}
           </span>
         </Link>
-        <div className="relative flex items-center gap-1 h-fit">
-          <span className="h-[7px] w-[7px] rounded-[50%] bg-red-500 absolute top-[6.5px] left-[16.3px]"></span>
-          <IoMdNotificationsOutline className="text-[#000] text-[1.6rem] font-semibold" />
-        </div>
+       <NotificationModal />
       </div>
     </section>
   );

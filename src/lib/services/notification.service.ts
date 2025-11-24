@@ -3,11 +3,11 @@
 import { revalidateTag } from "next/cache";
 import { baseUrl, getError } from "../utils";
 import { authFetch } from "./auth.service";
+import { INotification } from "../type";
 
 export const getNotificationSettings = async () => {
   try {
     const response = await authFetch("/user/notification");
-    console.log({ response });
   } catch (error) {
     throw getError(error);
   }
@@ -27,14 +27,13 @@ export const editNotificationSettings = async (form: {
 };
 
 export const createNotification = async (form: {
-  title: string;
-  content: string;
-  type: string;
+  title?: string;
+  content?: string;
+  type?: string;
 }) => {
   try {
     await baseUrl.post("/notifications", form);
-
-    revalidateTag("notification", "max");
+    revalidateTag("notifications", "max");
   } catch (error) {
     throw getError(error);
   }
@@ -42,14 +41,14 @@ export const createNotification = async (form: {
 
 export const getNotifications = async () => {
   try {
-    await authFetch("/notifications", {
+    const response = await authFetch("/notifications", {
       next: {
         tags: ["notifications"],
         revalidate: 8400,
       },
     });
 
-    revalidateTag("notification", "max");
+    return response as INotification[];
   } catch (error) {
     throw getError(error);
   }
@@ -72,9 +71,9 @@ export const getUnreadNotifications = async () => {
 
 export const markNotificationAsRead = async (notificationId: string) => {
   try {
-    await baseUrl.post(`/notifications/${notificationId}/read`);
+    await baseUrl.put(`/notifications/${notificationId}/read`);
 
-    revalidateTag("notification", "max");
+    revalidateTag("notifications", "max");
   } catch (error) {
     throw getError(error);
   }
