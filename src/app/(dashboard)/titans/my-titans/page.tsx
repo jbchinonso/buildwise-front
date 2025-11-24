@@ -16,7 +16,7 @@ const MyTitans = async () => {
         <Button
           size="xs"
           asLink
-          href="/admin/properties/add-property"
+          href="#"
           className="!text-xs ml-auto"
         >
           <Plus color="currentColor" size={20} />
@@ -30,6 +30,7 @@ const MyTitans = async () => {
       </section>
 
       <section className="flex flex-wrap gap-4 flex-1 max-h-[601px] w-full">
+        
         <DownlineActivity />
         <TopPerformingTitans />
       </section>

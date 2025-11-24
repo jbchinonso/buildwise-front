@@ -1,6 +1,6 @@
-import { ActivityCard } from "./cards/ActivityCard";
+import { ActivityCard } from "../../my-titans/ui/cards/ActivityCard";
 
-export default function DownlineActivity() {
+const Activities = async () => {
   const activities = [
     {
       type: "Instalment deposit",
@@ -23,9 +23,10 @@ export default function DownlineActivity() {
   ];
 
   return (
-    <div className="rounded-2xl bg-white p-2 w-full flex-1 md:flex-[38%] gap-3 flex flex-col border border-grey-50">
-      <h2 className="font-semibold text-gray-900">Downline activities</h2>
+    <div className="bg-white w-full flex-1 md:flex-[38%] gap-3 flex flex-col">
       <ActivityCard activities={activities} />
     </div>
   );
-}
+};
+
+export default Activities;

@@ -352,14 +352,14 @@ export const getTitanEarningsOverview = async () => {
       },
     });
 
-    console.log("response:::: ", response);
-
     return response;
   } catch (error) {
     console.error("Error fetching titans:", getError(error));
     throw new Error(getError(error));
   }
 };
+
+
 export const getTitanEarningsChart = async () => {
   try {
     const response = await authFetch("/titans/earnings-overview", {

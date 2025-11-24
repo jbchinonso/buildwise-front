@@ -8,15 +8,10 @@ import { useClientFetch, useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowDown } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
-import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import { PropertiesSold } from "./PropertiesSold";
 
 import {
   DataTableColumnHeader,
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
   Button,
   TableSkeleton,
 } from "@/components/ui";

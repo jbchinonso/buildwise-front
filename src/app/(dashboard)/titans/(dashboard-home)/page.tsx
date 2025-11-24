@@ -1,47 +1,56 @@
-import { PropertiesSold, RecentActivities, RevenueChart } from "./ui";
-import { getTitanDashboardSummary } from "@/lib/services/dashboard.service";
+import EarningOverview from "@/components/titans/dashboard/EarningOverview";
+import { PropertiesSold, RevenueChart } from "./ui";
+import { getTitanEarningsChart } from "@/lib/services";
+import { convertToChartData } from "@/lib/dtos/earnings.dto";
+import { EarningsOverviewChart } from "@/components/titans/dashboard";
+import { toAmount } from "@/lib/utils";
 
 const Dashboard = async () => {
-  const data = await getTitanDashboardSummary();
+  const res = await getTitanEarningsChart();
+
+  const data = convertToChartData(res) || [];
+  const totalSalesCommission = data?.reduce((acc, cv) => {
+    return (acc += cv?.salesCommission || 0);
+  }, 0);
+  const totalSubTitanCommission = data?.reduce((acc, cv) => {
+    return (acc += cv?.subTitanCommission || 0);
+  }, 0);
 
   return (
     <>
       {/* chart */}
-      <section className="flex flex-wrap gap-4">
-        <div className="rounded-2xl min-w-[MIN(100%,518px)] bg-white w-full flex-1 border border-grey-50">
-          <div className="flex items-center justify-between p-4  w-full gap-4">
-            <div className="flex flex-col">
-              <p className="text-sm font-semibold">Revenue</p>
-              <span className="text-xs text-grey-400">Total: ₦1,495,00</span>
-            </div>
-
-            <div className="p-2 px-3 rounded-3xl bg-grey-50">
-              <p className="text-xs">Last 1 year</p>
-            </div>
-          </div>
-          <div className="flex flex-1 w-full my-4 p-1 overflow-x-auto">
-            <RevenueChart />
-          </div>
+      <div className="bg-white flex flex-col border-[0.5px] gap-4 p-4 w-full flex-1  rounded-2xl">
+        <div className="w-full flex items-baseline justify-between">
+          <p className="font-semibold text-xl text-[#292A2C]">
+            Earning overview
+          </p>
         </div>
-        <div className="rounded-2xl min-w-[MIN(100%,518px)] bg-white w-full flex-1 border border-grey-50">
-          <div className="flex items-center justify-between w-full p-4  gap-4">
-            <div className="flex flex-col">
-              <p className="text-sm font-semibold">Properties sold</p>
-              <span className="text-xs text-grey-400">Total: 115</span>
+
+        <div className="w-full flex h-full max-h-[300px]">
+          <div className="flex py-4 mt-auto flex-col items-start gap-6 justify-start rounded-xl text-sm  text-white">
+            <div className="flex gap-2 items-center">
+              <span className="size-3  min-w-3 rounded-full bg-[#1FDBF4]" />
+              <div className="flex flex-col">
+                <p className="text-grey-400">Sales Commissions</p>
+                <p className="text-grey-600 text-[10px]">
+                  Yearly Total: {toAmount(totalSalesCommission ?? 0)}
+                </p>
+              </div>
             </div>
-            <div className="p-2 px-3 rounded-3xl bg-grey-50">
-              <p className="text-xs">Last 1 year</p>
+            <div className="flex gap-2 items-center">
+              <span className="size-3 min-w-3 rounded-full bg-[#9747FF]" />
+              <div className="flex flex-col">
+                <p className="text-grey-400">Commissions from Titans</p>
+                <p className="text-grey-600 text-[10px]">
+                  Yearly Total: {toAmount(totalSubTitanCommission ?? 0)}
+                </p>
+              </div>
             </div>
           </div>
 
-          <div className="flex flex-1 w-full my-4 p-1 overflow-x-auto">
-            <PropertiesSold />
-          </div>
+          <EarningsOverviewChart chartData={data} />
         </div>
-      </section>
-
-      {/* recent transactions */}
-      <RecentActivities data={data as any} />
+      </div>
     </>
   );
 };

@@ -21,7 +21,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function EarningsChart({
+export function EarningsOverviewChart({
   chartData,
 }: {
   chartData?: IEarningsChartData[];
@@ -29,7 +29,7 @@ export function EarningsChart({
   return (
     <ChartContainer
       config={chartConfig}
-      className="min-h-[200px] min-w-full text-[rgba(151, 71, 255, 1)"
+      className="min-h-[200px] w-full max-w-full text-[rgba(151,71,255,1)]"
     >
       <LineChart accessibilityLayer data={chartData}>
         <Line

@@ -4,12 +4,14 @@ export default function Layout({
   earnings,
   titans,
   clients,
+  activities,
 }: {
   children: React.ReactNode;
   revenue: React.ReactNode;
   earnings: React.ReactNode;
   titans: React.ReactNode;
   clients: React.ReactNode;
+  activities: React.ReactNode;
 }) {
   return (
     <>
@@ -20,6 +22,8 @@ export default function Layout({
         {titans}
       </section>
       {children}
+
+      <section>{activities}</section>
     </>
   );
 }

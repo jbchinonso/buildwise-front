@@ -12,8 +12,8 @@ import { Money } from "iconsax-react";
 import { getTitanEarningsChart } from "@/lib/services";
 import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 import Link from "next/link";
-import { EarningsChart } from "./EarningsChart";
 import { convertToChartData } from "@/lib/dtos/earnings.dto";
+import { EarningsOverviewChart } from "@/components/titans/dashboard";
 
 type Earnings = {
   _id: string;
@@ -95,7 +95,8 @@ export const EarningsOverview = ({ stats = 0 }: { stats?: number }) => {
     },
     isModalOpen,
   });
-  console.log({ chartData });
+ 
+
   return (
     <>
       <DashboardStatsCard
@@ -113,14 +114,15 @@ export const EarningsOverview = ({ stats = 0 }: { stats?: number }) => {
         >
           <section className="flex flex-1 flex-col w-full gap-4 ">
             <div className="w-full flex flex-col">
-              <EarningsChart chartData={chartData?.data || []} />
+              <EarningsOverviewChart chartData={chartData?.data || []} />
               <div className="flex w-full items-center gap-8 justify-center rounded-xl text-sm py-[10px] flex-wrap text-white">
                 <div className="flex gap-2 items-center">
                   <span className="size-3 rounded-full bg-[#1FDBF4]" />
                   <div className="flex flex-col">
                     <p className="text-grey-400">Sales Commissions</p>
                     <p className="text-grey-600 text-[10px]">
-                      Yearly Total: {toAmount(chartData?.totalSalesCommission ?? 0)}
+                      Yearly Total:{" "}
+                      {toAmount(chartData?.totalSalesCommission ?? 0)}
                     </p>
                   </div>
                 </div>
@@ -129,7 +131,8 @@ export const EarningsOverview = ({ stats = 0 }: { stats?: number }) => {
                   <div className="flex flex-col">
                     <p className="text-grey-400">Commissions from Titans</p>
                     <p className="text-grey-600 text-[10px]">
-                      Yearly Total: {toAmount(chartData?.totalSubTitanCommission ?? 0)}
+                      Yearly Total:{" "}
+                      {toAmount(chartData?.totalSubTitanCommission ?? 0)}
                     </p>
                   </div>
                 </div>
@@ -170,7 +173,12 @@ export const EarningsOverview = ({ stats = 0 }: { stats?: number }) => {
             </div>
 
             <div className="flex justify-end gap-4 items-center mt-auto">
-              <Button onClick={closeModal} size="xs" outline variant="secondary">
+              <Button
+                onClick={closeModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
               <Button size="xs">Export PDF</Button>
