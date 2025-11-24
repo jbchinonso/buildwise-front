@@ -31,6 +31,7 @@ export const createSale = async (sale: ISalePayload) => {
     revalidateTag("agents", "max");
     return response?.data;
   } catch (error) {
+    return { error: getError(error) };
     throw getError(error);
   }
 };

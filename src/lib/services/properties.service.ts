@@ -137,6 +137,7 @@ export const addProperty = async (property: ICreatePropertyPayload) => {
     revalidateTag("properties", "max");
     return response?.data;
   } catch (error) {
+    return { error: getError(error) };
     throw getError(error);
   }
 };

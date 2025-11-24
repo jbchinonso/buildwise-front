@@ -19,7 +19,6 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
   const { data: properties, isLoading: isFetchingProperties } = useClientFetch({
     action: async () => {
       const { data } = await getAllProperties();
-      console.log({data})
 
       return (data || [])?.map((property: IProperty) => ({
         label: property?.name,
@@ -156,7 +155,10 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
     toast.dismiss();
     try {
       console.log({ payload });
-      await createSale(payload);
+      const {error} = await createSale(payload);
+      if(error){
+        throw new error
+      }
       router.refresh();
       toast.success("Property added to client successfully");
       resetForm();

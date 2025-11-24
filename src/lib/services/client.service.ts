@@ -81,6 +81,7 @@ export const addClient = async (client: ICreateClientPayload) => {
     revalidateTag("clients", "max");
     return response?.data;
   } catch (error) {
+    return { error: getError(error) };
     throw getError(error);
   }
 };
@@ -358,7 +359,6 @@ export const getTitanEarningsOverview = async () => {
     throw new Error(getError(error));
   }
 };
-
 
 export const getTitanEarningsChart = async () => {
   try {

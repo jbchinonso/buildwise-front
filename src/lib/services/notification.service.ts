@@ -75,6 +75,7 @@ export const markNotificationAsRead = async (notificationId: string) => {
 
     revalidateTag("notifications", "max");
   } catch (error) {
+    return { error: getError(error) };
     throw getError(error);
   }
 };
