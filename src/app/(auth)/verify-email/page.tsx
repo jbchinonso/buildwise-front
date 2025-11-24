@@ -1,4 +1,3 @@
-import React from "react";
 import { Unverified, VerificationSuccessful } from "./Verification";
 import { verifyEmail } from "@/lib/services";
 

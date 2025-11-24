@@ -288,3 +288,12 @@ export const getTitanPropertiesSummary = async () => {
     throw new Error(getError(error));
   }
 };
+
+export const getTitanActivities = async () => {
+  try {
+    const response = await authFetch("/activity/activities");
+    return response as any[];
+  } catch (error) {
+    throw new Error(getError(error));
+  }
+};

@@ -92,10 +92,8 @@ export const signUp = async (values: ISignUpData) => {
 // verify email
 export const verifyEmail = async (verificationToken: string) => {
   try {
-    const response = await baseUrl.get(
-      `/auth/verify-email?token=/${verificationToken}`
-    );
-    revalidateTag("profile", "max");
+    const url = `/auth/verify-email?token=${verificationToken}`;
+    const response = await authFetch(url);
     return response?.data;
   } catch (error: any) {
     throw getError(error);
@@ -112,6 +110,16 @@ export const resendVerificationEmail = async (email: string) => {
     return data;
   } catch (error: any) {
     throw new Error(getError(error));
+  }
+};
+
+export const getReferralData = async (referralCode: string) => {
+  try {
+    const response = await authFetch(`/user/referral/${referralCode}`);
+    const data = response as IUser;
+    return { data };
+  } catch (error) {
+    return { error: getError(error) };
   }
 };
 

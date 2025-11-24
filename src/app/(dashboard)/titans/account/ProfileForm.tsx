@@ -108,7 +108,7 @@ const ProfileForm = () => {
         id="email"
         type="email"
         defaultValue={values.email}
-        placeholder="Example@gmail.com"
+        placeholder="example@gmail.com"
         readOnly
         labelStyle="text-[#292A2C]"
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"

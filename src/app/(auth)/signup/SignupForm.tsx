@@ -10,7 +10,13 @@ import toast from "react-hot-toast";
 import { signUp } from "@/lib/services";
 import { IState } from "@/lib/type";
 
-const SignupForm = ({ states }: { states: IState[] }) => {
+const SignupForm = ({
+  states,
+  referral,
+}: {
+  states: IState[];
+  referral: { name?: string; code?: string };
+}) => {
   const { isModalOpen, toggleModal } = useModal();
   const [email, setEmail] = useState("");
 
@@ -34,7 +40,7 @@ const SignupForm = ({ states }: { states: IState[] }) => {
       state: "",
       lga: "",
       password: "",
-      referralCode: "",
+      referralCode: referral?.code,
     },
     validationSchema: signUpValidationSchema,
     onSubmit: async () => {},
@@ -180,9 +186,9 @@ const SignupForm = ({ states }: { states: IState[] }) => {
           id="referralCode"
           label="Referral Code"
           placeholder="Enter referral Code"
-          value={values.referralCode}
-          onChange={handleChange}
+          defaultValue={values.referralCode}
           onBlur={handleBlur}
+          disabled
           required
           error={getFormikError(touched?.referralCode, errors?.referralCode)}
         />
@@ -201,9 +207,12 @@ const SignupForm = ({ states }: { states: IState[] }) => {
           </Link>
         </p>
 
-        {/* <p className="px-2 mt-3 ml-auto text-sm text-center">
-          You are invited by Damilola Nkechi
-        </p> */}
+        {referral?.code && (
+          <p className="px-2 mt-3 ml-auto text-sm text-center">
+            You are invited by{" "}
+            <span className="capitalize">{referral?.name || "N/A"}</span>
+          </p>
+        )}
       </form>
 
       {isModalOpen && (

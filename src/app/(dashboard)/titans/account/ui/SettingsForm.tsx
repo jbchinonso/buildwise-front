@@ -12,7 +12,7 @@ import { NotificationSettings } from "@/components/dashboard";
 export const SettingsForm = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [inviteLink, setInviteLink] = useState(
-    "http://localhost:3000/admin/account/settings"
+    `${process.env.VERCEL_URL||window?.origin}/signup?referral=`
   );
   const [bankAccount, setBankAccount] = useState({
     bankName: "GTB",

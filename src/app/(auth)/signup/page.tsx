@@ -1,10 +1,27 @@
 import Image from "next/image";
 import SignupForm from "./SignupForm";
 import { Logo } from "@/components/ui";
-import { getStates } from "@/lib/services";
+import { getReferralData, getStates } from "@/lib/services";
 
-const Signup = async () => {
-  const states = await getStates();
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+const Signup = async (props: { searchParams: SearchParams }) => {
+  const searchParams = await props.searchParams;
+  const referralCode = (searchParams["referral"] as string) || "";
+
+  const [states, referralData] = await Promise.all([
+    getStates(),
+    getReferralData(referralCode as string),
+  ]);
+
+  const full_name = referralData?.data?.firstName
+    ? `${referralData?.data?.lastName || ""} ${referralData?.data?.firstName || ""}`
+    : "N/A";
+
+  const referral = {
+    name: full_name,
+    code: referralCode,
+  };
 
   return (
     <section className="flex flex-col flex-wrap sm:py-[MIN(50px,5%)] !max-h-[1080px] custom-width flex-1 w-full gap-x-10 lg:flex-row  m-auto">
@@ -42,7 +59,7 @@ const Signup = async () => {
             <h2 className="text-2xl font-bold">Sign Up</h2>
             <p className="py-2">Create your account</p>
           </div>
-          <SignupForm states={states || []} />
+          <SignupForm states={states || []} referral={referral} />
         </div>
       </div>
     </section>
