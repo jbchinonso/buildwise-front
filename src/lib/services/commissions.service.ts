@@ -1,5 +1,4 @@
-import { getServerSession } from "next-auth";
-import { authOptions, customFetch, getError } from "../utils";
+import { customFetch, getError } from "../utils";
 import { authFetch } from "./auth.service";
 
 export const getCommissions = async (): Promise<{
