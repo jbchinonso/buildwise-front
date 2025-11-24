@@ -43,7 +43,11 @@ const SignupForm = ({ states }: { states: IState[] }) => {
   const onSignup = async () => {
     toast.dismiss();
     try {
-      await signUp(values);
+      const { error } = await signUp(values);
+
+      if (error) {
+        throw error;
+      }
 
       toggleModal();
       setEmail(values.email);
@@ -145,7 +149,6 @@ const SignupForm = ({ states }: { states: IState[] }) => {
             value: state.name,
           }))}
           labelStyle="text-[#292A2C]"
-         
           error={getFormikError(touched?.state, errors?.state)}
         />
         <SelectScrollable
@@ -158,7 +161,6 @@ const SignupForm = ({ states }: { states: IState[] }) => {
           placeholder="Select local government"
           labelStyle="text-[#292A2C]"
           error={getFormikError(touched?.lga, errors?.lga)}
-         
         />
 
         <Input

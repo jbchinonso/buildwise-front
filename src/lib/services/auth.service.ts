@@ -84,6 +84,7 @@ export const signUp = async (values: ISignUpData) => {
     const response = await baseUrl.post("/user/signup", values);
     return response?.data;
   } catch (error) {
+    return { error: getError(error) };
     throw getError(error);
   }
 };
@@ -154,4 +155,3 @@ export const editTitanProfile = async (form: any) => {
     throw getError(error);
   }
 };
-

@@ -1,4 +1,3 @@
-import { Input } from "@/components/ui";
 import { NotificationForm } from "../ui";
 
 const UserManagement = () => {
