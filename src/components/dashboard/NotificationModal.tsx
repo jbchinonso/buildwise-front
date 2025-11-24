@@ -38,7 +38,17 @@ export const NotificationModal = () => {
 
   useEffect(() => {
     retry();
+
+    return () => {
+      setNotification(null);
+    };
   }, []);
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      setNotification(null);
+    }
+  }, [isModalOpen]);
   return (
     <>
       <button
@@ -57,7 +67,7 @@ export const NotificationModal = () => {
         <Modal
           heading="Notifications"
           handleClose={closeModal}
-          className="w-[474px] max-w-[MIN(100%,474px)] max-h-[80dvh]"
+          className="w-[474px] gap-0 max-w-[MIN(100%,474px)] max-h-[80dvh]"
         >
           {notification ? (
             <div className="flex flex-col gap-1 py-4 p-1 flex-1">

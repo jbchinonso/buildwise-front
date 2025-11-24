@@ -78,7 +78,7 @@ export const Modal = ({
           transition={{ duration: 0.3 }}
           key={"modal-div"}
           className={twMerge(
-            "w-full max-w-[95%] sm:max-w-[MIN(90%,600px)] h-full min-h-[300px] pb-2 overflow-hidden m-auto bg-white flex flex-col relative rounded-4xl border overflow-y-auto z-[999] gap-.6 max-h-[95dvh]",
+            "w-full max-w-[95%] sm:max-w-[MIN(90%,600px)] h-full min-h-[300px] pb-2 overflow-hidden m-auto bg-white flex flex-col relative rounded-4xl border overflow-y-auto z-[999] gap-6 max-h-[95dvh]",
             className
           )}
         >
