@@ -5,6 +5,7 @@ import { useModal } from "@/lib/hooks";
 import { IClientProfile, IOption } from "@/lib/type";
 import { useRouter, useSearchParams } from "next/navigation";
 
+
 export const UpdatePaymentModal = ({
   properties = [],
   client,

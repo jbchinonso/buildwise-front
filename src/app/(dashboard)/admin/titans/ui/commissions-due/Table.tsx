@@ -1,6 +1,7 @@
 "use client";
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
+import { CommissionDueData } from "@/lib/types/titant";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -17,29 +18,25 @@ type Transaction = {
   payment_status: string;
 };
 
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<CommissionDueData>[] = [
   {
-    accessorKey: "client",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Titans" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    accessorKey: "titan",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Titan" />,
   },
   {
     accessorKey: "property",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Unpaid commission" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Property" />,
   },
-
+  // {
+  //   accessorKey: "unpaidCommission",
+  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Unpaid Commission" />,
+  //   cell: ({ row }) => <div>₦{Number(row.getValue("unpaidCommission")).toLocaleString()}</div>,
+  // },
   {
-    // id: "actions",
-    accessorKey: "id",
+    accessorKey: "_id",
     header: () => null,
     cell: ({ row }) => {
-      const id = String(row.getValue("id")) || String(row?.id);
-
+      const id = row.getValue("_id");
       return (
         <div className="flex justify-center px-4">
           <Link href={`/admin/titans/all/${id}`} id="button">
@@ -52,7 +49,7 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-const Table = ({ data = [] }: { data: Transaction[] }) => {
+const Table = ({ data = [] }: { data:  CommissionDueData[] }) => {
   return <DataTable columns={columns} data={data} />;
 };
 

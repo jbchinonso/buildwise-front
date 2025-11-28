@@ -154,11 +154,11 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
   const submitForm = async () => {
     toast.dismiss();
     try {
-      console.log({ payload });
       const {error} = await createSale(payload);
       if(error){
         throw new error
       }
+      closeModal();
       router.refresh();
       toast.success("Property added to client successfully");
       resetForm();
