@@ -119,6 +119,9 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
     ];
   }, [property]);
 
+   const options = property?.priceOptions as IPaymentOptions;
+  const instantPrice = options?.instantPrice || 0;
+
   const payload = useMemo(() => {
     const pricePlan = priceOptions?.find(
       (plan) => plan.value === values?.priceOptions
@@ -135,7 +138,7 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
       paymentDate: values?.paymentDate,
       plotNumber: Number(values?.plotNumber || 0),
       plotSize: values?.plotSize || 0,
-      price: Number(property?.price || 0),
+      price: Number(instantPrice|| 0),
       instalmentDuration: pricePlan?.instalmentDuration || "",
       paymentPlan: pricePlan?.paymentPlan || "",
     };
