@@ -102,12 +102,10 @@ export const getReceiptData = async (saleId?: string) => {
 
 export const getClientPaymentData = async (clientId: string) => {
   try {
-    // console.log({clientId})
     if (!clientId?.trim()) return;
 
     const url = `/sales/clients/${clientId}/payments/`;
 
-    console.log({ url });
 
     const response = await authFetch(url, {
       next: {
@@ -167,7 +165,6 @@ export const updatePayment = async (payload: IUpdatePaymentPayload) => {
   try {
     const response = await baseUrl.post("/sales/update-payment", payload);
 
-  
     return response.data;
   } catch (error) {
     console.error("Error updating payment:", getError(error));

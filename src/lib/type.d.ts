@@ -293,6 +293,9 @@ interface IClientProperty {
   plotNumber: number;
   unitNumber: string;
   amountPaid: number;
+  saleId: string;
+  clientId: string;
+  propertyId: string;
   price: number;
   paymentPlan: string;
   instalmentDuration: string;
