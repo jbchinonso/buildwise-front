@@ -1,5 +1,6 @@
 "use server";
 import { IPagination, SubTitan } from "../type";
+import { CommissionsDueResponse, ITopAgentsResponse } from "../types/titant";
 import { getError } from "../utils";
 import { authFetch } from "./auth.service";
 
@@ -295,5 +296,37 @@ export const getTitanActivities = async () => {
     return response as any[];
   } catch (error) {
     throw new Error(getError(error));
+  }
+};
+
+export const getTopTitanPerformannce = async (
+ ): Promise<ITopAgentsResponse> => {
+  try {
+    const response = await authFetch(
+      `/titans/top-agents`,
+      {
+        next: {
+          tags: ["titans"],
+          revalidate: 8400,
+        },
+      }
+    );
+
+    return response as ITopAgentsResponse;
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+
+export const getCommissionsDue = async (): Promise<CommissionsDueResponse> => {
+  try {
+    const response = await authFetch("/titans/commissions-due", {
+      next: { tags: ["titans"], revalidate: 8400 },
+    });
+
+    return response as CommissionsDueResponse;
+  } catch (error) {
+    throw getError(error);
   }
 };

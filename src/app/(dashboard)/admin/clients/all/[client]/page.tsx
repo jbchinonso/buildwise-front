@@ -45,7 +45,8 @@ const ClientProfile = async (props: {
           <div className="flex gap-4 items-center">
             <UpdatePaymentModal
               client={personalInformation}
-              properties={propertyOptions || []}
+              properties={properties || []}
+              //  clientProperties={properties || []} 
             />
 
             <Button

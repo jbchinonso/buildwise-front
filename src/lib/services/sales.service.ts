@@ -4,6 +4,7 @@ import { baseUrl, getError } from "../utils";
 import { authFetch } from "./auth.service";
 import { IClientPaymentData, IPagination, IReceipt } from "../type";
 import { receiptDTO } from "../dtos/sale.dto";
+import { IUpdatePaymentPayload } from "../types/titant";
 
 interface ISalePayload {
   propertyId: string;
@@ -101,12 +102,10 @@ export const getReceiptData = async (saleId?: string) => {
 
 export const getClientPaymentData = async (clientId: string) => {
   try {
-    // console.log({clientId})
     if (!clientId?.trim()) return;
 
     const url = `/sales/clients/${clientId}/payments/`;
 
-    console.log({ url });
 
     const response = await authFetch(url, {
       next: {
@@ -158,5 +157,17 @@ export const getPropertyUnitsSoldOrReserved = async ({
     return { data, pagination };
   } catch (error) {
     throw getError(error);
+  }
+};
+
+
+export const updatePayment = async (payload: IUpdatePaymentPayload) => {
+  try {
+    const response = await baseUrl.post("/sales/update-payment", payload);
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating payment:", getError(error));
+    return { error: getError(error) };
   }
 };

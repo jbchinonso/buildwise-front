@@ -137,7 +137,7 @@ export const PaymentHistoryTable = ({
           className="sm:max-w-[MIN(90%,520px)]"
         >
           <div className="flex flex-col mx-auto text-center">
-            <h1 className="text-3xl font-bold">₦500,000</h1>
+            <h1 className="text-3xl font-bold"></h1>
             <p className="flex items-center gap-1 text-sm text-grey-400">
               <TickCircle size="12" color="#37d67a" />
               Successfully deposited
