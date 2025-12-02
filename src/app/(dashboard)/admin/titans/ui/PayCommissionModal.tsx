@@ -2,6 +2,7 @@
 import { DashboardModal, DataTable } from "@/components/dashboard";
 import { Avatar, Button, DataTableColumnHeader } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
+import { ITitanProfile } from "@/lib/type";
 import { copyTextToClipboard } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { Files } from "lucide-react";
@@ -61,7 +62,13 @@ const columns: ColumnDef<ICommission>[] = [
   },
 ];
 
-export const PayCommissionModal = ({ bankAccount = "O70 3456 6543" }) => {
+export const PayCommissionModal = ({
+  bankAccount = "O70 3456 6543",
+  titan,
+}: {
+  bankAccount?: string,
+  titan?: Partial<ITitanProfile & { fullName?: string }>;
+}) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   return (
     <>
@@ -79,8 +86,8 @@ export const PayCommissionModal = ({ bankAccount = "O70 3456 6543" }) => {
             <div className="flex items-baseline justify-between">
               <Avatar
                 image="/image/avatar.png"
-                name="Annette Black"
-                id="0939393"
+                name={titan?.fullName}
+                id={titan?._id}
                 className="flex-col items-start gap-1"
               />
 

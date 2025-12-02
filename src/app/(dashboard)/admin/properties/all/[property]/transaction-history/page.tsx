@@ -6,7 +6,7 @@ import {
 import React from "react";
 import { TransactionTable } from "./TransactionTable";
 import { IPropertySale } from "@/lib/dtos/property.dto";
-import { ReceiptModal } from "./ReceiptModal";
+import { ReceiptModal } from "../../../../../../../components/dashboard/ReceiptModal";
 
 type Params = Promise<{ property: string }>;
 

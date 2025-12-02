@@ -304,7 +304,7 @@ export const formatDate = (
   }
 };
 
-export const formatDateToNow = (date: string | null | undefined) => {
+export const formatDateToNow = (date: Date|string | null | undefined) => {
   try {
     if (!date) {
       throw new Error();

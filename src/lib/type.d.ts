@@ -342,6 +342,36 @@ interface ITitans {
   totalReferrals: number;
   totalEarnings: number;
 }
+interface ITitanProfile {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  address: string;
+  state: string;
+  lga: string;
+  role: string;
+  parent: string;
+  directReferrals: number;
+  indirectReferrals: number;
+  level: number;
+  children: any[];
+  earnings: number;
+  referralBonus: number;
+  isEmailVerified: boolean;
+  emailNotifications: boolean;
+  smsNotifications: boolean;
+  downlines: any[];
+  referralCode: string;
+  createdAt: Date;
+  updatedAt: Date;
+  personalSales: number;
+  marketersRecruited: number;
+  pendingCommission: number;
+  eligibleCommission: number;
+  performanceBonus: number;
+}
 
 interface IPaymentHistoryTransaction {
   _id: string;

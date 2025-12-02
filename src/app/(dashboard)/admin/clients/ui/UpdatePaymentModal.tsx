@@ -4,7 +4,7 @@ import { Button, Input, SelectScrollable, SubmitButton } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
 import { updatePayment } from "@/lib/services";
 import { IClientProperty, IClientProfile, IOption } from "@/lib/type";
-import { IUpdatePaymentPayload } from "@/lib/types/titant";
+import { IUpdatePaymentPayload } from "@/lib/types/titan";
 import { getError, toAmount } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";

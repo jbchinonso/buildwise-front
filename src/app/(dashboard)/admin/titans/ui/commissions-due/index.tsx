@@ -1,12 +1,11 @@
 import { ArrowRight } from "iconsax-react";
 import Link from "next/link";
 import Table from "./Table";
-import { getCommissionsDue, getTransactions } from "@/lib/services";
+import { getCommissionsDue } from "@/lib/services";
 
 export const CommissionsDue = async () => {
-  // const { data = [] } = await getTransactions();
-   const response = await getCommissionsDue();
-  const data = response.data;
+  const result = await getCommissionsDue();
+  const data = result.data;
   return (
     <div className="rounded-2xl m.in-w-[MIN(100%,518px)] bg-white p-4 w/-full flex flex-col gap-4 flex-[30%] border border-grey-50">
       <div className="flex w-full items-center justify-between gap-4">
@@ -21,8 +20,11 @@ export const CommissionsDue = async () => {
           View all <ArrowRight size={14} color="currentColor" />
         </Link>
       </div>
-
-      <Table data={data} />
+      {data ? (
+        <Table data={data} />
+      ) : (
+        <p>There was an error fetching Commissions Due. Please try again</p>
+      )}
     </div>
   );
 };

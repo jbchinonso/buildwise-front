@@ -1,14 +1,11 @@
 "use client";
-import { ReceiptModal } from "@/app/(dashboard)/admin/properties/all/[property]/transaction-history/ReceiptModal";
-import { DashboardModal, DataTable } from "@/components/dashboard";
-import { Button, DataTableColumnHeader } from "@/components/ui";
-import { useModal } from "@/lib/hooks";
+import { ReceiptModal } from "@/components/dashboard/ReceiptModal";
+import { DataTable } from "@/components/dashboard";
+import { DataTableColumnHeader } from "@/components/ui";
 import { IPaymentHistorySales } from "@/lib/type";
 import { formatDate, toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
-import { TickCircle } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
-import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const columns: (

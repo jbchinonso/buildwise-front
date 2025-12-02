@@ -5,21 +5,29 @@ import {
   SubTitians,
   PayCommissionModal,
 } from "../../ui";
+import { getTitanActivities, getTitanProfile } from "@/lib/services";
+import { formatDateToNow } from "@/lib/utils";
 
 type Params = Promise<{ titan: string }>;
 
 const TitanProfile = async (props: { params: Params }) => {
   const params = await props.params;
-  const id = params.titan;
+  const id = params.titan as string;
+
+  const titan = await getTitanProfile(id)
+
 
   const personalInformation = {
-    phone: "070 3456 6543",
-    email: "AnnetteBlack@gmail.com",
-    address: "2464 Royal Ln. Mesa, New Jersey 45463",
+    fullName: titan?.firstName
+    ? `${titan?.lastName || ""} ${titan?.firstName || ""}`
+    : "N/A",
+    phone: titan?.phone,
+    email: titan?.email,
+    address: titan?.address,
     bank_account: "First bank- 0838 3838 38",
-    upline: "Ibrahim Sanogo",
-    joined: "1 year 5 months ago",
-    status: "Active",
+    upline: titan?.parent,
+    joined:  formatDateToNow(titan?.createdAt),
+    status: "N/A",
   };
 
   const activities = {
@@ -43,10 +51,10 @@ const TitanProfile = async (props: { params: Params }) => {
 
       <div className="flex flex-col gap-8 flex-1 w-full gap max-w-[MIN(100%,1052px)]">
         <div className="flex w-full justify-between gap-4 flex-wrap items-center">
-          <ProfileAvatar img="/image/avatar.png" name="Annette Black" />
+          <ProfileAvatar img="/image/avatar.png" name={personalInformation.fullName} />
 
           <div className="flex gap-4 items-center">
-            <PayCommissionModal />
+            <PayCommissionModal  titan={{...titan, fullName: personalInformation?.fullName}}/>
 
             <Button
               asLink

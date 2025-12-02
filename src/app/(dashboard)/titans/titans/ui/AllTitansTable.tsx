@@ -1,22 +1,14 @@
 "use client";
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
+import { ITitans } from "@/lib/type";
+import { toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-type Transaction = {
-  id: string;
-  titan: string;
-  upline: string;
-  location: string;
-  properties_sold: number;
-  commission: string;
-  status: string;
-  joined: string;
-};
 
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<ITitans>[] = [
   {
     accessorKey: "titan",
     header: ({ column }) => (
@@ -36,21 +28,30 @@ const columns: ColumnDef<Transaction>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Location" />
     ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
+    cell: ({ row }) => (
+      <div
+        title={row.getValue("location")}
+        className="max-w-[120px] line-clamp-2 overflow-ellipsis whitespace-break-spaces"
+      >
+        {row.getValue("location")}
+      </div>
+    ),
   },
   {
-    accessorKey: "properties_sold",
+    accessorKey: "propertiesSold",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Properties sold" />
     ),
-    cell: ({ row }) => <div>{row.getValue("properties_sold")}</div>,
+    cell: ({ row }) => (
+      <div>{toAmount(row.getValue("propertiesSold"), false)}</div>
+    ),
   },
   {
     accessorKey: "commission",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Commission" />
     ),
-    cell: ({ row }) => <div>{row.getValue("commission")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("commission"))}</div>,
   },
   {
     accessorKey: "status",
@@ -64,6 +65,18 @@ const columns: ColumnDef<Transaction>[] = [
         }`}
       >
         {row.getValue("status")}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "joined",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Joined" />
+    ),
+    cell: ({ row }) => (
+      <div>
+        {row.getValue("joined")}
+        {/* {format(row.getValue("joinedDate") || "", "dd/MM/yyyy, HH:MMa")} */}
       </div>
     ),
   },
@@ -87,7 +100,7 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const AllTitansTable = ({ data = [] }: { data: Transaction[] }) => {
+export const AllTitansTable = ({ data = [] }: { data: ITitans[] }) => {
 
   return <DataTable columns={columns} data={data} />;
 };

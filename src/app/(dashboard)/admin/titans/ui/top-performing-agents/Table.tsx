@@ -1,22 +1,11 @@
 "use client"
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
-import { TopAgentData } from "@/lib/types/titant";
+import { TopAgentData } from "@/lib/types/titan";
+import { toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-
-type Transaction = {
-  id: string;
-  client: string;
-  property: string;
-  location: string;
-  last_payment: string;
-  totalPaid: string;
-  outstanding: string;
-  instalment: string;
-  payment_status: string;
-};
 
 const columns: ColumnDef<TopAgentData>[] = [
   {
@@ -24,24 +13,21 @@ const columns: ColumnDef<TopAgentData>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Titans" />
     ),
+    cell: ({ row }) => <div className="capitalize">{row.getValue("titan")}</div>,
   },
   {
     accessorKey: "totalRevenue",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Revenue" />
     ),
-    cell: ({ row }) => (
-      <div>₦{Number(row.getValue("totalRevenue")).toLocaleString()}</div>
-    ),
+    cell: ({ row }) => <div>{toAmount(row.getValue("totalRevenue"))}</div>,
   },
   {
     accessorKey: "totalCommission",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Commission" />
     ),
-    cell: ({ row }) => (
-      <div>₦{Number(row.getValue("totalCommission")).toLocaleString()}</div>
-    ),
+    cell: ({ row }) => <div>{toAmount(row.getValue("totalCommission"))}</div>,
   },
   {
     accessorKey: "subTitans",
