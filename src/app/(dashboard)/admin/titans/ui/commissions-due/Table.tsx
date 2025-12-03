@@ -14,22 +14,22 @@ const columns: ColumnDef<CommissionDueData>[] = [
     ),
       cell: ({ row }) => <div className="capitalize">{row.getValue("titan")}</div>,
   },
-  {
-    accessorKey: "property",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Property" />
-    ),
-  },
   // {
-  //   accessorKey: "unpaidCommission",
-  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Unpaid Commission" />,
-  //   cell: ({ row }) => <div>₦{Number(row.getValue("unpaidCommission")).toLocaleString()}</div>,
+  //   accessorKey: "property",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Property" />
+  //   ),
   // },
   {
-    accessorKey: "_id",
+    accessorKey: "unpaidCommission",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Unpaid Commission" />,
+    cell: ({ row }) => <div>₦{Number(row.getValue("unpaidCommission")).toLocaleString()}</div>,
+  },
+  {
+    accessorKey: "titanId",
     header: () => null,
     cell: ({ row }) => {
-      const id = row.getValue("_id");
+      const id = row.getValue("titanId");
       return (
         <div className="flex justify-center px-4">
           <Link href={`/admin/titans/all/${id}`} id="button">

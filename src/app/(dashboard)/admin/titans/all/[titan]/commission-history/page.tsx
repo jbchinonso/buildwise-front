@@ -6,8 +6,8 @@ type Params = Promise<{ titan: string }>;
 
 const CommissionHistory = async (props: { params: Params }) => {
   const params = await props.params;
-  const id = params.titan;
-  const { data = [] } = await getCommissions();
+  const id = params.titan as string;
+  const { data = [] } = await getCommissions(id);
 
   return (
     <section className="flex flex-1 flex-col gap-4">

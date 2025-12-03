@@ -1,17 +1,9 @@
 "use client";
 import { DataTable } from "@/components/dashboard";
+import { ICommissionHistory } from "@/lib/type";
+import { cn, formatDate, toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import React, { PropsWithChildren } from "react";
-
-type Transaction = {
-  id: string;
-  property: string;
-  commission: string;
-  location: string;
-  properties_sold: number;
-  status: string;
-  joined: string;
-};
 
 const TableHead: React.FC<PropsWithChildren & { title?: string }> = ({
   children,
@@ -20,7 +12,7 @@ const TableHead: React.FC<PropsWithChildren & { title?: string }> = ({
   return <div>{children || title}</div>;
 };
 
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<ICommissionHistory>[] = [
   {
     accessorKey: "property",
     header: ({}) => <TableHead title="Property" />,
@@ -29,12 +21,12 @@ const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "commission",
     header: ({}) => <TableHead title="Commission" />,
-    cell: ({ row }) => <div>{row.getValue("commission")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("commission") || 0)}</div>,
   },
   {
-    accessorKey: "commission_id",
+    accessorKey: "commissionId",
     header: ({}) => <TableHead title="Commission ID" />,
-    cell: ({ row }) => <div>{row.getValue("commission_id")}</div>,
+    cell: ({ row }) => <div>{row.getValue("commissionId")}</div>,
   },
 
   {
@@ -42,21 +34,32 @@ const columns: ColumnDef<Transaction>[] = [
     header: ({}) => <TableHead title="Status" />,
     cell: ({ row }) => (
       <div
-        className={`${
-          row.getValue("status") == "Paid" ? "text-[#4FAB15]" : "text-[#F4BB1F]"
-        }`}
+        className={cn(
+          "capitalize",
+          `${
+            row.getValue("status") == "paid"
+              ? "text-[#4FAB15]"
+              : "text-[#F4BB1F]"
+          }`
+        )}
       >
         {row.getValue("status")}
       </div>
     ),
   },
   {
-    accessorKey: "date_paid",
+    accessorKey: "datePaid",
     header: ({}) => <TableHead title="Date paid" />,
-    cell: ({ row }) => <div>{row.getValue("date_paid")}</div>,
+    cell: ({ row }) => (
+      <div>{formatDate(row.getValue("datePaid"), "dd/MM/yyyy, HH:MMa")}</div>
+    ),
   },
 ];
 
-export const CommissionsTable = ({ data = [] }: { data: Transaction[] }) => {
+export const CommissionsTable = ({
+  data = [],
+}: {
+  data: ICommissionHistory[];
+}) => {
   return <DataTable columns={columns} data={data} />;
 };

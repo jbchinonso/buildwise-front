@@ -7,6 +7,7 @@ import {
 } from "../../ui";
 import { getTitanActivities, getTitanProfile } from "@/lib/services";
 import { formatDateToNow } from "@/lib/utils";
+import { DeactivateTitanAccount } from "@/components/dashboard";
 
 type Params = Promise<{ titan: string }>;
 
@@ -186,13 +187,7 @@ const TitanProfile = async (props: { params: Params }) => {
             defaultValue={activities.referral_commission}
           />
 
-          <div className="w-full flex py-2 my-2">
-            <Button
-              variant="secondary"
-              size="sm"
-              className="text-error ml-auto"
-            >{`Deactivate Agent's Account`}</Button>
-          </div>
+          <DeactivateTitanAccount titan={titan}/>
         </div>
       </div>
     </section>
