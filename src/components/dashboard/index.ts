@@ -12,3 +12,4 @@ export * from "./NotificationSettingsModal"
 export * from "./ClientProperties"
 export * from "./AddPropertyModal"
 export * from "./NotificationModal";
+export * from "./DeactivateTitanAccount";

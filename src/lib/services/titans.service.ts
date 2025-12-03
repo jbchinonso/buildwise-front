@@ -1,7 +1,8 @@
 "use server";
+import { revalidateTag } from "next/cache";
 import { IPagination, ITitanProfile, ITitans, SubTitan } from "../type";
 import { CommissionDueData, ITopAgent } from "../types/titan";
-import { getError } from "../utils";
+import { baseUrl, getError } from "../utils";
 import { authFetch } from "./auth.service";
 
 export const getTitans = async (
@@ -340,6 +341,15 @@ export const getTitanProfile = async (id: string) => {
     });
 
     return data as ITitanProfile;
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
+export const deactivateTitan = async (id: string) => {
+  try {
+    await baseUrl.patch(`/titans/${id}/deactivate`);
+    revalidateTag("titans", "max");
   } catch (error) {
     throw getError(error);
   }

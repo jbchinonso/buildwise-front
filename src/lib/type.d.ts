@@ -510,3 +510,11 @@ interface INotification {
   createdAt: string;
   formattedTime: string;
 }
+
+interface ICommissionHistory {
+  commissionId: string;
+  property: string;
+  commission: number;
+  status: string;
+  datePaid: string | Date;
+}

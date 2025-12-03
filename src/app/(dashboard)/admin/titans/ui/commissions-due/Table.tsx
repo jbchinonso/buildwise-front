@@ -14,17 +14,17 @@ const columns: ColumnDef<CommissionDueData>[] = [
     ),
       cell: ({ row }) => <div className="capitalize">{row.getValue("titan")}</div>,
   },
-  {
-    accessorKey: "property",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Property" />
-    ),
-  },
   // {
-  //   accessorKey: "unpaidCommission",
-  //   header: ({ column }) => <DataTableColumnHeader column={column} title="Unpaid Commission" />,
-  //   cell: ({ row }) => <div>₦{Number(row.getValue("unpaidCommission")).toLocaleString()}</div>,
+  //   accessorKey: "property",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Property" />
+  //   ),
   // },
+  {
+    accessorKey: "unpaidCommission",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Unpaid Commission" />,
+    cell: ({ row }) => <div>₦{Number(row.getValue("unpaidCommission")).toLocaleString()}</div>,
+  },
   {
     accessorKey: "titanId",
     header: () => null,

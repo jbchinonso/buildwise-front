@@ -23,6 +23,7 @@ export type TopAgentData = {
 export type CommissionDueData = {
   _id: string;
   titan: string;
+  titanId: string;
   property: string;
   unpaidCommission: number;
 };

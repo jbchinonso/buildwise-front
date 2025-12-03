@@ -1,24 +1,15 @@
 "use client";
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
+import { ICommissionHistory } from "@/lib/type";
 import { ColumnDef } from "@tanstack/react-table";
 import React, { PropsWithChildren } from "react";
-
-type Transaction = {
-  id: string;
-  property: string;
-  commission: string;
-  location: string;
-  properties_sold: number;
-  status: string;
-  joined: string;
-};
 
 const TableHead: React.FC<PropsWithChildren & {title?: string}> = ({ children, title }) => {
   return <div>{children||title}</div>;
 };
 
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<ICommissionHistory>[] = [
   {
     accessorKey: "date",
     header: ({ column }) => (
@@ -70,6 +61,6 @@ const columns: ColumnDef<Transaction>[] = [
   },
 ];
 
-export const CommissionsTable = ({ data = [] }: { data: Transaction[] }) => {
+export const CommissionsTable = ({ data = [] }: { data: ICommissionHistory[] }) => {
   return <DataTable columns={columns} data={data} />;
 };

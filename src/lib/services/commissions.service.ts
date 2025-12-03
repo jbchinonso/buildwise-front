@@ -1,19 +1,20 @@
-import { customFetch, getError } from "../utils";
+import { ICommissionHistory } from "../type";
+import { getError } from "../utils";
 import { authFetch } from "./auth.service";
 
-export const getCommissions = async (): Promise<{
+export const getCommissions = async (
+  id: string
+): Promise<{
   data?: any[];
   error?: string;
 }> => {
   try {
-    const data = await customFetch(
-      "https://dummyjson.com/c/d74b-de04-4864-bc3c",
-      {
-        next: {
-          revalidate: 8400,
-        },
-      }
-    );
+    const { data } = await authFetch(`/titans/${id}/commissions`, {
+      next: {
+        tags: ["commissions"],
+        revalidate: 8400,
+      },
+    });
 
     return { data };
   } catch (error) {
@@ -22,7 +23,7 @@ export const getCommissions = async (): Promise<{
 };
 
 export const getCommissionBreakdown = async (): Promise<{
-  data?: any[];
+  data?: ICommissionHistory[];
   error?: string;
 }> => {
   try {
