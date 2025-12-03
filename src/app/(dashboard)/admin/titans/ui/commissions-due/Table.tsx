@@ -1,31 +1,24 @@
 "use client";
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
-import { CommissionDueData } from "@/lib/types/titant";
+import { CommissionDueData } from "@/lib/types/titan";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-type Transaction = {
-  id: string;
-  client: string;
-  property: string;
-  location: string;
-  last_payment: string;
-  totalPaid: string;
-  outstanding: string;
-  instalment: string;
-  payment_status: string;
-};
-
 const columns: ColumnDef<CommissionDueData>[] = [
   {
     accessorKey: "titan",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Titan" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Titan" />
+    ),
+      cell: ({ row }) => <div className="capitalize">{row.getValue("titan")}</div>,
   },
   {
     accessorKey: "property",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Property" />,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Property" />
+    ),
   },
   // {
   //   accessorKey: "unpaidCommission",

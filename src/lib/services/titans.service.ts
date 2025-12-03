@@ -1,6 +1,6 @@
 "use server";
-import { IPagination, SubTitan } from "../type";
-import { CommissionsDueResponse, ITopAgentsResponse } from "../types/titant";
+import { IPagination, ITitanProfile, ITitans, SubTitan } from "../type";
+import { CommissionDueData, ITopAgent } from "../types/titan";
 import { getError } from "../utils";
 import { authFetch } from "./auth.service";
 
@@ -28,7 +28,7 @@ export const getTitans = async (
     });
 
     return response as {
-      data: any[];
+      data: ITitans[];
       pagination: IPagination;
     };
   } catch (error) {
@@ -299,33 +299,47 @@ export const getTitanActivities = async () => {
   }
 };
 
-export const getTopTitanPerformannce = async (
- ): Promise<ITopAgentsResponse> => {
+export const getTopTitanPerformannce = async (): Promise<{
+  error?: string;
+  data?: ITopAgent[];
+}> => {
   try {
-    const response = await authFetch(
-      `/titans/top-agents`,
-      {
-        next: {
-          tags: ["titans"],
-          revalidate: 8400,
-        },
-      }
-    );
+    const response = await authFetch(`/titans/top-agents`, {
+      next: {
+        tags: ["titans"],
+        revalidate: 8400,
+      },
+    });
 
-    return response as ITopAgentsResponse;
+    return { data: response?.data as ITopAgent[] };
   } catch (error) {
+    return { error: getError(error) };
     throw getError(error);
   }
 };
 
-
-export const getCommissionsDue = async (): Promise<CommissionsDueResponse> => {
+export const getCommissionsDue = async () => {
   try {
     const response = await authFetch("/titans/commissions-due", {
       next: { tags: ["titans"], revalidate: 8400 },
     });
 
-    return response as CommissionsDueResponse;
+    return {
+      data: response?.data as CommissionDueData[],
+    };
+  } catch (error) {
+    return { error: getError(error) };
+    throw getError(error);
+  }
+};
+
+export const getTitanProfile = async (id: string) => {
+  try {
+    const { data } = await authFetch(`/titans/${id}/profile`, {
+      next: { tags: ["titans"], revalidate: 8400 },
+    });
+
+    return data as ITitanProfile;
   } catch (error) {
     throw getError(error);
   }

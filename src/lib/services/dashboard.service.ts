@@ -102,7 +102,6 @@ export const getDashboarSalesChart = async (
         },
       }
     );
-
     return { data: chartDTO(data) };
   } catch (error) {
     // return { error: getError(error) };

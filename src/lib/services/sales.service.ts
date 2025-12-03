@@ -4,7 +4,7 @@ import { baseUrl, getError } from "../utils";
 import { authFetch } from "./auth.service";
 import { IClientPaymentData, IPagination, IReceipt } from "../type";
 import { receiptDTO } from "../dtos/sale.dto";
-import { IUpdatePaymentPayload } from "../types/titant";
+import { IUpdatePaymentPayload } from "../types/titan";
 
 interface ISalePayload {
   propertyId: string;
