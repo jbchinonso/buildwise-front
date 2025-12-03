@@ -33,10 +33,10 @@ const columns: ColumnDef<CommissionDueData>[] = [
   //   cell: ({ row }) => <div>₦{Number(row.getValue("unpaidCommission")).toLocaleString()}</div>,
   // },
   {
-    accessorKey: "_id",
+    accessorKey: "titanId",
     header: () => null,
     cell: ({ row }) => {
-      const id = row.getValue("_id");
+      const id = row.getValue("titanId");
       return (
         <div className="flex justify-center px-4">
           <Link href={`/admin/titans/all/${id}`} id="button">
