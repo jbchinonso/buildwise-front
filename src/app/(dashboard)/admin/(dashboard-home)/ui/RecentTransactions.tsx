@@ -40,11 +40,11 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
   {
-    accessorKey: "last_payment",
+    accessorKey: "lastPayment",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Last payment" />
     ),
-    cell: ({ row }) => <div>{row.getValue("last_payment")}</div>,
+    cell: ({ row }) => <div>{row.getValue("lastPayment")}</div>,
   },
   {
     accessorKey: "totalPaid",
