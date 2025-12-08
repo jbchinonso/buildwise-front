@@ -75,23 +75,27 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("paymentStatus")}</div>,
   },
   {
-    accessorKey: "_id",
-    header: () => null,
-    cell: ({ row }) => {
-      const id =
-        String(row.getValue("id")) ||
-        String(row.getValue("_id"));
+  accessorKey: "_id",
+  header: () => null,
+  cell: ({ row }) => {
+    const id = String(
+      row.getValue("_id") ??
+      (row.original as any)?._id
+    );
 
-      return (
-        <div className="flex justify-center px-4">
-          <Link href={`${id}`} id="button">
-            <ChevronRight className="size-4" />
-            <span className="sr-only">View details</span>
-          </Link>
-        </div>
-      );
-    },
+    if (!id || id === "undefined") return null;
+
+    return (
+      <div className="flex justify-center px-4">
+        <Link href={`/${id}`} id="button">
+          <ChevronRight className="size-4" />
+          <span className="sr-only">View details</span>
+        </Link>
+      </div>
+    );
   },
+},
+
 ];
 
 export const RecentTransactions = ({

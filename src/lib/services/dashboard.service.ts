@@ -145,7 +145,11 @@ export const getDashboarSalesChart = async (
 
 export const getRevenueChartData = async (
   params: Record<string, any> = { lastYears: 1 }
-) => {
+): Promise<{
+  data: Array<{ month: string; revenue: number }>;
+  total: number;
+  error?: string;
+}> => {
   try {
     const query = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
@@ -164,30 +168,39 @@ export const getRevenueChartData = async (
       }
     );
     
-    const apiData = response.data;
+    const apiData = response.data as {
+      chartData?: Array<{
+        date?: string;
+        totalRevenue?: number;
+        [key: string]: any;
+      }>;
+      total?: number;
+    };
     
     if (!apiData || !apiData.chartData) {
       return { data: [], total: 0 };
     }
     
-    const chartData = apiData.chartData.map((item: any) => {
-      let monthName = "Unknown";
-      if (item.date) {
-        try {
-          const date = new Date(item.date);
-          if (!isNaN(date.getTime())) {
-            monthName = date.toLocaleString("default", { month: "long" });
+    const chartData = apiData.chartData
+      .map((item: { date?: string; totalRevenue?: number }) => {
+        let monthName = "Unknown";
+        if (item.date) {
+          try {
+            const date = new Date(item.date);
+            if (!isNaN(date.getTime())) {
+              monthName = date.toLocaleString("default", { month: "long" });
+            }
+          } catch (e) {
+            console.warn(`Could not parse date: ${item.date}`);
           }
-        } catch (e) {
-          console.warn(`Could not parse date: ${item.date}`);
         }
-      }
-      
-      return {
-        month: monthName,
-        revenue: item.totalRevenue || 0
-      };
-    }).filter(item => item.revenue > 0);
+        
+        return {
+          month: monthName,
+          revenue: item.totalRevenue || 0
+        };
+      })
+      .filter((item: { month: string; revenue: number }) => item.revenue > 0);
     
     const total = apiData.total || 0;
     
@@ -200,10 +213,12 @@ export const getRevenueChartData = async (
     console.error('Error:', error);
     return { 
       data: [], 
-      total: 0
+      total: 0,
+      error: getError(error)
     };
   }
 };
+
 export const getRevenueData = async () => {
   try {
     const response = await authFetch(`/dashboard/total-revenue`, {
