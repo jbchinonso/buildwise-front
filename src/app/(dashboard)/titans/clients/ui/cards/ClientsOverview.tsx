@@ -104,7 +104,7 @@ export const ClientOverview = ({ stats = 0 }: { stats?: string | number }) => {
         <PageModal
           handleClose={closeModal}
           heading="Clients Overview"
-          className="max-w-[MIN(95%,750px)]"
+          className="md:max-w-[MIN(95%,750px)]"
         >
           <section className="flex flex-1 flex-col w-full gap-4 ">
             <div
@@ -161,7 +161,7 @@ export const ClientOverview = ({ stats = 0 }: { stats?: string | number }) => {
               )}
             </div>
 
-            <div className="flex mt-auto justify-end gap-4 items-center">
+            <div className="flex mt-auto md:justify-end gap-4 items-center">
               <Button
                 onClick={toggleModal}
                 size="xs"

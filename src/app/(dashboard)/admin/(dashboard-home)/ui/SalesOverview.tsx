@@ -123,7 +123,7 @@ export const SalesOverview = ({ stats = 0 }: { stats?: number }) => {
         <PageModal handleClose={closeModal} heading="Total Sales Overview">
           <section className="flex flex-col w-full gap-4 flex-1">
             {isSalesLoading ? (
-              <Skeleton className="h-60 w-full rounded-xl">
+              <Skeleton className="h-60 w-full rounded-xl m-auto">
                 <span className="loader m-auto my-10" />
               </Skeleton>
             ) : (

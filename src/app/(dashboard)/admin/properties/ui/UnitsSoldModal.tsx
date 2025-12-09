@@ -13,7 +13,7 @@ export const UnitsSoldModal = () => {
     <PageModal
       handleClose={closeModal}
       heading="Units Sold"
-      className="max-w-[MIN(100%,600px)]"
+      className="md:max-w-[MIN(100%,600px)]"
     >
       <section className="flex flex-col w-full gap-4">
         <div className="flex items-baseline justify-between w-full gap-4 my-1">

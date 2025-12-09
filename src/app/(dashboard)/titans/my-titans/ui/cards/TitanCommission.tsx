@@ -124,7 +124,7 @@ export const TitanCommission = ({ stats }: { stats?: string | number }) => {
         <PageModal
           handleClose={closeModal}
           heading="My Titan's Commission"
-          className="max-w-[MIN(95%,728px)]"
+          className="md:max-w-[MIN(95%,728px)]"
         >
           <section className="flex flex-1 flex-col w-full gap-y-4 ">
             <TitanCommissionOverview />
@@ -170,11 +170,11 @@ export const TitanCommission = ({ stats }: { stats?: string | number }) => {
               {isLoading ? (
                 <TableSkeleton />
               ) : (
-                <DataTable columns={columns} data={data as any || []} />
+                <DataTable columns={columns} data={(data as any) || []} />
               )}
             </div>
 
-            <div className="flex mt-auto justify-end gap-4 items-center">
+            <div className="flex mt-auto md:justify-end gap-4 items-center">
               <Button
                 onClick={toggleModal}
                 size="xs"

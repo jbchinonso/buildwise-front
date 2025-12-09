@@ -518,3 +518,14 @@ interface ICommissionHistory {
   status: string;
   datePaid: string | Date;
 }
+
+interface ITitanCommission {
+  _id: string;
+  status: string;
+  commissionId: string;
+  commissionAmount: number;
+  payment: number;
+  titanId: string;
+  titanName: string;
+  clientName: string;
+}

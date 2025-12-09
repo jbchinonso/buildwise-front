@@ -29,7 +29,7 @@ export const ProfileAvatar = (props: AvatarProps) => {
 
   const cnFn = (...inputs: ClassArray) =>
     cn(
-      "w-10 rounded-md aspect-square h-auto overflow-hidden",
+      "w-8 lg:w-10 rounded-md aspect-square h-auto overflow-hidden",
       rounded && "rounded-full",
       inputs,
       avatarClassName
@@ -63,7 +63,7 @@ export const ProfileAvatar = (props: AvatarProps) => {
               },
             })})`,
           }}
-          className={cnFn("bg-cover  rounded-full bg-center")}
+          className={cnFn("bg-cover rounded-full bg-center")}
         />
       )}
     </div>
@@ -84,7 +84,7 @@ export const Avatar = ({ className, image, name, id }: IProfileAvatar) => {
 
       <div className="flex flex-col">
         {name && (
-          <p className="font-semibold text-[#292A2C] text-xl capitalize">
+          <p className="font-semibold text-[#292A2C] lg:text-xl capitalize">
             {name}
           </p>
         )}

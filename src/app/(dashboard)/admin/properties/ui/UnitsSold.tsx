@@ -110,7 +110,7 @@ export const UnitsSold = ({ unitsSold }: IProps) => {
         <PageModal
           handleClose={closeModal}
           heading="Units Sold / Reserved"
-          className="max-w-[MIN(100%,600px)]"
+          className="md:max-w-[MIN(100%,600px)]"
         >
           <section className="flex flex-col w-full gap-4">
             <div className="w-full my-1 flex-1">

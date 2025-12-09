@@ -109,7 +109,7 @@ export default function SubTitans({ data }: { data?: string | number }) {
         <PageModal
           handleClose={closeModal}
           heading="Sub-titans"
-          className="max-w-[MIN(95%,620px)]"
+          className="md:max-w-[MIN(95%,620px)]"
         >
           <section className="flex flex-1 flex-col w-full gap-4">
             {isLoading ? (

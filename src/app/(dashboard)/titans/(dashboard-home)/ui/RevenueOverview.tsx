@@ -160,7 +160,7 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: number }) => {
               )}
             </div>
 
-            <div className="flex mt-auto justify-end gap-4 items-center">
+            <div className="flex mt-auto md:justify-end gap-4 items-center">
               <Button
                 onClick={closeModal}
                 size="xs"

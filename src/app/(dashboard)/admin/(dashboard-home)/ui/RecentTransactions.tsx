@@ -14,6 +14,7 @@ type Transaction = {
   totalPaid: number;
   outstanding?: number;
   instalment?: number;
+  lastPayment?: number;
   paymentStatus?: string;
 };
 
@@ -23,7 +24,9 @@ const columns: ColumnDef<Transaction>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("client")}</div>
+    ),
   },
   {
     accessorKey: "property",
@@ -40,11 +43,11 @@ const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
   {
-    accessorKey: "last_payment",
+    accessorKey: "lastPayment",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Last payment" />
     ),
-    cell: ({ row }) => <div>{row.getValue("last_payment")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("lastPayment") || 0)}</div>,
   },
   {
     accessorKey: "totalPaid",
@@ -78,9 +81,7 @@ const columns: ColumnDef<Transaction>[] = [
     accessorKey: "_id",
     header: () => null,
     cell: ({ row }) => {
-      const id =
-        String(row.getValue("id")) ||
-        String(row.getValue("_id"));
+      const id = String(row.getValue("_id")) || String(row.getValue("id"));
 
       return (
         <div className="flex justify-center px-4">

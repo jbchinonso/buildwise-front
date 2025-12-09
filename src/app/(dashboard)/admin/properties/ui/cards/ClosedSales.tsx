@@ -133,7 +133,7 @@ export const ClosedSales = ({
         <PageModal
           handleClose={closeModal}
           heading="Closed Sales"
-          className="max-w-[MIN(100%,600px)]"
+          className="md:max-w-[MIN(100%,600px)]"
         >
           <section className="flex flex-1 flex-col w-full gap-4">
             <div className="w-full flex flex-col">
@@ -179,7 +179,7 @@ export const ClosedSales = ({
               <DataTable columns={columns} data={data} />
             </div>
 
-            <div className="flex mt-auto justify-end gap-4 items-center">
+            <div className="flex mt-auto md:justify-end gap-4 items-center">
               <Button size="xs" outline variant="secondary">
                 Close
               </Button>

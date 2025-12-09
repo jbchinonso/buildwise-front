@@ -89,7 +89,7 @@ export const ClientsOwnersModal = ({  owners, clientOwners }: IProps) => {
         <PageModal
           handleClose={closeModal}
           heading="Clients/ ownership"
-          className="max-w-[MIN(100%,889px)]"
+          className="md:max-w-[MIN(100%,889px)]"
         >
           <p className="mb-4">{owners}</p>
           <section className="flex flex-col w-full gap-4">

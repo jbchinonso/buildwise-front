@@ -54,7 +54,7 @@ const columns: ColumnDef<Agent>[] = [
     accessorKey: "_id",
     header: () => null,
     cell: ({ row }) => {
-      const id = String(row.getValue("id")) || String(row.getValue("_id"));
+      const id = String(row.getValue("_id")) || String(row.getValue("id")); ;
 
       return (
         <div className="flex justify-center px-4">
@@ -93,7 +93,7 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
         <PageModal
           handleClose={closeModal}
           heading="Titans Overview"
-          className="max-w-[MIN(95%,620px)]"
+          className="md:max-w-[MIN(95%,620px)]"
         >
           <section className="flex flex-1 flex-col w-full gap-4 ">
             {isAgentLoading ? (
@@ -155,8 +155,13 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
               </div>
             )}
 
-            <div className="flex mt-auto justify-end gap-4 items-center">
-              <Button onClick={closeModal} size="xs" outline variant="secondary">
+            <div className="flex mt-auto md:justify-end gap-4 items-center">
+              <Button
+                onClick={closeModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
 

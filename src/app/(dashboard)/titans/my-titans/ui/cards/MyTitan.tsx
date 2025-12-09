@@ -135,7 +135,7 @@ export const MyTitan = ({ stats }: { stats: number | string }) => {
         <PageModal
           handleClose={closeModal}
           heading="My Titans Overview"
-          className="max-w-[MIN(95%,880px)]"
+          className="md:max-w-[MIN(95%,880px)]"
         >
           <section className="flex flex-1 flex-col w-full gap-4 ">
             <div
@@ -170,7 +170,7 @@ export const MyTitan = ({ stats }: { stats: number | string }) => {
               )}
             </div>
 
-            <div className="flex mt-auto justify-end gap-4 items-center">
+            <div className="flex mt-auto md:justify-end gap-4 items-center">
               <Button
                 onClick={toggleModal}
                 size="xs"

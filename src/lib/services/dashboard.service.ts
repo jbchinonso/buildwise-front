@@ -81,6 +81,7 @@ export const getDashboarSalesChart = async (
     sales: number;
     revenue: number;
   }[];
+  total?: number;
   pagination?: IPagination;
   error?: string;
 }> => {
@@ -102,7 +103,46 @@ export const getDashboarSalesChart = async (
         },
       }
     );
-    return { data: chartDTO(data) };
+
+    return { data: chartDTO(data?.chartData), total: data?.total || 0 };
+  } catch (error) {
+    // return { error: getError(error) };
+    throw new Error(getError(error));
+  }
+};
+
+export const getDashboarRevenueChart = async (
+  params: Record<string, any> = { lastYears: 1 }
+): Promise<{
+  data?: {
+    month: string;
+    sales: number;
+    revenue: number;
+  }[];
+  total?: number;
+  pagination?: IPagination;
+  error?: string;
+}> => {
+  try {
+    const query = new URLSearchParams();
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (key != "id") {
+        query.set(key, String(value));
+      }
+    });
+
+    const { data } = await authFetch(
+      `/dashboard/revenue-chart-data?${query.toString()}`,
+      {
+        next: {
+          revalidate: 8400,
+          tags: [CACHETAGS.revenue],
+        },
+      }
+    );
+
+    return { data: chartDTO(data?.chartData), total: data?.total || 0 };
   } catch (error) {
     // return { error: getError(error) };
     throw new Error(getError(error));
@@ -206,14 +246,12 @@ export const getTitanDashboardSummary = async () => {
       },
     });
 
-
     return response as {
       totalRevenue: number;
       totalClients: number;
       totalEarnings: number;
       totalTitans: number;
     };
-
   } catch (error) {
     console.error("Error fetching titans:", getError(error));
     throw new Error(getError(error));

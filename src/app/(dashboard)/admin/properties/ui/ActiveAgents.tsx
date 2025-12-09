@@ -75,7 +75,7 @@ export const ActiveAgents = ({  agents=[], total=0 }: IProps) => {
         <PageModal
           handleClose={closeModal}
           heading="Active agents"
-          className="max-w-[MIN(100%,535px)]"
+          className="md:max-w-[MIN(100%,535px)]"
         >
           <p className="mb-4">{total}</p>
           <section className="flex flex-col w-full gap-4">

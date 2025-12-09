@@ -139,7 +139,7 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: string | number }) => {
         <PageModal
           handleClose={closeModal}
           heading="Revenue Overview"
-          className="max-w-[MIN(95%,880px)]"
+          className="md:max-w-[MIN(95%,880px)]"
         >
           <section className="flex flex-col w-full flex-1 gap-4 ">
             <PropertiesSold
