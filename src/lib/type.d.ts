@@ -62,7 +62,7 @@ interface IPaginationResponse extends IPagination {
 }
 
 export interface IUser {
-  id: number | string;
+  id:  string;
   created_at: string;
   updated_at: string;
   firstName?: string;

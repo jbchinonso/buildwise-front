@@ -54,24 +54,39 @@ export const getDashboardTransactions = async (): Promise<{
   }
 };
 
-const chartDTO = (
-  data: {
-    _id: string;
-    date: string;
-    totalSales: number;
-    totalRevenue: number;
-    revenue: number;
-  }[]
-) =>
-  data?.map((item) => ({
-    month: Date.parse(item.date || item?._id)
-      ? new Date(item.date || item?._id).toLocaleString("default", {
-          month: "long",
-        })
-      : item.date || item?._id,
-    sales: item.totalSales || 0,
-    revenue: item?.totalRevenue || item?.revenue || 0,
-  }));
+const chartDTO = (data: any) => {
+  if (data && data.chartData && Array.isArray(data.chartData)) {
+    return data.chartData.map((item: any) => ({
+      month: Date.parse(item.month || item.date || item?._id)
+        ? new Date(item.month || item.date || item?._id).toLocaleString(
+            "default",
+            {
+              month: "long",
+            }
+          )
+        : "Unknown",
+      sales: item.sales || 0,
+      revenue: item.revenue || 0,
+    }));
+  }
+
+  if (Array.isArray(data)) {
+    return data.map((item) => ({
+      month: Date.parse(item.date || item?.month || item?._id)
+        ? new Date(item.date || item?.month || item?._id).toLocaleString(
+            "default",
+            {
+              month: "long",
+            }
+          )
+        : item.month || "Unknown",
+      sales: item.sales || 0,
+      revenue: item.revenue || 0,
+    }));
+  }
+
+  return [];
+};
 
 export const getDashboarSalesChart = async (
   params: Record<string, any> = { lastYears: 1 }
@@ -87,9 +102,8 @@ export const getDashboarSalesChart = async (
 }> => {
   try {
     const query = new URLSearchParams();
-
     Object.entries(params).forEach(([key, value]) => {
-      if (key != "id") {
+      if (key !== "id") {
         query.set(key, String(value));
       }
     });
@@ -98,7 +112,7 @@ export const getDashboarSalesChart = async (
       `/dashboard/sales-chart-data?${query.toString()}`,
       {
         next: {
-          revalidate: 8400,
+          revalidate: 60,
           tags: [CACHETAGS.sales],
         },
       }
@@ -144,8 +158,86 @@ export const getDashboarRevenueChart = async (
 
     return { data: chartDTO(data?.chartData), total: data?.total || 0 };
   } catch (error) {
-    // return { error: getError(error) };
-    throw new Error(getError(error));
+    return {
+      data: [],
+      total: 0,
+      error: getError(error),
+    };
+  }
+};
+
+export const getRevenueChartData = async (
+  params: Record<string, any> = { lastYears: 1 }
+): Promise<{
+  data: Array<{ month: string; revenue: number }>;
+  total: number;
+  error?: string;
+}> => {
+  try {
+    const query = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (key !== "id") {
+        query.set(key, String(value));
+      }
+    });
+
+    const response = await authFetch(
+      `/dashboard/revenue-chart-data?${query.toString()}`,
+      {
+        next: {
+          revalidate: 0,
+          tags: [CACHETAGS.sales],
+        },
+      }
+    );
+
+    const apiData = response.data as {
+      chartData?: Array<{
+        date?: string;
+        totalRevenue?: number;
+        [key: string]: any;
+      }>;
+      total?: number;
+    };
+
+    if (!apiData || !apiData.chartData) {
+      return { data: [], total: 0 };
+    }
+
+    const chartData = apiData.chartData
+      .map((item: { date?: string; totalRevenue?: number }) => {
+        let monthName = "Unknown";
+        if (item.date) {
+          try {
+            const date = new Date(item.date);
+            if (!isNaN(date.getTime())) {
+              monthName = date.toLocaleString("default", { month: "long" });
+            }
+          } catch (e) {
+            console.warn(`Could not parse date: ${item.date}`);
+          }
+        }
+
+        return {
+          month: monthName,
+          revenue: item.totalRevenue || 0,
+        };
+      })
+      .filter((item: { month: string; revenue: number }) => item.revenue > 0);
+
+    const total = apiData.total || 0;
+
+    return {
+      data: chartData,
+      total,
+    };
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      data: [],
+      total: 0,
+      error: getError(error),
+    };
   }
 };
 
@@ -153,11 +245,10 @@ export const getRevenueData = async () => {
   try {
     const response = await authFetch(`/dashboard/total-revenue`, {
       next: {
-        revalidate: 8400,
+        revalidate: 0,
         tags: [CACHETAGS.sales],
       },
     });
-
     return {
       ...response,
       monthlyRevenue: chartDTO(response.monthlyRevenue || []),

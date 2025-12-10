@@ -31,12 +31,10 @@ export const Header = ({ children }: { children?: React.ReactNode }) => {
 
       <div className="flex items-center gap-4 md:ml-auto md:flex-row-reverse">
         <Link href={"/account"} className="flex items-center gap-3 ">
-         
-            <ProfileAvatar
-              name={session?.user?.full_name || "User"}
-              img={session?.user?.profile_image as string}
-            />
-     
+          <ProfileAvatar
+            name={session?.user?.full_name || "User"}
+            img={session?.user?.profile_image as string}
+          />
 
           <span className="hidden capitalize md:block">
             Hi {session?.user?.full_name || <small>...</small>}

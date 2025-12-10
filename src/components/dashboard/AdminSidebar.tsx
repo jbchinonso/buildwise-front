@@ -1,4 +1,5 @@
 "use client";
+import { MOBILE_BREAKPOINT } from "@/lib/constants";
 import { useNav } from "@/lib/hooks/useNav";
 import { cn } from "@/lib/utils";
 import { Element3, User, Profile2User, Logout } from "iconsax-react";
@@ -15,7 +16,7 @@ export const AdminSidebar = () => {
   useEffect(() => {
     //  on resize close modal
     window.onresize = () => {
-      if (isOpen && window.innerWidth <= 800) {
+      if (isOpen && window.innerWidth <= MOBILE_BREAKPOINT) {
         // console.log("close nav", window.innerWidth);
         closeNav();
       }
@@ -24,9 +25,9 @@ export const AdminSidebar = () => {
   }, [isOpen]);
 
   useEffect(() => {
-    if (typeof window != undefined && window.innerWidth >= 840 && !isOpen) {
+    if (typeof window != undefined && window.innerWidth >= MOBILE_BREAKPOINT && !isOpen) {
       toggleNav();
-    } else if (window.innerWidth <= 840) {
+    } else if (window.innerWidth <= MOBILE_BREAKPOINT) {
       closeNav();
     }
 
@@ -46,7 +47,7 @@ export const AdminSidebar = () => {
 
       <div
         className={cn(
-          "transition-transform top-1/2 -translate-y-1/2 h-dvh flex-[20] duration-300 fl.ex-[20] z-[999] flex flex-col lg:ml-8 w-full max-w-[MIN(100%,260px)] max-h-[calc(100dvh-var(--scroll-padding))] absolute lg:sticky lg:translate-y-0 lg:top-0 border rounded-r-2xl lg:rounded-2xl bg-white p-4 border-grey-50",
+          "transition-transform top-1/2 -translate-y-1/2 h-dvh flex-[20] duration-100 z-[999] lg:z-10 flex flex-col lg:ml-8 w-full max-w-[MIN(100%,260px)] max-h-[calc(100dvh-var(--scroll-padding))] absolute lg:sticky lg:translate-y-0 lg:top-0 border rounded-r-2xl lg:rounded-2xl bg-white p-4 border-grey-50",
           isOpen ? "translate-x-0 " : "-translate-x-full lg:translate-x-0"
         )}
       >
@@ -58,7 +59,7 @@ export const AdminSidebar = () => {
             <ChevronRight size={24} className={isOpen?'rotate-180':''}/>
           </button>
         </span>
-        <ul className="w-full ">
+        <ul className="w-full">
           {[
             {
               title: "Dashboard",

@@ -3,7 +3,7 @@ import { RevenueChart } from "../ui";
 import { getDashboarRevenueChart } from "@/lib/services/dashboard.service";
 
 const SalesChart = async () => {
-  const { data, total } = await getDashboarRevenueChart();
+  const { data: chartData, total } = await getDashboarRevenueChart();
   return (
     <div className="rounded-2xl min-w-[MIN(100%,518px)] bg-white w-full flex-1 border border-grey-50">
       <div className="flex items-center justify-between p-4  w-full gap-4">
@@ -19,7 +19,7 @@ const SalesChart = async () => {
         </div>
       </div>
       <div className="flex flex-1 w-full my-4 p-1 overflow-x-auto">
-        <RevenueChart chartData={data} />
+        <RevenueChart chartData={chartData} />
       </div>
     </div>
   );
