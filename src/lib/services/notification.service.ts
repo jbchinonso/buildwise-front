@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { revalidateTag, updateTag } from "next/cache";
 import { baseUrl, getError } from "../utils";
 import { authFetch } from "./auth.service";
 import { INotification } from "../type";
@@ -34,6 +34,7 @@ export const createNotification = async (form: {
   try {
     await baseUrl.post("/notifications", form);
     revalidateTag("notifications", "max");
+    updateTag("notifications");
   } catch (error) {
     throw getError(error);
   }
@@ -74,7 +75,9 @@ export const markNotificationAsRead = async (notificationId: string) => {
     await baseUrl.put(`/notifications/${notificationId}/read`);
 
     revalidateTag("notifications", "max");
+    updateTag("notifications");
   } catch (error) {
+    console.error(error);
     return { error: getError(error) };
     throw getError(error);
   }

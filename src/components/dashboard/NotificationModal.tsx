@@ -1,25 +1,29 @@
 "use client";
-import { useClientFetch, useModal } from "@/lib/hooks";
+import { useModal } from "@/lib/hooks";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { Modal, Skeleton } from "../ui";
 import { formatTodayTime } from "@/lib/utils";
-import { getNotifications, markNotificationAsRead } from "@/lib/services";
+import { markNotificationAsRead } from "@/lib/services";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { INotification } from "@/lib/type";
 
-export const NotificationModal = () => {
+export const NotificationModal = ({
+  notifications = [],
+}: {
+  notifications?: INotification[];
+}) => {
   const { closeModal, isModalOpen, openModal } = useModal();
   const [notification, setNotification] = useState<INotification | null>();
 
-  const {
-    data: notifications,
-    isLoading,
-    retry,
-  } = useClientFetch({
-    action: getNotifications,
-    isModalOpen,
-    autoFetch: true,
-  });
+  // const {
+  //   data: notifications,
+  //   isLoading,
+  //   retry,
+  // } = useClientFetch({
+  //   action: getNotifications,
+  //   isModalOpen,
+  //   autoFetch: true,
+  // });
 
   const hasUnread = useMemo(() => {
     return (notifications || []).some(
@@ -30,19 +34,21 @@ export const NotificationModal = () => {
   const viewNotification = useCallback(async (notification: INotification) => {
     try {
       setNotification(notification);
-      markNotificationAsRead(notification.id);
+      if (!notification?.isRead) {
+        await markNotificationAsRead(notification.id);
+      }
     } catch (error) {
       console.error("Could not mark notification as read");
     }
   }, []);
 
-  useEffect(() => {
-    retry();
+  // useEffect(() => {
+  //   retry();
 
-    return () => {
-      setNotification(null);
-    };
-  }, []);
+  //   return () => {
+  //     setNotification(null);
+  //   };
+  // }, []);
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -89,13 +95,15 @@ export const NotificationModal = () => {
                 </button>
               </div>
             </div>
-          ) : isLoading ? (
-            <div className="flex flex-col gap-2">
-              <Skeleton className="h-10" />
-              <Skeleton className="h-10" />
-              <Skeleton className="h-10" />
-            </div>
-          ) : (notifications || [])?.length ? (
+          ) 
+          // : isLoading ? (
+          //   <div className="flex flex-col gap-2">
+          //     <Skeleton className="h-10" />
+          //     <Skeleton className="h-10" />
+          //     <Skeleton className="h-10" />
+          //   </div>
+          // ) 
+          : (notifications || [])?.length ? (
             <div className="flex flex-col divide-y">
               {(notifications || []).map((notification, index) => (
                 <div key={index} className="flex flex-col gap-1 py-4 p-1 ">

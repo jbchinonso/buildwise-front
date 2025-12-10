@@ -77,7 +77,7 @@ export const PageModal = ({
           transition={{ duration: 0.3 }}
           key={"modal-div"}
           className={twMerge(
-            "w-full max-w-[MIN(95%,880px)] rounded-4xl flex-1 text-grey-600 p-4 min-h-full pb-2 overflow-hidden m-auto mr-4 bg-white flex flex-col relative mb-auto z-[999] max-h-[MIN(1920px,calc(100dvh+48px-var(--scroll-padding)))]",
+            "w-full md:max-w-[MIN(95%,880px)] mt-auto md:m-auto rounded-t-4xl md:rounded-4xl flex-1 text-grey-600 md:p-4 min-h-full pb-2 overflow-hidden md:mr-4 bg-white flex flex-col relative md:mb-auto z-[999] max-h-[MIN(1920px,calc(100dvh+48px-var(--scroll-padding)))]",
             className
           )}
         >

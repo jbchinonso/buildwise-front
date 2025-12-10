@@ -1,12 +1,12 @@
 export default async function Layout({
   children,
   stats,
-  sales,
+  revenue,
   properties,
 }: {
   children: React.ReactNode;
   stats: React.ReactNode;
-  sales: React.ReactNode;
+  revenue: React.ReactNode;
   properties: React.ReactNode;
 }) {
   return (
@@ -15,7 +15,7 @@ export default async function Layout({
         {stats}
       </section>
       <section className="flex flex-wrap gap-4 mb-4">
-        {sales}
+        {revenue}
         {properties}
       </section>
       <div>{children}</div>

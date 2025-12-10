@@ -5,11 +5,11 @@ import { createContext, useContext, useState, ReactNode } from "react";
 interface NavState {
   isOpen: boolean;
   minimize: boolean;
-  isCategorySidebarOpen: boolean;
+  // isCategorySidebarOpen: boolean;
   toggleNav: () => void;
   closeNav: () => void;
-  toggleCategorySideBar: () => void;
-  closeCategorySideBar: () => void;
+  // toggleCategorySideBar: () => void;
+  // closeCategorySideBar: () => void;
   toggleMinimize: () => void;
   minimizeNav: () => void;
 }
@@ -23,8 +23,8 @@ export const NavProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [minimize, setMinimize] = useState<boolean>(false);
-  const [isCategorySidebarOpen, setIsCateogorySidebarOpen] =
-    useState<boolean>(true);
+  // const [isCategorySidebarOpen, setIsCateogorySidebarOpen] =
+  //   useState<boolean>(true);
 
   const toggleNav = () => {
     setIsOpen(!isOpen);
@@ -42,13 +42,13 @@ export const NavProvider: React.FC<{ children: ReactNode }> = ({
     setIsOpen(false);
   };
 
-  const toggleCategorySideBar = () => {
-    setIsCateogorySidebarOpen(!isCategorySidebarOpen);
-  };
+  // const toggleCategorySideBar = () => {
+  //   setIsCateogorySidebarOpen(!isCategorySidebarOpen);
+  // };
 
-  const closeCategorySideBar = () => {
-    setIsCateogorySidebarOpen(false);
-  };
+  // const closeCategorySideBar = () => {
+  //   setIsCateogorySidebarOpen(false);
+  // };
 
   return (
     <NavContext.Provider
@@ -56,9 +56,9 @@ export const NavProvider: React.FC<{ children: ReactNode }> = ({
         isOpen,
         toggleNav,
         closeNav,
-        isCategorySidebarOpen,
-        toggleCategorySideBar,
-        closeCategorySideBar,
+        // isCategorySidebarOpen,
+        // toggleCategorySideBar,
+        // closeCategorySideBar,
         toggleMinimize,
         minimizeNav,
         minimize,

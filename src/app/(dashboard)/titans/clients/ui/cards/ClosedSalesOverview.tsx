@@ -120,7 +120,7 @@ export const SalesOverview = ({ stats = 0 }: { stats?: string | number }) => {
         <PageModal
           handleClose={closeModal}
           heading="Closed Sales"
-          className="max-w-[MIN(95%,728px)]"
+          className="md:max-w-[MIN(95%,728px)]"
         >
           <section className="flex flex-col flex-1 w-full gap-4">
             {isChartLoading ? (

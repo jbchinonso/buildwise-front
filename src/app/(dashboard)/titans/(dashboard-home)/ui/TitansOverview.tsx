@@ -92,7 +92,7 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
         <PageModal
           handleClose={closeModal}
           heading="My Titans"
-          className="max-w-[MIN(95%,683px)]"
+          className="md:max-w-[MIN(95%,683px)]"
         >
           <section className="flex flex-col w-full gap-4 flex-1">
             {isLoading ? (
@@ -132,7 +132,7 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
               )}
             </div>
 
-            <div className="flex mt-auto justify-end gap-4 items-center">
+            <div className="flex mt-auto md:justify-end gap-4 items-center">
               <Button
                 onClick={closeModal}
                 size="xs"

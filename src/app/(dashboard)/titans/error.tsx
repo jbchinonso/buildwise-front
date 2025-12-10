@@ -17,7 +17,7 @@ export default function Error({
 
   return (
     <ErrorBoundary
-      message={"Failed to fetch client data!"}
+      message={"Failed to fetch data!"}
       reset={() => reset()}
     />
   );

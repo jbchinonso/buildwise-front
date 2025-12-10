@@ -100,7 +100,7 @@ export const ClientOverview = ({ stats = 0 }: { stats?: number }) => {
         <PageModal
           handleClose={closeModal}
           heading="Clients Overview"
-          className="max-w-[MIN(95%,750px)]"
+          className="md:max-w-[MIN(95%,750px)]"
         >
           <section className="flex flex-1 flex-col w-full gap-4 ">
             <div

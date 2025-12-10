@@ -9,6 +9,8 @@ import {
 const TitanStats = async () => {
   const { data = {} } = await getDashboardData();
 
+  
+
   return (
     <>
       <RevenueOverview stats={data?.totalRevenue} />

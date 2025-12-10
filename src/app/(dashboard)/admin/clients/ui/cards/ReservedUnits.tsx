@@ -151,7 +151,7 @@ export const ReservedUnits = ({
         <PageModal
           handleClose={closeModal}
           heading="Reserved properties"
-          className="max-w-[MIN(100%,600px)]"
+          className="md:max-w-[MIN(100%,600px)]"
         >
           <section className="flex flex-1 flex-col w-full gap-4">
             <div className="w-full flex flex-col">
@@ -206,8 +206,13 @@ export const ReservedUnits = ({
               )}
             </div>
 
-            <div className="flex mt-auto justify-end gap-4 items-center">
-              <Button onClick={closeModal} size="xs" outline variant="secondary">
+            <div className="flex mt-auto md:justify-end gap-4 items-center">
+              <Button
+                onClick={closeModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
 

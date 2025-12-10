@@ -5,6 +5,7 @@ import { createNotification } from "@/lib/services";
 import { getError, getFormikError, notificationSchema } from "@/lib/utils";
 import { useFormik } from "formik";
 import { Send } from "iconsax-react";
+import { updateTag } from "next/cache";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -40,6 +41,7 @@ export const NotificationForm = () => {
       toast.success("Broadcast created successfully");
       setIsSubmitting(false)
       resetForm();
+    
     } catch (error) {
       toast.error(getError(error));
     }

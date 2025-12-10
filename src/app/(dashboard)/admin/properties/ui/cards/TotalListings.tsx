@@ -112,7 +112,7 @@ export const TotalListing = ({
         <PageModal
           handleClose={closeModal}
           heading="Properties listed"
-          className="max-w-[MIN(100%,600px)]"
+          className="md:max-w-[MIN(100%,600px)]"
         >
           <section className="flex flex-col w-full gap-4">
             <div className="w-full flex flex-col">
@@ -122,9 +122,7 @@ export const TotalListing = ({
                   <span className="size-3 rounded-full bg-[#7A7F83]" />
                   <div className="flex flex-col">
                     <p className="text-grey-400">Total Listing</p>
-                    <p className="text-grey-600">
-                      {summary?.totalUnits ?? 0}
-                    </p>
+                    <p className="text-grey-600">{summary?.totalUnits ?? 0}</p>
                   </div>
                 </div>
                 {chartData.map(({ label, data, fill }) => {

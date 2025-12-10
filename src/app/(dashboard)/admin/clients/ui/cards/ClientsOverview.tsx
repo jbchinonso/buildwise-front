@@ -83,7 +83,7 @@ export const ClientOverview = ({
         <PageModal
           handleClose={closeModal}
           heading="Clients Overview"
-          className="max-w-[MIN(95%,600px)]"
+          className="md:max-w-[MIN(95%,600px)]"
         >
           <section className="flex  flex-1 flex-col w-full gap-4 ">
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
@@ -126,8 +126,13 @@ export const ClientOverview = ({
               )}
             </div>
 
-            <div className="flex mt-auto justify-end gap-4 items-center">
-              <Button onClick={closeModal} size="xs" outline variant="secondary">
+            <div className="flex mt-auto md:justify-end gap-4 items-center">
+              <Button
+                onClick={closeModal}
+                size="xs"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
 

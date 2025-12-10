@@ -79,7 +79,7 @@ export const TitansOverview = ({ data }: { data: Transaction[] }) => {
         <PageModal
           handleClose={closeModal}
           heading="Titans Overview"
-          className="max-w-[MIN(95%,620px)]"
+          className="md:max-w-[MIN(95%,620px)]"
         >
           <section className="flex flex-col w-full gap-4 ">
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">

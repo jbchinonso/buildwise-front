@@ -62,7 +62,7 @@ interface IPaginationResponse extends IPagination {
 }
 
 export interface IUser {
-  id: number | string;
+  id:  string;
   created_at: string;
   updated_at: string;
   firstName?: string;
@@ -517,4 +517,15 @@ interface ICommissionHistory {
   commission: number;
   status: string;
   datePaid: string | Date;
+}
+
+interface ITitanCommission {
+  _id: string;
+  status: string;
+  commissionId: string;
+  commissionAmount: number;
+  payment: number;
+  titanId: string;
+  titanName: string;
+  clientName: string;
 }

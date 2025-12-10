@@ -54,37 +54,39 @@ export const getDashboardTransactions = async (): Promise<{
   }
 };
 
-const chartDTO = (
-  data: any
-) => {  
+const chartDTO = (data: any) => {
   if (data && data.chartData && Array.isArray(data.chartData)) {
-  
     return data.chartData.map((item: any) => ({
       month: Date.parse(item.month || item.date || item?._id)
-        ? new Date(item.month || item.date || item?._id).toLocaleString("default", {
-            month: "long",
-          })
+        ? new Date(item.month || item.date || item?._id).toLocaleString(
+            "default",
+            {
+              month: "long",
+            }
+          )
         : "Unknown",
       sales: item.sales || 0,
       revenue: item.revenue || 0,
     }));
   }
-  
+
   if (Array.isArray(data)) {
     return data.map((item) => ({
       month: Date.parse(item.date || item?.month || item?._id)
-        ? new Date(item.date || item?.month || item?._id).toLocaleString("default", {
-            month: "long",
-          })
+        ? new Date(item.date || item?.month || item?._id).toLocaleString(
+            "default",
+            {
+              month: "long",
+            }
+          )
         : item.month || "Unknown",
       sales: item.sales || 0,
       revenue: item.revenue || 0,
     }));
   }
-  
+
   return [];
 };
-
 
 export const getDashboarSalesChart = async (
   params: Record<string, any> = { lastYears: 1 }
@@ -99,7 +101,6 @@ export const getDashboarSalesChart = async (
   error?: string;
 }> => {
   try {
-    
     const query = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
       if (key !== "id") {
@@ -107,7 +108,7 @@ export const getDashboarSalesChart = async (
       }
     });
 
-    const response = await authFetch(
+    const { data } = await authFetch(
       `/dashboard/sales-chart-data?${query.toString()}`,
       {
         next: {
@@ -116,29 +117,51 @@ export const getDashboarSalesChart = async (
         },
       }
     );
-    
-    
-    const chartDataResponse = response.data;
-    
-    if (!chartDataResponse) {
-      return { data: [], total: 0 };
-    }
-    
-    const chartData = chartDTO(chartDataResponse);
-    
-    const total = chartDataResponse.total || 0;
-    
-    
-    return { 
-      data: chartData,
-      total 
-    };
-    
+
+    return { data: chartDTO(data?.chartData), total: data?.total || 0 };
   } catch (error) {
-    return { 
-      data: [], 
+    // return { error: getError(error) };
+    throw new Error(getError(error));
+  }
+};
+
+export const getDashboarRevenueChart = async (
+  params: Record<string, any> = { lastYears: 1 }
+): Promise<{
+  data?: {
+    month: string;
+    sales: number;
+    revenue: number;
+  }[];
+  total?: number;
+  pagination?: IPagination;
+  error?: string;
+}> => {
+  try {
+    const query = new URLSearchParams();
+
+    Object.entries(params).forEach(([key, value]) => {
+      if (key != "id") {
+        query.set(key, String(value));
+      }
+    });
+
+    const { data } = await authFetch(
+      `/dashboard/revenue-chart-data?${query.toString()}`,
+      {
+        next: {
+          revalidate: 8400,
+          tags: [CACHETAGS.revenue],
+        },
+      }
+    );
+
+    return { data: chartDTO(data?.chartData), total: data?.total || 0 };
+  } catch (error) {
+    return {
+      data: [],
       total: 0,
-      error: getError(error)
+      error: getError(error),
     };
   }
 };
@@ -167,7 +190,7 @@ export const getRevenueChartData = async (
         },
       }
     );
-    
+
     const apiData = response.data as {
       chartData?: Array<{
         date?: string;
@@ -176,11 +199,11 @@ export const getRevenueChartData = async (
       }>;
       total?: number;
     };
-    
+
     if (!apiData || !apiData.chartData) {
       return { data: [], total: 0 };
     }
-    
+
     const chartData = apiData.chartData
       .map((item: { date?: string; totalRevenue?: number }) => {
         let monthName = "Unknown";
@@ -194,27 +217,26 @@ export const getRevenueChartData = async (
             console.warn(`Could not parse date: ${item.date}`);
           }
         }
-        
+
         return {
           month: monthName,
-          revenue: item.totalRevenue || 0
+          revenue: item.totalRevenue || 0,
         };
       })
       .filter((item: { month: string; revenue: number }) => item.revenue > 0);
-    
+
     const total = apiData.total || 0;
-    
-    return { 
+
+    return {
       data: chartData,
-      total 
+      total,
     };
-    
   } catch (error) {
-    console.error('Error:', error);
-    return { 
-      data: [], 
+    console.error("Error:", error);
+    return {
+      data: [],
       total: 0,
-      error: getError(error)
+      error: getError(error),
     };
   }
 };
@@ -315,14 +337,12 @@ export const getTitanDashboardSummary = async () => {
       },
     });
 
-
     return response as {
       totalRevenue: number;
       totalClients: number;
       totalEarnings: number;
       totalTitans: number;
     };
-
   } catch (error) {
     console.error("Error fetching titans:", getError(error));
     throw new Error(getError(error));

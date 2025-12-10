@@ -127,7 +127,7 @@ export default function Properties({ data }: { data?: string | number }) {
         <PageModal
           handleClose={closeModal}
           heading="Properties Sold"
-          className="max-w-[MIN(95%,620px)]"
+          className="md:max-w-[MIN(95%,620px)]"
         >
           <section className="flex flex-1 flex-col w-full gap-4">
             {isLoading ? (

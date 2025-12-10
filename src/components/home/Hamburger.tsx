@@ -1,14 +1,17 @@
 "use client";
 
 import { useNav } from "@/lib/hooks/useNav";
+import { cn } from "@/lib/utils";
 import { HambergerMenu } from "iconsax-react";
 
-export const Hamburger = () => {
+export const Hamburger = ({className=''}:{className?: string}) => {
   const { isOpen, toggleNav } = useNav();
   return (
     <button
       onClick={toggleNav}
-      className="flex lg:hidden rounded-full size-8 bg-[#F8EAE8] p-2 text-black justify-center items-center z-50"
+      className={cn("flex lg:hidden rounded-full size-8 bg-[#F8EAE8] p-2 text-black justify-center items-center z-50",
+        className
+      )}
     >
       {isOpen ? (
         <span

@@ -1,19 +1,18 @@
+import { toAmount } from "@/lib/utils";
 import { PropertiesSold } from "../ui";
 import { getDashboarSalesChart } from "@/lib/services/dashboard.service";
 
 
 const PropertiesChart = async () => {
-  const chartResponse = await getDashboarSalesChart();
-  
- const total = chartResponse.total || 0; 
-  const chartData = Array.isArray(chartResponse.data) ? chartResponse.data : [];
-  
+  const { data: chartData, total } = await getDashboarSalesChart();
   return (
     <div className="rounded-2xl min-w-[MIN(100%,518px)] bg-white w-full flex-1 border border-grey-50">
       <div className="flex items-center justify-between p-4  w-full gap-4">
         <div className="flex flex-col">
           <p className="text-sm font-semibold">Properties sold</p>
-          <span className="text-xs text-grey-400">Total: {total}</span>
+          <span className="text-xs text-grey-400">
+            Total: {toAmount(total || 0, false)}
+          </span>
         </div>
 
         <div className="p-2 px-3 rounded-3xl bg-grey-50">

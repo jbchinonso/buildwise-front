@@ -115,7 +115,7 @@ const TotalCommissionEarned = ({
         <PageModal
           handleClose={closeModal}
           heading="Total commission earned"
-          className="max-w-[MIN(100%,600px)]"
+          className="md:max-w-[MIN(100%,600px)]"
         >
           <section className="flex flex-col w-full gap-4">
             <div className="w-full my-1 flex-1">

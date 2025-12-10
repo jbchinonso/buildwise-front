@@ -1,11 +1,11 @@
-import { BreadCrumbs, Button, Input, ProfileAvatar } from "@/components/ui";
+import { Avatar, BreadCrumbs, Button, Input } from "@/components/ui";
 import {
   Clients,
   PropertiesSold,
   SubTitians,
   PayCommissionModal,
 } from "../../ui";
-import { getTitanActivities, getTitanProfile } from "@/lib/services";
+import { getTitanCommission, getTitanProfile } from "@/lib/services";
 import { formatDateToNow } from "@/lib/utils";
 import { DeactivateTitanAccount } from "@/components/dashboard";
 
@@ -15,19 +15,22 @@ const TitanProfile = async (props: { params: Params }) => {
   const params = await props.params;
   const id = params.titan as string;
 
-  const titan = await getTitanProfile(id)
-
+  const [titan, commissions] = await Promise.all([
+    getTitanProfile(id),
+    getTitanCommission(id),
+  ]);
+  // console.log({titan})
 
   const personalInformation = {
     fullName: titan?.firstName
-    ? `${titan?.lastName || ""} ${titan?.firstName || ""}`
-    : "N/A",
+      ? `${titan?.lastName || ""} ${titan?.firstName || ""}`
+      : "N/A",
     phone: titan?.phone,
     email: titan?.email,
     address: titan?.address,
     bank_account: "First bank- 0838 3838 38",
     upline: titan?.parent,
-    joined:  formatDateToNow(titan?.createdAt),
+    joined: formatDateToNow(titan?.createdAt),
     status: "N/A",
   };
 
@@ -52,10 +55,17 @@ const TitanProfile = async (props: { params: Params }) => {
 
       <div className="flex flex-col gap-8 flex-1 w-full gap max-w-[MIN(100%,1052px)]">
         <div className="flex w-full justify-between gap-4 flex-wrap items-center">
-          <ProfileAvatar img="/image/avatar.png" name={personalInformation.fullName} />
+          <Avatar
+            name={personalInformation.fullName}
+            id={titan?._id}
+            className=""
+          />
 
           <div className="flex gap-4 items-center">
-            <PayCommissionModal  titan={{...titan, fullName: personalInformation?.fullName}}/>
+            <PayCommissionModal
+              titan={{ ...titan, fullName: personalInformation?.fullName }}
+              commissions={commissions?.data || []}
+            />
 
             <Button
               asLink
@@ -187,7 +197,7 @@ const TitanProfile = async (props: { params: Params }) => {
             defaultValue={activities.referral_commission}
           />
 
-          <DeactivateTitanAccount titan={titan}/>
+          <DeactivateTitanAccount titan={titan} />
         </div>
       </div>
     </section>
