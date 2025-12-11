@@ -115,7 +115,7 @@ export const UpdatePropertyPaymentModal = ({
         <DashboardModal
           heading={"Update Client's Payment"}
           backHref="?"
-          className="sm:max-w-[MIN(90%,520px)]"
+          className="lg:max-w-[MIN(90%,520px)]"
         >
           <form
             action={onSubmit}

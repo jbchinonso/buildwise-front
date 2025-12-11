@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidateTag, updateTag } from "next/cache";
-import { baseUrl, getError } from "../utils";
+import { baseUrl, CACHETAGS, getError } from "../utils";
 import { authFetch } from "./auth.service";
 import { INotification } from "../type";
 
@@ -20,7 +20,8 @@ export const editNotificationSettings = async (form: {
   try {
     await baseUrl.patch("/user/notification", form);
 
-    revalidateTag("notification", "max");
+    revalidateTag(CACHETAGS.notifications, "max");
+    updateTag(CACHETAGS.notifications);
   } catch (error) {
     throw getError(error);
   }
@@ -33,8 +34,9 @@ export const createNotification = async (form: {
 }) => {
   try {
     await baseUrl.post("/notifications", form);
-    revalidateTag("notifications", "max");
-    updateTag("notifications");
+
+    revalidateTag(CACHETAGS.notifications, "max");
+    updateTag(CACHETAGS.notifications);
   } catch (error) {
     throw getError(error);
   }
@@ -63,8 +65,6 @@ export const getUnreadNotifications = async () => {
         revalidate: 8400,
       },
     });
-
-    revalidateTag("notification", "max");
   } catch (error) {
     throw getError(error);
   }
@@ -74,8 +74,8 @@ export const markNotificationAsRead = async (notificationId: string) => {
   try {
     await baseUrl.put(`/notifications/${notificationId}/read`);
 
-    revalidateTag("notifications", "max");
-    updateTag("notifications");
+    revalidateTag(CACHETAGS.notifications, "max");
+    updateTag(CACHETAGS.notifications);
   } catch (error) {
     console.error(error);
     return { error: getError(error) };
@@ -87,7 +87,8 @@ export const deleteNotification = async (notificationId: string) => {
   try {
     await baseUrl.delete(`/notifications/${notificationId}`);
 
-    revalidateTag("notification", "max");
+    revalidateTag(CACHETAGS.notifications, "max");
+    updateTag(CACHETAGS.notifications);
   } catch (error) {
     throw getError(error);
   }
@@ -97,7 +98,8 @@ export const markAllNotificationAsRead = async () => {
   try {
     await baseUrl.post(`/notifications/read-all`);
 
-    revalidateTag("notification", "max");
+    revalidateTag(CACHETAGS.notifications, "max");
+    updateTag(CACHETAGS.notifications);
   } catch (error) {
     throw getError(error);
   }

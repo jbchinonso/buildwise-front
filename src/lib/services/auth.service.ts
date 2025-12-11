@@ -3,7 +3,6 @@ import { authOptions, getError } from "../utils";
 import baseUrl from "../utils/baseUrl.utils";
 import { ISignUpData, IUser } from "../type";
 import { getServerSession } from "next-auth";
-import { revalidateTag } from "next/cache";
 
 export const authFetch = async (url: string, options?: any) => {
   const session = await getServerSession(authOptions);

@@ -1,8 +1,8 @@
 "use server";
-import { revalidateTag } from "next/cache";
+import {  updateTag } from "next/cache";
 import { IPagination, ITitanProfile, ITitans, SubTitan } from "../type";
 import { CommissionDueData, ITopAgent } from "../types/titan";
-import { baseUrl, getError } from "../utils";
+import { baseUrl, CACHETAGS, getError } from "../utils";
 import { authFetch } from "./auth.service";
 
 export const getTitans = async (
@@ -24,7 +24,7 @@ export const getTitans = async (
     const response = await authFetch(url, {
       next: {
         revalidate: 8400,
-        tags: ["titans"],
+        tags: [CACHETAGS.titans],
       },
     });
 
@@ -43,7 +43,7 @@ export const getTitanStats = async () => {
     const response = await authFetch("/titans/titan-counts", {
       next: {
         revalidate: 8400,
-        tags: ["titans"],
+        tags: [CACHETAGS.titans],
       },
     });
 
@@ -63,7 +63,7 @@ export const getTitanSummary = async () => {
     const response = await authFetch("/titans/titan-network-summary", {
       next: {
         revalidate: 8400,
-        tags: ["titans"],
+        tags: [CACHETAGS.titans],
       },
     });
 
@@ -83,7 +83,7 @@ export const getTopPerformingTitans = async () => {
     const response = await authFetch("/titans/top-performing-titans", {
       next: {
         revalidate: 8400,
-        tags: ["titans"],
+        tags: [CACHETAGS.titans],
       },
     });
 
@@ -100,7 +100,7 @@ export const getTitansOverviewSummary = async () => {
     const response = await authFetch("/titans/overview/summary", {
       next: {
         revalidate: 8400,
-        tags: ["titans"],
+        tags: [CACHETAGS.titans],
       },
     });
 
@@ -121,7 +121,7 @@ export const getTitansCommissionSummary = async () => {
     const response = await authFetch("/titans/commissions/summary", {
       next: {
         revalidate: 8400,
-        tags: ["titans"],
+        tags: [CACHETAGS.titans],
       },
     });
 
@@ -143,7 +143,7 @@ export const getTitansCommissionChart = async () => {
     const response = await authFetch("/titans/commissions/chart", {
       next: {
         revalidate: 8400,
-        tags: ["titans"],
+        tags: [CACHETAGS.titans],
       },
     });
 
@@ -160,7 +160,7 @@ export const getTitansCommissionListt = async () => {
     const response = await authFetch("/titans/commissions/chart", {
       next: {
         revalidate: 8400,
-        tags: ["titans"],
+        tags: [CACHETAGS.titans],
       },
     });
 
@@ -177,7 +177,7 @@ export const getTitansCommissionList = async () => {
     const response = await authFetch("/titans/commissions/recent", {
       next: {
         revalidate: 8400,
-        tags: ["titans"],
+        tags: [CACHETAGS.titans],
       },
     });
 
@@ -196,7 +196,7 @@ export const getTitansOverviewList = async () => {
     const response = await authFetch("/titans/overview/list", {
       next: {
         revalidate: 8400,
-        tags: ["titans"],
+        tags: [CACHETAGS.titans],
       },
     });
 
@@ -219,7 +219,7 @@ export const getTitanPropertiesSold = async (titan?: string) => {
     const response = await authFetch(`/titans/${titan}/properties-sold`, {
       next: {
         revalidate: 8400,
-        tags: ["titans"],
+        tags: [CACHETAGS.titans],
       },
     });
 
@@ -236,7 +236,7 @@ export const getTitanSubTitans = async (titan?: string) => {
     const response = await authFetch(`/titans/${titan}/sub-titans`, {
       next: {
         revalidate: 8400,
-        tags: ["titans"],
+        tags: [CACHETAGS.titans],
       },
     });
 
@@ -291,9 +291,9 @@ export const getTitanPropertiesSummary = async () => {
   }
 };
 
-export const getTitanActivities = async () => {
+export const getTitanActivities = async (id: string = "") => {
   try {
-    const response = await authFetch("/activity/activities");
+    const response = await authFetch(`/activity/activities/${id}`);
     return response as any[];
   } catch (error) {
     throw new Error(getError(error));
@@ -307,7 +307,7 @@ export const getTopTitanPerformannce = async (): Promise<{
   try {
     const response = await authFetch(`/titans/top-agents`, {
       next: {
-        tags: ["titans"],
+        tags: [CACHETAGS.titans],
         revalidate: 8400,
       },
     });
@@ -322,7 +322,7 @@ export const getTopTitanPerformannce = async (): Promise<{
 export const getCommissionsDue = async () => {
   try {
     const response = await authFetch("/titans/commissions-due", {
-      next: { tags: ["titans"], revalidate: 8400 },
+      next: { tags: [CACHETAGS.titans], revalidate: 8400 },
     });
 
     return {
@@ -337,7 +337,7 @@ export const getCommissionsDue = async () => {
 export const getTitanProfile = async (id: string) => {
   try {
     const { data } = await authFetch(`/titans/${id}/profile`, {
-      next: { tags: ["titans"], revalidate: 8400 },
+      next: { tags: [CACHETAGS.titans], revalidate: 8400 },
     });
 
     return data as ITitanProfile;
@@ -349,7 +349,7 @@ export const getTitanProfile = async (id: string) => {
 export const deactivateTitan = async (id: string) => {
   try {
     await baseUrl.patch(`/titans/${id}/deactivate`);
-    revalidateTag("titans", "max");
+    updateTag(CACHETAGS.titans);
   } catch (error) {
     throw getError(error);
   }

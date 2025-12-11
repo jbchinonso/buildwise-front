@@ -8,21 +8,20 @@ import {
   SubmitButton,
 } from "@/components/ui";
 import { useModal } from "@/lib/hooks";
-import { ITitanCommission, ITitanProfile } from "@/lib/type";
-import { copyTextToClipboard, toAmount } from "@/lib/utils";
+import { updateTitanCommission } from "@/lib/services";
+import { IOption, ITitanCommission, ITitanProfile } from "@/lib/type";
+import { copyTextToClipboard, getError, toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { Files } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import toast from "react-hot-toast";
 
 interface IToggleProps {
   id: string;
   status: string;
 }
-const columns: (
-  toggleStatus: (props: IToggleProps) => void
-) => ColumnDef<ITitanCommission>[] = (
-  toggleStatus: (props: IToggleProps) => void
-) => [
+
+const columns: ColumnDef<ITitanCommission>[] = [
   {
     accessorKey: "clientName",
     header: ({ column }) => (
@@ -77,33 +76,71 @@ const columns: (
     cell: ({ row }) => {
       const status = (row.getValue("status") as string) || "";
       return (
-        <div
-          className={`text-center capitalize w-[90px] rounded-full px-1 p-0.5 text-[#292A2C] ${
-            String(status).toLowerCase() == "paid"
-              ? "bg-[#70F41F]"
-              : "bg-[#F4BB1F] "
-          }`}
-        >
-          <CustomDropdown
-            update={(option) =>
-              toggleStatus({
-                id: row.getValue("commissionId"),
-                status: option.value || "",
-              })
-            }
-            title={status}
-            className="w-full"
-            options={[
-              { label: "Paid", value: "paid" },
-              { label: "Unpaid", value: "unpaid" },
-            ]}
-          />
-          {/* {row.toggleSelected} */}
-        </div>
+        <ToggleStatus
+          id={(row.getValue("commissionId") as string) || ""}
+          status={status}
+        />
       );
     },
   },
 ];
+
+const ToggleStatus = ({
+  id,
+  status,
+}: {
+  id: string;
+  status: "paid" | "unpaid" | string | undefined;
+}) => {
+  const [localStatus, setLocalStatus] = useState(status);
+
+  const update = async () => {
+    toast.dismiss();
+    try {
+      if (localStatus === status || !localStatus) return;
+      const response = await updateTitanCommission(id, localStatus);
+      toast.success("Commission updated successfully");
+      setLocalStatus(response?.status)
+    } catch (error) {
+      toast.error(getError(error));
+    }
+  };
+
+  const onChange = useCallback((option: IOption) => {
+    setLocalStatus(option.value as string);
+  }, []);
+
+  useEffect(() => {
+    setLocalStatus(status as string);
+    console.log("Mounted")
+  }, []);
+
+  return (
+    <>
+      <form action={update} className="flex gap-2">
+        <CustomDropdown
+          update={onChange}
+          title={localStatus}
+          className={`text-center capitalize w-[90px] rounded-full px-2 py-0.5 text-[#292A2C] ${
+            String(localStatus).toLowerCase() == "paid"
+              ? "bg-[#70F41F]"
+              : "bg-[#F4BB1F] "
+          }`}
+          options={[
+            { label: "Paid", value: "paid" },
+            { label: "Unpaid", value: "unpaid" },
+          ]}
+        />
+
+        {localStatus && localStatus !== status && (
+          <SubmitButton size="xs" className="!text-sm  !py-0.5">
+            Update
+          </SubmitButton>
+        )}
+      </form>
+    </>
+  );
+};
 
 export const PayCommissionModal = ({
   bankAccount = "O70 3456 6543",
@@ -115,53 +152,31 @@ export const PayCommissionModal = ({
   commissions?: ITitanCommission[];
 }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
-  const [tableData, setTableData] = useState<ITitanCommission[]>([
-    ...(commissions || []),
-  ]);
-  const [editedRows, setEditedRows] = useState<
-    Record<string, ITitanCommission>
-  >({});
 
-  const toggleStatus = ({ id, status }: IToggleProps) => {
-    setTableData((prev) =>
-      prev.map((row) =>
-        row.commissionId === id
-          ? { ...row, status } // ← update the value
-          : row
-      )
-    );
+  const tableData = useMemo<ITitanCommission[]>(
+    () => [...(commissions || [])],
+    [commissions]
+  );
 
-    setEditedRows((prev) => ({
-      ...prev,
-      [id]: {
-        ...prev[id],
-        status,
-      },
-    }));
-  };
-
-  const updateCommission = async () => {
-    console.log({ editedRows });
-  };
-
-  useEffect(() => {
-    if (!isModalOpen && Object.values(editedRows)?.length) {
-      setEditedRows({});
-      setTableData([...commissions]);
-    }
-  }, [isModalOpen, editedRows]);
+  const unpaidCommissions = useMemo(
+    () =>
+      (commissions || [])?.filter(
+        (commission) => commission?.status === "unpaid"
+      )?.length,
+    [commissions]
+  );
 
   return (
     <>
       <Button size="sm" onClick={toggleModal}>
-        Pay Commission {commissions?.length && `(${commissions?.length})`}
+        Pay Commission {unpaidCommissions ? `(${unpaidCommissions})` : ""}
       </Button>
 
       {isModalOpen && (
         <DashboardModal
           heading={"Pay agent's commissions"}
           handleClose={closeModal}
-          className="sm:max-w-[MIN(90%,924px)]"
+          className="lg:max-w-[MIN(90%,924px)]"
         >
           <div className="flex flex-col gap-4 w-full">
             <div className="flex flex-wrap gap-4 items-baseline justify-between">
@@ -174,7 +189,9 @@ export const PayCommissionModal = ({
               <div className="flex gap-4 border rounded-xl p-4 py-2 flex-1 lg:max-w-fit justify-between">
                 <div>
                   <p className="text-[#7A7F83] text-xs">Bank account</p>
-                  <p className="font-semibold text-sm lg:text-base">{bankAccount}</p>
+                  <p className="font-semibold text-sm lg:text-base">
+                    {bankAccount}
+                  </p>
                 </div>
 
                 <button
@@ -191,7 +208,7 @@ export const PayCommissionModal = ({
               </div>
             </div>
             <div className="flex w-full bg-red-300">
-              <DataTable columns={columns(toggleStatus)} data={tableData} />
+              <DataTable columns={columns} data={tableData} />
             </div>
             <div className="flex gap-4 lg:justify-end mt-10">
               <Button
@@ -202,11 +219,6 @@ export const PayCommissionModal = ({
               >
                 Cancel
               </Button>
-              <form action={updateCommission}>
-                <SubmitButton size="sm" className="w-full lg:max-w-fit">
-                  Update Payment
-                </SubmitButton>
-              </form>
             </div>
           </div>
         </DashboardModal>

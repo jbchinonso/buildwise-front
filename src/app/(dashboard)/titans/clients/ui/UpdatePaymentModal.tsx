@@ -58,7 +58,7 @@ export const UpdatePaymentModal = () => {
         <DashboardModal
           heading={"Update Client's Payment"}
           handleClose={closeModal}
-          className="sm:max-w-[MIN(90%,520px)]"
+          className="lg:max-w-[MIN(90%,520px)]"
         >
           <div className="flex flex-col flex-1 w-full gap-4 mt-auto">
             {step ? (

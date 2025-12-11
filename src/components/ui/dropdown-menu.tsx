@@ -259,7 +259,7 @@ const CustomDropdown = ({
     <div className={cn("flex items-center space-x-2 text-sm", className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild className="!bg-transparent">
-          <button className="flex w-full items-center justify-between p-1 rounded outline-none border-none data-[state=open]:bg-accent">
+          <button type="button" className="flex w-full items-center justify-between p-1 rounded outline-none border-none data-[state=open]:bg-accent">
             <span className="text-start max-w-fit capitalize">{title}</span>
             <ChevronsUpDown className="ml-1 size-4" />
           </button>

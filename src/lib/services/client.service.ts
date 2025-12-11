@@ -1,7 +1,7 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
-import { baseUrl, getError, getMonth } from "../utils";
+import { revalidateTag, updateTag } from "next/cache";
+import { baseUrl, CACHETAGS, getError, getMonth } from "../utils";
 import { authFetch } from "./auth.service";
 import { URLSearchParams } from "url";
 import {
@@ -78,7 +78,9 @@ interface ICreateClientPayload {
 export const addClient = async (client: ICreateClientPayload) => {
   try {
     const response = await baseUrl.post("/clients", client);
-    revalidateTag("clients", "max");
+    revalidateTag(CACHETAGS.clients, "max");
+    updateTag(CACHETAGS.clients);
+
     return response?.data;
   } catch (error) {
     return { error: getError(error) };

@@ -1,4 +1,4 @@
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag, updateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 
 export async function GET(
@@ -12,6 +12,7 @@ export async function GET(
     if (tags) {
       for (const tag of tags) {
         revalidateTag(tag, "max");
+        updateTag(tag)
       }
     }
 

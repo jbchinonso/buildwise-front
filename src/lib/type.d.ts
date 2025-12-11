@@ -529,3 +529,16 @@ interface ITitanCommission {
   titanName: string;
   clientName: string;
 }
+
+interface IBankDetails {
+  userId: string;
+  bankName: string;
+  accountNumber: string;
+  isPrimary: boolean;
+  status: string;
+  oldBankDetails: any;
+  requestType?: string;
+  _id?: string;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+}
