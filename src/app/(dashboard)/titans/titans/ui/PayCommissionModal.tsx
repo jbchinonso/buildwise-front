@@ -73,7 +73,7 @@ export const PayCommissionModal = ({ bankAccount = "O70 3456 6543" }) => {
         <DashboardModal
           heading={"Pay agent's commissions"}
           handleClose={closeModal}
-          className="sm:max-w-[MIN(90%,924px)]"
+          className="lg:max-w-[MIN(90%,924px)]"
         >
           <div className="flex flex-col gap-4 w-full">
             <div className="flex items-baseline justify-between">

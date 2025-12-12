@@ -17,9 +17,8 @@ const TitanProfile = async (props: { params: Params }) => {
 
   const [titan, commissions] = await Promise.all([
     getTitanProfile(id),
-    getTitanCommission(id),
+    getTitanCommission(id)
   ]);
-  // console.log({titan})
 
   const personalInformation = {
     fullName: titan?.firstName
@@ -91,7 +90,7 @@ const TitanProfile = async (props: { params: Params }) => {
             id="phone"
             type="text"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="flex-[45%] lg:max-w-[MIN(100%,470px)]"
             defaultValue={personalInformation.phone}
           />
           <Input
@@ -100,7 +99,7 @@ const TitanProfile = async (props: { params: Params }) => {
             id="email"
             type="email"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="flex-[45%] lg:max-w-[MIN(100%,470px)]"
             defaultValue={personalInformation.email}
           />
           <Input
@@ -109,7 +108,7 @@ const TitanProfile = async (props: { params: Params }) => {
             id="address"
             type="text"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="flex-[45%] lg:max-w-[MIN(100%,470px)]"
             defaultValue={personalInformation.address}
           />
           <Input
@@ -118,7 +117,7 @@ const TitanProfile = async (props: { params: Params }) => {
             id="bank_account"
             type="text"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="flex-[45%] lg:max-w-[MIN(100%,470px)]"
             defaultValue={personalInformation.bank_account}
           />
           <Input
@@ -127,7 +126,7 @@ const TitanProfile = async (props: { params: Params }) => {
             id="upline"
             type="text"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="flex-[45%] lg:max-w-[MIN(100%,470px)]"
             defaultValue={personalInformation.upline}
           />
           <Input
@@ -136,7 +135,7 @@ const TitanProfile = async (props: { params: Params }) => {
             id="joined"
             type="text"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="flex-[45%] lg:max-w-[MIN(100%,470px)]"
             defaultValue={personalInformation.joined}
           />
           <Input
@@ -145,7 +144,7 @@ const TitanProfile = async (props: { params: Params }) => {
             id="status"
             type="text"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="lg:max-w-[MIN(100%,470px)]"
             defaultValue={personalInformation.status}
           />
         </div>
@@ -157,16 +156,16 @@ const TitanProfile = async (props: { params: Params }) => {
 
           <PropertiesSold
             data={activities.properties_sold}
-            className="flex-[45%] max-w-[MIN(100%,470px)]"
+            className="flex-[45%] lg:max-w-[MIN(100%,470px)]"
           />
 
           <Clients
             data={activities.clients}
-            className="flex-[45%] max-w-[MIN(100%,470px)]"
+            className="flex-[45%] lg:max-w-[MIN(100%,470px)]"
           />
           <SubTitians
             data={activities.sub_titans}
-            className="flex-[45%] max-w-[MIN(100%,470px)]"
+            className="flex-[45%] lg:max-w-[MIN(100%,470px)]"
           />
 
           <Input
@@ -175,7 +174,7 @@ const TitanProfile = async (props: { params: Params }) => {
             id="total_revenue"
             type="text"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="flex-[45%] lg:max-w-[MIN(100%,470px)]"
             defaultValue={activities.total_revenue}
           />
           <Input
@@ -184,7 +183,7 @@ const TitanProfile = async (props: { params: Params }) => {
             id="sales_commission"
             type="text"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="flex-[45%] lg:max-w-[MIN(100%,470px)]"
             defaultValue={activities.sales_commission}
           />
           <Input
@@ -193,7 +192,7 @@ const TitanProfile = async (props: { params: Params }) => {
             id="referral_commission"
             type="text"
             readOnly
-            containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+            containerStyle="flex-[45%] lg:max-w-[MIN(100%,470px)]"
             defaultValue={activities.referral_commission}
           />
 

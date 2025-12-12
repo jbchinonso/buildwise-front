@@ -200,7 +200,7 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
         <DashboardModal
           heading={"Add property"}
           handleClose={closeModal}
-          className="sm:max-w-[MIN(90%,520px)]"
+          className="lg:max-w-[MIN(90%,520px)]"
         >
           <form
             action={submitForm}

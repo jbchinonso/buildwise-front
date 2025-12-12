@@ -25,7 +25,7 @@ export const TopPerformingAgents = async () => {
       {data ? (
         <Table data={data} />
       ) : (
-        <p>
+        <p className="text-xs m-auto">
           There was an error fetching Top Performing Agents. Please try again
         </p>
       )}

@@ -1,7 +1,7 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
-import { baseUrl, getError } from "../utils";
+import { revalidateTag, updateTag } from "next/cache";
+import { baseUrl, CACHETAGS, getError } from "../utils";
 import { authFetch } from "./auth.service";
 import {
   ICreatePropertyPayload,
@@ -22,7 +22,7 @@ export const getAllProperties = async ({
       `/properties?page=${page}&limit=${limit}`,
       {
         next: {
-          tags: ["properties"],
+          tags: [CACHETAGS.properties],
           revalidate: 8400,
         },
       }
@@ -37,7 +37,7 @@ export const getPropertiesSummary = async () => {
   try {
     const response = await authFetch(`/properties/summary`, {
       next: {
-        tags: ["properties"],
+        tags: [CACHETAGS.properties],
         revalidate: 8400,
       },
     });
@@ -57,7 +57,7 @@ export const getTopSellingProperties = async ({
       `/properties/top-selling?page=${page}&limit=${limit}`,
       {
         next: {
-          tags: ["properties"],
+          tags: [CACHETAGS.properties],
           revalidate: 8400,
         },
       }
@@ -77,7 +77,7 @@ export const getRecentlyListedProperties = async ({
       `/properties/recently-listed?page=${page}&limit=${limit}`,
       {
         next: {
-          tags: ["properties"],
+          tags: [CACHETAGS.properties],
           revalidate: 8400,
         },
       }
@@ -99,7 +99,7 @@ export const getAvailableProperties = async ({
       `/properties/most-available-units?page=${page}&limit=${limit}`,
       {
         next: {
-          tags: ["properties"],
+          tags: [CACHETAGS.properties],
           revalidate: 8400,
         },
       }
@@ -119,7 +119,7 @@ export const getReservedProperties = async ({
       `/properties/recently-reserved?page=${page}&limit=${limit}`,
       {
         next: {
-          tags: ["properties"],
+          tags: [CACHETAGS.properties],
           revalidate: 8400,
         },
       }
@@ -134,7 +134,8 @@ export const getReservedProperties = async ({
 export const addProperty = async (property: ICreatePropertyPayload) => {
   try {
     const response = await baseUrl.post("/properties", property);
-    revalidateTag("properties", "max");
+    revalidateTag(CACHETAGS.properties, "max");
+    updateTag(CACHETAGS.notifications);
     return response?.data;
   } catch (error) {
     return { error: getError(error) };
@@ -146,7 +147,7 @@ export const getProperty = async (id: string) => {
   try {
     const data = await authFetch(`/properties/${id}`, {
       next: {
-        tags: [`property`, `property-${id}`],
+        tags: [CACHETAGS.properties, `${CACHETAGS.properties}-${id}`],
         revalidate: 8400,
       },
     });
@@ -177,7 +178,7 @@ export const getClientAndOwnership = async (
       `/properties/${params.id}/clients-ownership?${query.toString()}`,
       {
         next: {
-          tags: ["property", `property-${params.id}`],
+          tags: [CACHETAGS.properties, `${CACHETAGS.properties}-${params.id}`],
           revalidate: 8400,
         },
       }
@@ -214,7 +215,7 @@ export const getMostAvaliableUnits = async (
       `/properties/most-available-units?${query.toString()}`,
       {
         next: {
-          tags: ["property"],
+          tags: [CACHETAGS.properties],
           revalidate: 8400,
         },
       }

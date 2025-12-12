@@ -52,7 +52,7 @@ export const ReceiptModal = ({ saleId }: IProps) => {
     <DashboardModal
       backHref="?"
       heading="Receipt"
-      className="sm:max-w-[MIN(90%,520px)]"
+      className="lg:max-w-[MIN(90%,520px)]"
     >
       {isLoading ? (
         <>

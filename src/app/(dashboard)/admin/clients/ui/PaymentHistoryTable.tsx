@@ -134,7 +134,7 @@ export const PaymentHistoryTable = ({
         <DashboardModal
           handleClose={closeModal}
           heading="Receipt"
-          className="sm:max-w-[MIN(90%,520px)]"
+          className="lg:max-w-[MIN(90%,520px)]"
         >
           <div className="flex flex-col mx-auto text-center">
             <h1 className="text-3xl font-bold"></h1>

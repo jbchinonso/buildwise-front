@@ -1,6 +1,6 @@
 "use server";
-import { revalidateTag } from "next/cache";
-import { baseUrl, getError } from "../utils";
+import { updateTag } from "next/cache";
+import { baseUrl, CACHETAGS, getError } from "../utils";
 import { authFetch } from "./auth.service";
 import { IClientPaymentData, IPagination, IReceipt } from "../type";
 import { receiptDTO } from "../dtos/sale.dto";
@@ -23,13 +23,12 @@ interface ISalePayload {
 export const createSale = async (sale: ISalePayload) => {
   try {
     const response = await baseUrl.post("/sales", sale);
-    revalidateTag("sales", "max");
-    revalidateTag("property-sales", "max");
-    revalidateTag(`property-${sale.propertyId}`, "max");
-    revalidateTag(`clients-${sale.clientId}`, "max");
-    revalidateTag("sales", "max");
-    revalidateTag("property", "max");
-    revalidateTag("agents", "max");
+    updateTag(`${CACHETAGS.properties}-${sale.propertyId}`);
+    updateTag(`${CACHETAGS.sales}-${sale.clientId}`);
+    updateTag(CACHETAGS.property_sale);
+    updateTag(CACHETAGS.sales);
+    updateTag(CACHETAGS.properties);
+    updateTag(CACHETAGS.titans);
     return response?.data;
   } catch (error) {
     return { error: getError(error) };
@@ -42,7 +41,7 @@ export const getActiveAgents = async () => {
     const response = await authFetch("/sales/active-agent", {
       next: {
         revalidate: 8400,
-        tags: ["agents"],
+        tags: [CACHETAGS.titans],
       },
     });
 
@@ -71,7 +70,7 @@ export const getPropertySales = async ({
     const { data, ...pagination } = await authFetch(url, {
       next: {
         revalidate: 8400,
-        tags: ["property-sales"],
+        tags: [CACHETAGS.property_sale],
       },
     });
 
@@ -89,7 +88,7 @@ export const getReceiptData = async (saleId?: string) => {
     const response = await authFetch(url, {
       next: {
         revalidate: 8400,
-        tags: ["receipts"],
+        tags: [CACHETAGS.receipts],
       },
     });
 
@@ -106,11 +105,10 @@ export const getClientPaymentData = async (clientId: string) => {
 
     const url = `/sales/clients/${clientId}/payments/`;
 
-
     const response = await authFetch(url, {
       next: {
         revalidate: 8400,
-        tags: ["sales"],
+        tags: [CACHETAGS.sales],
       },
     });
 
@@ -150,7 +148,7 @@ export const getPropertyUnitsSoldOrReserved = async ({
     const url = `/sales/units-sold-reserved/?${query.toString()}`;
     const { data, ...pagination } = await authFetch(url, {
       next: {
-        tags: ["sales"],
+        tags: [CACHETAGS.sales],
         revalidate: 8400,
       },
     });
@@ -160,11 +158,11 @@ export const getPropertyUnitsSoldOrReserved = async ({
   }
 };
 
-
 export const updatePayment = async (payload: IUpdatePaymentPayload) => {
   try {
     const response = await baseUrl.post("/sales/update-payment", payload);
 
+    updateTag(CACHETAGS.sales);
     return response.data;
   } catch (error) {
     console.error("Error updating payment:", getError(error));

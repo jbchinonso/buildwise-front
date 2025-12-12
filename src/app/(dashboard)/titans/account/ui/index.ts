@@ -1,3 +1,4 @@
 export * from "./AccountTabs";
-export * from "./SettingsForm";
+export * from "./InviteLink";
+export * from "./ChangePasswordModal";
 export * from "./BankModal";

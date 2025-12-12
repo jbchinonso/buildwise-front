@@ -1,7 +1,7 @@
-"use server"
-import { revalidateTag } from "next/cache";
+"use server";
+import { revalidateTag, updateTag } from "next/cache";
 import { ICommissionHistory, ITitanCommission } from "../type";
-import { baseUrl, getError } from "../utils";
+import { baseUrl, CACHETAGS, getError } from "../utils";
 import { authFetch } from "./auth.service";
 
 export const getCommissions = async (
@@ -13,7 +13,7 @@ export const getCommissions = async (
   try {
     const { data } = await authFetch(`/titans/${id}/commissions`, {
       next: {
-        tags: ["commissions"],
+        tags: [CACHETAGS.commissions],
         revalidate: 8400,
       },
     });
@@ -36,7 +36,7 @@ export const getCommissionBreakdown = async (): Promise<{
     const data = await authFetch(`/titans/commissions/breakdown/`, {
       next: {
         revalidate: 8400,
-        tags: ["titans"],
+        tags: [CACHETAGS.commissions, CACHETAGS.titans],
       },
     });
 
@@ -51,7 +51,7 @@ export const getTotalCommissions = async () => {
     const data = await authFetch("/earning/titan", {
       next: {
         revalidate: 8400,
-        tags: ["commission"],
+        tags: [CACHETAGS.commissions],
       },
     });
 
@@ -71,7 +71,7 @@ export const getTitanCommission = async (
   try {
     const { data } = await authFetch(`/titans/commissions-all/${id}`, {
       next: {
-        tags: ["commissions"],
+        tags: [CACHETAGS.commissions],
         revalidate: 8400,
       },
     });
@@ -85,14 +85,20 @@ export const getTitanCommission = async (
 };
 
 export const updateTitanCommission = async (
-  id: string
+  id: string,
+  status: string
 ): Promise<any> => {
   try {
-    const response = await baseUrl.patch(`/titans/commissions-all/${id}`);
-    revalidateTag("commissions", "max")
+    const response = await baseUrl.patch(`/titans/commissions/${id}`, {
+      status,
+    });
 
-    return response;
+    const data = response?.data?.data;
+
+    updateTag(CACHETAGS.commissions);
+    revalidateTag(CACHETAGS.commissions, "max");
+    return data;
   } catch (error) {
-    return { error: getError(error) };
-  }
+    throw new Error(getError(error));
+  } 
 };

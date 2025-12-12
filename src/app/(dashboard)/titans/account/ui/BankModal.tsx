@@ -10,25 +10,21 @@ import {
 } from "@/components/ui";
 import { useClientFetch, useModal } from "@/lib/hooks";
 import { useFormik } from "formik";
-import { getFormikError } from "@/lib/utils";
+import { getError, getFormikError } from "@/lib/utils";
 import { useSession } from "next-auth/react";
+import {
+  addBankDetails,
+  getBankList,
+  updateBankDetails,
+} from "@/lib/services/bank.service";
+import toast from "react-hot-toast";
 
-export const BankModal = ({
-  bankName,
-  accountName,
-  accountNumber,
-}: {
-  bankName: string;
-  accountNumber: string | number;
-  accountName: string | number;
-}) => {
+export const BankModal = ({ bank }: { bank: any[] }) => {
   const { data: session } = useSession();
   const { closeModal, isModalOpen, toggleModal } = useModal();
 
-  const { data: banks = [] } = useClientFetch({
-    action: async () => {
-      return [{ label: "Access Bank PLC", value: "342" }];
-    },
+  const { data: banks = [], isLoading } = useClientFetch({
+    action: getBankList,
     isModalOpen,
   });
 
@@ -45,9 +41,10 @@ export const BankModal = ({
     setFieldValue,
   } = useFormik({
     initialValues: {
-      bankName: "",
-      accountNumber: "",
-      userId: session?.user?.id,
+      bankName: (bank[0]?.bankName as string) || "",
+      accountNumber: (bank[0]?.accountNumber as string) || "",
+      file: "",
+      userId: session?.user?.id || "",
     },
     // validationSchema: signInValidationSchema,
     onSubmit: async () => {},
@@ -55,6 +52,30 @@ export const BankModal = ({
 
   const handleSelect = (name: string, value: any) => {
     setFieldValue(name, value);
+  };
+
+  const onSubmit = async () => {
+    toast.dismiss();
+    try {
+      await addBankDetails(values);
+      resetForm();
+      toast.success("Bank added successfully");
+      closeModal();
+    } catch (error) {
+      toast.error(getError(error));
+    }
+  };
+
+  const onSubmitRequest = async () => {
+    toast.dismiss();
+    try {
+      await updateBankDetails(values);
+      resetForm();
+      toast.success("Request submitted successfully");
+      closeModal();
+    } catch (error) {
+      toast.error(getError(error));
+    }
   };
 
   return (
@@ -67,7 +88,11 @@ export const BankModal = ({
         <Input
           label="Bank Account"
           type="text"
-          defaultValue={`${bankName} - ${accountNumber}`}
+          defaultValue={
+            values?.bankName
+              ? `${values?.bankName} - ${values?.accountNumber}`
+              : "N/A"
+          }
           placeholder=""
           autoComplete="off"
           labelStyle="text-[#292A2C]"
@@ -90,7 +115,11 @@ export const BankModal = ({
           handleClose={closeModal}
           className="!max-w-[470px]"
         >
-          <form action="" className="flex flex-col gap-4">
+          <form
+            onReset={handleReset}
+            action={(bank || [])?.length ? onSubmitRequest : onSubmit}
+            className="flex flex-col gap-4"
+          >
             <SelectScrollable
               label="Bank"
               name="bank"
@@ -98,6 +127,7 @@ export const BankModal = ({
               value={values.bankName}
               onChange={(value) => handleSelect("bankName", value)}
               options={banks || []}
+              disabled={isLoading}
               labelStyle="text-[#292A2C]"
               required
               error={getFormikError(touched?.bankName, errors?.bankName)}
@@ -107,6 +137,7 @@ export const BankModal = ({
               label="Account Number"
               name="accountNumber"
               placeholder="Enter account number"
+              maxLength={10}
               onChange={handleChange}
               value={values.accountNumber}
               onBlur={handleBlur}
@@ -120,19 +151,19 @@ export const BankModal = ({
             <Input
               label="Upload ID"
               name="id"
+              type="file"
               placeholder="Upload ID"
               onChange={handleChange}
-              value={values.accountNumber}
+              value={values.file}
               onBlur={handleBlur}
-              error={
-                touched.accountNumber && errors.accountNumber
-                  ? errors.accountNumber
-                  : ""
-              }
+              error={touched.file && errors.file ? errors.file : ""}
+              className="ml-auto text-xs"
             />
 
             <div className="flex w-full justify-end gap-4">
-              <Button variant="secondary" size="sm">Cancel</Button>
+              <Button variant="secondary" size="sm">
+                Cancel
+              </Button>
               <SubmitButton disabled={!isValid} size="sm" className="">
                 Submit request
               </SubmitButton>
