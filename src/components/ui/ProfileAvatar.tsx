@@ -29,7 +29,7 @@ export const ProfileAvatar = (props: AvatarProps) => {
 
   const cnFn = (...inputs: ClassArray) =>
     cn(
-      "w-8 lg:w-10 rounded-md aspect-square h-auto overflow-hidden",
+      "w-8 lg:w-10 rounded-md aspect-square h-auto overflow-hidden border",
       rounded && "rounded-full",
       inputs,
       avatarClassName

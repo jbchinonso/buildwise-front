@@ -4,12 +4,13 @@ import { Button } from "@/components/ui";
 import { NotificationSettings } from "@/components/dashboard";
 
 const Settings = async () => {
-  const { data: bank = [] } = await getBankDetails();
+  const { data: bank } = await getBankDetails();
+
   return (
     <>
-      <div className="w-full flex supports-[grid]:grid md:grid-cols-2 flex-wrap justify-between gap-4 gap-x-20">
+      <div className="w-full flex supports-[grid]:grid md:grid-cols-2 flex-wrap justify-between gap-4 gap-x-10">
         <ChangePasswordModal />
-        <BankModal bank={bank || []} />
+        <BankModal bank={bank} />
         <InviteLink />
         <NotificationSettings />
       </div>

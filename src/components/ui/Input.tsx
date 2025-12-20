@@ -1,6 +1,8 @@
 "use client";
-import { Eye, EyeSlash } from "iconsax-react";
-import { useState } from "react";
+import { MAX_FILE_SIZE, ONE_MEGABYTE } from "@/lib/constants";
+import { DocumentUpload, Eye, EyeSlash } from "iconsax-react";
+import { useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { twMerge } from "tailwind-merge";
 
 type IInput = React.DetailedHTMLProps<
@@ -25,6 +27,7 @@ interface IInputProps extends InputProps {
   labelStyle?: string;
   children?: React.ReactNode;
   rightIcon?: React.ReactNode;
+  filePlaceholder?: string;
 }
 
 export const Input = ({
@@ -38,12 +41,28 @@ export const Input = ({
   inputStyle,
   children,
   rightIcon,
+  filePlaceholder = "Click to upload file",
   ...props
 }: IInputProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const togglePassword = () => setIsPasswordVisible(!isPasswordVisible);
   const isPasswordInput =
     /password/gi.test(`${props.name}`) || /password/gi.test(`${props.type}`);
+  const [fileName, setFileName] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const isFileInput = props.type === "file";
+
+  // Handle file name display
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (Number(file?.size || 0) > MAX_FILE_SIZE) {
+      toast.error(`File too large (Max ${MAX_FILE_SIZE / ONE_MEGABYTE}MB)`);
+      return;
+    }
+
+    if (file) setFileName(file.name);
+    if (props.onChange) props.onChange(e);
+  };
   return (
     <div
       className={twMerge(
@@ -76,6 +95,29 @@ export const Input = ({
             className
           )}
         />
+      ) : isFileInput ? (
+        /* FILE INPUT LOGIC */
+        <div
+          onClick={() => fileInputRef.current?.click()}
+          className="relative px-4 flex items-center justify-between cursor-pointer w-full h-full"
+        >
+          <span
+            className={twMerge(
+              "text-sm",
+              fileName ? "text-black" : "text-grey-400"
+            )}
+          >
+            {fileName || filePlaceholder}
+          </span>
+          <DocumentUpload size={18} className="text-grey-400" />
+          <input
+            {...props}
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden" // Hide the ugly native button
+          />
+        </div>
       ) : props.type === "checkbox" ? (
         <CheckboxInput {...props} />
       ) : props.type === "radio" ? (

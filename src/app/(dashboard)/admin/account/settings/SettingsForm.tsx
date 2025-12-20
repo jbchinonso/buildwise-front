@@ -9,9 +9,12 @@ import { Copy } from "iconsax-react";
 import { NotificationSettings } from "@/components/dashboard";
 
 export const SettingsForm = () => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [inviteLink, setInviteLink] = useState(
-    "http://localhost:3000/admin/account/settings"
+  const {data: session} = useSession()
+  console.log({session})
+  // const [isEditing, setIsEditing] = useState(false);
+
+  const [inviteLink] = useState(
+    `${process.env.VERCEL_URL || (window && window?.origin)}/signup?referral=`
   );
   return (
     <>
@@ -42,7 +45,7 @@ export const SettingsForm = () => {
           type="button"
           size="sm"
           variant="secondary"
-          onClick={() => setIsEditing(false)}
+          // onClick={() => setIsEditing(false)}
         >
           Deactivate Account
         </Button>
