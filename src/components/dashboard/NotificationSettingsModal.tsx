@@ -41,7 +41,7 @@ export const NotificationSettings = () => {
       <div
         onClick={toggleModal}
         tabIndex={0}
-        className="flex-[45%] max-w-[MIN(100%,470px)]"
+        className="f.lex-[45%] ma.x-w-[MIN(100%,470px)]"
       >
         <Input
           label="Notification"

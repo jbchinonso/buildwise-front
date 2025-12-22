@@ -1,5 +1,3 @@
-import EarningOverview from "@/components/titans/dashboard/EarningOverview";
-import { PropertiesSold, RevenueChart } from "./ui";
 import { getTitanEarningsChart } from "@/lib/services";
 import { convertToChartData } from "@/lib/dtos/earnings.dto";
 import { EarningsOverviewChart } from "@/components/titans/dashboard";
@@ -19,7 +17,7 @@ const Dashboard = async () => {
   return (
     <>
       {/* chart */}
-      <div className="bg-white flex flex-col border-[0.5px] gap-4 p-4 w-full flex-1  rounded-2xl">
+      <div className="bg-white flex flex-col border-[0.5px] gap-4 p-4 w-full flex-1  max-h-fit rounded-2xl">
         <div className="w-full flex items-baseline justify-between">
           <p className="font-semibold text-xl text-[#292A2C]">
             Earning overview

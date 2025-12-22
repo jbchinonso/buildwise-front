@@ -8,7 +8,7 @@ const AddClient = async () => {
     getStates(),
   ]);
 
-  console.log({ agents });
+  // console.log({ agents });
 
   return (
     <section className="flex flex-1 flex-col gap-4">

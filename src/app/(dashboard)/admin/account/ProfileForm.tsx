@@ -76,7 +76,7 @@ const ProfileForm = ({ states }: { states: IState[] }) => {
   return (
     <form
       action={onEdit}
-      className="w-full flex flex-wrap justify-between gap-4 gap-x-20"
+      className="w-full flex flex-wrap gap-4 gap-x-20"
     >
       <Input
         label="Phone number"

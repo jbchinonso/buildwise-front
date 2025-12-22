@@ -48,7 +48,7 @@ export const Sidebar = () => {
 
       <div
         className={cn(
-          "transition-transform top-1/2 -translate-y-1/2 h-dvh flex-[20] duration-100 z-[999] lg:z-10 flex flex-col lg:ml-8 w-full max-w-[MIN(100%,260px)] max-h-[calc(100dvh-var(--scroll-padding))] absolute lg:sticky lg:translate-y-0 lg:top-0 border rounded-r-2xl lg:rounded-2xl bg-white p-4 border-grey-50",
+          "transition-transform top-1/2 -translate-y-1/2 min-h-full flex-[20] duration-100 z-[999] lg:z-10 flex flex-col lg:ml-8 w-full max-w-[MIN(100%,260px)] max-h-[calc(100dvh-var(--scroll-padding))] absolute lg:sticky lg:translate-y-0 lg:top-0 border rounded-r-2xl lg:rounded-2xl bg-white p-4 border-grey-50",
           isOpen ? "translate-x-0 " : "-translate-x-full lg:translate-x-0"
         )}
       >

@@ -62,7 +62,7 @@ interface IPaginationResponse extends IPagination {
 }
 
 export interface IUser {
-  id:  string;
+  id: string;
   created_at: string;
   updated_at: string;
   firstName?: string;
@@ -541,4 +541,35 @@ interface IBankDetails {
   _id?: string;
   createdAt?: string | Date;
   updatedAt?: string | Date;
+}
+
+interface IAddBankPayload {
+  userId: string;
+  bankName: string;
+  accountNumber: string;
+  requestType?: string;
+}
+
+interface IBankRequest {
+  _id: string;
+  userId: string;
+  bankName: string;
+  accountNumber: string;
+  isPrimary: string;
+  status: string;
+  oldBankDetails: any | null;
+  requestType: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
+}
+
+interface ITitanSalesTable {
+  saleId: string;
+  clientId: string;
+  clientName: string;
+  property: string;
+  price: number;
+  paid: number;
+  outstanding: number;
+  commission: number;
 }

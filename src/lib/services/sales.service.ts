@@ -113,8 +113,8 @@ export const getClientPaymentData = async (clientId: string) => {
     });
 
     return response as IClientPaymentData;
-
     // NOTE: I am getting the data but it doesnt match the UI, no property name, id, agent name, id
+    
   } catch (error) {
     console.error("Error fetching client payments:", getError(error));
     throw new Error(getError(error));

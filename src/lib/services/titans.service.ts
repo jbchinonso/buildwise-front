@@ -132,9 +132,9 @@ export const getTitansCommissionSummary = async () => {
       bonusCommission: number;
     };
   } catch (error) {
-    return { error: getError(error) };
+    // return { error: getError(error) };
     // console.error("Error fetching titans:", getError(error));
-    // throw new Error(getError(error));
+    throw new Error(getError(error));
   }
 };
 

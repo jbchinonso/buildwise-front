@@ -2,10 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/components/dashboard";
-import { DataTableColumnHeader, Button } from "@/components/ui";
+import { DataTableColumnHeader } from "@/components/ui";
 import { ChevronRight } from "lucide-react";
-import { ArrowRight } from "iconsax-react";
-import Link from "next/link";
 
 type Activities = {
   id: string;

@@ -17,7 +17,7 @@ export const InviteLink = () => {
       defaultValue={inviteLink}
       readOnly
       labelStyle="text-[#292A2C]"
-      containerStyle="flex-[45%] max-w-[MIN(100%,470px)] cursor-copy *:cursor-copy"
+      containerStyle="fle.x-[45%] max.-w-[MIN(100%,470px)] cursor-copy *:cursor-copy"
       inputStyle="cursor-copy"
       onClick={() => copyTextToClipboard(inviteLink)}
       rightIcon={

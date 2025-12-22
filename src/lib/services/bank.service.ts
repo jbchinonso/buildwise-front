@@ -3,7 +3,7 @@
 import { revalidateTag, updateTag } from "next/cache";
 import { baseUrl, CACHETAGS, getError } from "../utils";
 import { authFetch } from "./auth.service";
-import { IBankDetails } from "../type";
+import { IAddBankPayload, IBankDetails, IBankRequest } from "../type";
 
 export const getBankList = async () => {
   try {
@@ -32,19 +32,12 @@ export const getBankDetails = async () => {
         tags: [CACHETAGS.bank],
       },
     });
-    return { data: response?.data as IBankDetails[] } 
+    return { data: response?.data as IBankDetails };
   } catch (error) {
     return { error: getError(error) };
     throw getError(error);
   }
 };
-
-interface IAddBankPayload {
-  userId: string;
-  bankName: string;
-  accountNumber: string;
-  requestType?: string;
-}
 
 export const addBankDetails = async (payload: IAddBankPayload) => {
   try {
@@ -69,6 +62,45 @@ export const updateBankDetails = async (payload: IAddBankPayload) => {
     return response?.data;
   } catch (error) {
     return { error: getError(error) };
+    throw getError(error);
+  }
+};
+
+export const getBankRequests = async () => {
+  try {
+    const response = await authFetch("/bank/requests", {
+      next: {
+        revalidate: 8400,
+        tags: [CACHETAGS.bank],
+      },
+    });
+
+    return { data: response as IBankRequest[] };
+  } catch (error) {
+    return { error: getError(error) };
+  }
+};
+
+export const approveBankRequest = async (id: string) => {
+  try {
+    const response = await baseUrl.patch(`/bank/approve/${id}`);
+    updateTag(CACHETAGS.bank);
+    revalidateTag(CACHETAGS.bank, "max");
+    return response?.data;
+  } catch (error) {
+    // return { error: getError(error) };
+    throw getError(error);
+  }
+};
+
+export const declineBankRequest = async (id: string) => {
+  try {
+    const response = await baseUrl.patch(`/bank/decline/${id}`);
+    updateTag(CACHETAGS.bank);
+    revalidateTag(CACHETAGS.bank, "max");
+    return response?.data;
+  } catch (error) {
+    // return { error: getError(error) };
     throw getError(error);
   }
 };

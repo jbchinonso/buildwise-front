@@ -34,7 +34,7 @@ export const AddClientForm = ({
       state: "",
       lga: "",
       residentialAddress: "",
-      agentId: '',
+      agentId: "",
     },
     // validationSchema: signInValidationSchema,
     onSubmit: async () => {},
@@ -49,7 +49,7 @@ export const AddClientForm = ({
         value: lga,
       })) ?? []
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values.state]);
 
   const handleSelect = (name: string, value: any) => {
@@ -70,7 +70,7 @@ export const AddClientForm = ({
     <form
       action={submitForm}
       onReset={handleReset}
-      className="w-full flex flex-wrap justify-between gap-4 gap-x-20"
+      className="w-full flex flex-wrap gap-4 gap-x-20"
     >
       <Input
         label="First name"
@@ -176,9 +176,11 @@ export const AddClientForm = ({
         className="flex-[45%] max-w-[MIN(100%,470px)]"
       />
 
-      <SubmitButton disabled={!dirty || !isValid} size="sm" className="my-4">
-        Save Client
-      </SubmitButton>
+      <div className="w-full">
+        <SubmitButton disabled={!dirty || !isValid} size="sm" className="my-4">
+          Save Client
+        </SubmitButton>
+      </div>
     </form>
   );
 };

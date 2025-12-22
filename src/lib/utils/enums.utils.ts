@@ -10,6 +10,8 @@ export enum CACHETAGS {
   properties = "properties",
   property_sale = "property_sale",
   receipts = "receipts",
+  payments = "payments",
+  dashboard = "dashboard",
 }
 
 export enum PaymentOptions{

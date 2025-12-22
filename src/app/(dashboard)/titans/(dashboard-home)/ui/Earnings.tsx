@@ -10,7 +10,13 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight, House } from "lucide-react";
 import { PropertiesSold } from "./PropertiesSold";
 import { Money } from "iconsax-react";
-import { getTitanEarningsOverview } from "@/lib/services";
+import {
+  getTitanEarningsChart,
+  getTitanEarningsOverview,
+} from "@/lib/services";
+import { toAmount, toAmountWithSuffix } from "@/lib/utils";
+import { convertToChartData } from "@/lib/dtos/earnings.dto";
+import { EarningsOverviewChart } from "@/components/titans/dashboard";
 
 type Earning = {
   id: string;
@@ -96,10 +102,25 @@ const columns: ColumnDef<Earning>[] = [
   },
 ];
 
-export const Earnings = ({ data }: { data: Earning[] }) => {
+export const Earnings = ({ stats = 0 }: { stats?: number }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const {} = useClientFetch({
     action: getTitanEarningsOverview,
+    isModalOpen,
+  });
+
+  const { data: chartData, isLoading } = useClientFetch({
+    action: async () => {
+      const res = await getTitanEarningsChart();
+      const data = convertToChartData(res) || [];
+      const totalSalesCommission = data?.reduce((acc, cv) => {
+        return (acc += cv?.salesCommission || 0);
+      }, 0);
+      const totalSubTitanCommission = data?.reduce((acc, cv) => {
+        return (acc += cv?.subTitanCommission || 0);
+      }, 0);
+      return { data, totalSalesCommission, totalSubTitanCommission };
+    },
     isModalOpen,
   });
   return (
@@ -107,31 +128,31 @@ export const Earnings = ({ data }: { data: Earning[] }) => {
       <DashboardStatsCard
         title="Earnings"
         icon={<Money size="24" color="#1FDBF4" />}
-        data="23.8B"
-        theme=""
+        data={toAmountWithSuffix(stats || 0)}
         onClick={toggleModal}
       />
 
       {isModalOpen && (
         <PageModal handleClose={closeModal} heading="My Earnings">
           <section className="flex flex-col w-full gap-4 ">
-            <PropertiesSold />
+            <EarningsOverviewChart chartData={chartData?.data || []} />
+
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Total earnings</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-600">{toAmount(0)}</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Sales commission</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-600">{toAmount(0)}</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Titans commission</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-600">{toAmount(0)}</p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Total paid-in</p>
-                <p className="text-grey-600">₦51,208,009</p>
+                <p className="text-grey-600">{toAmount(0)}</p>
               </div>
             </div>
 
@@ -142,7 +163,7 @@ export const Earnings = ({ data }: { data: Earning[] }) => {
             </div>
 
             <div className="w-full my-2">
-              <DataTable columns={columns} data={data} />
+              <DataTable columns={columns} data={ []} />
             </div>
 
             <div className="flex justify-end gap-4 items-center">

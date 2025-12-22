@@ -9,14 +9,14 @@ export const ActiveSystemSettingsTabs = () => {
   return (
     <div className="flex gap-2 p-2 text-sm w-fit rounded-3xl bg-grey-50">
       <Link
-        href={"user-management"}
-        data-ui={pathname.includes("user-management") ? "active" : ""}
+        href={"/admin/settings"}
+        data-ui={!pathname.includes("commission-and-payment") ? "active" : ""}
         className="p-4 py-2 rounded-3xl data-active:bg-white active:text-primary-400 hover:bg-white"
       >
         User management
       </Link>
       <Link
-        href={"commission-and-payment"}
+        href={"/admin/settings/commission-and-payment"}
         data-ui={pathname.includes("commission-and-payment") ? "active" : ""}
         className="p-4 py-2 rounded-3xl data-active:bg-white active:text-primary-400 hover:bg-white"
       >

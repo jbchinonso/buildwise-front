@@ -18,8 +18,10 @@ import {
   updateBankDetails,
 } from "@/lib/services/bank.service";
 import toast from "react-hot-toast";
+import { IBankDetails } from "@/lib/type";
+import { ChangeEvent } from "react";
 
-export const BankModal = ({ bank }: { bank: any[] }) => {
+export const BankModal = ({ bank }: { bank?: IBankDetails }) => {
   const { data: session } = useSession();
   const { closeModal, isModalOpen, toggleModal } = useModal();
 
@@ -41,12 +43,11 @@ export const BankModal = ({ bank }: { bank: any[] }) => {
     setFieldValue,
   } = useFormik({
     initialValues: {
-      bankName: (bank[0]?.bankName as string) || "",
-      accountNumber: (bank[0]?.accountNumber as string) || "",
+      bankName: (bank?.bankName as string) || "",
+      accountNumber: (bank?.accountNumber as string) || "",
       file: "",
       userId: session?.user?.id || "",
     },
-    // validationSchema: signInValidationSchema,
     onSubmit: async () => {},
   });
 
@@ -83,7 +84,7 @@ export const BankModal = ({ bank }: { bank: any[] }) => {
       <div
         onClick={toggleModal}
         tabIndex={0}
-        className="flex-[45%] max-w-[MIN(100%,470px)]"
+        // className="flex-[45%] max-w-[MIN(100%,470px)]"
       >
         <Input
           label="Bank Account"
@@ -113,11 +114,13 @@ export const BankModal = ({ bank }: { bank: any[] }) => {
         <Modal
           heading="Change bank account"
           handleClose={closeModal}
-          className="!max-w-[470px]"
+          className="!l.g:max-w-[MIN(90%,470px)]"
         >
           <form
             onReset={handleReset}
-            action={(bank || [])?.length ? onSubmitRequest : onSubmit}
+            action={
+              Object.keys(bank || [])?.length ? onSubmitRequest : onSubmit
+            }
             className="flex flex-col gap-4"
           >
             <SelectScrollable
@@ -150,11 +153,14 @@ export const BankModal = ({ bank }: { bank: any[] }) => {
             />
             <Input
               label="Upload ID"
-              name="id"
+              name="file"
               type="file"
               placeholder="Upload ID"
-              onChange={handleChange}
-              value={values.file}
+              onChange={(event) => {
+                const file = (event as ChangeEvent<HTMLInputElement>)
+                  .currentTarget?.files?.[0];
+                setFieldValue("file", file);
+              }}
               onBlur={handleBlur}
               error={touched.file && errors.file ? errors.file : ""}
               className="ml-auto text-xs"

@@ -12,6 +12,7 @@ import {
   TableSkeleton,
 } from "@/components/ui";
 import { useClientFetch, useModal } from "@/lib/hooks";
+import { getTitansCommissionSummary } from "@/lib/services";
 import { toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { Network } from "lucide-react";
@@ -79,6 +80,15 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
     action: async () => [],
     isModalOpen,
   });
+
+    const {
+      data: summary,
+      isLoading: isSummaryLoading,
+      // error: isClientsError,
+    } = useClientFetch({
+      action: getTitansCommissionSummary,
+      isModalOpen,
+    });
   return (
     <>
       <DashboardStatsCard
@@ -95,31 +105,35 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
           className="md:max-w-[MIN(95%,683px)]"
         >
           <section className="flex flex-col w-full gap-4 flex-1">
-            {isLoading ? (
+            {isSummaryLoading ? (
               <Skeleton className="h-8" />
             ) : (
               <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
                 <div className="flex flex-col flex-[25] gap-2">
                   <p className="text-grey-400">Titans</p>
-                  <p className="text-grey-600">{toAmount(0, false)}</p>
+                  <p className="text-grey-600">
+                    {toAmount(summary?.totalCommission||0, false)}
+                  </p>
                 </div>
                 <div className="flex flex-col flex-[25] gap-2">
                   <p className="text-grey-400 whitespace-normal">
                     Commissions from all Titans
                   </p>
-                  <p className="text-grey-600">{toAmount(0)}</p>
+                  <p className="text-grey-600">
+                    {toAmount(summary?.totalCommission||0)}
+                  </p>
                 </div>
                 <div className="flex flex-col flex-[25] gap-2">
                   <p className="text-grey-400 whitespace-normal">
                     Commission from my Titans
                   </p>
-                  <p className="text-grey-600">{toAmount(0)}</p>
+                  <p className="text-grey-600">{toAmount(summary?.titanCommission ||0)}</p>
                 </div>
                 <div className="flex flex-col flex-[25] gap-2">
                   <p className="text-grey-400 whitespace-normal">
                     Commission from Sub-titans
                   </p>
-                  <p className="text-grey-600">{toAmount(0)}</p>
+                  <p className="text-grey-600">{toAmount(summary?.subTitanCommission ||0)}</p>
                 </div>
               </div>
             )}

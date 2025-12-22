@@ -17,6 +17,8 @@ export const ClientProperties = ({
 
   const selectedProperty = properties?.[Number(property || 1) - 1];
 
+  // console.log({selectedProperty})
+
   return (
     <div className="flex flex-1 flex-wrap justify-between gap-4 gap-x-20 w-full">
       <div className="flex gap-4 max-w-full overflow-x-auto py-1">
@@ -97,21 +99,28 @@ const PropertyPreview = ({ property }: { property: IClientProperty }) => {
         type="text"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        value={toAmount(property?.amountPaid || 0)}
+        defaultValue={toAmount(property?.amountPaid || 0)}
       />
       <Input
         label="Outstanding payment"
         type="text"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        value={toAmount(property?.outstandingPayment || 0)}
+        defaultValue={toAmount(property?.outstandingPayment || 0)}
       />
       <Input
         label="Payment due"
         type="text"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        value={toAmount(property?.paymentDue || 0)}
+        defaultValue={toAmount(property?.paymentDue || 0)}
+      />
+      <Input
+        label="Client"
+        type="text"
+        readOnly
+        containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
+        defaultValue={property?.clientId}
       />
     </div>
   );

@@ -34,7 +34,6 @@ export const ChangePasswordModal = () => {
       <div
         onClick={toggleModal}
         tabIndex={0}
-        className="flex-[45%] max-w-[MIN(100%,470px)]"
       >
         <Input
           label="Password"

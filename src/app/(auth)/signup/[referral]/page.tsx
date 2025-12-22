@@ -3,11 +3,11 @@ import SignupForm from "./SignupForm";
 import { Logo } from "@/components/ui";
 import { getReferralData, getStates } from "@/lib/services";
 
-type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+type Params = Promise<{ referral: string }>;
 
-const Signup = async (props: { searchParams: SearchParams }) => {
-  const searchParams = await props.searchParams;
-  const referralCode = (searchParams["referral"] as string) || "";
+const Signup = async (props: { params: Params }) => {
+  const params = await props.params;
+  const referralCode = (params["referral"] as string) || "";
 
   const [states, referralData] = await Promise.all([
     getStates(),
