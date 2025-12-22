@@ -562,3 +562,14 @@ interface IBankRequest {
   createdAt: string | Date;
   updatedAt: string | Date;
 }
+
+interface ITitanSalesTable {
+  saleId: string;
+  clientId: string;
+  clientName: string;
+  property: string;
+  price: number;
+  paid: number;
+  outstanding: number;
+  commission: number;
+}

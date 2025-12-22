@@ -1,6 +1,6 @@
 "use client";
 import { IBankRequest } from "@/lib/type";
-import { getError, toAmount } from "@/lib/utils";
+import { cn, getError, toAmount } from "@/lib/utils";
 import { ArrowLeft2, ArrowRight2, NotificationBing } from "iconsax-react";
 import { X } from "lucide-react";
 import { DashboardModal } from "@/components/dashboard";
@@ -21,6 +21,7 @@ export const Banner = ({
   totalUsers: number;
 }) => {
   const { isModalOpen, toggleModal } = useModal();
+  const [isMinimized, setIsMinized] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const total = requests?.length || 0;
 
@@ -61,42 +62,61 @@ export const Banner = ({
 
   return (
     <>
-      <div className="bg-[#292A2C] w-screen fixed top-10 left-0 p-4 z-100 flex">
-        <div className="flex m-auto gap-6 items-center justify-center">
-          <div className="text-[#F4BB1F] flex gap-2">
-            <NotificationBing
-              color="#F4BB1F"
-              className="text-green-400"
-              size={24}
-            />
-            <p>Important notification</p>
+      <div
+        className={cn(
+          "bg-[#292A2C] min-h-[56px] items-center p-4 fixed top-12 z-100 flex",
+          {
+            "rounded-full size-[56px] -right-4": isMinimized,
+            "left-0 w-screen": !isMinimized,
+          }
+        )}
+      >
+        {!isMinimized ? (
+          <div className="flex m-auto gap-6 items-center justify-center w-full">
+            <div className="text-[#F4BB1F] flex gap-2">
+              <NotificationBing
+                color="#F4BB1F"
+                className="text-green-400"
+                size={24}
+              />
+              <p>Important notification</p>
+            </div>
+
+            {totalUsers > 1 ? (
+              <p className="text-white">
+                ({toAmount(totalUsers, false)}) Agents are requesting a change
+                of bank account
+              </p>
+            ) : (
+              <p className="text-white">
+                Sodik Nwachukwu is requesting a change of bank account
+              </p>
+            )}
+
+            <button
+              onClick={toggleModal}
+              className="text-[#F4BB1F] text-sm py-2 p-4 border border-transparent hover:border-[#F4BB1F] rounded-lg"
+            >
+              View Request
+            </button>
           </div>
+        ) : (
+          <div></div>
+        )}
 
-          {totalUsers > 1 ? (
-            <p className="text-white">
-              ({toAmount(totalUsers, false)}) Agents are requesting a change of
-              bank account
-            </p>
+        <button
+          type="button"
+          className={cn("cursor-pointer text-white ", {
+            "justify-self-end ml-auto": !isMinimized,
+          })}
+          onClick={() => setIsMinized(!isMinimized)}
+        >
+          {isMinimized ? (
+            <ArrowLeft2 color="currentColor" size={24} className="text-xl text-white" />
           ) : (
-            <p className="text-white">
-              Sodik Nwachukwu is requesting a change of bank account
-            </p>
-          )}
-
-          <button
-            onClick={toggleModal}
-            className="text-[#F4BB1F] text-sm py-2 p-4 border border-transparent hover:border-[#F4BB1F] rounded-lg"
-          >
-            View Request
-          </button>
-          <button
-            type="button"
-            className="absolute z-10 cursor-pointer text-white top-4 right-6 place-self-end "
-            //   onClick={closeModal}
-          >
             <X color="currentColor" className="text-xl" />
-          </button>
-        </div>
+          )}
+        </button>
       </div>
 
       {/* MODAL */}

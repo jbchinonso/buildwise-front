@@ -1,17 +1,13 @@
 "use client";
 
 import { Line, LineChart, XAxis, YAxis } from "recharts";
-
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-
-const chartData = [
-  { month: "January", revenue: 186 },
-  { month: "February", revenue: 305 },
-  { month: "March", revenue: 237 },
-  { month: "April", revenue: 73 },
-  { month: "May", revenue: 209 },
-  { month: "June", revenue: 214 },
-];
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { toAmountWithSuffix } from "@/lib/utils";
 
 const chartConfig = {
   revenue: {
@@ -20,9 +16,22 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function PropertiesSold() {
+export function PropertiesSold({
+  chartData,
+  isLoading,
+}: {
+  isLoading?: boolean;
+  chartData: {
+    month: string;
+    revenue: number;
+  }[];
+}) {
   return (
-    <ChartContainer config={chartConfig} className="min-h-[200px] min-w-full">
+    <ChartContainer
+      data-ui={isLoading ? "loading" : ""}
+      config={chartConfig}
+      className="min-h-[200px] min-w-full data-loading:animate-pulse"
+    >
       <LineChart accessibilityLayer data={chartData}>
         <Line
           dataKey="revenue"
@@ -39,7 +48,7 @@ export function PropertiesSold() {
         <YAxis
           dataKey="revenue"
           tickMargin={0}
-          tickFormatter={(value) => value + "m"}
+          tickFormatter={(value) => toAmountWithSuffix(value||0)}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
       </LineChart>

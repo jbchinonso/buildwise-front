@@ -35,7 +35,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
           <div className="flex flex-col flex-1">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <p className="text-[16px] font-medium text-gray-800">
+                <p className="text-base capitalize font-medium text-gray-800">
                   {activity.type}
                 </p>
                 <p className="text-xs text-gray-400 whitespace-nowrap">
@@ -45,7 +45,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
               <ChevronRight className="size-4 shrink-0" />
             </div>
 
-            <p className="text-[14px] text-gray-500 font-normal break-normal mt-1">
+            <p className="text-sm text-gray-500 font-normal break-normal mt-1">
               {activity.message}
             </p>
           </div>

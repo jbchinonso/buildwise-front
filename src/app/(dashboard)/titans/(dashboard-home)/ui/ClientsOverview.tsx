@@ -110,30 +110,43 @@ export const ClientOverview = ({ stats = 0 }: { stats?: number }) => {
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Total Clients</p>
                 <p className="text-grey-600">
-                  {toAmount(summary?.totalClients || 0)}
+                  {toAmount(summary?.totalClients || 0, false)}
                 </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Active Buyers</p>
                 <p className="text-grey-600">
-                  {toAmount(summary?.activeBuyers || 0)}
+                  {toAmount(summary?.activeBuyers || 0, false)}
                 </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Properties</p>
                 <p className="text-grey-600">
-                  {toAmount(summary?.totalProperties || 0)}
+                  {toAmount(summary?.totalProperties || 0, false)}
                 </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Closed sales</p>
                 <p className="text-grey-600">
-                  {toAmount(summary?.closedSales || 0)}
+                  {toAmount(summary?.closedSales || 0, false)}
                 </p>
               </div>
             </div>
 
-            <div className="w-full my-4">
+            <div className="w-full my-4 flex flex-col gap-4">
+              <div className="flex items-baseline justify-between mt-6 w-full gap-4">
+                <h2 className="font-semibold text-grey-600">
+                  Active clients added
+                </h2>
+
+                <Link
+                  href="/titans/clients/all"
+                  className="flex items-center gap-1 text-xs font-medium text-primary-400 flex-nowrap whitespace-nowrap"
+                >
+                  View all <ArrowRight size={14} color="currentColor" />
+                </Link>
+              </div>
+
               {isLoading ? (
                 <TableSkeleton />
               ) : (

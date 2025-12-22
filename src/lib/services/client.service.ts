@@ -38,7 +38,7 @@ export const getAllClients = async (
       url,
       {
         next: {
-          tags: ["clients"],
+          tags: [CACHETAGS.clients],
           revalidate: 8400,
         },
       }
@@ -46,6 +46,7 @@ export const getAllClients = async (
     );
     return { data, pagination };
   } catch (error) {
+    console.log({errrorrrrr: error})
     throw getError(error);
   }
 };
@@ -175,13 +176,14 @@ export const getRecentClients = async () => {
   try {
     const { data = [] } = await authFetch("/titans/recent-clients", {
       next: {
-        tags: ["clients"],
+        tags: [CACHETAGS.clients],
         revalidate: 8400,
       },
     });
 
     return data as IRecentClients[];
   } catch (error) {
+    console.log({ERRRRRRROORRR: getError(error)})
     throw getError(error);
   }
 };
@@ -190,7 +192,7 @@ export const getAllTitanClients = async () => {
   try {
     const { data, ...pagination } = await authFetch("/titans/all-client", {
       next: {
-        tags: ["clients"],
+        tags: [CACHETAGS.clients],
         revalidate: 8400,
       },
     });
@@ -205,7 +207,7 @@ export const getTitanClientProfile = async (id: string) => {
   try {
     const response = await authFetch(`/clients/personal-info/${id}`, {
       next: {
-        tags: ["clients-" + id],
+        tags: [`${CACHETAGS.clients}-${id}`],
         revalidate: 8400,
       },
     });
@@ -229,7 +231,7 @@ export const getTitanClientProfileProperty = async (id: string) => {
   try {
     const response = await authFetch(`/clients/${id}/properties`, {
       next: {
-        tags: [`clients-${id}`, "sales", "properties"],
+        tags: [`${CACHETAGS.clients}-${id}`, CACHETAGS.sales, CACHETAGS.properties],
         revalidate: 8400,
       },
     });
@@ -244,12 +246,14 @@ export const getTitanClientPaymentHistory = async (id: string) => {
   try {
     const response = await authFetch(`/clients/${id}/payment-history`, {
       next: {
-        tags: ["clients-" + id + "-payment", "payments"],
+        tags: [`${CACHETAGS.clients}-${id}-payment`, CACHETAGS.payments],
         revalidate: 8400,
       },
     });
 
     const sales = response?.sales as IPaymentHistorySales[];
+
+    console.log(sales, {response})
 
     const uniquePropertiesMap = new Map();
 
@@ -295,7 +299,7 @@ export const getTitanClientOverview = async () => {
   try {
     const response = await authFetch("/titans/active-clients-summary", {
       next: {
-        tags: ["clients"],
+        tags: [CACHETAGS.clients],
         revalidate: 8400,
       },
     });
@@ -310,7 +314,7 @@ export const getActiveTitanClient = async () => {
   try {
     const response = await authFetch("/titans/active-clients", {
       next: {
-        tags: ["clients"],
+        tags: [CACHETAGS.clients],
         revalidate: 8400,
       },
     });
@@ -351,7 +355,7 @@ export const getTitanEarningsOverview = async () => {
     const response = await authFetch("/titans/earnings-overview", {
       next: {
         revalidate: 8400,
-        tags: ["dashboard"],
+        tags: [CACHETAGS.dashboard],
       },
     });
 
@@ -439,7 +443,7 @@ export const getTitanClientRevenueSummary = async () => {
   try {
     const response = await authFetch("/titans/revenue-summary", {
       next: {
-        tags: ["revenue"],
+        tags: [CACHETAGS.revenue],
         revalidate: 8400,
       },
     });
@@ -460,7 +464,7 @@ export const getTitanClientRevenueChart = async () => {
   try {
     const response = await authFetch("/titans/revenue-chart", {
       next: {
-        tags: ["revenue"],
+        tags: [CACHETAGS.revenue],
         revalidate: 8400,
       },
     });
@@ -481,11 +485,28 @@ export const getTitanClientRevenueChart = async () => {
   }
 };
 
+export const getTitanDashboardRecentSalesStats = async () => {
+  try {
+    const response = await authFetch("/titans/recent-sales", {
+      next: {
+        tags: [CACHETAGS.revenue],
+        revalidate: 8400,
+      },
+    });
+
+    console.log({response})
+
+    return response;
+  } catch (error) {
+    throw getError(error);
+  }
+};
+
 export const getTitanClientRecentSales = async () => {
   try {
     const response = await authFetch("/titans/titan-recent-sales", {
       next: {
-        tags: ["revenue"],
+        tags: [CACHETAGS.revenue],
         revalidate: 8400,
       },
     });

@@ -1,6 +1,10 @@
 import { BreadCrumbs } from "@/components/ui";
 import { ActiveTabs, PaymentHistoryTable } from "../../../ui";
-import { getClient, getClientPaymentData } from "@/lib/services";
+import {
+  getClient,
+  getClientPaymentData,
+  getTitanClientPaymentHistory,
+} from "@/lib/services";
 import { clientProfileDTO } from "@/lib/dtos";
 
 type Params = Promise<{ client: string }>;
@@ -12,7 +16,15 @@ const PaymentHistoryPage = async (props: { params: Params }) => {
 
   const personalInformation = clientProfileDTO(data);
 
-  const paymentData = await getClientPaymentData(clientId );
+  const paymentData = await getClientPaymentData(clientId);
+  const { sales = [], properties = [] } =
+    await getTitanClientPaymentHistory(clientId);
+
+  console.log(sales) 
+
+  // const filteredTransactions = searchParams?.property
+  //   ? sales?.filter((v) => v?.property?._id === searchParams?.property)
+  //   : sales;
 
   return (
     <section className="flex flex-col flex-1 gap-4">
@@ -29,13 +41,15 @@ const PaymentHistoryPage = async (props: { params: Params }) => {
       />
 
       <section className="flex flex-col w-full gap-4 p-2">
-        <p className="font-bold capitalize">{personalInformation?.fullname} - Payment history</p>
+        <p className="font-bold capitalize">
+          {personalInformation?.fullname} - Payment history
+        </p>
 
         <div className="flex flex-col w-full gap-4">
           <ActiveTabs />
 
           <div className="flex flex-col w-full">
-            <PaymentHistoryTable data={[]} />
+            {/* <PaymentHistoryTable data={sales||[]} /> */}
           </div>
         </div>
       </section>
