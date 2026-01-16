@@ -47,7 +47,7 @@ export const login = async (payload: { email: string; password: string }) => {
 
     return response?.data;
   } catch (error) {
-    console.log({ error: getError(error) });
+    // console.log({ error: getError(error) });
     throw new Error(getError(error));
   }
 };
@@ -149,7 +149,7 @@ export const resendVerification = async (form: any) => {
     // console.log({ data });
     return { data };
   } catch (error) {
-    console.log({ error });
+    // console.log({ error });
     return { error: getError(error) };
   }
 };

@@ -94,7 +94,7 @@ export const SignInForm = () => {
         <SubmitButton disabled={!isValid} className="min-w-full mt-8">
           Login
         </SubmitButton>
-        <p className="mx-auto">
+        {/* <p className="mx-auto">
           Don't have an account?
           <Link
             className="font-bold text-primary hover:underline"
@@ -103,7 +103,7 @@ export const SignInForm = () => {
             {" "}
             Sign up{" "}
           </Link>
-        </p>
+        </p> */}
       </form>
       {isModalOpen && <RecoverPasswordModal />}
     </>

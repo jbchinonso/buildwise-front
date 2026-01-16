@@ -9,7 +9,10 @@ import { useClientFetch, useModal } from "@/lib/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import { Money } from "iconsax-react";
-import { getTitanEarningsChart, getTitansCommissionSummary } from "@/lib/services";
+import {
+  getTitanEarningsChart,
+  getTitansCommissionSummary,
+} from "@/lib/services";
 import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 import Link from "next/link";
 import { convertToChartData } from "@/lib/dtos/earnings.dto";
@@ -158,7 +161,9 @@ export const EarningsOverview = ({ stats = 0 }: { stats?: number }) => {
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Titans commission</p>
-                <p className="text-grey-600">{toAmount(summary?.totalCommission||0)}</p>
+                <p className="text-grey-600">
+                  {toAmount(summary?.totalCommission || 0)}
+                </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Total paid-in</p>

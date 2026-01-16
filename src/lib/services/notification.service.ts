@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag, updateTag } from "next/cache";
+import { refresh, revalidateTag, updateTag } from "next/cache";
 import { baseUrl, CACHETAGS, getError } from "../utils";
 import { authFetch } from "./auth.service";
 import { INotification } from "../type";
@@ -22,6 +22,7 @@ export const editNotificationSettings = async (form: {
 
     revalidateTag(CACHETAGS.notifications, "max");
     updateTag(CACHETAGS.notifications);
+    refresh();
   } catch (error) {
     throw getError(error);
   }
@@ -37,6 +38,7 @@ export const createNotification = async (form: {
 
     revalidateTag(CACHETAGS.notifications, "max");
     updateTag(CACHETAGS.notifications);
+    refresh();
   } catch (error) {
     throw getError(error);
   }
@@ -76,6 +78,7 @@ export const markNotificationAsRead = async (notificationId: string) => {
 
     revalidateTag(CACHETAGS.notifications, "max");
     updateTag(CACHETAGS.notifications);
+    refresh();
   } catch (error) {
     console.error(error);
     return { error: getError(error) };
@@ -89,6 +92,7 @@ export const deleteNotification = async (notificationId: string) => {
 
     revalidateTag(CACHETAGS.notifications, "max");
     updateTag(CACHETAGS.notifications);
+    refresh();
   } catch (error) {
     throw getError(error);
   }
@@ -100,6 +104,7 @@ export const markAllNotificationAsRead = async () => {
 
     revalidateTag(CACHETAGS.notifications, "max");
     updateTag(CACHETAGS.notifications);
+    refresh();
   } catch (error) {
     throw getError(error);
   }

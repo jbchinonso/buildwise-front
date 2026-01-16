@@ -1,18 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import { DashboardModal, DataTable } from "@/components/dashboard";
-import { Button, DataTableColumnHeader } from "@/components/ui";
-import { useModal } from "@/lib/hooks";
-import { IClientPaymentData } from "@/lib/type";
+import { DataTable } from "@/components/dashboard";
+import { ReceiptModal } from "@/components/dashboard/ReceiptModal";
+import { DataTableColumnHeader } from "@/components/ui";
+import { IPaymentHistorySales } from "@/lib/type";
 import { ColumnDef } from "@tanstack/react-table";
-import { TickCircle } from "iconsax-react";
 import { ChevronRight } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-// import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 
-const columns: (toggleModal: () => void) => ColumnDef<IClientPaymentData>[] = (
-  toggleModal: () => void
+const columns: (
+  toggleModal: (id: string) => void
+) => ColumnDef<IPaymentHistorySales>[] = (
+  toggleModal: (id: string) => void
 ) => [
   {
     accessorKey: "date",
@@ -33,7 +32,11 @@ const columns: (toggleModal: () => void) => ColumnDef<IClientPaymentData>[] = (
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Property" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    cell: ({ row }) => {
+      const property = row.getValue("property") as any;
+
+      return <div>{property?.name}</div>;
+    },
   },
   {
     accessorKey: "plot_no",
@@ -59,78 +62,59 @@ const columns: (toggleModal: () => void) => ColumnDef<IClientPaymentData>[] = (
   },
 
   {
-    accessorKey: "id",
+    id: "actions",
     header: () => null,
     cell: ({ row }) => {
-      const id =
-        String(row.getValue("id")) ||
-        // String(row?.original) ||
-        String(row.getValue("_id"));
+      const id = String(row?.original?._id || row?.original?.id) || "";
 
       return (
         <div className="flex justify-center px-4">
-          <Link href={`/${id}`} id="button">
-            <ChevronRight className="size-4" />
-            <span className="sr-only">View details</span>
-          </Link>
+          <button
+            onClick={() => toggleModal(id)}
+            type="button"
+            id="button"
+            className="flex items-center gap-1"
+          >
+            View receipt <ChevronRight className="size-4" />
+          </button>
         </div>
       );
     },
   },
 ];
 
+const RECEIPT_KEY = "receipt";
 export const PaymentHistoryTable = ({
   data = [],
 }: {
-  data: IClientPaymentData[];
+  data: IPaymentHistorySales[];
 }) => {
-  const { isModalOpen, closeModal, toggleModal } = useModal();
+  const searchParams = useSearchParams();
+  const receipt = searchParams.get(RECEIPT_KEY) || "";
+  const router = useRouter();
 
-  const payment_data = [
-    {
-      item: "client",
-      label: "Client  name",
-      data: "Courtney Henry",
+  const toggleModal = useCallback(
+    (saleId: string) => {
+      const url = new URLSearchParams(searchParams);
+
+      if (receipt) {
+        url.delete(RECEIPT_KEY);
+      } else {
+        url.set(RECEIPT_KEY, saleId);
+      }
+
+      router.replace(`?${url.toString()}`);
     },
-    {
-      item: "agent",
-      data: "Sodik Nwachukwu",
-    },
-    {
-      item: "property",
-      data: "Silvercrest vill",
-    },
-    {
-      item: "units",
-      data: "1 Plot",
-    },
-    {
-      item: "installment_period",
-      label: "Instalment period",
-      data: "18 May 2025 - 18 Nov 2026",
-    },
-    {
-      item: "total_amount",
-      label: "Total amount",
-      data: "₦3,500,000",
-    },
-    {
-      item: "amount_due",
-      label: "Amount due",
-      data: "₦1,500,000",
-    },
-    {
-      item: "amount_paid",
-      label: "Amount paid",
-      data: "₦500,500",
-    },
-  ];
+    [searchParams, receipt]
+  );
 
   return (
     <>
       <DataTable columns={columns(toggleModal)} data={data} />
 
-      {isModalOpen && (
+      {Boolean(receipt) && <ReceiptModal saleId={receipt} />}
+
+      {/* {isModalOpen && (
         <DashboardModal
           handleClose={closeModal}
           heading="Receipt"
@@ -184,7 +168,7 @@ export const PaymentHistoryTable = ({
             </Button>
           </div>
         </DashboardModal>
-      )}
+      )} */}
     </>
   );
 };

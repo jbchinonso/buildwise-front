@@ -5,16 +5,12 @@ import { clientProfileDTO } from "@/lib/dtos";
 import { AddPropertyModal, ClientProperties } from "@/components/dashboard";
 
 type Params = Promise<{ client: string; property: string }>;
-type SearchParams = Promise<{ property: string }>;
 
 const ClientProfile = async (props: {
   params: Params;
-  searchParams: SearchParams;
 }) => {
   const params = await props.params;
-  const searchParams = await props.searchParams;
   const id = params.client;
-  const property = Number(searchParams?.property || 1);
 
   const [data, properties] = await Promise.all([
     getClient(id),

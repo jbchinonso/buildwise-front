@@ -5,6 +5,9 @@ export default withAuth(function middleware() {}, {
     authorized: ({ token }) => !!token,
   },
 });
+
+
+
 export const config = {
   // every route included here will be protected
   // the '/:path*' string will match and protect any nested routes of the routes included here

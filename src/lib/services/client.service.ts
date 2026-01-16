@@ -242,18 +242,23 @@ export const getTitanClientProfileProperty = async (id: string) => {
   }
 };
 
-export const getTitanClientPaymentHistory = async (id: string) => {
+export const getTitanClientPaymentHistory = async (
+  id: string,
+  propertyId: string=""
+) => {
+  const query = propertyId? `?propertyId=${propertyId}`: ""
   try {
-    const response = await authFetch(`/clients/${id}/payment-history`, {
-      next: {
-        tags: [`${CACHETAGS.clients}-${id}-payment`, CACHETAGS.payments],
-        revalidate: 8400,
-      },
-    });
+    const response = await authFetch(
+      `/clients/${id}/payment-history/${query}`,
+      {
+        next: {
+          tags: [`${CACHETAGS.clients}-${id}-payment`, CACHETAGS.payments],
+          revalidate: 8400,
+        },
+      }
+    );
 
     const sales = response?.sales as IPaymentHistorySales[];
-
-    console.log(sales, {response})
 
     const uniquePropertiesMap = new Map();
 
