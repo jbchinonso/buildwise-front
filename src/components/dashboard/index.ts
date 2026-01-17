@@ -15,3 +15,4 @@ export * from "./NotificationModal";
 export * from "./DeactivateTitanAccount";
 export * from "./DashboardCardLayout";
 export * from "./BankRequests/BankRequests";
+export * from "./PaymentHistoryTable";

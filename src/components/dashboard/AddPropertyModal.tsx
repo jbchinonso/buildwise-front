@@ -88,7 +88,7 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
             ) => v?.value === values?.propertyId
           )
         : {},
-    [values?.propertyId]
+    [properties, values?.propertyId]
   );
 
   const priceOptions = useMemo(() => {
@@ -183,6 +183,7 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
       setFieldValue("amountPaid", instantPrice);
       setFieldTouched("amountPaid");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values?.priceOptions]);
 
   return (
@@ -190,8 +191,8 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
       <Button
         size="sm"
         onClick={toggleModal}
-        variant="secondary"
-        className={cn("ml-auto", isMini ? "rounded-full p-4" : "")}
+        variant="round"
+        className={cn("ml-auto", isMini ? "rounded-full px-4 py-0" : "")}
       >
         <Plus size={18} /> {!isMini && <span>Add property</span>}
       </Button>

@@ -89,6 +89,8 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
       action: getTitansCommissionSummary,
       isModalOpen,
     });
+
+
   return (
     <>
       <DashboardStatsCard
@@ -112,7 +114,7 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
                 <div className="flex flex-col flex-[25] gap-2">
                   <p className="text-grey-400">Titans</p>
                   <p className="text-grey-600">
-                    {toAmount(summary?.totalCommission||0, false)}
+                    {toAmount(summary?.totalEarnings||0, false)}
                   </p>
                 </div>
                 <div className="flex flex-col flex-[25] gap-2">
@@ -120,20 +122,20 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
                     Commissions from all Titans
                   </p>
                   <p className="text-grey-600">
-                    {toAmount(summary?.totalCommission||0)}
+                    {toAmount(summary?.titansCommission||0)}
                   </p>
                 </div>
                 <div className="flex flex-col flex-[25] gap-2">
                   <p className="text-grey-400 whitespace-normal">
                     Commission from my Titans
                   </p>
-                  <p className="text-grey-600">{toAmount(summary?.titanCommission ||0)}</p>
+                  {/* <p className="text-grey-600">{toAmount(summary?.titanCommission ||0)}</p> */}
                 </div>
                 <div className="flex flex-col flex-[25] gap-2">
                   <p className="text-grey-400 whitespace-normal">
                     Commission from Sub-titans
                   </p>
-                  <p className="text-grey-600">{toAmount(summary?.subTitanCommission ||0)}</p>
+                  {/* <p className="text-grey-600">{toAmount(summary?.subTitanCommission ||0)}</p> */}
                 </div>
               </div>
             )}

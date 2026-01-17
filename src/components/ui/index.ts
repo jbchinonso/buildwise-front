@@ -18,3 +18,4 @@ export * from "./TableSkeleton";
 export * from "./EmptyChartData";
 export * from "./Switch";
 export * from "./ErrorBoundary";
+export * from "./Pagination";

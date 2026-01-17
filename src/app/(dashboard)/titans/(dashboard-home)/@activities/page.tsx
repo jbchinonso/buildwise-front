@@ -5,7 +5,7 @@ const Activities = async () => {
   const activities = await getTitanActivities();
 
   return (
-    <div className="bg-white w-full flex-1 md:flex-[38%] gap-3 flex flex-col">
+    <div className="bg-white w-full flex-1 md:flex-[38%] gap-3 flex flex-col min-h-full">
       <ActivityCard activities={activities || []} />
     </div>
   );

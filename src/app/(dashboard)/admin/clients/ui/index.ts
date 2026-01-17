@@ -1,6 +1,4 @@
 export * from "./cards"
 export * from "./ClientsTable"
 export * from "./UpdatePaymentModal"
-export * from "./ActiveTabs"
-export * from "./PaymentHistoryTable"
 export * from "./UpdatePropertyPaymentModal"

@@ -1,8 +1,10 @@
+import { ActiveTabs, PaymentHistoryTable } from "@/components/dashboard";
 import { BreadCrumbs } from "@/components/ui";
-import { ActiveTabs, PaymentHistoryTable } from "../../../ui";
+// import { ActiveTabs, PaymentHistoryTable } from "../../../ui";
 import {
   getTitanClientPaymentHistory,
   getTitanClientProfile,
+  getTitanClientProfileProperty,
 } from "@/lib/services";
 
 type Params = Promise<{ client: string }>;
@@ -16,15 +18,11 @@ const PaymentHistoryPage = async (props: {
   const searchParams = await props.searchParams;
   const id = params.client;
 
-  const [profile, { sales = [], properties = [] }] =
-    await Promise.all([
-      getTitanClientProfile(id),
-      getTitanClientPaymentHistory(id),
-    ]); 
-
-  const filteredTransactions = searchParams?.property
-    ? sales?.filter((v) => v?.property?._id === searchParams?.property)
-    : sales;
+  const [profile, { sales = [], pagination }, properties] = await Promise.all([
+    getTitanClientProfile(id),
+    getTitanClientPaymentHistory(id),
+    getTitanClientProfileProperty(id)
+  ]); 
 
   return (
     <section className="flex flex-col flex-1 gap-4">
@@ -50,7 +48,7 @@ const PaymentHistoryPage = async (props: {
           <ActiveTabs properties={properties} />
 
           <div className="flex flex-col w-full">
-            <PaymentHistoryTable data={filteredTransactions} />
+            <PaymentHistoryTable data={sales || []} pagination={pagination} />
           </div>
         </div>
       </section>

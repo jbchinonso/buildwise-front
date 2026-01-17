@@ -181,9 +181,7 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: number }) => {
 
             <div className="w-full">
               {isFetchingSales ? (
-                <>
-                  <TableSkeleton />
-                </>
+                <TableSkeleton />
               ) : (
                 <DataTable columns={columns} data={sales || []} />
               )}

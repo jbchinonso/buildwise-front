@@ -23,7 +23,7 @@ export default function Layout({
       </section>
       {children}
 
-      <section>{activities}</section>
+      <section className="flex flex-col flex-1">{activities}</section>
     </>
   );
 }
