@@ -89,16 +89,7 @@ export const TitanCommission = ({ stats }: { stats?: string | number }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
 
   const { data: summary, isLoading: isSummaryLoading } = useClientFetch({
-    action: async () => {
-      const res = await getTitansCommissionSummary();
-
-      return res as {
-        totalCommission: number;
-        titanCommission: number;
-        subTitanCommission: number;
-        bonusCommission: number;
-      };
-    },
+    action: getTitansCommissionSummary,
     isModalOpen,
   });
 
@@ -136,19 +127,19 @@ export const TitanCommission = ({ stats }: { stats?: string | number }) => {
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Total Commission</p>
                 <p className="text-grey-600 font-medium">
-                  {toAmount(summary?.totalCommission || 0)}
+                  {toAmount(summary?.totalEarnings || 0)}
                 </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Commission from Titans</p>
                 <p className="text-grey-600 font-medium">
-                  {toAmount(summary?.titanCommission || 0)}
+                  {toAmount(summary?.titansCommission || 0)}
                 </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Comission from Sub-titans</p>
                 <p className="text-grey-600 font-medium">
-                  {toAmount(summary?.subTitanCommission || 0)}
+                  {toAmount(summary?.titansCommission || 0)}
                 </p>
               </div>
             </div>

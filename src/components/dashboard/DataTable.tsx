@@ -15,24 +15,37 @@ import {
 } from "@tanstack/react-table";
 
 import {
+  Button,
+  Pagination,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
+  TableSkeleton,
 } from "@/components/ui";
+import { IPaginationResponse } from "@/lib/type";
+import { SpinLoadingAnimation } from "../ui/SpinLoadingAnimation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  pagination?: IPaginationResponse;
+  manualPagination?: boolean;
+  rowCount?: number;
+  isLoading?: boolean;
+  isLoadingInner?: boolean;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  manualPagination,
+  rowCount = 1,
+  isLoading,
+  isLoadingInner,
 }: DataTableProps<TData, TValue>) {
-
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -41,27 +54,45 @@ export function DataTable<TData, TValue>({
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0, //initial page index
+    pageSize: 10, //default page size
+  });
+
   const table = useReactTable({
     data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+
+    ...(manualPagination
+      ? {
+          manualPagination,
+          rowCount: rowCount,
+          onPaginationChange: setPagination,
+        }
+      : {
+          getPaginationRowModel: getPaginationRowModel(),
+        }),
+
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      ...(manualPagination ? { pagination } : {}),
     },
   });
 
-  return (
-    <div className="w-full flex flex-col flex-1 min-h-full">
+  return isLoading ? (
+    <TableSkeleton />
+  ) : (
+    <div className="w-full flex flex-col flex-1 min-h-full relative">
       <Table className="flex-1 min-h-full">
         <TableHeader className="bg-grey-50 rounded-lg mb-2">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -81,6 +112,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
+
         <TableBody className="bg-white min-h-full rounded-lg my-2 p-4 text-sm flex-1">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
@@ -101,12 +133,25 @@ export function DataTable<TData, TValue>({
                 colSpan={columns?.length || 5}
                 className="h-24 text-center text-sm"
               >
-                No results.
+                {isLoadingInner ? (
+                  <div className="flex gap-4 text-center items-center justify-center relative w-full">
+                    Fetching data
+                    <SpinLoadingAnimation className="m-auto" />
+                  </div>
+                ) : (
+                  "No results."
+                )}
               </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
+
+      {pagination && (
+        <div className="flex my-4">
+          <Pagination {...pagination} />
+        </div>
+      )}
     </div>
   );
 }

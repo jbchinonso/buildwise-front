@@ -5,16 +5,10 @@ import { clientProfileDTO } from "@/lib/dtos";
 import { AddPropertyModal, ClientProperties } from "@/components/dashboard";
 
 type Params = Promise<{ client: string; property: string }>;
-type SearchParams = Promise<{ property: string }>;
 
-const ClientProfile = async (props: {
-  params: Params;
-  searchParams: SearchParams;
-}) => {
+const ClientProfile = async (props: { params: Params }) => {
   const params = await props.params;
-  const searchParams = await props.searchParams;
   const id = params.client;
-  const property = Number(searchParams?.property || 1);
 
   const [data, properties] = await Promise.all([
     getClient(id),
@@ -46,7 +40,7 @@ const ClientProfile = async (props: {
             <UpdatePaymentModal
               client={personalInformation}
               properties={properties || []}
-              //  clientProperties={properties || []} 
+              //  clientProperties={properties || []}
             />
 
             <Button
@@ -138,11 +132,7 @@ const ClientProfile = async (props: {
         {properties?.length ? (
           <ClientProperties properties={properties || []} />
         ) : (
-          <div className="flex flex-1 flex-wrap justify-between gap-4 gap-x-20 w-full">
-            <div className="w-full flex py-2 my-2 mt-auto">
-              <AddPropertyModal />
-            </div>
-          </div>
+          <AddPropertyModal />
         )}
       </div>
     </section>

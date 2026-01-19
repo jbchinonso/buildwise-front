@@ -22,14 +22,14 @@ export interface IButtonProps
   outline?: boolean;
   asLink?: boolean;
   loading?: boolean;
-  variant?: "secondary" | "primary" | "ghost" | "white";
+  variant?: "secondary" | "primary" | "ghost" | "white" | "round" | "outline";
   size?: keyof typeof ButtonSizes;
 }
 
 const ButtonSizes = {
   default: "px-4 py-2",
-  xs: "px-4 text-[10px] py-2",
-  sm: "px-6 text-xs py-2",
+  xs: "px-4 !text-xs py-2",
+  sm: "px-6 !text-sm py-2",
   lg: "px-8",
   icon: "size-9 aspect-square h-auto p-0 !sm:p-0",
 };
@@ -42,28 +42,18 @@ export function Button({
   variant,
   ...props
 }: IButtonProps) {
-  const variantStyles: ClassNameValue = (() => {
-    switch (variant) {
-      case "ghost":
-        return "bg-transparent text-primary-500";
-      case "secondary":
-        return "bg-[#E8E9EB] text-primary-500 ";
-      case "white":
-        return "bg-white text-primary-500 ";
-      default:
-        return "text-white enabled:hover:text-primary-500 text-white border-primary-500 bg-primary-500 enabled:hover:bg-[#ededed]";
-    }
-  })();
-
   return (
     <ButtonWrapper
       asLink={asLink}
       {...props}
-      className={twMerge(
-        `capitalize rounded-4xl whitespace-nowrap flex flex-nowrap items-center place-items-center text-sm md:text-base cursor-pointer relative p-4 px-16 group disabled:pointer-events-none disabled:opacity-70 min-w-fit gap-1 transition-all duration-300 ease-out justify-center border border-transparent enabled:hover:border-primary-500`,
+      className={cn(
+        "capitalize rounded-4xl whitespace-nowrap flex flex-nowrap items-center place-items-center text-sm md:text-base cursor-pointer relative p-4 px-16 group disabled:pointer-events-none disabled:opacity-70 min-w-fit gap-1 transition-all duration-300 ease-out justify-center border enabled:hover:border-primary-500 text-white enabled:hover:text-primary-500 border-primary-500 bg-primary-500 enabled:hover:bg-[#ededed]",
         size ? ButtonSizes[size] : "",
-        outline && "text-white bg-transparent",
-        variantStyles,
+        { "bg-transparent text-primary-500": outline },
+        { "bg-transparent text-primary-500": variant === "ghost" },
+        { "bg-[#E8E9EB] text-primary-500": variant === "secondary" },
+        { "bg-white text-primary-500": variant === "white" },
+        { "bg-transparent text-primary-500 rounded-full !aspect-square !py-0 bg-primary-500/10": variant === "round" },
         className
       )}
     >

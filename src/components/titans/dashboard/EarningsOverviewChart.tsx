@@ -9,6 +9,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { IEarningsChartData } from "@/lib/type";
+import { SpinLoadingAnimation } from "@/components/ui/SpinLoadingAnimation";
 
 const chartConfig = {
   salesCommission: {
@@ -23,41 +24,58 @@ const chartConfig = {
 
 export function EarningsOverviewChart({
   chartData,
+  isLoading,
 }: {
   chartData?: IEarningsChartData[];
+  isLoading?: boolean;
 }) {
   return (
-    <ChartContainer
-      config={chartConfig}
-      className="min-h-[200px] w-full max-w-full text-[rgba(151,71,255,1)]"
-    >
-      <LineChart accessibilityLayer data={chartData}>
-        <Line
-          dataKey="salesCommission"
-          type="linear"
-          stroke="var(--color-salesCommission)"
-          strokeWidth={2}
-          dot={false}
-        />
-        <Line
-          dataKey="subTitanCommission"
-          type="linear"
-          stroke="var(--color-subTitanCommission)"
-          strokeWidth={2}
-          dot={false}
-        />
-        <XAxis
-          dataKey="month"
-          tickMargin={10}
-          tickFormatter={(value) => value.slice(0, 3)}
-        />
-        <YAxis
-          dataKey="amount"
-          tickMargin={0}
-          tickFormatter={(value) => value + "m"}
-        />
-        <ChartTooltip content={<ChartTooltipContent />} />
-      </LineChart>
-    </ChartContainer>
+    <div className="flex flex-col">
+      {chartData?.length ? (
+        <ChartContainer
+          config={chartConfig}
+          className="min-h-[200px] w-full max-w-full text-[rgba(151,71,255,1)]"
+        >
+          <LineChart accessibilityLayer data={chartData}>
+            <Line
+              dataKey="salesCommission"
+              type="linear"
+              stroke="var(--color-salesCommission)"
+              strokeWidth={2}
+              dot={false}
+            />
+            <Line
+              dataKey="subTitanCommission"
+              type="linear"
+              stroke="var(--color-subTitanCommission)"
+              strokeWidth={2}
+              dot={false}
+            />
+            <XAxis
+              dataKey="month"
+              tickMargin={10}
+              tickFormatter={(value) => value.slice(0, 3)}
+            />
+            <YAxis
+              dataKey="amount"
+              tickMargin={0}
+              tickFormatter={(value) => value + "m"}
+            />
+            <ChartTooltip content={<ChartTooltipContent />} />
+          </LineChart>
+        </ChartContainer>
+      ) : (
+        <div className="min-h-[200px] text-center w-full max-w-full text-[rgba(151,71,255,1)]">
+          {isLoading ? (
+            <div className="flex gap-4 text-center items-center justify-center relative w-full">
+              Fetching data
+              <SpinLoadingAnimation className="m-auto" />
+            </div>
+          ) : (
+            "No chart data."
+          )}
+        </div>
+      )}
+    </div>
   );
 }

@@ -52,13 +52,17 @@ interface Company {
 interface IPagination {
   page?: number | string;
   limit?: number | string;
+  total?: number | string;
+  page?: number | string;
+  pages?: number | string;
 }
 
 interface IPaginationResponse extends IPagination {
-  total?: number;
   totalPages?: number;
   hasNextPage?: boolean;
   hasPreviousPage?: boolean;
+  pageIndex?: number;
+  pageSize?: number;
 }
 
 export interface IUser {
@@ -399,6 +403,16 @@ interface IPaymentHistorySales {
   transactions: IPaymentHistoryTransaction[];
   totalPaid: number;
   outstanding: number;
+}
+interface IPaymentHistoryTransaction {
+  saleId: string;
+  propertyId: string;
+  _id: string;
+  date: string | Date;
+  amount: number;
+  property: string;
+  plotNumber: number | string;
+  status: string;
 }
 
 interface IPaymentHistoryTransactionDTO {
