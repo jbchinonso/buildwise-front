@@ -19,7 +19,7 @@ const ProfileForm = () => {
   const [isEditing, setIsEditing] = useState(false);
   const { data: session, update } = useSession();
 
-  console.log({session})
+  // console.log({session})
 
   const { data: states = [], isLoading } = useClientFetch({
     action: getStates,

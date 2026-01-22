@@ -10,7 +10,7 @@ import { NotificationSettings } from "@/components/dashboard";
 
 export const SettingsForm = () => {
   const {data: session} = useSession()
-  console.log({session})
+  // console.log({session})
   // const [isEditing, setIsEditing] = useState(false);
 
   const [inviteLink] = useState(

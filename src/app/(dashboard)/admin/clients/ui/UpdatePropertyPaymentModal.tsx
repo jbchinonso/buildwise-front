@@ -28,7 +28,7 @@ export const UpdatePropertyPaymentModal = ({
           if (!clientId) {
             throw new Error("Select client");
           }
-          console.log({clientId})
+          // console.log({clientId})
 
           // NOTE: this fails because salesId and clientOwnership.id 
           // are the same so it throws an internal server error

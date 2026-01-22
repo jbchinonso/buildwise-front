@@ -5,16 +5,7 @@ import { toAmount } from "@/lib/utils";
 
 const Dashboard = async () => {
   const res = await getTitanEarningsChart();
-
-  // console.log({res})
-
-  // const data = convertToChartData(res) || [];
-  // const totalSalesCommission = data?.reduce((acc, cv) => {
-  //   return (acc += cv?.salesCommission || 0);
-  // }, 0);
-  // const totalSubTitanCommission = data?.reduce((acc, cv) => {
-  //   return (acc += cv?.subTitanCommission || 0);
-  // }, 0);
+  const data = convertToChartData(res?.chartData) || [];
 
   return (
     <>
@@ -33,7 +24,7 @@ const Dashboard = async () => {
               <div className="flex flex-col">
                 <p className="text-grey-400">Sales Commissions</p>
                 <p className="text-grey-600 text-[10px]">
-                  {/* Yearly Total: {toAmount(totalSalesCommission ?? 0)} */}
+                  Yearly Total: {toAmount(res?.yearlyTotals?.sales ?? 0)}
                 </p>
               </div>
             </div>
@@ -42,13 +33,13 @@ const Dashboard = async () => {
               <div className="flex flex-col">
                 <p className="text-grey-400">Commissions from Titans</p>
                 <p className="text-grey-600 text-[10px]">
-                  {/* Yearly Total: {toAmount(totalSubTitanCommission ?? 0)} */}
+                  Yearly Total: {toAmount(res?.yearlyTotals?.titans ?? 0)}
                 </p>
               </div>
             </div>
           </div>
 
-          {/* <EarningsOverviewChart chartData={data} /> */}
+          <EarningsOverviewChart chartData={data} />
         </div>
       </div>
     </>

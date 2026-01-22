@@ -1,5 +1,5 @@
 import { IEarningsChartData, IEarningsResponse } from "../type";
-import { getMonth } from "../utils";
+// import { getMonth } from "../utils";
 
 export function convertToChartData(
   data: IEarningsResponse
@@ -9,7 +9,8 @@ export function convertToChartData(
 
   // 1. Process salesCommissions
   for (const item of data.salesCommissions) {
-    const monthKey = getMonth(item.month);
+    // const monthKey = getMonth(item.month);
+    const monthKey = item.month;
     if (monthKey) {
       const existing = mergedData.get(monthKey) || { month: String(monthKey) };
 
@@ -24,7 +25,8 @@ export function convertToChartData(
 
   // 2. Process subTitanCommissions
   for (const item of data.subTitanCommissions) {
-    const monthKey = getMonth(item.month);
+    // const monthKey = getMonth(item.month);
+    const monthKey = item.month;
     if (monthKey) {
       const existing = mergedData.get(monthKey) || { month: String(monthKey) };
 
