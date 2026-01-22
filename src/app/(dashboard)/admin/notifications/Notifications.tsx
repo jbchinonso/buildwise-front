@@ -27,7 +27,7 @@ export default function NotificationListener() {
     const eventSource = new EventSource("/api/notifications/stream");
 
     eventSource.onmessage = (event) => {
-      console.log({ event });
+      // console.log({ event });
       const data = JSON.parse(event.data);
       setMessages((prev) => [...prev, data.message]);
     };

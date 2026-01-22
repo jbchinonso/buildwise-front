@@ -182,7 +182,7 @@ export const getTitansCommissionList = async () => {
       },
     });
 
-    console.log({ response });
+    // console.log({ response });
 
     return response as any[];
   } catch (error) {
@@ -390,6 +390,15 @@ export const getTitanCommissionEarnings = async () => {
   }
 };
 
+
+interface IEarningChartResponse {
+  chartData: {
+    salesCommissions: { month: number | string; amount: number }[];
+    subTitanCommissions: { month: number | string; amount: number }[];
+  };
+  yearlyTotals: { sales: 0; titans: 0; grandTotal: 0 };
+}
+
 export const getTitanEarningsChart = async () => {
   try {
     const response = await authFetch("/titans/earnings-overview", {
@@ -398,11 +407,8 @@ export const getTitanEarningsChart = async () => {
         tags: ["dashboard"],
       },
     });
-
-    return response as {
-      salesCommissions: { month: number | string; amount: number }[];
-      subTitanCommissions: { month: number | string; amount: number }[];
-    };
+    
+    return response as IEarningChartResponse;
   } catch (error) {
     console.error("Error fetching titans:", getError(error));
     throw new Error(getError(error));
@@ -518,7 +524,7 @@ export const getTitanDashboardRecentSalesStats = async () => {
       },
     });
 
-    console.log({ response });
+    // console.log({ response });
 
     return response;
   } catch (error) {

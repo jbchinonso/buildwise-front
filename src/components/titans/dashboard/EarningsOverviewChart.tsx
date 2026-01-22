@@ -30,7 +30,7 @@ export function EarningsOverviewChart({
   isLoading?: boolean;
 }) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col w-full">
       {chartData?.length ? (
         <ChartContainer
           config={chartConfig}
@@ -65,7 +65,7 @@ export function EarningsOverviewChart({
           </LineChart>
         </ChartContainer>
       ) : (
-        <div className="min-h-[200px] text-center w-full max-w-full text-[rgba(151,71,255,1)]">
+        <div className="min-h-[200px] text-center w-full max-w-full">
           {isLoading ? (
             <div className="flex gap-4 text-center items-center justify-center relative w-full">
               Fetching data
