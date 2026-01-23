@@ -277,8 +277,10 @@ interface IRecentClients {
   location: string;
   instalment: string;
   paymentStatus: string;
+  status: string;
   properties: string | number;
   propertiesCount: string | number;
+  joined: string
 }
 
 interface IClientRecentTransactions {
@@ -492,6 +494,7 @@ interface SubTitan {
   joined: string;
 }
 
+
 interface IClientProfile {
   phone_number: string;
   firstName: string;
@@ -586,4 +589,25 @@ interface ITitanSalesTable {
   paid: number;
   outstanding: number;
   commission: number;
+}
+
+
+interface IPropertiesSold {
+  _id: string;
+  price: string|number;
+  buyer: string;
+  location: string;
+  paymentStatus: string;
+  propertyName: string;
+  unit: string;
+}
+
+interface IRecentSale {
+  _id: string;
+  price: string | number;
+  clientName: string;
+  propertyName: string;
+  revenue: string | number;
+  outstanding: string | number;
+  commission: string | number;
 }

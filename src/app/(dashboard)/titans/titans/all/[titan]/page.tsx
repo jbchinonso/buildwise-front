@@ -3,8 +3,8 @@ import {
   Clients,
   PropertiesSold,
   SubTitians,
-  PayCommissionModal,
 } from "../../ui";
+import { PayCommissionModal } from "@/app/(dashboard)/admin/titans/ui";
 
 type Params = Promise<{ titan: string }>;
 const TitanProfile = async (props: { params: Params }) => {

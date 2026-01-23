@@ -157,14 +157,14 @@ export const ClientOverview = ({ stats = 0 }: { stats?: number }) => {
             <div className="flex justify-end gap-4 mt-auto items-center">
               <Button
                 onClick={closeModal}
-                size="xs"
+                size="sm"
                 outline
                 variant="secondary"
               >
                 Close
               </Button>
 
-              <Button size="xs">Export PDF</Button>
+              <Button size="sm">Export PDF</Button>
             </div>
           </section>
         </PageModal>

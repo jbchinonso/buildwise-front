@@ -33,11 +33,11 @@ export const UnitsSoldModal = () => {
         </div>
 
         <div className="flex justify-end gap-4 items-center">
-          <Button onClick={toggleModal} size="xs" outline variant="secondary">
+          <Button onClick={toggleModal} size="sm" outline variant="secondary">
             Close
           </Button>
 
-          <Button size="xs">Export PDF</Button>
+          <Button size="sm">Export PDF</Button>
         </div>
       </section>
     </PageModal>

@@ -2,7 +2,7 @@
 import { DataTable } from "@/components/dashboard";
 import { DataTableColumnHeader } from "@/components/ui";
 import { IRecentClients } from "@/lib/type";
-import { toAmount } from "@/lib/utils";
+import { formatDateToNow, toAmount } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
@@ -13,7 +13,17 @@ const columns: ColumnDef<IRecentClients>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div className="capitalize">{row.getValue("clientName")}</div>,
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("clientName")}</div>
+    ),
+  },
+
+  {
+    accessorKey: "location",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Location" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
 
   {
@@ -26,57 +36,72 @@ const columns: ColumnDef<IRecentClients>[] = [
       <div>
         {toAmount(
           row.original?.properties || row.original?.propertiesCount || 0,
-          false
+          false,
         )}
       </div>
     ),
   },
-  {
-    accessorKey: "location",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Location" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("location")}</div>,
-  },
+
   {
     accessorKey: "lastPayment",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Last Payment" />
     ),
-    cell: ({ row }) => <div>{toAmount(row.getValue("lastPayment") || 0)}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("lastPayment") ?? 0)}</div>,
   },
 
-  {
-    accessorKey: "totalPaid",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Total Paid" />
-    ),
-    cell: ({ row }) => <div>{toAmount(row.getValue("totalPaid") || 0)}</div>,
-  },
+  // {
+  //   accessorKey: "totalPaid",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Total Paid" />
+  //   ),
+  //   cell: ({ row }) => <div>{toAmount(row.getValue("totalPaid") ?? 0)}</div>,
+  // },
 
-  {
-    accessorKey: "outstanding",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Outstanding" />
-    ),
-    cell: ({ row }) => <div>{toAmount(row.getValue("outstanding") || 0)}</div>,
-  },
-  {
-    accessorKey: "instalment",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Instalment" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("instalment")}</div>,
-  },
+  // {
+  //   accessorKey: "outstanding",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Outstanding" />
+  //   ),
+  //   cell: ({ row }) => <div>{toAmount(row.getValue("outstanding") || 0)}</div>,
+  // },
+  // {
+  //   accessorKey: "instalment",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Instalment" />
+  //   ),
+  //   cell: ({ row }) => <div>{row.getValue("instalment")}</div>,
+  // },
 
   {
     accessorKey: "paymentStatus",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Payment Status" />
     ),
-    cell: ({ row }) => (
-      <div className={"text-center"}>{row.getValue("paymentStatus")}</div>
+    cell: ({ row }) => <div>{row.getValue("paymentStatus")}</div>,
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
     ),
+    cell: ({ row }) => <div>{row.getValue("status")}</div>,
+  },
+  // {
+  //   accessorKey: "",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Payment Status" />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <div>{row.getValue("paymentStatus")}</div>
+  //   ),
+  // },
+  {
+    accessorKey: "joined",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Joined" />
+    ),
+    cell: ({ row }) => <div>{formatDateToNow(row.getValue("joined"))}</div>,
   },
 
   {

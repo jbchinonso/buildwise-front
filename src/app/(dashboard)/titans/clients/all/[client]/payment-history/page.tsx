@@ -1,11 +1,10 @@
-import { ActiveTabs, PaymentHistoryTable } from "@/components/dashboard";
 import { BreadCrumbs } from "@/components/ui";
-// import { ActiveTabs, PaymentHistoryTable } from "../../../ui";
 import {
+  getClient,
   getTitanClientPaymentHistory,
-  getTitanClientProfile,
-  getTitanClientProfileProperty,
 } from "@/lib/services";
+import { clientProfileDTO } from "@/lib/dtos";
+import { ActiveTabs, PaymentHistoryTable } from "@/components/dashboard";
 
 type Params = Promise<{ client: string }>;
 type SearchParams = Promise<{ property: string }>;
@@ -15,14 +14,19 @@ const PaymentHistoryPage = async (props: {
   searchParams: SearchParams;
 }) => {
   const params = await props.params;
+  const clientId = params.client;
   const searchParams = await props.searchParams;
-  const id = params.client;
+  const property = searchParams.property || "";
 
-  const [profile, { sales = [], pagination }, properties] = await Promise.all([
-    getTitanClientProfile(id),
-    getTitanClientPaymentHistory(id),
-    getTitanClientProfileProperty(id)
-  ]); 
+  const data = await getClient(clientId);
+
+  const personalInformation = clientProfileDTO(data);
+
+  const {
+    sales = [],
+    pagination,
+    availableProperties = [],
+  } = await getTitanClientPaymentHistory(clientId, property);
 
   return (
     <section className="flex flex-col flex-1 gap-4">
@@ -30,22 +34,21 @@ const PaymentHistoryPage = async (props: {
         paths={[
           { title: "Home", path: "/titans/clients" },
           { title: "All Clients", path: "/titans/clients/all" },
-          { title: "Profile", path: `/titans/clients/all/${id}` },
+          { title: "Profile", path: `/titans/clients/all/${clientId}` },
           {
             title: "Payment history",
-            path: "",
+            path: "#",
           },
         ]}
       />
 
       <section className="flex flex-col w-full gap-4 p-2">
-        <p className="font-bold">
-          {`${profile?.firstName || ""} ${profile?.lastName || ""}`} - Payment
-          history
+        <p className="font-bold capitalize">
+          {personalInformation?.fullname} - Payment history
         </p>
 
         <div className="flex flex-col w-full gap-4">
-          <ActiveTabs properties={properties} />
+          <ActiveTabs properties={availableProperties} />
 
           <div className="flex flex-col w-full">
             <PaymentHistoryTable data={sales || []} pagination={pagination} />

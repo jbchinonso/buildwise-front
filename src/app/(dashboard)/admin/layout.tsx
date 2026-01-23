@@ -15,7 +15,7 @@ export default async function AdminLayout({
     return redirect("/login");
   }
   return (
-    <section className="flex flex-col flex-1 relative mb-auto w-full min-h-fit bg-[#F8F8F8] max-w-[MIN(2440px,100%)] mx-auto">
+    <section className="flex flex-col flex-1 relative mb-auto w-full min-h-fit bg-[#F8F8F8] max-w-[MIN(2000px,100%)] mx-auto">
       <HeaderServer />
       <BankRequests />
 

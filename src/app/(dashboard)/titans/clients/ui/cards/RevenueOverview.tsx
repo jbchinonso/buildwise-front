@@ -23,66 +23,62 @@ import {
   getTitanClientRevenueChart,
   getTitanClientRevenueSummary,
 } from "@/lib/services";
+import { IRecentSale } from "@/lib/type";
 
-type Transaction = {
-  id: string;
-  client: string;
-  property: string;
-  location: string;
-  last_payment: string;
-  totalPaid: string;
-  outstanding: string;
-  instalment: string;
-  payment_status: string;
-};
 
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<IRecentSale>[] = [
   {
-    accessorKey: "client",
+    accessorKey: "clientName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Client" />
     ),
-    cell: ({ row }) => <div>{row.getValue("client")}</div>,
+    cell: ({ row }) => <div>{row.getValue("clientName")}</div>,
   },
   {
-    accessorKey: "property",
+    accessorKey: "propertyName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Property" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    cell: ({ row }) => <div>{row.getValue("propertyName")}</div>,
   },
   {
     accessorKey: "price",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Sales price" />
     ),
-    cell: ({ row }) => <div>{row.getValue("price")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("price"))}</div>,
   },
   {
     accessorKey: "revenue",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Revenue" />
     ),
-    cell: ({ row }) => <div>{row.getValue("revenue")}</div>,
+    cell: ({ row }) => (
+      <div className="text-primary-400">{toAmount(row.getValue("revenue"))}</div>
+    ),
   },
   {
     accessorKey: "outstanding",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Outstanding" />
     ),
-    cell: ({ row }) => <div>{row.getValue("outstanding")}</div>,
+    cell: ({ row }) => (
+      <div className="text-secondary-300">
+        {toAmount(row.getValue("outstanding"))}
+      </div>
+    ),
   },
   {
     accessorKey: "commission",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Commission" />
     ),
-    cell: ({ row }) => <div>{row.getValue("commission")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("commission"))}</div>,
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const id = String(row.getValue("_id")) || String(row?.id);
+      const id = String(row.original?._id);
 
       return (
         <div className="flex justify-center">
@@ -116,7 +112,7 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: string | number }) => {
     action: getTitanClientRevenueSummary,
     isModalOpen,
   });
-  
+
   const {
     data,
     isLoading,
@@ -185,23 +181,25 @@ export const RevenueOverview = ({ stats = 0 }: { stats?: string | number }) => {
 
             <div className="w-full my-2">
               <h2 className="font-semibold my-2 text-grey-600">Recent Sales</h2>
-              {isLoading ? (
-                <TableSkeleton />
-              ) : (
-                <DataTable columns={columns} data={data?.data || []} />
-              )}
+
+              <DataTable
+                isLoading={isLoading}
+                columns={columns}
+                data={data?.data || []}
+                pagination={data?.pagination}
+              />
             </div>
 
             <div className="flex justify-end gap-4 items-center mt-auto">
               <Button
                 onClick={toggleModal}
-                size="xs"
+                size="sm"
                 outline
                 variant="secondary"
               >
                 Close
               </Button>
-              <Button size="xs">Export PDF</Button>
+              <Button size="sm">Export PDF</Button>
             </div>
           </section>
         </PageModal>

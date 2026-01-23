@@ -90,7 +90,7 @@ export const SubTitanCommission = ({
           heading="Titans Overview"
           className="md:max-w-[MIN(95%,620px)]"
         >
-          <section className="flex flex-col w-full gap-4 ">
+          <section className="flex flex-1 flex-col w-full gap-4 ">
             <div className="flex w-full rounded-xl text-xs py-[10px] flex-wrap bg-primary-50 p-3 text-white">
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">All Titans</p>
@@ -123,17 +123,17 @@ export const SubTitanCommission = ({
               <DataTable columns={columns} data={[]} />
             </div>
 
-            <div className="flex justify-end gap-4 items-center">
+            <div className="mt-auto flex justify-end gap-4 items-center">
               <Button
                 onClick={toggleModal}
-                size="xs"
+                size="sm"
                 outline
                 variant="secondary"
               >
                 Close
               </Button>
 
-              <Button size="xs">Export PDF</Button>
+              <Button size="sm">Export PDF</Button>
             </div>
           </section>
         </PageModal>

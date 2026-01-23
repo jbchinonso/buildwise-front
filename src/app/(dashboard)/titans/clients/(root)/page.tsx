@@ -7,8 +7,8 @@ const RecentClients = async () => {
   const recentClients = await getRecentClients();
 
   return (
-    <section className="flex flex-wrap gap-4 flex-1 max-h-[601px]">
-      <div className="w-full my-4">
+    <section className="flex flex-wrap gap-4 flex-1 m.ax-h-[601px]">
+      <div className="w-full my-4 flex-1">
         <div className="w-full flex items-baseline my-2">
           <div className="flex items-center gap-4">
             <p className="font-bold">Recent added clients</p>

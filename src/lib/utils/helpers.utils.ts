@@ -79,7 +79,7 @@ type OutputType = "formData" | "object";
 export const stripFormData = (
   data: { [key: string]: any } | FormData,
   keysToRemove: string[],
-  outputType?: OutputType
+  outputType?: OutputType,
   // outputType: OutputType = "formData"
 ) => {
   if (outputType === "formData") {
@@ -186,13 +186,13 @@ export function myImageLoader({
   // Example: Using a hypothetical external image optimization service
   // Replace with your actual image optimization service URL logic
   return `https://example.com/api/image?url=${encodeURIComponent(
-    src
+    src,
   )}&w=${width}&q=${quality || 75}`;
 }
 
 export const toAmountWithSuffix = (
   value: string | number,
-  isCurrency = true
+  isCurrency = true,
 ) => {
   const numValue = Number(value);
 
@@ -242,7 +242,7 @@ export const toAmountWithSuffix = (
  * @returns {(string | number)}
  */
 export const toAmount = (value: string | number, isCurrency = true) => {
-  let _value = value;
+  let _value = value ?? 0;
 
   if (typeof value === "string") {
     _value = value.replace(/\D/gi, "").trim();
@@ -273,7 +273,7 @@ export const toAmount = (value: string | number, isCurrency = true) => {
 export function formatAddress(
   lga?: string,
   state?: string,
-  country?: string
+  country?: string,
 ): string {
   const addressParts: string[] = [];
 
@@ -292,7 +292,7 @@ export function formatAddress(
 
 export const formatDate = (
   date: Date | string | null | undefined,
-  formatString: string = "dd/MM/yyyy, HH:MMa"
+  formatString: string = "dd/MM/yyyy, hh:MM a",
 ) => {
   try {
     if (!date) {
@@ -304,7 +304,7 @@ export const formatDate = (
   }
 };
 
-export const formatDateToNow = (date: Date|string | null | undefined) => {
+export const formatDateToNow = (date: Date | string | null | undefined) => {
   try {
     if (!date) {
       throw new Error();

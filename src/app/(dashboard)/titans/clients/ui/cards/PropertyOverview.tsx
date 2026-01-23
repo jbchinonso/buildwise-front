@@ -12,20 +12,10 @@ import { DataTableColumnHeader, Button, TableSkeleton } from "@/components/ui";
 import { toAmount, toAmountWithSuffix } from "@/lib/utils";
 import Link from "next/link";
 import { getPropertiesSold, getTitanPropertiesSummary } from "@/lib/services";
+import { IPropertiesSold } from "@/lib/type";
 
-type Transaction = {
-  id: string;
-  client: string;
-  property: string;
-  location: string;
-  last_payment: string;
-  totalPaid: string;
-  outstanding: string;
-  instalment: string;
-  payment_status: string;
-};
 
-const columns: ColumnDef<Transaction>[] = [
+const columns: ColumnDef<IPropertiesSold>[] = [
   //   {
   //     accessorKey: "client",
   //     header: ({ column }) => (
@@ -34,11 +24,11 @@ const columns: ColumnDef<Transaction>[] = [
   //     cell: ({ row }) => <div>{row.getValue("client")}</div>,
   //   },
   {
-    accessorKey: "property",
+    accessorKey: "propertyName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Property" />
     ),
-    cell: ({ row }) => <div>{row.getValue("property")}</div>,
+    cell: ({ row }) => <div>{row.getValue("propertyName")}</div>,
   },
   {
     accessorKey: "location",
@@ -66,20 +56,20 @@ const columns: ColumnDef<Transaction>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Price" />
     ),
-    cell: ({ row }) => <div>{row.getValue("price")}</div>,
+    cell: ({ row }) => <div>{toAmount(row.getValue("price"))}</div>,
   },
 
   {
-    accessorKey: "payment_status",
+    accessorKey: "paymentStatus",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Payment status" />
     ),
-    cell: ({ row }) => <div>{row.getValue("payment_status")}</div>,
+    cell: ({ row }) => <div>{row.getValue("paymentStatus")}</div>,
   },
   {
     id: "actions",
     cell: ({ row }) => {
-      const id = String(row.getValue("_id")) || String(row?.id);
+      const id = String(row.original?._id);
 
       return (
         <div className="flex justify-center">
@@ -120,7 +110,11 @@ export const PropertyOverview = ({
       />
 
       {isModalOpen && (
-        <PageModal handleClose={closeModal} heading="Properties sold">
+        <PageModal
+          handleClose={closeModal}
+          heading="Properties sold"
+          className="md:max-w-[MIN(95%,984px)]"
+        >
           <section className="flex flex-col flex-1 w-full gap-4 ">
             <div
               data-ui={isFetchingSummary ? "loading" : ""}
@@ -129,19 +123,19 @@ export const PropertyOverview = ({
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Property Sold</p>
                 <p className="text-grey-600">
-                  {toAmount(summary?.totalUnits || 0, false)}
+                  {toAmount(summary?.propertiesSoldTotal || 0, false)}
                 </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Paid</p>
                 <p className="text-grey-600">
-                  {toAmount(summary?.totalSoldUnits || 0)}
+                  {toAmount(summary?.totalPaid || 0)}
                 </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
                 <p className="text-grey-400">Outstanding</p>
                 <p className="text-grey-600">
-                  {toAmount(summary?.totalReservedUnits || 0)}
+                  {toAmount(summary?.totalOutstanding || 0)}
                 </p>
               </div>
               <div className="flex flex-col flex-[25] gap-2">
@@ -165,13 +159,13 @@ export const PropertyOverview = ({
               <div className="flex  justify-end gap-4 items-center mt-auto">
                 <Button
                   onClick={toggleModal}
-                  size="xs"
+                  size="sm"
                   outline
                   variant="secondary"
                 >
                   Close
                 </Button>
-                <Button size="xs">Export PDF</Button>
+                <Button size="sm">Export PDF</Button>
               </div>
             </div>
           </section>

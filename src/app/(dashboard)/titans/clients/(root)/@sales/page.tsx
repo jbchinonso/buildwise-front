@@ -1,8 +1,8 @@
+import { getTitanClientSummary } from "@/lib/services/dashboard.service";
 import { SalesOverview } from "../../ui";
-import { getTitanClientOverviewSummary } from "@/lib/services";
 
 const SalesChart = async () => {
-  const response = await getTitanClientOverviewSummary();
+  const response = await getTitanClientSummary();
   return <SalesOverview stats={response?.closedSales} />;
 };
 

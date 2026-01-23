@@ -166,13 +166,13 @@ export const SalesOverview = ({ stats = 0 }: { stats?: string | number }) => {
             <div className="flex justify-end mt-auto gap-4 items-center">
               <Button
                 onClick={toggleModal}
-                size="xs"
+                size="sm"
                 outline
                 variant="secondary"
               >
                 Close
               </Button>
-              <Button size="xs">Export PDF</Button>
+              <Button size="sm">Export PDF</Button>
             </div>
           </section>
         </PageModal>

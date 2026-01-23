@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/chart";
 import { IEarningsChartData } from "@/lib/type";
 import { SpinLoadingAnimation } from "@/components/ui/SpinLoadingAnimation";
+import { toAmountWithSuffix } from "@/lib/utils";
 
 const chartConfig = {
   salesCommission: {
@@ -59,7 +60,7 @@ export function EarningsOverviewChart({
             <YAxis
               dataKey="amount"
               tickMargin={0}
-              tickFormatter={(value) => value + "m"}
+              tickFormatter={(value) => toAmountWithSuffix(value)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
           </LineChart>

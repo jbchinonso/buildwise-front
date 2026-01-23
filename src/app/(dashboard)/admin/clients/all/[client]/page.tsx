@@ -53,7 +53,6 @@ const ClientProfile = async (props: { params: Params }) => {
             </Button>
           </div>
         </div>
-
         {/* Profile info */}
         <div className="flex flex-wrap justify-between gap-4 gap-x-20 w-full">
           <header className="w-full text-grey-400 font-bold">
@@ -127,13 +126,17 @@ const ClientProfile = async (props: { params: Params }) => {
             defaultValue={personalInformation.residential_address}
           />
         </div>
-
         {/* Activities info */}
         {properties?.length ? (
           <ClientProperties properties={properties || []} />
         ) : (
           <AddPropertyModal />
         )}
+        {/* // NOTE: There is a problem here, a user can purchase same property
+        twice, // if I use plot-number is there a validation for a user
+        purchasing same plot again? 
+        BUG I was able to create the same
+        property with the same plot number */}
       </div>
     </section>
   );

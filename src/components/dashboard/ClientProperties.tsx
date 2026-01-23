@@ -1,6 +1,6 @@
 "use client";
 import { toAmount } from "@/lib/utils";
-import { Button, Input, TabButton } from "../ui";
+import { Input, TabButton } from "../ui";
 import { IClientProperty } from "@/lib/type";
 import { AddPropertyModal } from "./AddPropertyModal";
 import { useSearchParams } from "next/navigation";
@@ -17,13 +17,11 @@ export const ClientProperties = ({
 
   const selectedProperty = properties?.[Number(property || 1) - 1];
 
-  // console.log({selectedProperty})
-
   return (
-    <div className="flex flex-1 flex-wrap justify-between gap-4 gap-x-20 w-full">
-      <div className="flex gap-4 max-w-full overflow-x-auto py-1">
-        <div className="w-fit rounded-full border flex gap-1 bg-[rgba(232,233,235,1)] overflow-x-auto max-w-full">
-          <div className="w-fit rounded-full border p-2 flex gap-1 overflow-x-auto max-w-full">
+    <div className="flex flex-col flex-1 items-start gap-4 gap-x-20 w-full">
+      <div className="flex items-start max-h-fit gap-4 max-w-full overflow-x-auto py-1">
+        <div className="w-fit max-h-fit rounded-full border flex gap-1 bg-[rgba(232,233,235,1)] overflow-x-auto max-w-full">
+          <div className="w-fit my-auto rounded-full border p-2 flex gap-1 overflow-x-auto max-w-full">
             {(properties || [])?.map((_property, i) => (
               <TabButton
                 href={`?property=${i + 1}`}
@@ -46,7 +44,6 @@ export const ClientProperties = ({
             ))}
           </div>
         </div>
-
         {canAdd && <AddPropertyModal isMini />}
       </div>
 
@@ -116,7 +113,7 @@ const PropertyPreview = ({ property }: { property: IClientProperty }) => {
         defaultValue={toAmount(property?.paymentDue || 0)}
       />
       <Input
-        label="Client"
+        label="Agent"
         type="text"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
