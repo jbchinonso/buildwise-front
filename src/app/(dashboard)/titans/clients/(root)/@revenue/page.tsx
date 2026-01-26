@@ -1,9 +1,9 @@
+import { getTitanClientSummary } from "@/lib/services/dashboard.service";
 import { RevenueOverview } from "../../ui";
-import { getTitanDashboardSummary } from "@/lib/services/dashboard.service";
 
 const TotalRevenue = async () => {
-  // const response = await getTitanDashboardSummary();
-  return <RevenueOverview stats={0} />;
+  const response = await getTitanClientSummary();
+  return <RevenueOverview stats={response?.totalSalesRevenue} />;
 };
 
 export default TotalRevenue;

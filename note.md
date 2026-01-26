@@ -16,3 +16,9 @@ Tested endpoints
 
 #Failed endpoints
 - Fetch sales receipt
+
+
+### PENDING
+- filters and search on tables and graphs
+- export modal data
+- pagination on page modals

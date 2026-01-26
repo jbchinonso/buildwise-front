@@ -6,19 +6,19 @@ export default function DownlineActivity() {
       type: "Instalment deposit",
       message: "Sandra Ibe confirmed payment for plot 613 Boulevard estate",
       date: "Tue 5 Mar",
-      time: "3:15pm",
+      createdAt: "3:15pm",
     },
     {
       type: "Agent onboarded",
       message: "Sodik Nwachukwu added Bukayo Saka to their downline",
       date: "Tue 5 Mar",
-      time: "3:15pm",
+      createdAt: "3:15pm",
     },
     {
       type: "Agent onboarded",
       message: "Sodik Nwachukwu added Bukayo Saka to their downline",
       date: "Tue 5 Mar",
-      time: "3:15pm",
+      createdAt: "3:15pm",
     },
   ];
 

@@ -29,6 +29,7 @@ export const createSale = async (sale: ISalePayload) => {
     updateTag(CACHETAGS.sales);
     updateTag(CACHETAGS.properties);
     updateTag(CACHETAGS.titans);
+    updateTag(CACHETAGS.payments);
     return response?.data;
   } catch (error) {
     return { error: getError(error) };

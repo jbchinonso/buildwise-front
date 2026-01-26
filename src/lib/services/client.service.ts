@@ -185,7 +185,7 @@ export const getRecentClients = async () => {
 
     return data as IRecentClients[];
   } catch (error) {
-    console.log({ERRRRRRROORRR: getError(error)})
+    // console.log({ERRRRRRROORRR: getError(error)})
     throw getError(error);
   }
 };
@@ -260,8 +260,11 @@ export const getTitanClientPaymentHistory = async (
       }
     );
 
-
     const sales = response?.transactions as IPaymentHistoryTransaction[];
+    const availableProperties = response?.availableProperties as {
+      _id: string;
+      name: string;
+    }[];
     const pagination = response?.pagination as IPagination
 
     // const uniquePropertiesMap = new Map();
@@ -294,10 +297,10 @@ export const getTitanClientPaymentHistory = async (
 
     //     return [...acc, ...transactions];
     //   }, [] as IPaymentHistoryTransactionDTO[]) || [];
-
     return {
       sales,
       pagination,
+      availableProperties,
       // properties: Array.from(uniquePropertiesMap.values()) || [],
     };
   } catch (error) {
@@ -314,7 +317,8 @@ export const getTitanClientOverview = async () => {
       },
     });
 
-    return response as ITitanClientSummary;
+    return response?.data as ITitanClientSummary;
+
   } catch (error) {
     throw getError(error);
   }

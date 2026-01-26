@@ -143,7 +143,7 @@ const ToggleStatus = ({
 };
 
 export const PayCommissionModal = ({
-  bankAccount = "O70 3456 6543",
+  bankAccount = "",
   titan,
   commissions = [],
 }: {
@@ -207,7 +207,7 @@ export const PayCommissionModal = ({
                 </button>
               </div>
             </div>
-            <div className="flex w-full bg-red-300">
+            <div className="flex w-full">
               <DataTable columns={columns} data={tableData} />
             </div>
             <div className="flex gap-4 lg:justify-end mt-10">

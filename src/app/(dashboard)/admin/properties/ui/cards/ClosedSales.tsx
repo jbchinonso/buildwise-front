@@ -180,11 +180,11 @@ export const ClosedSales = ({
             </div>
 
             <div className="flex mt-auto md:justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+              <Button onClick={closeModal} size="sm" outline variant="secondary">
                 Close
               </Button>
 
-              <Button size="xs">Export PDF</Button>
+              <Button size="sm">Export PDF</Button>
             </div>
           </section>
         </PageModal>

@@ -122,14 +122,14 @@ export default function SubTitans({ data }: { data?: string | number }) {
 
             <div className="flex mt-auto justify-end gap-4">
               <Button
-                size="xs"
+                size="sm"
                 outline
                 variant="secondary"
                 onClick={closeModal}
               >
                 Close
               </Button>
-              <Button size="xs">Export PDF</Button>
+              <Button size="sm">Export PDF</Button>
             </div>
           </section>
         </PageModal>

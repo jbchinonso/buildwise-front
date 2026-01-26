@@ -1,10 +1,10 @@
-import { getTitanDashboardSummary } from "@/lib/services/dashboard.service";
+import { getTitanClientSummary } from "@/lib/services/dashboard.service";
 import { PropertyOverview } from "../../ui";
 
 const PropertiesSold = async () => {
-  // const response = await getTitanDashboardSummary();
+  const response = await getTitanClientSummary();
 
-  return <PropertyOverview stats={0}/>;
+  return <PropertyOverview stats={response?.totalPlotsSold} />;
 };
 
 export default PropertiesSold;

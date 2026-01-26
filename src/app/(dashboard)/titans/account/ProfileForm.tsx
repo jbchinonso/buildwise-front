@@ -2,7 +2,7 @@
 import { Button, Input, SelectScrollable, SubmitButton } from "@/components/ui";
 import { useClientFetch } from "@/lib/hooks";
 import { editTitanProfile, getStates } from "@/lib/services";
-import { IUser } from "@/lib/type";
+import { ITitanProfile, IUser } from "@/lib/type";
 import {
   getError,
   getFormikError,
@@ -10,16 +10,14 @@ import {
   stripFormData,
 } from "@/lib/utils";
 import { useFormik } from "formik";
-import {  Edit2 } from "lucide-react";
+import { Edit2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
-const ProfileForm = () => {
+const ProfileForm = ({ profile }: { profile?: ITitanProfile }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const { data: session, update } = useSession();
-
-  // console.log({session})
+  const { update } = useSession();
 
   const { data: states = [], isLoading } = useClientFetch({
     action: getStates,
@@ -35,14 +33,16 @@ const ProfileForm = () => {
     isValid,
     dirty,
     setFieldValue,
+    resetForm,
+    handleReset,
   } = useFormik({
     initialValues: {
-      phone: session?.user?.phone || "",
-      email: session?.user?.email || "",
-      state: session?.user?.state || "",
-      lga: session?.user?.lga || "",
-      address: session?.user?.address || "",
-      branch: session?.user?.branch || "",
+      phone: profile?.phone ?? "",
+      email: profile?.email ?? "",
+      state: profile?.state ?? "",
+      lga: profile?.lga ?? "",
+      address: profile?.address ?? "",
+      branch: "",
     },
     validationSchema: profileValidationSchema,
     onSubmit: async () => {},
@@ -68,12 +68,19 @@ const ProfileForm = () => {
     try {
       const unchangedValues: string[] = [];
       Object.entries(values).forEach(([key, value]) => {
-        if (value != session?.user?.[key as keyof IUser] && key != "email") {
-          unchangedValues.push(value);
+        if (value != profile?.[key as keyof ITitanProfile] && key != "email") {
+          // if (
+          //   key === "lga" &&
+          //   typeof value != "string" &&
+          //   value?.value != profile?.[key as keyof ITitanProfile]
+          // ) {
+          //  return unchangedValues.push(key);
+          // }
+          unchangedValues.push(key);
         }
       });
       const response = await editTitanProfile(
-        stripFormData(values, unchangedValues)
+        stripFormData(values, unchangedValues),
       );
       update(response);
       setIsEditing(false);
@@ -86,6 +93,7 @@ const ProfileForm = () => {
   return (
     <form
       action={onEdit}
+      onReset={handleReset}
       className="w-full flex flex-wrap justify-between gap-4 gap-x-20"
     >
       <Input
@@ -142,6 +150,7 @@ const ProfileForm = () => {
         labelStyle="text-[#292A2C]"
         error={getFormikError(touched?.lga, errors?.lga)}
         className="flex-[45%] max-w-[MIN(100%,470px)]"
+        defaultValue={profile?.lga}
       />
 
       <Input
@@ -174,9 +183,7 @@ const ProfileForm = () => {
         onChange={handleChange}
         onBlur={handleBlur}
         error={
-          isEditing && touched?.branch && errors?.branch
-            ? errors?.branch
-            : ""
+          isEditing && touched?.branch && errors?.branch ? errors?.branch : ""
         }
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
       />
@@ -188,7 +195,10 @@ const ProfileForm = () => {
               type="button"
               size="sm"
               variant="secondary"
-              onClick={() => setIsEditing(false)}
+              onClick={() => {
+                setIsEditing(false);
+                resetForm();
+              }}
             >
               Cancel
             </Button>

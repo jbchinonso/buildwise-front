@@ -18,7 +18,7 @@ const AllClients = async () => {
         <p className="font-bold flex gap-2">
           All Clients
           <span className="text-grey-400">
-            {toAmount(allClients?.pagination?.total || 0, false)}
+            {toAmount(allClients?.pagination?.total ?? 0, false)}
           </span>
         </p>
 

@@ -151,14 +151,14 @@ export const TitansOverview = ({ stats = 0 }: { stats?: number }) => {
             <div className="flex mt-auto md:justify-end gap-4 items-center">
               <Button
                 onClick={closeModal}
-                size="xs"
+                size="sm"
                 outline
                 variant="secondary"
               >
                 Close
               </Button>
 
-              <Button size="xs">Export PDF</Button>
+              <Button size="sm">Export PDF</Button>
             </div>
           </section>
         </PageModal>

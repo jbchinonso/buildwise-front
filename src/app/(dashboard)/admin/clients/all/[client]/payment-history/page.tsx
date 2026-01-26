@@ -1,8 +1,7 @@
 import { BreadCrumbs } from "@/components/ui";
 import {
   getClient,
-  getTitanClientPaymentHistory,
-  getTitanClientProfileProperty,
+  getTitanClientPaymentHistory
 } from "@/lib/services";
 import { clientProfileDTO } from "@/lib/dtos";
 import { ActiveTabs, PaymentHistoryTable } from "@/components/dashboard";
@@ -19,17 +18,15 @@ const PaymentHistoryPage = async (props: {
   const searchParams = await props.searchParams;
   const property = searchParams.property || "";
 
-  const [data, properties] = await Promise.all([
-    getClient(clientId),
-    getTitanClientProfileProperty(clientId),
-  ]);
+  const data = await getClient(clientId);
 
   const personalInformation = clientProfileDTO(data);
 
-  const { sales = [], pagination } = await getTitanClientPaymentHistory(
-    clientId,
-    property
-  );
+  const {
+    sales = [],
+    pagination,
+    availableProperties = [],
+  } = await getTitanClientPaymentHistory(clientId, property);
 
   return (
     <section className="flex flex-col flex-1 gap-4">
@@ -51,7 +48,7 @@ const PaymentHistoryPage = async (props: {
         </p>
 
         <div className="flex flex-col w-full gap-4">
-          <ActiveTabs properties={properties} />
+          <ActiveTabs properties={availableProperties} />
 
           <div className="flex flex-col w-full">
             <PaymentHistoryTable data={sales || []} pagination={pagination} />

@@ -71,14 +71,13 @@ export const Earnings = ({ stats = 0 }: { stats?: number }) => {
   const { data: chartData, isLoading } = useClientFetch({
     action: async () => {
       const res = await getTitanEarningsChart();
-      const data = convertToChartData(res) || [];
-      const totalSalesCommission = data?.reduce((acc, cv) => {
-        return (acc += cv?.salesCommission || 0);
-      }, 0);
-      const totalSubTitanCommission = data?.reduce((acc, cv) => {
-        return (acc += cv?.subTitanCommission || 0);
-      }, 0);
-      return { data, totalSalesCommission, totalSubTitanCommission };
+      const data = convertToChartData(res?.chartData) || [];
+
+      return {
+        data,
+        totalSalesCommission: res?.yearlyTotals?.sales ?? 0,
+        totalSubTitanCommission:  res?.yearlyTotals?.titans ?? 0,
+      };
     },
     isModalOpen,
   });
@@ -149,10 +148,15 @@ export const Earnings = ({ stats = 0 }: { stats?: number }) => {
             </div>
 
             <div className="flex justify-end gap-4 items-center">
-              <Button size="xs" outline variant="secondary">
+              <Button
+                onClick={closeModal}
+                size="sm"
+                outline
+                variant="secondary"
+              >
                 Close
               </Button>
-              <Button size="xs">Export PDF</Button>
+              <Button size="sm">Export PDF</Button>
             </div>
           </section>
         </PageModal>

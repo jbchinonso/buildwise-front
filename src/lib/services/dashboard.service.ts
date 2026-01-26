@@ -348,3 +348,27 @@ export const getTitanDashboardSummary = async () => {
     throw new Error(getError(error));
   }
 };
+
+export const getTitanClientSummary = async () => {
+  try {
+    const response = await authFetch("/titans/titan-dashboard-summary", {
+      next: {
+        revalidate: 8400,
+        tags: [CACHETAGS.clients],
+      },
+    });
+
+    return response?.summary as {
+      totalSalesRevenue: number;
+      totalPaid: number;
+      closedSales: number;
+      ongoingSales: number;
+      totalPlotsSold: number;
+      totalClients: number;
+      outstanding: number;
+    };
+  } catch (error) {
+    console.error("Error fetching client summary:", getError(error));
+    throw new Error(getError(error));
+  }
+};

@@ -11,7 +11,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 
-export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
+export const AddPropertyModal = ({ isMini = false }: { isMini?: boolean }) => {
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const params = useParams();
   const router = useRouter();
@@ -74,8 +74,6 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
     },
   });
 
- 
-
   const property = useMemo(
     () =>
       values?.propertyId
@@ -84,11 +82,11 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
               v: { value?: string; label?: string } & Pick<
                 IProperty,
                 "_id" | "name" | "priceOptions" | "price"
-              >
-            ) => v?.value === values?.propertyId
+              >,
+            ) => v?.value === values?.propertyId,
           )
         : {},
-    [properties, values?.propertyId]
+    [properties, values?.propertyId],
   );
 
   const priceOptions = useMemo(() => {
@@ -119,30 +117,8 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
     ];
   }, [property]);
 
-   const options = property?.priceOptions as IPaymentOptions;
+  const options = property?.priceOptions as IPaymentOptions;
   const instantPrice = options?.instantPrice || 0;
-
-  const payload = useMemo(() => {
-    const pricePlan = priceOptions?.find(
-      (plan) => plan.value === values?.priceOptions
-    )?.data;
-
-    return {
-      propertyId: values?.propertyId,
-      agentId: values?.agentId,
-      clientId: values?.clientId,
-      unitNumber: values?.unitNumber,
-      amountPaid: Number(
-        String(values?.amountPaid || 0).replace(/\D/gi, "") || 0
-      ),
-      paymentDate: values?.paymentDate,
-      plotNumber: Number(values?.plotNumber || 0),
-      plotSize: values?.plotSize || 0,
-      price: Number(instantPrice|| 0),
-      instalmentDuration: pricePlan?.instalmentDuration || "",
-      paymentPlan: pricePlan?.paymentPlan || "",
-    };
-  }, [values]);
 
   const handleSelect = (name: string, value: any) => {
     setFieldValue(name, value);
@@ -157,9 +133,28 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
   const submitForm = async () => {
     toast.dismiss();
     try {
-      const {error} = await createSale(payload);
-      if(error){
-        throw new error
+      const pricePlan = priceOptions?.find(
+        (plan) => plan.value === values?.priceOptions,
+      )?.data;
+
+      const payload = {
+        propertyId: values?.propertyId,
+        agentId: values?.agentId,
+        clientId: values?.clientId,
+        unitNumber: values?.unitNumber,
+        amountPaid: Number(
+          String(values?.amountPaid || 0).replace(/\D/gi, "") || 0,
+        ),
+        paymentDate: values?.paymentDate,
+        plotNumber: Number(values?.plotNumber || 0),
+        plotSize: values?.plotSize || 0,
+        price: Number(instantPrice || 0),
+        instalmentDuration: pricePlan?.instalmentDuration || "",
+        paymentPlan: pricePlan?.paymentPlan || "",
+      };
+      const { error } = await createSale(payload);
+      if (error) {
+        throw new error();
       }
       closeModal();
       router.refresh();
@@ -174,6 +169,7 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
     if (!isModalOpen) {
       resetForm();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isModalOpen]);
 
   useEffect(() => {
@@ -183,7 +179,7 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
       setFieldValue("amountPaid", instantPrice);
       setFieldTouched("amountPaid");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values?.priceOptions]);
 
   return (
@@ -191,8 +187,9 @@ export const AddPropertyModal = ({ isMini }: { isMini?: boolean }) => {
       <Button
         size="sm"
         onClick={toggleModal}
-        variant="round"
-        className={cn("ml-auto", isMini ? "rounded-full px-4 py-0" : "")}
+        className={cn("max-w-fit ", {
+          "rounded-full px-4 py-0 my-auto ml-auto aspect-square": isMini,
+        })}
       >
         <Plus size={18} /> {!isMini && <span>Add property</span>}
       </Button>
