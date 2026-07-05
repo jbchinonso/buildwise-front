@@ -55,7 +55,7 @@ const columns: ColumnDef<ITitanClosedSales>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Sales Price" />
+      <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => <div>{row.getValue("status")}</div>,
   },

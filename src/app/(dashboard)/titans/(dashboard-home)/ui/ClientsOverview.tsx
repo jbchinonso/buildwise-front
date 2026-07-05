@@ -64,7 +64,7 @@ const columns: ColumnDef<IActiveTitanClient>[] = [
 
       return (
         <div className="flex justify-center px-4">
-          <Link href={`/titan/clients/all/${id}`} id="button">
+          <Link href={`/titans/clients/all/${id}`} id="button">
             <ChevronRight className="size-4" />
             <span className="sr-only">View details</span>
           </Link>

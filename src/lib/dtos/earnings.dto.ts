@@ -7,6 +7,10 @@ export function convertToChartData(
   // Use a Map to group and merge commissions by month
   const mergedData = new Map<string | number, IEarningsChartData>();
 
+  if (!data || !data.salesCommissions || !data.subTitanCommissions) {
+    return [];
+  }
+
   // 1. Process salesCommissions
   for (const item of data.salesCommissions) {
     // const monthKey = getMonth(item.month);

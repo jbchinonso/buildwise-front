@@ -8,9 +8,11 @@ import { useSearchParams } from "next/navigation";
 export const ClientProperties = ({
   properties = [],
   canAdd = true,
+  agentName,
 }: {
   properties: IClientProperty[];
   canAdd?: boolean;
+  agentName?: string;
 }) => {
   const searchParams = useSearchParams();
   const property = Number(searchParams.get("property") || 1);
@@ -47,12 +49,18 @@ export const ClientProperties = ({
         {canAdd && <AddPropertyModal isMini />}
       </div>
 
-      <PropertyPreview property={selectedProperty} />
+      <PropertyPreview property={selectedProperty} agentName={agentName} />
     </div>
   );
 };
 
-const PropertyPreview = ({ property }: { property: IClientProperty }) => {
+const PropertyPreview = ({
+  property,
+  agentName,
+}: {
+  property: IClientProperty;
+  agentName?: string;
+}) => {
   if (!property) return null;
   return (
     <div className="flex flex-wrap justify-between gap-4 gap-x-20 w-full">
@@ -117,7 +125,7 @@ const PropertyPreview = ({ property }: { property: IClientProperty }) => {
         type="text"
         readOnly
         containerStyle="flex-[45%] max-w-[MIN(100%,470px)]"
-        defaultValue={property?.clientId}
+        defaultValue={agentName || property?.clientId}
       />
     </div>
   );

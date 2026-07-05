@@ -292,7 +292,7 @@ export function formatAddress(
 
 export const formatDate = (
   date: Date | string | null | undefined,
-  formatString: string = "dd/MM/yyyy, hh:MM a",
+  formatString: string = "dd/MM/yyyy, hh:mm a",
 ) => {
   try {
     if (!date) {
