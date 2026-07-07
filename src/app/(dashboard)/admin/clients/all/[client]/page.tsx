@@ -127,11 +127,16 @@ const ClientProfile = async (props: { params: Params }) => {
           />
         </div>
         {/* Activities info */}
-        {properties?.length ? (
-          <ClientProperties properties={properties || []} />
-        ) : (
-          <AddPropertyModal />
-        )}
+        {(() => {
+          const agentName = data?.agent
+            ? `${data.agent.firstName || ""} ${data.agent.lastName || ""}`.trim()
+            : undefined;
+          return properties?.length ? (
+            <ClientProperties properties={properties || []} agentName={agentName} />
+          ) : (
+            <AddPropertyModal />
+          );
+        })()}
         {/* // NOTE: There is a problem here, a user can purchase same property
         twice, // if I use plot-number is there a validation for a user
         purchasing same plot again? 

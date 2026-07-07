@@ -66,21 +66,21 @@ const columns: ColumnDef<IPropertiesSold>[] = [
     ),
     cell: ({ row }) => <div>{row.getValue("paymentStatus")}</div>,
   },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      const id = String(row.original?._id);
+  // {
+  //   id: "actions",
+  //   cell: ({ row }) => {
+  //     const id = String(row.original?._id);
 
-      return (
-        <div className="flex justify-center">
-          <Link href={`/titan/properties/all/${id}`} id="button">
-            <ChevronRight className="size-4" />
-            <span className="sr-only">View details</span>
-          </Link>
-        </div>
-      );
-    },
-  },
+  //     return (
+  //       <div className="flex justify-center">
+  //         <Link href={`/titan/properties/all/${id}`} id="button">
+  //           <ChevronRight className="size-4" />
+  //           <span className="sr-only">View details</span>
+  //         </Link>
+  //       </div>
+  //     );
+  //   },
+  // },
 ];
 
 export const PropertyOverview = ({

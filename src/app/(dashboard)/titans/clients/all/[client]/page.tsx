@@ -1,7 +1,7 @@
 import { ClientProperties } from "@/components/dashboard";
 import { BreadCrumbs, Button, Input, Avatar } from "@/components/ui";
 import {
-  getTitanClientProfile,
+  getClient,
   getTitanClientProfileProperty,
 } from "@/lib/services";
 
@@ -16,7 +16,7 @@ const ClientProfile = async (props: {
   const id = params.client;
 
   const [profile, properties] = await Promise.all([
-    getTitanClientProfile(id),
+    getClient(id),
     getTitanClientProfileProperty(id),
   ]);
 
@@ -124,7 +124,18 @@ const ClientProfile = async (props: {
         </div>
 
         {/* Activities info */}
-        <ClientProperties properties={properties || []} canAdd={false} />
+        {(() => {
+          const agentName = profile?.agent
+            ? `${profile.agent.firstName || ""} ${profile.agent.lastName || ""}`.trim()
+            : undefined;
+          return (
+            <ClientProperties
+              properties={properties || []}
+              canAdd={false}
+              agentName={agentName}
+            />
+          );
+        })()}
       </div>
     </section>
   );

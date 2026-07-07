@@ -67,7 +67,7 @@ const columns: ColumnDef<ITitanSalesTable>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const id = String(row.original?.saleId || row.getValue("saleId"));
+      const id = String(row.original?.clientId || row.getValue("clientId"));
 
       return (
         <div className="flex justify-center px-4">

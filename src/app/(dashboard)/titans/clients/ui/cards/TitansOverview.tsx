@@ -46,21 +46,21 @@ const columns: ColumnDef<Transaction>[] = [
     ),
     cell: ({ row }) => <div>{row.getValue("location")}</div>,
   },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      const id = String(row.getValue("_id")) || String(row?.id);
+  // {
+  //   id: "actions",
+  //   cell: ({ row }) => {
+  //     const id = String(row.getValue("_id")) || String(row?.id);
 
-      return (
-        <div className="flex justify-center">
-          <Link href={`/titan/properties/all/${id}`} id="button">
-            <ChevronRight className="size-4" />
-            <span className="sr-only">View details</span>
-          </Link>
-        </div>
-      );
-    },
-  },
+  //     return (
+  //       <div className="flex justify-center">
+  //         <Link href={`/titan/properties/all/${id}`} id="button">
+  //           <ChevronRight className="size-4" />
+  //           <span className="sr-only">View details</span>
+  //         </Link>
+  //       </div>
+  //     );
+  //   },
+  // },
 ];
 
 export const TitansOverview = ({ data }: { data: Transaction[] }) => {

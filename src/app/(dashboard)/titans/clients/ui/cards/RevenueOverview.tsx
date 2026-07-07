@@ -75,21 +75,21 @@ const columns: ColumnDef<IRecentSale>[] = [
     ),
     cell: ({ row }) => <div>{toAmount(row.getValue("commission"))}</div>,
   },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-      const id = String(row.original?._id);
+  // {
+  //   id: "actions",
+  //   cell: ({ row }) => {
+  //     const id = String(row.original?._id);
 
-      return (
-        <div className="flex justify-center">
-          <Link href={`/titan/properties/all/${id}`} id="button">
-            <ChevronRight className="size-4" />
-            <span className="sr-only">View details</span>
-          </Link>
-        </div>
-      );
-    },
-  },
+  //     return (
+  //       <div className="flex justify-center">
+  //         <Link href={`/titan/properties/all/${id}`} id="button">
+  //           <ChevronRight className="size-4" />
+  //           <span className="sr-only">View details</span>
+  //         </Link>
+  //       </div>
+  //     );
+  //   },
+  // },
 ];
 
 export const RevenueOverview = ({ stats = 0 }: { stats?: string | number }) => {
